@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<!-- SPDX-License-Identifier: MIT -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Stop at the drop: the building</title>
+<style>
+  :root {
+    --bg: #ffffff; --ink: #0b0b0b; --ink2: #52514e; --muted: #898781; --grid: #e1e0d9;
+    --wall: #f6f5f1; --blue: #1f4fd1; --hi: #eb6834; --green: #1a7f1a; --red: #d23a22;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1a1a19; --ink: #f0efec; --ink2: #c3c2b7; --muted: #898781; --grid: #2c2c2a;
+      --wall: #222221; --blue: #3987e5; --hi: #eb6834; --green: #4caf50; --red: #e66767;
+    }
+  }
+  body { margin: 0; padding: 16px; background: var(--bg); color: var(--ink);
+         font: 14px/1.5 system-ui, sans-serif; }
+  h1 { font-size: 18px; font-weight: 600; margin: 0 0 4px; }
+  .sub { color: var(--ink2); margin: 0 0 12px; max-width: 70ch; }
+  .main { display: flex; flex-wrap: wrap; gap: 20px; align-items: flex-start; }
+  .side { flex: 1 1 280px; max-width: 420px; }
+  .controls { display: flex; flex-wrap: wrap; gap: 10px 14px; align-items: center;
+              color: var(--ink2); font-size: 13px; margin-bottom: 10px; }
+  .controls label { display: flex; align-items: center; gap: 6px; }
+  input[type=number] { width: 90px; font: inherit; padding: 3px 6px; background: var(--bg);
+                       color: var(--ink); border: 1px solid var(--grid); border-radius: 4px; }
+  button { font: inherit; padding: 4px 12px; border-radius: 4px; cursor: pointer;
+           border: 1px solid var(--muted); background: var(--wall); color: var(--ink); }
+  button.go { border-color: var(--blue); color: var(--blue); font-weight: 600; }
+  .presets button { padding: 2px 8px; font-size: 12px; }
+  #info { font: 13px/1.6 ui-monospace, monospace; color: var(--ink2); white-space: pre-wrap;
+          word-break: break-all; }
+  #info b { color: var(--ink); font-weight: 600; }
+  #msg { margin-top: 10px; font-weight: 600; min-height: 1.5em; }
+  #msg.ok { color: var(--green); } #msg.bad { color: var(--red); }
+  #stage { flex: 2 1 420px; min-width: 320px; height: calc(100vh - 120px); min-height: 460px; }
+  svg { width: 100%; height: 100%; display: block; }
+  .legend { font-size: 12px; color: var(--muted); margin-top: 12px; }
+</style>
+</head>
+<body>
+<h1>Stop at the drop: the building</h1>
+<p class="sub">Every floor has one way out. An odd floor has a stair numbered 1, up to
+(3x+1)/2. An even floor has a hole with a pole numbered 0, down to x/2. Board on a floor
+and ride until the first floor below your start: the drop, where lunch is waiting.</p>
+<div class="main">
+  <div class="side">
+    <div class="controls">
+      <label>Board at <input type="number" id="start" min="1" max="100000" value="3"></label>
+      <button class="go" id="go">Ride</button>
+      <button id="rnd">Random</button>
+    </div>
+    <div class="controls presets" id="presets">Try:
+      <button>3</button><button>7</button><button>11</button><button>27</button>
+      <button>123</button><button>47</button>
+    </div>
+    <div class="controls">
+      <label>Floors at least <input type="range" id="floors" min="8" max="64" value="20"
+             style="width:110px"><span id="floorsv">20</span></label>
+      <label>Speed <input type="range" id="speed" min="1" max="10" value="5"
+             style="width:90px"></label>
+    </div>
+    <div class="controls">
+      <label><input type="checkbox" id="eng"> The young engineer's long poles</label>
+    </div>
+    <div id="info"></div>
+    <div id="msg"></div>
+    <div class="legend">Blue: stairs numbered 1. Orange: poles numbered 0. Dashed line:
+      the floor you boarded; the ride ends at the first stop below it. Hyphens in the
+      word sit at the lowest floors of the ride, counted from the first step on.</div>
+  </div>
+  <div id="stage"><svg id="svg" xmlns="http://www.w3.org/2000/svg"></svg></div>
+</div>
+<script>
+"use strict";
+const $ = id => document.getElementById(id);
+const NS = "http://www.w3.org/2000/svg";
+const css = v => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+
+const step = x => (x % 2 ? (3 * x + 1) / 2 : x / 2);
+
+/* The ride of x up to its drop; drop(1) = 1 via 1 -> 2 -> 1. */
+function ride(x) {
+  const v = [x];
+  let y = x;
+  do { y = step(y); v.push(y); } while (!(y < x || (x === 1 && y === 1)));
+  return v;
+}
+
+/* The engineer: stairs up one at a time, long poles all the way to an odd floor. */
+function engineerRide(x) {
+  const v = [x];
+  let y = x;
+  do {
+    if (y % 2) y = (3 * y + 1) / 2;
+    else { while (y % 2 === 0) y /= 2; }
+    v.push(y);
+  } while (!(y < x || (x === 1 && y === 1)));
+  return v;
+}
+
+function wordOf(v) { return v.slice(0, -1).map(a => (a % 2 ? "1" : "0")).join(""); }
+
+/* Cut positions: after the first step, floors lower than all floors before them. */
+function cuts(v) {
+  const c = [1];
+  let lo = v[1];
+  for (let i = 2; i < v.length; i++) if (v[i] < lo) { lo = v[i]; c.push(i); }
+  return c;
+}
+
+function hyphenWord(w, c) {
+  let out = "", prev = 0;
+  for (const i of c) { out += w.slice(prev, i) + "-"; prev = i; }
+  return out.slice(0, -1) + w.slice(prev);
+}
+
+function hyphenRide(v, c) {
+  const set = new Set(c.slice(0, -1));
+  return v[0] + ": " + v.slice(1).map((a, k) => a + (k + 1 < v.length - 1
+    ? (set.has(k + 1) ? "-" : ",") : "")).join("");
+}
+
+/* ---------- drawing ---------- */
+const svg = $("svg");
+let geo = null, anim = null;
+
+function el(tag, attrs, parent = svg) {
+  const e = document.createElementNS(NS, tag);
+  for (const k in attrs) e.setAttribute(k, attrs[k]);
+  parent.appendChild(e);
+  return e;
+}
+
+function layout(top) {
+  const r = $("stage").getBoundingClientRect();
+  const W = Math.max(r.width, 320), H = Math.max(r.height, 460);
+  const pad = 26, bw = Math.min(260, W * 0.45), x0 = W * 0.45;
+  const fh = (H - 2 * pad) / top;
+  return { W, H, pad, bw, x0, fh, top,
+           y: f => H - pad - (f - 0.5) * fh,                  // middle of floor f
+           yb: f => H - pad - (f - 1) * fh };                 // bottom of floor f
+}
+
+function poleX(g, k) {                                        // pole from 2k down to k
+  const kmax = Math.floor(g.top / 2);
+  return g.x0 + 34 + (g.bw - 44) * k / (kmax + 1);
+}
+
+function stairPath(g, a, b) {
+  const ya = g.y(a) + g.fh * 0.25, yb = g.y(b) + g.fh * 0.25;
+  const bulge = Math.min(18 + 0.35 * Math.abs(ya - yb), g.x0 - 20);
+  return `M ${g.x0} ${ya} C ${g.x0 - bulge} ${ya}, ${g.x0 - bulge} ${yb}, ${g.x0} ${yb}`;
+}
+
+function draw(v, used, eng) {
+  svg.innerHTML = "";
+  const top = Math.max(+$("floors").value, Math.max(...v) + 1);
+  const g = geo = layout(top);
+  svg.setAttribute("viewBox", `0 0 ${g.W} ${g.H}`);
+  el("rect", { x: g.x0, y: g.H - g.pad - top * g.fh, width: g.bw, height: top * g.fh,
+               fill: css("--wall"), stroke: css("--muted") });
+  const lines = g.fh >= 5, labels = g.fh >= 11;
+  const visited = new Set(v);
+  for (let f = 1; f <= top; f++) {
+    if (lines && f > 1) el("line", { x1: g.x0, x2: g.x0 + g.bw, y1: g.yb(f), y2: g.yb(f),
+                                     stroke: css("--grid") });
+    if (labels || visited.has(f))
+      el("text", { x: g.x0 + 6, y: g.y(f) + 4, "font-size": Math.min(11, Math.max(9, g.fh * 0.7)),
+                   fill: visited.has(f) ? css("--ink") : css("--muted") }).textContent = f;
+  }
+  const all = top <= 64;
+  // poles
+  for (let k = 1; 2 * k <= top; k++) {
+    const hot = used.poles.has(k);
+    if (!all && !hot) continue;
+    const x = poleX(g, k);
+    if (lines) for (let f = k + 1; f <= 2 * k; f++)
+      el("line", { x1: x - 3, x2: x + 3, y1: g.yb(f), y2: g.yb(f), stroke: css("--wall"),
+                   "stroke-width": 3 });
+    el("line", { x1: x, x2: x, y1: g.y(2 * k), y2: g.y(k), stroke: css("--hi"),
+                 "stroke-width": hot ? 2.2 : 1, opacity: hot ? 1 : 0.35 });
+  }
+  // long poles of the engineer
+  for (const [a, b] of used.long) {
+    const x = g.x0 + g.bw - 14;
+    el("line", { x1: x, x2: x, y1: g.y(a), y2: g.y(b), stroke: css("--hi"),
+                 "stroke-width": 3, "stroke-dasharray": "2 3" });
+  }
+  // stairs
+  for (let f = 1; f <= top; f += 2) {
+    const t = step(f), hot = used.stairs.has(f);
+    if (t > top || (!all && !hot)) continue;
+    el("path", { d: stairPath(g, f, t), fill: "none", stroke: css("--blue"),
+                 "stroke-width": hot ? 2 : 1, opacity: hot ? 1 : 0.3 });
+  }
+  // boarding line and lunch
+  const s = v[0], d = used.drop;
+  el("line", { x1: g.x0 - 30, x2: g.x0 + g.bw + 10, y1: g.yb(s), y2: g.yb(s),
+               stroke: css("--ink2"), "stroke-dasharray": "5 4" });
+  if (d !== null) {
+    const ly = g.y(d);
+    el("rect", { x: g.x0 + g.bw + 8, y: ly - 3, width: 22, height: 4, fill: css("--green") });
+    el("text", { x: g.x0 + g.bw + 34, y: ly + 3, "font-size": 11, fill: css("--green") })
+      .textContent = "lunch";
+  }
+  return g;
+}
+
+/* ---------- the stick figure ---------- */
+function figure() {
+  const gr = el("g", {});
+  const c = css("--ink");
+  el("circle", { cx: 0, cy: -15, r: 3.2, fill: "none", stroke: c, "stroke-width": 1.5 }, gr);
+  el("line", { x1: 0, y1: -12, x2: 0, y2: -5, stroke: c, "stroke-width": 1.5 }, gr);
+  el("line", { x1: -4, y1: -9, x2: 4, y2: -9, stroke: c, "stroke-width": 1.5 }, gr);
+  el("line", { x1: 0, y1: -5, x2: -3, y2: 0, stroke: c, "stroke-width": 1.5 }, gr);
+  el("line", { x1: 0, y1: -5, x2: 3, y2: 0, stroke: c, "stroke-width": 1.5 }, gr);
+  const chute = el("path", { d: "M -9 -22 Q 0 -36 9 -22 Z", fill: css("--hi"),
+                             opacity: 0.85, visibility: "hidden" }, gr);
+  el("line", { x1: -9, y1: -22, x2: 0, y2: -12, stroke: css("--hi"), "stroke-width": 0.8 }, chute);
+  return { gr, chute };
+}
+
+/* Segments: functions of t in [0,1] returning {x,y}. */
+function segments(g, v, eng) {
+  const segs = [], wall = g.x0 + 20;
+  const floorY = f => g.yb(f) - 1;
+  for (let i = 0; i + 1 < v.length; i++) {
+    const a = v[i], b = v[i + 1];
+    if (a % 2) {
+      const p = document.createElementNS(NS, "path");
+      p.setAttribute("d", stairPath(g, a, b));
+      const L = p.getTotalLength();
+      segs.push({ kind: 1, dur: 700, f: t => {
+        if (t < 0.15) return { x: wall + (g.x0 - wall) * t / 0.15, y: floorY(a) };
+        if (t > 0.85) return { x: g.x0 + (wall - g.x0) * (t - 0.85) / 0.15, y: floorY(b) };
+        const q = p.getPointAtLength(L * (t - 0.15) / 0.7);
+        return { x: q.x, y: q.y - g.fh * 0.25 + (floorY(a) - g.y(a)) };
+      } });
+    } else {
+      const x = eng ? g.x0 + g.bw - 14 : poleX(g, a / 2);
+      segs.push({ kind: 0, dur: 700, last: i + 2 === v.length, f: t => {
+        if (t < 0.3) return { x: wall + (x - wall) * t / 0.3, y: floorY(a) };
+        if (t > 0.8) return { x: x + (wall - x) * (t - 0.8) / 0.2, y: floorY(b) };
+        const u = (t - 0.3) / 0.5;
+        return { x, y: floorY(a) + (floorY(b) - floorY(a)) * u * u };
+      } });
+    }
+  }
+  return segs;
+}
+
+function run() {
+  if (anim) cancelAnimationFrame(anim);
+  let x = Math.floor(+$("start").value);
+  if (!(x >= 1 && x <= 100000)) { x = 3; $("start").value = 3; }
+  const eng = $("eng").checked;
+  const real = ride(x), v = eng ? engineerRide(x) : real;
+  const drop = real[real.length - 1];
+  const used = { stairs: new Set(), poles: new Set(), long: [], drop };
+  for (let i = 0; i + 1 < v.length; i++) {
+    if (v[i] % 2) used.stairs.add(v[i]);
+    else if (eng) used.long.push([v[i], v[i + 1]]);
+    else used.poles.add(v[i] / 2);
+  }
+  const g = draw(v, used, eng);
+  info(x, real, eng ? v : null);
+  $("msg").textContent = ""; $("msg").className = "";
+  const fig = figure(), segs = segments(g, v, eng);
+  const speed = +$("speed").value;
+  let k = 0, t0 = null;
+  const place = p => fig.gr.setAttribute("transform", `translate(${p.x},${p.y})`);
+  place({ x: g.x0 + 20, y: g.yb(v[0]) - 1 });
+  const frame = ts => {
+    if (k >= segs.length) return finish(x, v, drop, eng);
+    if (t0 === null) t0 = ts;
+    const s = segs[k], t = Math.min(1, (ts - t0) * speed / (5 * s.dur));
+    fig.chute.setAttribute("visibility", s.last && t > 0.3 && t < 0.8 ? "visible" : "hidden");
+    place(s.f(t));
+    if (t >= 1) { k++; t0 = null; }
+    anim = requestAnimationFrame(frame);
+  };
+  anim = requestAnimationFrame(frame);
+}
+
+function finish(x, v, drop, eng) {
+  const end = v[v.length - 1], m = $("msg");
+  if (x === 1) { m.textContent = "1 \u2192 2 \u2192 1: back on floor 1, our rule counts that as the drop."; m.className = "ok"; return; }
+  if (!eng || end === drop) {
+    m.textContent = `Floor ${end}: the first stop below ${x}. Lunch!`; m.className = "ok";
+  } else {
+    m.textContent = `Oops: the long pole ended on floor ${end}, right past floor ${drop}, where lunch was.`;
+    m.className = "bad";
+  }
+}
+
+function ord(n) {                                            // 2 -> "2nd", 81 -> "81st"
+  const s = n.toString(), t = s.slice(-2), u = s.slice(-1);
+  const suf = t === "11" || t === "12" || t === "13" ? "th"
+            : ({ "1": "st", "2": "nd", "3": "rd" })[u] || "th";
+  return s + suf;
+}
+
+function gap(b, e) {                                         // "256th", or "2^59th" when long
+  return e <= 16 ? ord(BigInt(b) ** BigInt(e)) : `${b}^${e}th`;
+}
+
+function info(x, v, ev) {
+  const w = wordOf(v), c = cuts(v), n = [...w].filter(b => b === "1").length, L = w.length;
+  const P = 2n ** BigInt(L), r = BigInt(x) % P, cid = Number(r === 0n ? P : r);
+  const cr = ride(cid), cd = cr[cr.length - 1];
+  const lines = [
+    `<b>ride</b>   ${hyphenRide(v, c)}`,
+    `<b>word</b>   ${hyphenWord(w, c)}`,
+    `<b>Order</b>  ${n}, length ${L}`,
+    `<b>family</b> every ${gap(2, L)} floor from ${cid}, landing on ` +
+      (n ? `every ${gap(3, n)} floor from ${cd}` : "every floor"),
+    `<b>Collatz-prime</b> ${cid}` + (cid === x ? " (you boarded on it)" : ""),
+  ];
+  if (ev) lines.push(`<b>engineer</b> ${ev.join(", ")}`);
+  $("info").innerHTML = lines.join("\n");
+}
+
+/* ---------- controls ---------- */
+$("go").onclick = run;
+$("rnd").onclick = () => { $("start").value = 2 + Math.floor(Math.random() * 200); run(); };
+$("start").onkeydown = e => { if (e.key === "Enter") run(); };
+$("floors").oninput = () => { $("floorsv").textContent = $("floors").value; };
+$("floors").onchange = run;
+$("eng").onchange = run;
+for (const b of $("presets").querySelectorAll("button"))
+  b.onclick = () => { $("start").value = b.textContent; run(); };
+window.addEventListener("resize", run);
+run();
+</script>
+</body>
+</html>
