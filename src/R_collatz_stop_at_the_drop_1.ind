@@ -1,0 +1,95 @@
+\begin{theindex}
+
+  \item \termlink{0step}{0-step}, \textbf{6}
+  \item \termlink{1step}{1-step}, \textbf{6}
+
+  \indexspace
+
+  \item \termlink{bigquestion}{big question}, \textbf{16}
+
+  \indexspace
+
+  \item \termlink{collatzprime}{Collatz-prime}, \textbf{9}
+
+  \indexspace
+
+  \item \termlink{drop}{drop}, \textbf{4}
+
+  \indexspace
+
+  \item \termlink{escalator}{escalator}, \textbf{14}
+  \item \termlink{extra0}{extra \bw{0}}, \textbf{12}
+
+  \indexspace
+
+  \item \termlink{family}{family}, \textbf{4}, \textbf{9}
+  \item \termlink{fastride}{fast ride}, \textbf{14}
+  \item \termlink{floor}{floor}, \textbf{9}
+  \item \termlink{freelunch}{free lunch}, \textbf{14}
+
+  \indexspace
+
+  \item \termlink{game}{game}, \textbf{4}
+  \item \termlink{gluingcount}{gluing count}, \textbf{13}
+
+  \indexspace
+
+  \item \termlink{letters}{letters}, \textbf{6}
+  \item \termlink{longpole}{long pole}, \textbf{14}
+  \item \termlink{loop}{loop}, \textbf{16}
+
+  \indexspace
+
+  \item \termlink{mountain}{mountain}, \textbf{12}
+
+  \indexspace
+
+  \item \termlink{lowestfloor}{new low}, \textbf{12}
+
+  \indexspace
+
+  \item \termlink{oddpart}{odd part}, \textbf{6}
+  \item OEIS
+    \subitem A000265, 4--6
+    \subitem A014682, 2, 4
+    \subitem A020914, 4--6
+    \subitem A022921, 4--6
+    \subitem A060412, 4, 16
+    \subitem A076227, 4, 16
+    \subitem A100982, 4--6, 13, 17
+    \subitem A122442, 4, 9
+    \subitem A177789, 4, 9
+    \subitem A186008, 4, 13
+    \subitem A243115, 4, 9
+    \subitem A324245, 4, 14
+    \subitem A349414, 4, 14
+    \subitem A368514, 4--6
+    \subitem A375782, 4, 14
+    \subitem A375961, 2, 4
+    \subitem A387325, 4, 14
+  \item \termlink{order}{Order}, \textbf{6}
+
+  \indexspace
+
+  \item \termlink{part}{part}, \textbf{12}
+
+  \indexspace
+
+  \item \termlink{rank}{rank}, \textbf{6}
+  \item \termlink{ratcatalan}{rational Catalan}, \textbf{13}
+
+  \indexspace
+
+  \item \termlink{share}{share}, \textbf{13}
+  \item \termlink{simplerrule}{simpler rule}, \textbf{6}
+  \item \termlink{subdrop}{sub-drop}, \textbf{12}
+
+  \indexspace
+
+  \item \termlink{validword}{valid word}, \textbf{6}
+
+  \indexspace
+
+  \item \termlink{word}{word}, \textbf{6}
+
+\end{theindex}
