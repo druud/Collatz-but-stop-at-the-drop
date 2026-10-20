@@ -10,8 +10,7 @@ x > 1 eventually falls below itself: its *drop*.
 | `R_collatz_stop_at_the_drop_2.pdf` | Paper 2, *A game with two letters: the proofs* (Ruud H.G. van Tol and Mike Winkler) |
 | `building.html` | the game of paper 1 in a browser: a building with stairs and poles, a rider to its drop |
 | `pv.py` | the admissible words: counts, ranks, class ids, chains, record Orders and more; `./pv.py test` runs the self-test (Python 3.8 or later, no extra packages) |
-| `All_lean.zip` | the Lean sources; unzip, then `lake exe cache get && lake build` in `Lean/accelerated_collatz/` |
-| `src/` | the LaTeX sources of both papers, with their index files: see below |
+| `src/` | the LaTeX sources of both papers with their index files (see below); `lean_files/`, the Lean sources, and `lean_files.zip`, the same as one file: unzip, then `lake exe cache get && lake build` in `lean_files/` |
 
 ## Building the papers
 
