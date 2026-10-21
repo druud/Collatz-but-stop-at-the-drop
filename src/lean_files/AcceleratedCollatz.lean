@@ -45,6 +45,7 @@ import AcceleratedCollatz.TChainOrders
 import AcceleratedCollatz.TChainParse
 import AcceleratedCollatz.TChainQ
 import AcceleratedCollatz.TClass
+import AcceleratedCollatz.TCongruenceSplit
 import AcceleratedCollatz.TCorrespondence
 import AcceleratedCollatz.TCount
 import AcceleratedCollatz.TCountQ
