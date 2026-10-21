@@ -134,6 +134,9 @@ import AcceleratedCollatz.TSweepPerm
 import AcceleratedCollatz.TSweepPermQ
 import AcceleratedCollatz.TSweepQ
 import AcceleratedCollatz.TSweepZ
+import AcceleratedCollatz.TUds
+import AcceleratedCollatz.TUdsCount
+import AcceleratedCollatz.TUdsDrop
 import AcceleratedCollatz.TVectorLex
 import AcceleratedCollatz.TWidth
 import AcceleratedCollatz.TWidthBound
