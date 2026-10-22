@@ -50,6 +50,7 @@ import AcceleratedCollatz.TCorrespondence
 import AcceleratedCollatz.TCount
 import AcceleratedCollatz.TCountQ
 import AcceleratedCollatz.TCovering
+import AcceleratedCollatz.TTerras
 import AcceleratedCollatz.TCutSweepQ
 import AcceleratedCollatz.TCycle
 import AcceleratedCollatz.TDrop

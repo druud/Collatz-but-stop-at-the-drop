@@ -11,7 +11,7 @@ import Mathlib.NumberTheory.Real.Irrational
   quotients a(j) (`cfQuotQ`, all ≥ 1) are those of Mathlib's `GenContFract.of`
   (`stream_log2Q`, `of_log2Q_h`, `of_log2Q_s`), and the continuants, two places ahead
   (`cfNumQ`, `cfDenQ`: 0/1, 1/0, then Q(j + 2) = a(j) Q(j + 1) + Q(j)), are its
-  numerators and denominators (`of_log2Q_nums`, `of_log2Q_dens`): Q(j + 2) is the j-th
+  numerators and denominators (`of_log2Q_nums_dens`, `of_log2Q_convs`): Q(j + 2) is the j-th
   convergent. The walk runs through the quotients: after a(0) + ... + a(j - 1) + t steps,
   t ≤ a(j), it holds Q(j + 1) and Q(j) + t Q(j + 1) (`sbWalkQ_cfStartQ_add`), the second
   one below log2 q for even j and above it for odd j (`cfNodeQ`). The fractions
