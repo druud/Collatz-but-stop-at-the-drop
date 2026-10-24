@@ -630,19 +630,29 @@
 Under the reduced Collatz map $T$, the numbers that first fall below their start
 after $n$ odd steps form residue classes, one for each \emph{admissible word}: a
 word in \bw{1} and \bw{0} whose running product of factors $3/2$ and $1/2$ stays
-above $1$ until its last letter. We study these words. (1) Cut at its record lows,
-every admissible word is, in exactly one way, a chain of smaller admissible words, and
-admissible words glue into an admissible word if and only if an inequality holds that
-depends on their numbers of ones only; this gives a recurrence for their number $a(n)$
-(OEIS A100982). (2) The same cuts make the words plane trees, characterized by a local
-condition, and read off a bracket word. (3) The sweep map of rational Catalan
-combinatorics permutes the admissible words of each Order; two variants of it are
-permutations exactly at the upper, and at the lower, semiconvergent denominators of
-$\log_2 3$. All of this holds for every odd multiplier $q \ge 3$. (4) Terras's
-coefficient stopping time conjecture reduces, at each Order $n$, to the class ids up to
-$n\,3^{n-1}/(2^{p_2(n)} - 3^n)$; with a range check up to $9.8 \cdot 10^{11}$ it holds
-at every Order up to $10\,781\,273$, and by Rhin's bound the range to check grows only
-polynomially with the Order. Every result with a Lean name is proved in Lean~4 with
+above $1$ until its last letter. The classes, the drop formula and the counts $a(n)$
+(OEIS A100982) are known; we study the words themselves. New here, as far as we know:
+
+\begin{enumerate}\setlength{\itemsep}{0.3ex}
+\item \emph{Chains.} Cut at its record lows, every admissible word is, in exactly one
+  way, a chain of smaller admissible words, and admissible words glue into an admissible
+  word if and only if an inequality holds that depends on their numbers of ones only.
+  This gives a recurrence for $a(n)$.
+\item \emph{Trees.} The same cuts make the words plane trees, characterized by a local
+  condition, and read off a bracket word.
+\item \emph{Sweeps.} The sweep map of rational Catalan combinatorics permutes the
+  admissible words with a given number of ones; two variants of it are permutations exactly at the
+  upper, and at the lower, semiconvergent denominators of $\log_2 3$.
+  Items~1 to~3 hold for every odd multiplier $q \ge 3$.
+\item \emph{A finite check.} Terras's coefficient stopping time conjecture reduces, at
+  each number $n$ of odd steps, to the class ids up to $n\,3^{n-1}/d$, where $d$ is the distance from $3^n$
+  up to the next power of $2$. With a range
+  check up to $9.8 \cdot 10^{11}$ it holds for every $n$ up to $10\,781\,273$, and by
+  Rhin's bound the range to check grows only polynomially with $n$.
+\end{enumerate}
+
+\noindent
+Every result with a Lean name, the known ones included, is proved in Lean~4 with
 Mathlib, without \texttt{sorry}; open statements, the range check and two published
 theorems enter as named hypotheses.
 \end{quotation}
