@@ -647,8 +647,9 @@ above $1$ until its last letter. The classes, the drop formula and the counts $a
 \item \emph{A finite check.} Terras's coefficient stopping time conjecture reduces, at
   each number $n$ of odd steps, to the class ids up to $n\,3^{n-1}/d$, where $d$ is the distance from $3^n$
   up to the next power of $2$. With a range
-  check up to $9.8 \cdot 10^{11}$ it holds for every $n$ up to $10\,781\,273$, and by
-  Rhin's bound the range to check grows only polynomially with $n$.
+  check up to $9.8 \cdot 10^{11}$ it holds for every $n$ up to $10\,781\,273$, that is,
+  for coefficient stopping times up to $17\,087\,914$ (Terras proved it below $2593$,
+  Garner below $105\,000$), and by Rhin's bound the range to check grows only polynomially with $n$.
 \end{enumerate}
 
 \noindent
@@ -706,7 +707,9 @@ Let $\tau(n) = n\,3^{n-1}/(2^{p_2(n)} - 3^n)$. At Order $n$, the width identity
 ids up to $\tau(n)$; $\tau$ sets a new record exactly at the upper record Orders
 (\lean{classDrops\_iff\_small}, \lean{upperRecord\_iff\_tau}). With a range check up to
 $984\,572\,779\,224$, entered as a hypothesis, it holds at every Order up to
-$10\,781\,273$ (\lean{classDropsAt\_le\_10781273}). Under Rhin's bound~\cite{Rhin1987}
+$10\,781\,273$, that is, for every coefficient stopping time up to $17\,087\,914$
+(\lean{classDropsAt\_le\_10781273}); Terras~\cite{Terras1976} proved it below $2593$
+and Garner~\cite{Garner1981} below $105\,000$. Under Rhin's bound~\cite{Rhin1987}
 the class ids to check at Order $n$ are at most a polynomial in $n$
 (\lean{classDrops\_of\_rhinBound}).
 \end{mainthm}
@@ -719,13 +722,15 @@ are due to Terras~\cite{Terras1976} and Everett~\cite{Everett1977} (see also
 Garner~\cite{Garner1981} and the survey of Lagarias~\cite{Lagarias1985}); the rational
 fixed points $\rho/(2^{p_2} - 3^{p_3})$, our cycle points, go back to B\"ohm and
 Sontacchi~\cite{BohmSontacchi1978}. Terras stated the width identity as his
-Conjecture~2.9; it is still open. The counts $a(n)$ are OEIS A100982; the count by
+Conjecture~2.9 and proved it for coefficient stopping times below $2593$; Garner extended
+this to $105\,000$, that is, to Orders up to $66\,246$. In general it is still open. The counts $a(n)$ are OEIS A100982; the count by
 active words is that of Hikawa and Nakanishi~\cite{HikawaNakanishi2026}, and the bounds
 on $a(n)$ are Winkler's~\cite{Winkler2026b}. Cutting a path at its record lows is the
 classical ladder factorization~\cite{Feller1971}, and the sweep map is that of
 Armstrong, Loehr and Warrington~\cite{ALW2015}. Chapters~\ref{sec:words}
 and~\ref{sec:numbers} re-prove the known parts, in Lean as well. As far as we know,
-Theorems~A to D, the further characterizations of the record Orders in
+Theorems~A to C, the range of Theorem~D (by a reduction in the spirit of Terras's and
+Garner's, who also used the continued fraction of $\log_2 3$ and a range check), the further characterizations of the record Orders in
 Chapter~\ref{sec:chain}, and the formalization (Appendix~\ref{app:lean}, including
 Terras's density theorem) are new.
 
@@ -1916,7 +1921,10 @@ $\lfloor \tau(n) \rfloor$ is largest at $190\,537$ for $n < 10\,781\,274$
 also outside Lean, checked that every $x$ with $1 < x \le 984\,572\,779\,224$ drops at its
 coefficient stopping time; the largest Order met is $347$ (at $x = 898\,696\,369\,947$).
 
-So the width identity holds for every admissible word of Order at most $10\,781\,273$:
+So the width identity holds for every admissible word of Order at most $10\,781\,273$,
+that is, of length at most $17\,087\,914$; Terras~\cite{Terras1976} proved it for lengths
+below $2593$ and Garner~\cite{Garner1981} below $105\,000$ (Orders up to $1635$ and $66\,246$).
+It is
 a computer-assisted result, since the range check enters the Lean proof as its only
 hypothesis (\lean{classDropsAt\_le\_10781273}). An independent residue-class sieve and a
 second run of the program on other hardware reproduced the range check. The step to the
