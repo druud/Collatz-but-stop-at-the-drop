@@ -16,8 +16,6 @@ x > 1 eventually falls below itself: its *drop*.
 
 In `src/`, run `pdflatex R_collatz_stop_at_the_drop_1.tex` three times, then the
 same for `_2.tex`: paper 2 links into paper 1 through `xr-hyper` and reads its `.aux`.
-`R_collatz_stop_at_the_drop_2_arXiv.tex` is paper 2 without those links; it builds on
-its own from the `.tex` and its `.ind`.
 
 ## Licence
 
