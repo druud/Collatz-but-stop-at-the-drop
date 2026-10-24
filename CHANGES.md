@@ -23,6 +23,11 @@ first. Version names (R_65a, R_66, ...) are the authors' own labels.
   and the chapter "What is still open"; the range is new, the method
   is in the spirit of theirs. New references: Boehm and Sontacchi
   (1978), Everett (1977), Garner (1981).
+- Paper 2, the abstract's first paragraph (M. Winkler): an
+  admissible word gives a residue class whose sufficiently large
+  members first fall below their start at the end of the word. The
+  earlier wording could be read as saying more, namely the open
+  width identity.
 - Paper 2: the AI assistance is named under "Contributions" instead
   of on the title page. 34 pages (was 33).
 
