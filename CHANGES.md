@@ -28,6 +28,8 @@ first. Version names (R_65a, R_66, ...) are the authors' own labels.
   members first fall below their start at the end of the word. The
   earlier wording could be read as saying more, namely the open
   width identity.
+- Paper 1: the AI assistance is no longer on the title page; "How
+  to read this paper" names it, as before.
 - Paper 2: the AI assistance is named under "Contributions" instead
   of on the title page. 34 pages (was 33).
 
