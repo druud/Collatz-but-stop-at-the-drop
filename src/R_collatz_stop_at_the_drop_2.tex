@@ -1,7 +1,7 @@
-\documentclass[11pt,a4paper,titlepage]{article}
+\documentclass[10pt,a4paper,titlepage]{article}
 \usepackage[utf8]{inputenc}
 \usepackage{amsmath,amssymb,amsthm}
-\usepackage[margin=1in]{geometry}
+\usepackage[margin=1.25in]{geometry}
 % References into Paper 1: its .aux is read under the name of this generation,
 % the links go to the final name of its PDF
 \usepackage{xr-hyper}
@@ -47,7 +47,7 @@
 \bool_new:N \l__bw_first_bool
 \cs_new_protected:Npn \__bw_part:n #1
   {
-    \fcolorbox{black!50}{black!4}
+    \fcolorbox{black!50}{black!5}
       {
         \bool_set_true:N \l__bw_first_bool
         \tl_map_inline:nn {#1}
@@ -86,11 +86,16 @@
 \newenvironment{wordbox}
   {\par\ifpaper\vspace*{\fill}\vspace{\bigskipamount}\else\medskip\fi
    \noindent\begin{lrbox}{\wordboxbin}%
-   \begin{minipage}{\dimexpr\linewidth-2\fboxsep-2\fboxrule\relax}\small
-   \textbf{Key terms introduced in Chapter~\thesection:}\par\smallskip
+   \begin{minipage}{\dimexpr\linewidth-6pt-2\fboxrule\relax}\small
    \begin{tabular}{@{}>{\bfseries\boldmath\raggedright\arraybackslash}p{0.24\linewidth}p{0.68\linewidth}@{}}}
   {\end{tabular}\end{minipage}\end{lrbox}%
-   \fcolorbox{black!40}{black!3}{\usebox{\wordboxbin}}\par\ifpaper\else\medskip\fi}
+   \begingroup\setlength{\fboxsep}{0pt}%
+   \fcolorbox{black!40}{black!5}{\begin{minipage}{\dimexpr\linewidth-2\fboxrule\relax}%
+     {\setlength{\fboxsep}{3pt}\colorbox{black!18}{\makebox[\dimexpr\linewidth-6pt\relax][l]%
+       {\small\bfseries\strut Key terms introduced in Chapter~\thesection}}}\par\nointerlineskip
+     {\color{black!40}\rule{\linewidth}{0.4pt}}\par\nointerlineskip
+     \vspace{3pt}\noindent\hspace*{3pt}\usebox{\wordboxbin}\par\vspace{3pt}%
+   \end{minipage}}\endgroup\par\ifpaper\else\medskip\fi}
 
 % A figure or table set where it stands, on one page with what follows it
 \makeatletter
@@ -322,37 +327,37 @@
   \draw[black!30, densely dotted] (3.90,-2.85) -- (5.20,-2.85);
   \node[circle, fill=white, draw=black!40, inner sep=1.5pt, font=\small] at (0.00,0.00) {$1$};
   \node[circle, fill=white, draw=black!40, inner sep=1.5pt, font=\small] at (1.30,0.00) {$1$};
-  \node[anchor=west, text=chordorange!85!black, font=\scriptsize] at (1.50,-0.30) {$20$};
+  \node[anchor=west, text=chordorange!85!black, font=\scriptsize] at (1.43,-0.20) {$20$};
   \node[circle, fill=white, draw=black!40, inner sep=1.5pt, font=\small] at (2.60,0.00) {$1$};
-  \node[anchor=west, text=chordorange!85!black, font=\scriptsize] at (2.80,-0.30) {$10$};
+  \node[anchor=west, text=chordorange!85!black, font=\scriptsize] at (2.73,-0.20) {$10$};
   \node[circle, fill=white, draw=black!40, inner sep=1.5pt, font=\small] at (3.90,0.00) {$1$};
-  \node[anchor=west, text=chordorange!85!black, font=\scriptsize] at (4.10,-0.30) {$4$};
+  \node[anchor=west, text=chordorange!85!black, font=\scriptsize] at (4.03,-0.20) {$4$};
   \node[circle, fill=white, draw=black!40, inner sep=1.5pt, font=\small] at (5.20,0.00) {$1$};
-  \node[anchor=west, text=chordorange!85!black, font=\scriptsize] at (5.40,-0.30) {$1$};
+  \node[anchor=west, text=chordorange!85!black, font=\scriptsize] at (5.33,-0.20) {$1$};
   \node[circle, fill=chordblue!35, draw=chordblue, inner sep=1.5pt, font=\small\bfseries] at (1.30,-0.95) {$1$};
-  \node[anchor=west, text=chordorange!85!black, font=\scriptsize] at (1.50,-1.25) {$\boldsymbol{\times 10}$};
+  \node[anchor=west, text=chordorange!85!black, font=\scriptsize] at (1.43,-1.15) {$\boldsymbol{10}$};
   \node[circle, fill=white, draw=black!40, inner sep=1.5pt, font=\small] at (2.60,-0.95) {$1$};
-  \node[anchor=west, text=chordorange!85!black, font=\scriptsize] at (2.80,-1.25) {$6$};
+  \node[anchor=west, text=chordorange!85!black, font=\scriptsize] at (2.73,-1.15) {$6$};
   \node[circle, fill=white, draw=black!40, inner sep=1.5pt, font=\small] at (3.90,-0.95) {$2$};
-  \node[anchor=west, text=chordorange!85!black, font=\scriptsize] at (4.10,-1.25) {$3$};
+  \node[anchor=west, text=chordorange!85!black, font=\scriptsize] at (4.03,-1.15) {$3$};
   \node[circle, fill=white, draw=black!40, inner sep=1.5pt, font=\small] at (5.20,-0.95) {$3$};
-  \node[anchor=west, text=chordorange!85!black, font=\scriptsize] at (5.40,-1.25) {$1$};
+  \node[anchor=west, text=chordorange!85!black, font=\scriptsize] at (5.33,-1.15) {$1$};
   \fill[black!40] (1.30,-1.90) circle (1.2pt);
-  \node[anchor=west, text=chordorange!85!black, font=\scriptsize] at (1.50,-2.20) {$4$};
+  \node[anchor=west, text=chordorange!85!black, font=\scriptsize] at (1.43,-2.10) {$4$};
   \node[circle, fill=chordblue!35, draw=chordblue, inner sep=1.5pt, font=\small\bfseries] at (2.60,-1.90) {$1$};
-  \node[anchor=west, text=chordorange!85!black, font=\scriptsize] at (2.80,-2.20) {$\boldsymbol{\times 3}$};
+  \node[anchor=west, text=chordorange!85!black, font=\scriptsize] at (2.73,-2.10) {$\boldsymbol{3}$};
   \node[circle, fill=chordblue!35, draw=chordblue, inner sep=1.5pt, font=\small\bfseries] at (3.90,-1.90) {$2$};
-  \node[anchor=west, text=chordorange!85!black, font=\scriptsize] at (4.10,-2.20) {$\boldsymbol{\times 2}$};
+  \node[anchor=west, text=chordorange!85!black, font=\scriptsize] at (4.03,-2.10) {$\boldsymbol{2}$};
   \node[circle, fill=white, draw=black!40, inner sep=1.5pt, font=\small] at (5.20,-1.90) {$3$};
-  \node[anchor=west, text=chordorange!85!black, font=\scriptsize] at (5.40,-2.20) {$1$};
+  \node[anchor=west, text=chordorange!85!black, font=\scriptsize] at (5.33,-2.10) {$1$};
   \fill[black!40] (1.30,-2.85) circle (1.2pt);
-  \node[anchor=west, text=chordorange!85!black, font=\scriptsize] at (1.50,-3.15) {$1$};
+  \node[anchor=west, text=chordorange!85!black, font=\scriptsize] at (1.43,-3.05) {$1$};
   \fill[black!40] (2.60,-2.85) circle (1.2pt);
-  \node[anchor=west, text=chordorange!85!black, font=\scriptsize] at (2.80,-3.15) {$1$};
+  \node[anchor=west, text=chordorange!85!black, font=\scriptsize] at (2.73,-3.05) {$1$};
   \fill[black!40] (3.90,-2.85) circle (1.2pt);
-  \node[anchor=west, text=chordorange!85!black, font=\scriptsize] at (4.10,-3.15) {$1$};
+  \node[anchor=west, text=chordorange!85!black, font=\scriptsize] at (4.03,-3.05) {$1$};
   \node[circle, fill=chordblue!35, draw=chordblue, inner sep=1.5pt, font=\small\bfseries] at (5.20,-2.85) {$3$};
-  \node[anchor=west, text=chordorange!85!black, font=\scriptsize] at (5.40,-3.15) {$\boldsymbol{\times 1}$};
+  \node[anchor=west, text=chordorange!85!black, font=\scriptsize] at (5.33,-3.05) {$\boldsymbol{1}$};
 }
 % deficit budget of a chain (Order 5), generated by a throwaway script
 \newcommand{\chainbudget}{%
@@ -1022,7 +1027,7 @@ $n = 5$ and $r = 4$ the values of $z$ are $0, 2, 2, 0, 1, 1, 1$ and the word is
 the sum of $z$ over its \bw{1}s after the first (\pv{rank}).
 
 The table has no more than $n\,p_2(n)$ entries, and a word takes $p_2(n)$ steps.
-For Order $60$, with $a(60) = 1325438036712274130536314$, the word of rank
+For Order $60$ there are $a(60) = 1325438036712274130536314$ words; the one of rank
 $\lfloor 2\,a(60)/3 \rfloor = 883625357808182753690876$ is
 \[
 \begin{array}{l}
@@ -1675,7 +1680,8 @@ Figure~\ref{fig:threecounts} puts the three counts side by side for Order $5$.
 
 \begin{figure}[htbp]
 \centering
-\begin{tikzpicture}\threecounts\end{tikzpicture}
+% a little wider than the text: let it stick out evenly
+\makebox[\linewidth]{\begin{tikzpicture}\threecounts\end{tikzpicture}}
 \caption{Three ways to count the $a(5) = 7$ admissible words of Order $5$. Left: their
 chains, grouped by the Orders of the blocks. Middle: the $\binom{7}{4} = 35$ words of
 length $8$ with five \bw{1}s that start with \bw{1}, one square each, by the Order

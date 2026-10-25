@@ -28,10 +28,13 @@ first. Version names (R_65a, R_66, ...) are the authors' own labels.
   members first fall below their start at the end of the word. The
   earlier wording could be read as saying more, namely the open
   width identity.
+- Both papers, layout: 10pt type, wider side margins, clearer
+  key-term boxes; small fixes to two figures and one sentence.
+  Paper 2 now has 33 pages. No change to the mathematics.
 - Paper 1: the AI assistance is no longer on the title page; "How
   to read this paper" names it, as before.
 - Paper 2: the AI assistance is named under "Contributions" instead
-  of on the title page. 34 pages (was 33).
+  of on the title page.
 
 ## R_73 (22 October 2026)
 

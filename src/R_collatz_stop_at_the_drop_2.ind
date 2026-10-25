@@ -6,22 +6,22 @@
 
   \indexspace
 
-  \item \termlink{block}{block}, \textbf{18}
-  \item \termlink{blockfactor}{block factor $f(o)$}, \textbf{18}
-  \item \termlink{brackettree}{bracket tree}, \textbf{18}
-  \item \termlink{bracketword}{bracket word}, \textbf{18}
+  \item \termlink{block}{block}, \textbf{17}
+  \item \termlink{blockfactor}{block factor $f(o)$}, \textbf{17}
+  \item \termlink{brackettree}{bracket tree}, \textbf{17}
+  \item \termlink{bracketword}{bracket word}, \textbf{17}
 
   \indexspace
 
-  \item \termlink{chain}{chain}, \textbf{18}
+  \item \termlink{chain}{chain}, \textbf{17}
   \item \termlink{class}{class}, \textbf{10}
   \item \termlink{classid}{class id}, \textbf{10}
-  \item \termlink{code}{code}, \textbf{18}
-  \item \termlink{cst}{coefficient stopping time}, \textbf{26}
+  \item \termlink{code}{code}, \textbf{17}
+  \item \termlink{cst}{coefficient stopping time}, \textbf{25}
   \item \termlink{collatzprime}{Collatz-prime}, \textbf{10}
-  \item \termlink{composition}{composition}, \textbf{20}
-  \item \termlink{covering}{Covering}, \textbf{26}
-  \item \termlink{cutsweep}{cut sweep}, \textbf{18}
+  \item \termlink{composition}{composition}, \textbf{19}
+  \item \termlink{covering}{Covering}, \textbf{25}
+  \item \termlink{cutsweep}{cut sweep}, \textbf{17}
   \item \termlink{cyclepoint}{cycle point $x^*$}, \textbf{10}
 
   \indexspace
@@ -32,7 +32,7 @@
   \indexspace
 
   \item \termlink{family}{family}, \textbf{5}
-  \item \termlink{fillerzero}{filler zero}, \textbf{18}
+  \item \termlink{fillerzero}{filler zero}, \textbf{17}
   \item \termlink{firstpassage}{first passage}, \textbf{8}
 
   \indexspace
@@ -42,36 +42,36 @@
 
   \indexspace
 
-  \item \termlink{mn}{$m(n)$}, \textbf{20}
-  \item \termlink{markedvector}{marked vector}, \textbf{22}
+  \item \termlink{mn}{$m(n)$}, \textbf{19}
+  \item \termlink{markedvector}{marked vector}, \textbf{21}
 
   \indexspace
 
   \item \termlink{oddpart}{odd part}, \textbf{8}
   \item OEIS
     \subitem A000265, 6, 8
-    \subitem A003586, 17, 18
+    \subitem A003586, 16, 17
     \subitem A014682, 3, 5
     \subitem A020914, 6, 8
     \subitem A022921, 6, 8
-    \subitem A056576, 19, 20
-    \subitem A060412, 23, 26
-    \subitem A076227, 7, 8, 23
-    \subitem A100982, 4, 7, 8, 19, 20
-    \subitem A122442, 9, 10, 25
+    \subitem A056576, 18, 19
+    \subitem A060412, 22, 25
+    \subitem A076227, 7, 8, 22
+    \subitem A100982, 4, 7, 8, 18
+    \subitem A122442, 9, 10, 24
     \subitem A177789, 9, 10
-    \subitem A186008, 20
-    \subitem A206788, 13, 18
+    \subitem A186008, 19
+    \subitem A206788, 12, 17
     \subitem A243115, 9, 10
     \subitem A260591, 7, 8
-    \subitem A324245, 21, 22
-    \subitem A349414, 21, 22
-    \subitem A350082, 26
+    \subitem A324245, 20, 21
+    \subitem A349414, 20, 21
+    \subitem A350082, 25
     \subitem A368514, 7, 8
-    \subitem A375782, 21, 22
+    \subitem A375782, 20, 21
     \subitem A375961, 3, 5
-    \subitem A387325, 21, 22
-    \subitem A400742, 26
+    \subitem A387325, 20, 21
+    \subitem A400742, 25
   \item \termlink{order}{Order}, \textbf{8}
 
   \indexspace
@@ -87,32 +87,32 @@
 
   \indexspace
 
-  \item \termlink{R}{$R$ (fast map)}, \textbf{22}
+  \item \termlink{R}{$R$ (fast map)}, \textbf{21}
   \item \termlink{rank}{rank}, \textbf{8}
-  \item \termlink{ratcatalan}{rational Catalan}, \textbf{18}
-  \item \termlink{recordlow}{record low}, \textbf{18}
+  \item \termlink{ratcatalan}{rational Catalan}, \textbf{17}
+  \item \termlink{recordlow}{record low}, \textbf{17}
   \item \termlink{rho}{$\rho$}, \textbf{10}
 
   \indexspace
 
-  \item \termlink{sharedclose}{shared close}, \textbf{18}
-  \item \termlink{startsweep}{start sweep}, \textbf{18}
+  \item \termlink{sharedclose}{shared close}, \textbf{17}
+  \item \termlink{startsweep}{start sweep}, \textbf{17}
   \item \termlink{steppattern}{step pattern}, \textbf{5}
   \item \termlink{stepT}{step $T$}, \textbf{5}
-  \item \termlink{sweepmap}{sweep map}, \textbf{18}
+  \item \termlink{sweepmap}{sweep map}, \textbf{17}
 
   \indexspace
 
-  \item \termlink{tail}{tail}, \textbf{18}
-  \item \termlink{tau}{$\tau(n)$}, \textbf{26}
+  \item \termlink{tail}{tail}, \textbf{17}
+  \item \termlink{tau}{$\tau(n)$}, \textbf{25}
 
   \indexspace
 
-  \item \termlink{validorders}{valid Orders}, \textbf{18}
+  \item \termlink{validorders}{valid Orders}, \textbf{17}
 
   \indexspace
 
-  \item \termlink{widthidentity}{Width identity}, \textbf{26}
+  \item \termlink{widthidentity}{Width identity}, \textbf{25}
   \item \termlink{word}{word}, \textbf{8}
 
 \end{theindex}

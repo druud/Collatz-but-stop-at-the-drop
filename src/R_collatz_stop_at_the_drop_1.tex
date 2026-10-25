@@ -1,7 +1,7 @@
-\documentclass[11pt,a4paper,titlepage]{article}
+\documentclass[10pt,a4paper,titlepage]{article}
 \usepackage[utf8]{inputenc}
 \usepackage{amsmath,amssymb,amsthm}
-\usepackage[margin=1in]{geometry}
+\usepackage[margin=1.25in]{geometry}
 \usepackage{hyperref}
 \hypersetup{colorlinks, allcolors=blue!50!black}
 % Index: the entry of a key term links to the passage that introduces the term
@@ -41,7 +41,7 @@
 \bool_new:N \l__bw_first_bool
 \cs_new_protected:Npn \__bw_part:n #1
   {
-    \fcolorbox{black!50}{black!4}
+    \fcolorbox{black!50}{black!5}
       {
         \bool_set_true:N \l__bw_first_bool
         \tl_map_inline:nn {#1}
@@ -80,11 +80,16 @@
 \newenvironment{wordbox}
   {\par\ifpaper\vspace*{\fill}\vspace{\bigskipamount}\else\medskip\fi
    \noindent\begin{lrbox}{\wordboxbin}%
-   \begin{minipage}{\dimexpr\linewidth-2\fboxsep-2\fboxrule\relax}\small
-   \textbf{Key terms introduced in Chapter~\thesection:}\par\smallskip
+   \begin{minipage}{\dimexpr\linewidth-6pt-2\fboxrule\relax}\small
    \begin{tabular}{@{}>{\bfseries\boldmath}p{0.24\linewidth}p{0.68\linewidth}@{}}}
   {\end{tabular}\end{minipage}\end{lrbox}%
-   \fcolorbox{black!40}{black!3}{\usebox{\wordboxbin}}\par\ifpaper\else\medskip\fi}
+   \begingroup\setlength{\fboxsep}{0pt}%
+   \fcolorbox{black!40}{black!5}{\begin{minipage}{\dimexpr\linewidth-2\fboxrule\relax}%
+     {\setlength{\fboxsep}{3pt}\colorbox{black!18}{\makebox[\dimexpr\linewidth-6pt\relax][l]%
+       {\small\bfseries\strut Key terms introduced in Chapter~\thesection}}}\par\nointerlineskip
+     {\color{black!40}\rule{\linewidth}{0.4pt}}\par\nointerlineskip
+     \vspace{3pt}\noindent\hspace*{3pt}\usebox{\wordboxbin}\par\vspace{3pt}%
+   \end{minipage}}\endgroup\par\ifpaper\else\medskip\fi}
 
 % A figure or table set where it stands, on one page with what follows it
 \makeatletter
@@ -1072,7 +1077,8 @@ $3, 1$: two words. Order $4$: all three. The other five ways to split $4$, such 
 $2, 2$ or $1, 1, 2$, never appear: a start would drop too early.
 
 \begin{herefloat}{figure}
-\begin{tikzpicture}\dropchordsXXVII\dropchordsXXVIIlabels\end{tikzpicture}
+% a little wider than the text: let it stick out evenly
+\makebox[\linewidth]{\begin{tikzpicture}\dropchordsXXVII\dropchordsXXVIIlabels\end{tikzpicture}}
 \caption{The ride of $27$ to its drop at $23$: $59$ steps, up to floor $4\,616$ (the
 floors are drawn on a log scale). From every odd floor, a chord to its own drop: solid
 when the drop is an odd floor, dashed when it is an even one. These are the blue bars of
