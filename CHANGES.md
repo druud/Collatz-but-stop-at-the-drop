@@ -28,6 +28,9 @@ first. Version names (R_65a, R_66, ...) are the authors' own labels.
   members first fall below their start at the end of the word. The
   earlier wording could be read as saying more, namely the open
   width identity.
+- Paper 1 on Zenodo: https://doi.org/10.5281/zenodo.23631044. Paper 2:
+  https://doi.org/10.5281/zenodo.23631547. Each DOI is on its
+  paper's title page and in the other paper's bibliography.
 - Both papers, layout: 10pt type, wider side margins, clearer
   key-term boxes; small fixes to two figures and one sentence.
   Paper 2 now has 33 pages. No change to the mathematics.
