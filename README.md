@@ -4,6 +4,11 @@ Two papers and the Lean 4 / Mathlib formalization of their results.
 The question studied is not whether every start reaches 1, but whether every
 x > 1 eventually falls below itself: its *drop*.
 
+Both papers are archived on Zenodo, each with its source files:
+paper 1 at [doi:10.5281/zenodo.23631043](https://doi.org/10.5281/zenodo.23631043),
+paper 2, with the Lean files, at [doi:10.5281/zenodo.23631546](https://doi.org/10.5281/zenodo.23631546)
+(these DOIs always point to the newest version).
+
 | File | What |
 |---|---|
 | `R_collatz_stop_at_the_drop_1.pdf` | Paper 1, *Now with less noise*: an introduction without proofs (Ruud H.G. van Tol) |
