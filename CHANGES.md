@@ -3,7 +3,7 @@
 The changes to this repository since its first public release, newest
 first. Version names (R_65a, R_66, ...) are the authors' own labels.
 
-## R_74 (24 October 2026)
+## R_74 and R_74a (24 and 25 October 2026)
 
 - Paper 2 will be published on Zenodo instead of arXiv. The
   arXiv-only copy of its source (`src/R_collatz_stop_at_the_drop_2_arXiv.tex`
