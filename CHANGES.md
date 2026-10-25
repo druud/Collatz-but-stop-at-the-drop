@@ -3,6 +3,16 @@
 The changes to this repository since its first public release, newest
 first. Version names (R_65a, R_66, ...) are the authors' own labels.
 
+## R_75 (25 October 2026)
+
+- Both papers on Zenodo: paper 1, https://doi.org/10.5281/zenodo.23631044,
+  paper 2, https://doi.org/10.5281/zenodo.23631547. Each DOI is on
+  its paper's title page and in the other paper's bibliography. The
+  README gives the DOIs for all versions.
+- Both papers, layout: 10pt type, wider side margins, clearer
+  key-term boxes; small fixes to two figures and one sentence.
+  Paper 2 now has 33 pages. No change to the mathematics.
+
 ## R_74 and R_74a (24 and 25 October 2026)
 
 - Paper 2 will be published on Zenodo instead of arXiv. The
@@ -28,13 +38,6 @@ first. Version names (R_65a, R_66, ...) are the authors' own labels.
   members first fall below their start at the end of the word. The
   earlier wording could be read as saying more, namely the open
   width identity.
-- Both papers on Zenodo: paper 1, https://doi.org/10.5281/zenodo.23631044,
-  paper 2, https://doi.org/10.5281/zenodo.23631547. Each DOI is on
-  its paper's title page and in the other paper's bibliography. The
-  README gives the DOIs for all versions.
-- Both papers, layout: 10pt type, wider side margins, clearer
-  key-term boxes; small fixes to two figures and one sentence.
-  Paper 2 now has 33 pages. No change to the mathematics.
 - Paper 1: the AI assistance is no longer on the title page; "How
   to read this paper" names it, as before.
 - Paper 2: the AI assistance is named under "Contributions" instead
