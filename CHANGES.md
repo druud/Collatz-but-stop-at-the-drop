@@ -3,6 +3,17 @@
 The changes to this repository since its first public release, newest
 first. Version names (R_65a, R_66, ...) are the authors' own labels.
 
+## Since R_75
+
+- Lean, three new files outside the papers: `PowDiff.lean` proves
+  the numbers |2^i - 3^j| up to the 3000th term of A014121
+  (328256967394000206715): A014121 (Kevin Ryde's table of 3000
+  terms is right) and A363999 (2891 terms), by a congruence sieve;
+  `PowDiffRhin.lean` decides every number under Rhin's bound;
+  `PowDiffWalk.lean` gives the bound min(2^i, 3^j) <= p2(j)^2
+  |2^i - 3^j| for j <= 10^60 without it.
+- `src/lean_files/.gitignore`: `.lake/`, macOS files and text clippings.
+
 ## R_75 (25 October 2026)
 
 - Both papers on Zenodo: paper 1, https://doi.org/10.5281/zenodo.23631044,
