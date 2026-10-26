@@ -18,7 +18,7 @@ p K + K/(Q^2/2) + 1 ≤ a n (`lowOK_spec`). The kernel runs the walk at K = 2^40
 
 Both sides together: min(2^i, 3^j) ≤ p2(j)^2 |2^i - 3^j| for 1 ≤ j ≤ 10^60
 (`min_le_of_walk`), so v = |2^i - 3^j| with j ≤ 10^60 has i, j < B for any B ≥ 3 with
-(4 B^2 + 1) v < 2^B (`lt_of_walk`). Without `RhinLog`, only j > 10^60 is left open.
+(4 B^2 + 1) v < 2^B (`lt_of_walk`). Without `RhinInt`, only j > 10^60 is left open.
 -/
 
 namespace PowDiff
