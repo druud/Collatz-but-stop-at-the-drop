@@ -1,0 +1,11 @@
+# Lean / Lake build output and dependencies
+.lake/
+
+# macOS (exact names; text clippings by extension, their name is the dragged text)
+.DS_Store
+*.textClipping
+__MACOSX/
+.AppleDouble
+.LSOverride
+# Icon must end with two \r (git drops one)
+Icon
