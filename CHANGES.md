@@ -3,7 +3,7 @@
 The changes to this repository since its first public release, newest
 first. Version names (R_65a, R_66, ...) are the authors' own labels.
 
-## Since R_75
+## R_76 (27 October 2026)
 
 - Lean, three new files outside the papers: `PowDiff.lean` proves
   the numbers |2^i - 3^j| up to the 3000th term of A014121
