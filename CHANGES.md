@@ -9,7 +9,8 @@ first. Version names (R_65a, R_66, ...) are the authors' own labels.
   the numbers |2^i - 3^j| up to the 3000th term of A014121
   (328256967394000206715): A014121 (Kevin Ryde's table of 3000
   terms is right) and A363999 (2891 terms), by a congruence sieve;
-  `PowDiffRhin.lean` decides every number under Rhin's bound;
+  `PowDiffRhin.lean` decides every number under `RhinInt`, an
+  integer form of Rhin's bound (no reals);
   `PowDiffWalk.lean` gives the bound min(2^i, 3^j) <= p2(j)^2
   |2^i - 3^j| for j <= 10^60 without it.
 - `src/lean_files/.gitignore`: `.lake/`, macOS files and text clippings.
