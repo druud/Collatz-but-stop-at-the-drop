@@ -3,6 +3,14 @@
 The changes to this repository since its first public release, newest
 first. Version names (R_65a, R_66, ...) are the authors' own labels.
 
+## R_78 (in progress)
+
+- Lean, the walks of `PowDiffFar` run by the kernel to 10^200:
+  `PowDiffFarRhin`, `PowDiffFarLow` and `PowDiffFarCheck`,
+  min(2^i, 3^j) <= p2(j)^2 |2^i - 3^j| for 1 <= j <= 10^200. Each
+  walk takes about an hour and 20 GB of memory; the second imports
+  the first, so `lake build` runs them one after the other.
+
 ## R_77 (27 October 2026)
 
 - Lean, three new files for every odd multiplier q >= 3 (the
