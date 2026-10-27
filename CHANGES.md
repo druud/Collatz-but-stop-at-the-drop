@@ -3,6 +3,16 @@
 The changes to this repository since its first public release, newest
 first. Version names (R_65a, R_66, ...) are the authors' own labels.
 
+## Since R_76
+
+- Lean, three new files for every odd multiplier q >= 3 (the
+  q-family of paper 2's chain decomposition): `TBracketCountQ`,
+  `TChainParseQ`, `TBracketDropQ`; with them every statement of
+  paper 2's chapter on the chain decomposition has its form for
+  every odd q.
+- Lean, `PowDiffFar.lean`: the two walk bounds for any certified
+  range (the step towards checks past 10^60).
+
 ## R_76 (27 October 2026)
 
 - Lean, three new files outside the papers: `PowDiff.lean` proves
