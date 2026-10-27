@@ -3,7 +3,7 @@
 The changes to this repository since its first public release, newest
 first. Version names (R_65a, R_66, ...) are the authors' own labels.
 
-## R_78 (in progress)
+## R_78 (27 October 2026)
 
 - Lean, the walks of `PowDiffFar` run by the kernel to 10^200:
   each walk in four stretches (`PowDiffFarRhin1` to
