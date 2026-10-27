@@ -10,7 +10,9 @@ first. Version names (R_65a, R_66, ...) are the authors' own labels.
   `PowDiffFarRhin4`, `PowDiffFarLow1` to `PowDiffFarLow4`), joined
   in `PowDiffFarCheck`: min(2^i, 3^j) <= p2(j)^2 |2^i - 3^j| for
   1 <= j <= 10^200. Each stretch imports the one before, so
-  `lake build` runs them one after the other.
+  `lake build` runs them one after the other. The stretches take
+  the bracket ends as literals from `PowDiffFarBracket` (14
+  kernel-checked chunks of squarings, each from a literal state).
 
 ## R_77 (27 October 2026)
 
