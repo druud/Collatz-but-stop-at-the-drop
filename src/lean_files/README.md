@@ -33,7 +33,12 @@ odd q >= 3 (the q-family of Winkler 2026). Rhin's (1987) lower bound on
 | `AcceleratedCollatz/PowDiff.lean` | self-contained (Mathlib only): the numbers \|2^i - 3^j\| up to 328256967394000206715, the 3000th term of A014121: A014121 (i, j >= 0, 3000 terms: Kevin Ryde's conjectured table is right) and A363999 (i, j >= 1, 2891 terms), by a congruence sieve modulo 2^8 3^3 and 13 primes (`a014121_iff`, `a363999_iff`) |
 | `AcceleratedCollatz/PowDiffRhin.lean` | the numbers \|2^i - 3^j\| for every bound under `RhinInt`, an integer form of Rhin's bound (no reals): min(2^i, 3^j) <= H^14 \|2^i - 3^j\|, H = max(i, j), so a finite search decides each v (`isPowDiff_iff_searchB`) |
 | `AcceleratedCollatz/PowDiffWalk.lean` | the lower side of TRhinCheck, 2^(Q-1) (1 + Q^2) <= Q^2 3^n for Q = p2(n), n <= 10^60, by a kernel walk (`lowAt_upTo`); with the upper side, min(2^i, 3^j) <= p2(j)^2 \|2^i - 3^j\| for 1 <= j <= 10^60, unconditionally (`min_le_of_walk`, `lt_of_walk`) |
-| `AcceleratedCollatz/PowDiffFar.lean` | the two walk bounds for any certified range: a walk at K = 2^m (bracket from B bits) up to N that returns true gives the upper side (`rhinBoundUpTo_of_walk`), the lower side (`lowAt_of_walk`) and min(2^i, 3^j) <= p2(j)^2 \|2^i - 3^j\| for 1 <= j <= N (`min_le_of_walks`); the kernel runs past 10^60 are prepared outside the tree |
+| `AcceleratedCollatz/PowDiffFar.lean` | the two walk bounds for any certified range, also from a walk in stretches (`walkTo`, `walkedTo_next`): a walk at K = 2^m (bracket from B bits) up to N that returns true gives the upper side (`rhinBoundUpTo_of_walk`), the lower side (`lowAt_of_walk`) and min(2^i, 3^j) <= p2(j)^2 \|2^i - 3^j\| for 1 <= j <= N (`min_le_of_walks`) |
+| `AcceleratedCollatz/PowDiffFarNodes.lean` | the end nodes of four stretches of the walk to 10^200 at K = 2^1330 (steps 1460, 2920, 4380, 5839) |
+| `AcceleratedCollatz/PowDiffFarBracket.lean` | the bracket of the walk to 10^200 (K = 2^1330 from 2663 bits) from 14 kernel-checked chunks of squarings, each from a literal state: its ends as literals (`farLo200_eq`, `farHi200_eq`); 241 s, peak 3.0 GB |
+| `AcceleratedCollatz/PowDiffFarRhin1.lean` .. `PowDiffFarRhin4.lean` | the upper walk to 10^200 in four stretches, each computed by the kernel (`rhinStretch_200_1` .. `_4`, by `walkTo`); heavy checks, each imports the one before |
+| `AcceleratedCollatz/PowDiffFarLow1.lean` .. `PowDiffFarLow4.lean` | the lower walk to 10^200 in four stretches (`lowStretch_200_1` .. `_4`); `PowDiffFarLow1` imports `PowDiffFarRhin4` |
+| `AcceleratedCollatz/PowDiffFarCheck.lean` | the stretches joined (`walkedTo_start`, `walkedTo_next`): `rhinBoundUpTo_one_two_200`, `lowAt_upTo_200` and min(2^i, 3^j) <= p2(j)^2 \|2^i - 3^j\| for 1 <= j <= 10^200 (`min_le_of_walk_200`) |
 | `pv.py` | virtual cache of admissible words: counts, ranks, class ids, chains, excess/gap, record Orders, first words, sweeps, bracket words, the 3-smooth numbers in order; `./pv.py test` runs the self-test |
 | `building.html` | the game of paper 1 in a browser: a building with stairs and poles, a rider to its drop |
 | `R_collatz_stop_at_the_drop_1.tex`, `_2.tex` | the two papers (`pdflatex`; build paper 1 first, paper 2 links to it) |
@@ -54,7 +59,11 @@ environment, else `TFiniteCheck` stops with that message. The Lean toolchain is 
 `AcceleratedCollatz/` (the `globs` of `lakefile.lean`), so also `DeadCode.lean` and the
 extracts `ChainDecomposition.lean`, `ChainQ.lean`, `SmoothPlace.lean` and `SweepQ.lean`, which
 the library does not import and which build in any Mathlib project; `SmoothRuler.lean` and
-`PowDiff.lean` build there too. `PowDiffRhin.lean` and `PowDiffWalk.lean` import the library.
+`PowDiff.lean` build there too. `PowDiffRhin.lean` and `PowDiffWalk.lean` import the library. The walks to 10^200
+are cut into eight stretches (`PowDiffFarRhin1` to `PowDiffFarLow4`), each in its own file; each
+imports the one before, so they build one after the other. They take the bracket ends as literals
+from `PowDiffFarBracket` (computed in one go, the bracket alone took 48 minutes and 18.6 GB);
+now the bracket takes 4 minutes (3.0 GB) and each stretch about 5 s (1.6 GB).
 
 `pv.py` needs Python 3.8 or later and no extra packages:
 
