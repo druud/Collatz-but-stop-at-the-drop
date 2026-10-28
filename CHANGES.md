@@ -3,6 +3,10 @@
 The changes to this repository since its first public release, newest
 first. Version names (R_65a, R_66, ...) are the authors' own labels.
 
+## After R_80 (28 October 2026)
+
+- Papers 1 and 2: the front page reads "Preprint, October 2026".
+
 ## R_80 (28 October 2026)
 
 - Lean, `TSubwordJoint`: the admissible words counted by start
