@@ -37,6 +37,14 @@ first. Version names (R_65a, R_66, ...) are the authors' own labels.
   (`sum_cycOcc_admSet`, `sum_cycOcc_persLen`); the plain count is
   that less the occurrences across the end
   (`occAdm_add_wrap_of_upperRecord`, `occAdm_add_wrap_of_lowerRecord`).
+- Lean, `TSubwordShort`: at an upper record Order n >= 2 the
+  subwords of length at most 3 explicitly
+  (`occAdm_short_of_upperRecord`): every admissible word of Order
+  n >= 2 starts with 11 (`prefix_true_true`) and ends in 0, so with
+  L = p2(n) the occurrences are C(L - |s|, n - order s) less a(n)
+  for 01 and 011, a(n) - E for 001, E for 101 and nothing for the
+  others, E being the count of the words ending in 10
+  (`sufAdm_ten`).
 
 ## R_78 (27 October 2026)
 
