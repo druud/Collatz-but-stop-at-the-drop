@@ -3,9 +3,15 @@
 The changes to this repository since its first public release, newest
 first. Version names (R_65a, R_66, ...) are the authors' own labels.
 
-## After R_80 (28 October 2026)
+## R_81 (28 October 2026)
 
 - Papers 1 and 2: the front page reads "Preprint, October 2026".
+- Lean, `TMonksQ`: K. G. Monks' maps T_{A,B} on the power
+  series over F_2 (JIS 28, 25.6.8). After L steps,
+  q^L T^L(x) = A^n x + B rho_A, with rho_A the staircase sum
+  of paper 2 with 2 -> q and 3 -> A (`X_pow_mul_monksT_iterate`);
+  for A = 1 the map is the shift conjugated by B,
+  T_{1,B}(B y) = B sigma(y) (`monksT_one_mul`).
 
 ## R_80 (28 October 2026)
 
