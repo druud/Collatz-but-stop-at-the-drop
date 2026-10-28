@@ -3,6 +3,17 @@
 The changes to this repository since its first public release, newest
 first. Version names (R_65a, R_66, ...) are the authors' own labels.
 
+## R_80 (28 October 2026)
+
+- Lean, `TSubwordJoint`: the admissible words counted by start
+  and end together. A start that stays above 1 (every nonempty
+  prefix has level > 1) is never cut by a first passage, so the
+  suffix identity of `TSubword` keeps its form with the start
+  carried along (`joint_first_passage`); it gives the words of
+  Order n that start with 1 :: y' and end with x from lower
+  Orders (`jointAdm_rec`). These counts are what the subword
+  counts of length 4 and 5 across the end of a word need.
+
 ## R_79 (28 October 2026)
 
 - Lean, `TSubword`: subwords of the admissible words, counted
