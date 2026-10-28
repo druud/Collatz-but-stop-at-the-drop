@@ -3,7 +3,7 @@
 The changes to this repository since its first public release, newest
 first. Version names (R_65a, R_66, ...) are the authors' own labels.
 
-## Since R_78
+## R_79 (28 October 2026)
 
 - Lean, `TSubword`: subwords of the admissible words, counted
   by first passage (after Florez, Junes, Montoya and Ramirez, JIS
