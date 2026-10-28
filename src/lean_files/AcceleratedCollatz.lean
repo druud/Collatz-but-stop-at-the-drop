@@ -130,6 +130,10 @@ import AcceleratedCollatz.TSternBrocotInterval
 import AcceleratedCollatz.TSternBrocotOnto
 import AcceleratedCollatz.TSternBrocotQ
 import AcceleratedCollatz.TSternBrocotTree
+import AcceleratedCollatz.TSubword
+import AcceleratedCollatz.TSubwordCycle
+import AcceleratedCollatz.TSubwordShort
+import AcceleratedCollatz.TSubwordSuffix
 import AcceleratedCollatz.TSweep
 import AcceleratedCollatz.TSweepPerm
 import AcceleratedCollatz.TSweepPermQ

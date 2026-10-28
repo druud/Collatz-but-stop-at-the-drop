@@ -162,74 +162,81 @@ theorem exists_first_drop (hn : 1 ≤ n) (s : List Bool) (hs : s ∈ startWords 
   · exact absurd h hne1
   · exact h
 
+/-- Joining the two parts of a first-passage split gives exactly the start words. -/
+theorem image_firstPassageSplits (hn : 1 ≤ n) :
+    (firstPassageSplits n).image (fun p => p.2.1 ++ p.2.2) = startWords n := by
+  ext s
+  simp only [Finset.mem_image, firstPassageSplits, Finset.mem_sigma, Finset.mem_Icc,
+    Finset.mem_product,
+    mem_admSet, mem_wordSet, Sigma.exists, Prod.exists]
+  constructor
+  · rintro ⟨i, a, r, ⟨⟨hi1, hin⟩, ⟨hA, hoa⟩, hlr, hor⟩, rfl⟩
+    rw [mem_startWords n hn]
+    obtain ⟨u, rfl⟩ := admissible_cons_true a hA (by omega)
+    refine ⟨⟨u ++ r, rfl⟩, ?_, ?_⟩
+    · have hla := admissible_length _ hA
+      rw [hoa] at hla
+      have hmono := p2_of_mono hin
+      rw [List.length_append, hla, hlr]
+      omega
+    · rw [order_append, hoa, hor]
+      omega
+  · intro hs
+    obtain ⟨m, hm1, hml, hA⟩ := exists_first_drop n hn s hs
+    rw [mem_startWords n hn] at hs
+    obtain ⟨⟨u, rfl⟩, hl, ho⟩ := hs
+    set a := (true :: u).take m with ha_def
+    set r := (true :: u).drop m with hr_def
+    have hsplit : a ++ r = true :: u := List.take_append_drop m _
+    have hord := order_append a r
+    rw [hsplit] at hord
+    have hla := admissible_length a hA
+    have hlen : a.length + r.length = (true :: u).length := by
+      rw [← List.length_append, hsplit]
+    have hoa1 : 1 ≤ order a := by
+      obtain ⟨k, hk⟩ := Nat.exists_eq_add_of_le' hm1
+      rw [ha_def, hk, List.take_succ_cons, order_cons]
+      simp
+    refine ⟨order a, a, r, ⟨⟨hoa1, by omega⟩, ⟨hA, rfl⟩, ?_, by omega⟩, hsplit⟩
+    rw [hla] at hlen
+    omega
+
+/-- A start word has only one first-passage split. -/
+theorem injOn_firstPassageSplits :
+    Set.InjOn (fun p : (Σ _ : ℕ, List Bool × List Bool) => p.2.1 ++ p.2.2)
+      (firstPassageSplits n) := by
+  rintro ⟨i, a, r⟩ hp ⟨i', a', r'⟩ hq h
+  simp only [firstPassageSplits, Finset.coe_sigma, Set.mem_sigma_iff, Finset.mem_coe,
+    Finset.mem_Icc,
+    Finset.mem_product, mem_admSet, mem_wordSet] at hp hq h
+  obtain ⟨_, ⟨ha, hoa⟩, _⟩ := hp
+  obtain ⟨_, ⟨ha', hoa'⟩, _⟩ := hq
+  have hpre : a <+: a ++ r := List.prefix_append a r
+  have hpre' : a' <+: a ++ r := by
+    rw [h]
+    exact List.prefix_append a' r'
+  have haa : a = a' := by
+    by_contra hne
+    rcases le_total a.length a'.length with hle | hle
+    · exact admissible_not_prefix a a' ha ha' hne
+        (List.prefix_of_prefix_length_le hpre hpre' hle)
+    · exact admissible_not_prefix a' a ha' ha (Ne.symm hne)
+        (List.prefix_of_prefix_length_le hpre' hpre hle)
+  subst haa
+  have hrr : r = r' := List.append_cancel_left h
+  subst hrr
+  have hii : i = i' := by
+    rw [← hoa, ← hoa']
+  subst hii
+  rfl
+
 /-- A100982 binomial identity: C(p2(n) - 1, n - 1) = Σ_{i=1..n} a(i) C(p2(n) - p2(i), n - i). -/
 theorem choose_eq_sum_admSet (hn : 1 ≤ n) :
     (p2_of n - 1).choose (n - 1) =
       ∑ i ∈ Finset.Icc 1 n, (admSet i).card * (p2_of n - p2_of i).choose (n - i) := by
   have hstart : (startWords n).card = (p2_of n - 1).choose (n - 1) := by
     rw [startWords, Finset.card_image_of_injective _ (List.cons_injective), card_wordSet]
-  have himg : (firstPassageSplits n).image (fun p => p.2.1 ++ p.2.2) = startWords n := by
-    ext s
-    simp only [Finset.mem_image, firstPassageSplits, Finset.mem_sigma, Finset.mem_Icc,
-      Finset.mem_product,
-      mem_admSet, mem_wordSet, Sigma.exists, Prod.exists]
-    constructor
-    · rintro ⟨i, a, r, ⟨⟨hi1, hin⟩, ⟨hA, hoa⟩, hlr, hor⟩, rfl⟩
-      rw [mem_startWords n hn]
-      obtain ⟨u, rfl⟩ := admissible_cons_true a hA (by omega)
-      refine ⟨⟨u ++ r, rfl⟩, ?_, ?_⟩
-      · have hla := admissible_length _ hA
-        rw [hoa] at hla
-        have hmono := p2_of_mono hin
-        rw [List.length_append, hla, hlr]
-        omega
-      · rw [order_append, hoa, hor]
-        omega
-    · intro hs
-      obtain ⟨m, hm1, hml, hA⟩ := exists_first_drop n hn s hs
-      rw [mem_startWords n hn] at hs
-      obtain ⟨⟨u, rfl⟩, hl, ho⟩ := hs
-      set a := (true :: u).take m with ha_def
-      set r := (true :: u).drop m with hr_def
-      have hsplit : a ++ r = true :: u := List.take_append_drop m _
-      have hord := order_append a r
-      rw [hsplit] at hord
-      have hla := admissible_length a hA
-      have hlen : a.length + r.length = (true :: u).length := by
-        rw [← List.length_append, hsplit]
-      have hoa1 : 1 ≤ order a := by
-        obtain ⟨k, hk⟩ := Nat.exists_eq_add_of_le' hm1
-        rw [ha_def, hk, List.take_succ_cons, order_cons]
-        simp
-      refine ⟨order a, a, r, ⟨⟨hoa1, by omega⟩, ⟨hA, rfl⟩, ?_, by omega⟩, hsplit⟩
-      rw [hla] at hlen
-      omega
-  have hinj : Set.InjOn (fun p : (Σ _ : ℕ, List Bool × List Bool) => p.2.1 ++ p.2.2)
-      (firstPassageSplits n) := by
-    rintro ⟨i, a, r⟩ hp ⟨i', a', r'⟩ hq h
-    simp only [firstPassageSplits, Finset.coe_sigma, Set.mem_sigma_iff, Finset.mem_coe,
-      Finset.mem_Icc,
-      Finset.mem_product, mem_admSet, mem_wordSet] at hp hq h
-    obtain ⟨_, ⟨ha, hoa⟩, _⟩ := hp
-    obtain ⟨_, ⟨ha', hoa'⟩, _⟩ := hq
-    have hpre : a <+: a ++ r := List.prefix_append a r
-    have hpre' : a' <+: a ++ r := by
-      rw [h]
-      exact List.prefix_append a' r'
-    have haa : a = a' := by
-      by_contra hne
-      rcases le_total a.length a'.length with hle | hle
-      · exact admissible_not_prefix a a' ha ha' hne
-          (List.prefix_of_prefix_length_le hpre hpre' hle)
-      · exact admissible_not_prefix a' a ha' ha (Ne.symm hne)
-          (List.prefix_of_prefix_length_le hpre' hpre hle)
-    subst haa
-    have hrr : r = r' := List.append_cancel_left h
-    subst hrr
-    have hii : i = i' := by
-      rw [← hoa, ← hoa']
-    subst hii
-    rfl
-  rw [← hstart, ← himg, Finset.card_image_of_injOn hinj, card_firstPassageSplits]
+  rw [← hstart, ← image_firstPassageSplits n hn,
+    Finset.card_image_of_injOn (injOn_firstPassageSplits n), card_firstPassageSplits]
 
 end AcceleratedCollatz
