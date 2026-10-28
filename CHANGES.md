@@ -3,6 +3,20 @@
 The changes to this repository since its first public release, newest
 first. Version names (R_65a, R_66, ...) are the authors' own labels.
 
+## Since R_78
+
+- Lean, `TSubword`: subwords of the admissible words, counted
+  by first passage (after Florez, Junes, Montoya and Ramirez, JIS
+  28, 25.1.6, who count subwords of length up to 5 in Dyck paths).
+  Cutting the words that start with 1 at their first passage below
+  1, as for the count a(n), gives two identities in binomials: one
+  for the occurrences of any subword s in the words of Order n
+  (`occ_first_passage`), one for the words of Order n that end with
+  a given x (`suffix_first_passage`); each gives its Order-n part
+  from lower Orders (`occAdm_rec`, `sufAdm_rec`). `TBinomial`
+  states the first-passage split as two lemmas
+  (`image_firstPassageSplits`, `injOn_firstPassageSplits`).
+
 ## R_78 (27 October 2026)
 
 - Lean, the walks of `PowDiffFar` run by the kernel to 10^200:
