@@ -1,0 +1,52 @@
+\begin{theindex}
+
+  \item \termlink{splitbound}{bound of a split}, \textbf{8}
+
+  \indexspace
+
+  \item \termlink{letterword}{letter word}, \textbf{13}
+
+  \indexspace
+
+  \item \termlink{M}{$M$}, \textbf{13}
+  \item \termlink{measured}{measured}, \textbf{1}
+  \item \termlink{merge}{merge}, \textbf{13}
+
+  \indexspace
+
+  \item OEIS
+    \subitem A003586, 9, 10
+    \subitem A100982, 13
+    \subitem A122442, 12
+    \subitem A324245, 13
+
+  \indexspace
+
+  \item \termlink{ruler}{plain ruler}, \textbf{11}
+  \item \termlink{proved}{proved}, \textbf{1}
+
+  \indexspace
+
+  \item \termlink{recordfrac}{record fraction}, \textbf{10}
+  \item \termlink{rhomax}{$\rho_{\max}(n)$}, \textbf{6}
+  \item \termlink{rulergap}{ruler gap}, \textbf{11}
+
+  \indexspace
+
+  \item \termlink{S}{$S(k)$}, \textbf{10}
+  \item \termlink{scan}{scan}, \textbf{12}
+  \item \termlink{slack}{slack}, \textbf{6}
+  \item \termlink{slanted}{slanted grid}, \textbf{3}
+  \item \termlink{staircase}{staircase}, \textbf{3}
+  \item \termlink{stop}{stop}, \textbf{13}
+
+  \indexspace
+
+  \item \termlink{letters}{U, D, S}, \textbf{13}
+
+  \indexspace
+
+  \item \termlink{W}{$W(n)$}, \textbf{6}
+  \item \termlink{wall}{wall}, \textbf{3}
+
+\end{theindex}
