@@ -75,6 +75,7 @@ import AcceleratedCollatz.TMarkerPointHigh
 import AcceleratedCollatz.TMarkerTree
 import AcceleratedCollatz.TMersenne
 import AcceleratedCollatz.TMod4
+import AcceleratedCollatz.TMonksQ
 import AcceleratedCollatz.TNest
 import AcceleratedCollatz.TParity
 import AcceleratedCollatz.TPersistent
