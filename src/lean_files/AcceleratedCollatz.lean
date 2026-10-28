@@ -132,6 +132,7 @@ import AcceleratedCollatz.TSternBrocotQ
 import AcceleratedCollatz.TSternBrocotTree
 import AcceleratedCollatz.TSubword
 import AcceleratedCollatz.TSubwordCycle
+import AcceleratedCollatz.TSubwordJoint
 import AcceleratedCollatz.TSubwordShort
 import AcceleratedCollatz.TSubwordSuffix
 import AcceleratedCollatz.TSweep
