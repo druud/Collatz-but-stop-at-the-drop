@@ -16,6 +16,14 @@ first. Version names (R_65a, R_66, ...) are the authors' own labels.
   from lower Orders (`occAdm_rec`, `sufAdm_rec`). `TBinomial`
   states the first-passage split as two lemmas
   (`image_firstPassageSplits`, `injOn_firstPassageSplits`).
+- Lean, `TSubwordSuffix`: the admissible words of Order n that
+  end in 100 number a(n - 1) (`sufAdm_hundred`, n >= 2); those
+  that end in 10 number a(n - 1) if p2(n) = p2(n - 1) + 1, else
+  none (`sufAdm_ten`). Proof by the last-1 decomposition: a word
+  ending in 1 0^j is a persistent word of Order n - 1 completed;
+  the longest persistent words are the admissible words without
+  their last 0 (`card_persLen_max`), and when p2 steps by 1 the
+  next shorter ones are as many (`card_persLen_pred`).
 
 ## R_78 (27 October 2026)
 
