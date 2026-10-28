@@ -24,6 +24,19 @@ first. Version names (R_65a, R_66, ...) are the authors' own labels.
   the longest persistent words are the admissible words without
   their last 0 (`card_persLen_max`), and when p2 steps by 1 the
   next shorter ones are as many (`card_persLen_pred`).
+- Lean, `TSubwordCycle`: the cycle lemma at the record Orders. At
+  an upper record Order n every word of length p2(n) with n ones
+  has exactly one admissible rotation, the one from its last lowest
+  point (`exists_admissible_rotate`, `not_admissible_rotate`), so
+  p2(n) a(n) = C(p2(n), n) (`p2_mul_card_admSet`: M. Winkler's
+  upper bound, attained). At a lower record Order the words of
+  length p2(n) - 1 have exactly one persistent rotation each, so
+  (p2(n) - 1) a(n) = C(p2(n) - 1, n) (`pred_p2_mul_card_admSet`).
+  Counted around the cycle, a subword s occurs
+  C(L - |s|, n - order s) times in all these words together
+  (`sum_cycOcc_admSet`, `sum_cycOcc_persLen`); the plain count is
+  that less the occurrences across the end
+  (`occAdm_add_wrap_of_upperRecord`, `occAdm_add_wrap_of_lowerRecord`).
 
 ## R_78 (27 October 2026)
 
