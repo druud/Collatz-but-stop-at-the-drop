@@ -5,7 +5,9 @@ first. Version names (R_65a, R_66, ...) are the authors' own labels.
 
 ## After R_82
 
-- Paper 3 on the site as "Draft: R_83" (29 October 2026).
+- Paper 3 on the site as "Draft: R_84" (29 October 2026; the
+  Christoffel remark checked against the book; first as "Draft:
+  R_83" the same day).
 - Paper 3: subtitle "The game on the grid of 2^j 3^i"; the
   author line is the name only, Claude credited in Ch. 1; the
   ruler gap (now Ch. 8) moved after the three letters (Ch. 7),
@@ -13,7 +15,9 @@ first. Version names (R_65a, R_66, ...) are the authors' own labels.
   number, without the list", Ch. 7 "Three letters: the stop of
   A324245"; Ch. 9, "Shares and ratios" reworded.
 - Paper 3, Ch. 3: at a record Order the first word is a
-  Christoffel word (Berstel, Lauve, Reutenauer, Saliola 2008).
+  Christoffel word (Berstel, Lauve, Reutenauer, Saliola 2008),
+  the upper one of slope n/(P - n), checked against the book's
+  Definition 1.1.
   Ch. 5: Shanks (1954) and Jackson and Matthews (JIS 5, 02.2.7)
   as the integer-only precedent. 19 pages.
 

@@ -227,7 +227,7 @@
 \title{\textbf{Collatz, but stop at the drop}\\[0.5ex]
   \Large The game on the grid of $2^j 3^i$}
 \author{\textbf{Ruud H.G. van Tol}}
-\date{\textbf{Draft: R\_83}}  % on the public site as a draft; no date (user, 28 Oct 2026)
+\date{\textbf{Draft: R\_84}}  % on the public site as a draft; no date (user, 28 Oct 2026)
 
 \begin{document}
 \maketitle
@@ -421,13 +421,16 @@ of Order $n$ (rank~$1$), and it is the only word that reaches the bound
 \bw{11010}, with odd steps at $0$, $1$ and $3$, and $\rho_{\max}(3) = 9 + 6 + 8 = 23$,
 against $n\,3^{n-1} = 27$.
 
-At a record Order the first word is a Christoffel word~\cite{BerstelLRS2008}: with
-$P = p_2(n)$ at an upper record Order $n$, and $P = p_2(n) - 1$ at a lower one, its $o$-th
+At a record Order the first word is an upper Christoffel word~\cite[Definition~1.1]{BerstelLRS2008}:
+with $P = p_2(n)$ at an upper record Order $n$, and $P = p_2(n) - 1$ at a lower one, its $o$-th
 odd step stands at $\lfloor (o-1)P/n \rfloor$, by $\lfloor iP/Q \rfloor + 1 = p_2(i)$ for a
-record fraction $P/Q$ (Chapter~\ref{sec:a003586}); at a lower record Order a $\bw{0}$
-follows. Below Order $200$ the first word has this form at no other Orders than these and
-$4$, $6$, $24$, $36$, $48$, $106$, $159$, where $(p_2(n) - 1)/n$ is the record fraction of a
-lower record Order, not in lowest terms (measured).
+record fraction $P/Q$ (Chapter~\ref{sec:a003586}); with $\bw{0}$ as $x$ and $\bw{1}$ as $y$
+these $P$ letters are the upper Christoffel word of slope $n/(P - n)$ ($n$ and $P$ are coprime:
+a common factor would give an earlier record), and at a lower record Order a $\bw{0}$ follows.
+Below Order $200$ the first word has this form at no other Orders than these and $4$, $6$,
+$24$, $36$, $48$, $106$, $159$, where $(p_2(n) - 1)/n$ is the record fraction of a lower record
+Order, not in lowest terms, and the first $p_2(n) - 1$ letters a power of that Order's
+Christoffel word (measured).
 
 \termhere{slack}What the bound $n\,3^{n-1}$ gives away, its \keyterm{slack}{slack}, is a sum of the lower deficits
 $2 \cdot 3^m - 2^{p_2(m)}$:
