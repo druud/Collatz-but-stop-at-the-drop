@@ -1,6 +1,6 @@
 % Paper 3: skeleton (generation 68). Chapters 1 to 7 have text (generation 69); Chapters 8, 9
 % and the appendix (generation 70).
-% Proposed, not decided: the chapter order, the titles, the subtitle, the author line.
+% Decided (generation 83, S29 to S33): the subtitle, the author line, the chapter order, the titles.
 % Material: Backlog items 5, 10, 11, 17; History_03 (B1, generation 67; A, generation 68).
 % Every Lean name below was checked against the tree in generation 68.
 % Preamble: paper 2's, without its figures (generation 68).
@@ -225,9 +225,9 @@
 \fi
 
 \title{\textbf{Collatz, but stop at the drop}\\[0.5ex]
-  \Large [subtitle: to be decided]}
-\author{\textbf{Ruud H.G. van Tol} \\ \small with assistance from Claude (Anthropic)}
-\date{\textbf{Draft: R\_82}}  % on the public site as a draft; no date (user, 28 Oct 2026)
+  \Large The game on the grid of $2^j 3^i$}
+\author{\textbf{Ruud H.G. van Tol}}
+\date{\textbf{Draft: R\_83}}  % on the public site as a draft; no date (user, 28 Oct 2026)
 
 \begin{document}
 \maketitle
@@ -264,6 +264,10 @@ its left (Chapter~\ref{sec:staircases}). The exact links between the two:
 Whether this language moves either open statement is not known; it is a common language,
 not yet a tool.
 
+The Lean files, the scripts and this text were written with the assistance of Claude
+(Anthropic) (Appendix~\ref{app:lean}); the author checked the statements and takes
+responsibility for them.
+
 \subsection*{The chapters}
 
 Chapter~\ref{sec:staircases} draws the words as staircases and bounds $\rho$.
@@ -271,10 +275,10 @@ Chapter~\ref{sec:rhomax} takes the largest $\rho$ of each Order as the bound of 
 reduction of the width identity, with its records. Chapter~\ref{sec:congruence} asks whether
 the congruences that fix a class id carry the drop, and finds that they restate it.
 Chapter~\ref{sec:a003586} finds the $n$-th $3$-smooth number without listing the others.
-Chapter~\ref{sec:ruler} is an open statement on neighbouring $3$-smooth numbers, with its
-reductions. Chapter~\ref{sec:minimal} computes the smallest class id of each Order.
-Chapter~\ref{sec:three} plays the game with three letters, and Chapter~\ref{sec:leftout}
-says what is left out.
+Chapter~\ref{sec:minimal} computes the smallest class id of each Order, and
+Chapter~\ref{sec:three} plays the game with three letters. Chapter~\ref{sec:ruler} is an
+open statement on neighbouring $3$-smooth numbers, with its reductions, and
+Chapter~\ref{sec:leftout} says what is left out.
 
 \nopagebreak
 
@@ -416,6 +420,14 @@ of Order $n$ (rank~$1$), and it is the only word that reaches the bound
 (\lean{rho\_eq\_rhoMax\_iff}, \lean{rho\_lt\_rho\_firstWord}). For $n = 3$ the first word is
 \bw{11010}, with odd steps at $0$, $1$ and $3$, and $\rho_{\max}(3) = 9 + 6 + 8 = 23$,
 against $n\,3^{n-1} = 27$.
+
+At a record Order the first word is a Christoffel word~\cite{BerstelLRS2008}: with
+$P = p_2(n)$ at an upper record Order $n$, and $P = p_2(n) - 1$ at a lower one, its $o$-th
+odd step stands at $\lfloor (o-1)P/n \rfloor$, by $\lfloor iP/Q \rfloor + 1 = p_2(i)$ for a
+record fraction $P/Q$ (Chapter~\ref{sec:a003586}); at a lower record Order a $\bw{0}$
+follows. Below Order $200$ the first word has this form at no other Orders than these and
+$4$, $6$, $24$, $36$, $48$, $106$, $159$, where $(p_2(n) - 1)/n$ is the record fraction of a
+lower record Order, not in lowest terms (measured).
 
 \termhere{slack}What the bound $n\,3^{n-1}$ gives away, its \keyterm{slack}{slack}, is a sum of the lower deficits
 $2 \cdot 3^m - 2^{p_2(m)}$:
@@ -686,7 +698,7 @@ drop of $B$. (On Order $14$ this holds for $5927$ of the $17\,637$ words.)
 \boxhere{splitbound}bound of a split\index{bound of a split@\termlink{splitbound}{bound of a split}|textbf} & $X_u = (2^{L_u} c_v - \rho(u))/3^{n_u}$ for $w = uv$: the class id $c$ of $w$ is at least $X_u$.
 \end{wordbox}
 
-\section{The A003586 program}
+\section{The \texorpdfstring{$n$}{n}-th 3-smooth number, without the list}
 \label{sec:a003586}
 % Generation 69: first text. Material (b) of Backlog 17: TFloorSum, TBisect, TRecordFloor,
 % TRecordWalk, TSmoothRank, TSmoothProgram, TSmoothProgramConv, TSternBrocotCert.
@@ -753,7 +765,10 @@ $bn \le pK$ (above), and every step it decides is a step of the true walk, so th
 at record fractions (\lean{sbCertStep\_eq}, \lean{exists\_sbCert}). For every large $m$ the
 walk passes any numerator (\lean{exists\_lt\_walkAt}), and the program with the least such $m$
 returns the exponents of $a(n)$ for every $n \ge 1$ (\lean{latticeOrd\_smoothJIFind}): no
-convergent is assumed.
+convergent is assumed. Shanks~\cite{Shanks1954} computed the continued fraction of a
+logarithm from the powers alone, and Jackson and Matthews~\cite{JacksonMatthews2002} with
+floor and ceiling in fixed point, where the agreement of the two makes a partial quotient
+likely, not certain; here every step the bracket decides is proved.
 
 \nopagebreak
 
@@ -761,71 +776,6 @@ convergent is assumed.
 \boxhere{recordfrac}record fraction\index{record fraction@\termlink{recordfrac}{record fraction}|textbf} & $P/Q$ with $Q$ an upper record Order and $P = p_2(Q)$, or a lower one and $P = p_2(Q) - 1$. \\
 \boxhere{S}$S(k)$\index{S(k)@\termlink{S}{$S(k)$}|textbf} & the number of $3$-smooth numbers below $2^k$. \\
 A003586\index{OEIS!A003586} & the $3$-smooth numbers in the OEIS.
-\end{wordbox}
-
-\section{The ruler gap}
-\label{sec:ruler}
-% Generation 69: first text. Material (a) of Backlog 17; item 10. SmoothRuler, TRulerRecord,
-% TRulerDeficit, TRulerPair, TRulerCheck. Stopped by the user at rulerGap_iff_pairs (the
-% finite check was his request); this chapter states what is there and adds nothing.
-
-This chapter is an open statement on neighbouring $3$-smooth numbers, with its reductions.
-Papers~1 and~2 do not use it, and nothing in this paper rests on it.
-
-\subsection*{The statement}
-
-\termhere{ruler}\termhere{rulergap}Draw the $3$-smooth numbers on a \keyterm{ruler}{plain ruler}: $v$ at distance $v$ from the left, in the row
-of its number of factors $3$. Let $a < b$ be neighbours among them. A second step with the
-same factor would land at $b^2/a$; the straight line from $a$ through $b$, continued over
-the same number of rows, arrives at $2b - a$, which is before it
-(\lean{line\_falls\_short}). The \keyterm{rulergap}{ruler gap} says that no $3$-smooth number lies
-strictly between $2b - a$ and $b^2/a$ (\lean{RulerGap}). For $a = 8$, $b = 9$ the gap is
-from $10$ to $81/8$. Under the ruler gap a $3$-smooth number lies before the second step
-exactly when it lies at or before the end $2b - a$ of the line
-(\lean{rule\_iff\_of\_rulerGap}). The same rule with the place where the continued line
-meets row $0$ is false: from $3^{11}$ the step to $2^8 \cdot 3^6$ is to a neighbour, its
-line meets row $0$ at $197\,996 + 2/5$, and the second step of that factor lands at
-$2^{16} \cdot 3$, before that place (\lean{border\_rule\_fails}).
-
-\subsection*{In exponents and record Orders}
-
-The statement is one on exponents only (\lean{rulerGap\_iff\_ordersGap}). A step between
-neighbours that raises the exponent of $2$ is a step of an upper record Order $b$, by the
-factor $2^{p_2(b)}/3^b$; one that raises the exponent of $3$ is a step of a lower record
-Order $a$, by $3^a/2^{p_2(a)-1}$ (\lean{stepAt\_two\_three\_iff},
-\lean{stepAt\_three\_two\_iff}; these are the two steps of Chapter~\ref{sec:staircases}), and
-the ruler gap is a statement on those steps (\lean{rulerGap\_iff\_records}). For a step of
-an upper record Order $b$, a number in its gap is one more factor $3^v/2^u$ with
-$u + 1 = p_2(v)$, where $b$ and $v$ split at $K = b + v$, $p_2(K) + 1 = p_2(b) + p_2(v)$,
-and
-\[
-1 - f(K) < \bigl(1 - f(b)\bigr)^2
-\]
-for the block factor $f$ (\lean{gapAt\_two\_three\_iff\_deficit}); the lower record Orders
-have their own inequality of this kind. So the ruler gap is the failure of these deficit
-inequalities wherever the step is due (\lean{rulerGap\_iff\_deficit}), and the windows where
-a step is due end at the next record Order. Over each window the block factor is extreme at
-one record Order $c$, so the ruler gap is one inequality per pair of neighbouring record
-Orders $b < b'$, at the largest upper record Order $c \le b + b'$, and likewise for the lower
-ones (\lean{rulerGap\_iff\_pairs}). In words: the deficit $1 - f$ at such a $c$ is not below
-the square of the deficit at $b$. That is a statement on how closely the fractions on the
-Stern--Brocot walk approach $\log_2 3$, and it is open.
-
-\subsection*{The finite check}
-
-Lean's kernel checks the pair inequalities for every pair of neighbouring record Orders up
-to $10^{60}$ (\lean{upperPairs\_upTo}, \lean{lowerPairs\_upTo}), with the certified walk of
-Chapter~\ref{sec:rhomax}, here at $K = 2^{500}$ (\lean{rulerUpWalk\_ok}, \lean{rulerLowWalk\_ok}).
-With an upper and a lower record Order between $10^{59}$ and $10^{60}$
-(\lean{exists\_records\_between}), the ruler gap holds for every exponent of $2$ and every
-exponent of $3$ up to $10^{59}$ (\lean{rulerGapUpTo\_ten\_pow}). This is a finite check; the
-ruler gap itself stays open.
-
-\nopagebreak
-
-\begin{wordbox}
-\boxhere{ruler}plain ruler\index{plain ruler@\termlink{ruler}{plain ruler}|textbf} & $v$ drawn at distance $v$, in the row of its number of factors $3$. \\
-\boxhere{rulergap}ruler gap\index{ruler gap@\termlink{rulergap}{ruler gap}|textbf} & for neighbouring $3$-smooth numbers $a < b$: none lies strictly between $2b - a$ and $b^2/a$; open (\lean{RulerGap}).
 \end{wordbox}
 
 \section{The minimal class ids}
@@ -899,7 +849,7 @@ the hardness, if any, is not of the usual kind.
 A122442\index{OEIS!A122442} & the smallest class id of each Order, in the OEIS.
 \end{wordbox}
 
-\section{Three letters: the A324245 stop}
+\section{Three letters: the stop of A324245}
 \label{sec:three}
 % Generation 70: first text. History_01, generation 37; OEIS/a349414_variant_01.py, rerun
 % for every odd k < 2^22 and the count to M = 16; the least starts recomputed (k < 2^22).
@@ -972,11 +922,76 @@ A100982\index{OEIS!A100982} & the number of admissible words of each Order, in t
 A324245\index{OEIS!A324245} & the map of the three letters, on $n = (k-1)/2$, in the OEIS.
 \end{wordbox}
 
+\section{The ruler gap}
+\label{sec:ruler}
+% Generation 69: first text. Material (a) of Backlog 17; item 10. SmoothRuler, TRulerRecord,
+% TRulerDeficit, TRulerPair, TRulerCheck. Stopped by the user at rulerGap_iff_pairs (the
+% finite check was his request); this chapter states what is there and adds nothing.
+
+This chapter is an open statement on neighbouring $3$-smooth numbers, with its reductions.
+Papers~1 and~2 do not use it, and nothing in this paper rests on it.
+
+\subsection*{The statement}
+
+\termhere{ruler}\termhere{rulergap}Draw the $3$-smooth numbers on a \keyterm{ruler}{plain ruler}: $v$ at distance $v$ from the left, in the row
+of its number of factors $3$. Let $a < b$ be neighbours among them. A second step with the
+same factor would land at $b^2/a$; the straight line from $a$ through $b$, continued over
+the same number of rows, arrives at $2b - a$, which is before it
+(\lean{line\_falls\_short}). The \keyterm{rulergap}{ruler gap} says that no $3$-smooth number lies
+strictly between $2b - a$ and $b^2/a$ (\lean{RulerGap}). For $a = 8$, $b = 9$ the gap is
+from $10$ to $81/8$. Under the ruler gap a $3$-smooth number lies before the second step
+exactly when it lies at or before the end $2b - a$ of the line
+(\lean{rule\_iff\_of\_rulerGap}). The same rule with the place where the continued line
+meets row $0$ is false: from $3^{11}$ the step to $2^8 \cdot 3^6$ is to a neighbour, its
+line meets row $0$ at $197\,996 + 2/5$, and the second step of that factor lands at
+$2^{16} \cdot 3$, before that place (\lean{border\_rule\_fails}).
+
+\subsection*{In exponents and record Orders}
+
+The statement is one on exponents only (\lean{rulerGap\_iff\_ordersGap}). A step between
+neighbours that raises the exponent of $2$ is a step of an upper record Order $b$, by the
+factor $2^{p_2(b)}/3^b$; one that raises the exponent of $3$ is a step of a lower record
+Order $a$, by $3^a/2^{p_2(a)-1}$ (\lean{stepAt\_two\_three\_iff},
+\lean{stepAt\_three\_two\_iff}; these are the two steps of Chapter~\ref{sec:staircases}), and
+the ruler gap is a statement on those steps (\lean{rulerGap\_iff\_records}). For a step of
+an upper record Order $b$, a number in its gap is one more factor $3^v/2^u$ with
+$u + 1 = p_2(v)$, where $b$ and $v$ split at $K = b + v$, $p_2(K) + 1 = p_2(b) + p_2(v)$,
+and
+\[
+1 - f(K) < \bigl(1 - f(b)\bigr)^2
+\]
+for the block factor $f$ (\lean{gapAt\_two\_three\_iff\_deficit}); the lower record Orders
+have their own inequality of this kind. So the ruler gap is the failure of these deficit
+inequalities wherever the step is due (\lean{rulerGap\_iff\_deficit}), and the windows where
+a step is due end at the next record Order. Over each window the block factor is extreme at
+one record Order $c$, so the ruler gap is one inequality per pair of neighbouring record
+Orders $b < b'$, at the largest upper record Order $c \le b + b'$, and likewise for the lower
+ones (\lean{rulerGap\_iff\_pairs}). In words: the deficit $1 - f$ at such a $c$ is not below
+the square of the deficit at $b$. That is a statement on how closely the fractions on the
+Stern--Brocot walk approach $\log_2 3$, and it is open.
+
+\subsection*{The finite check}
+
+Lean's kernel checks the pair inequalities for every pair of neighbouring record Orders up
+to $10^{60}$ (\lean{upperPairs\_upTo}, \lean{lowerPairs\_upTo}), with the certified walk of
+Chapter~\ref{sec:rhomax}, here at $K = 2^{500}$ (\lean{rulerUpWalk\_ok}, \lean{rulerLowWalk\_ok}).
+With an upper and a lower record Order between $10^{59}$ and $10^{60}$
+(\lean{exists\_records\_between}), the ruler gap holds for every exponent of $2$ and every
+exponent of $3$ up to $10^{59}$ (\lean{rulerGapUpTo\_ten\_pow}). This is a finite check; the
+ruler gap itself stays open.
+
+\nopagebreak
+
+\begin{wordbox}
+\boxhere{ruler}plain ruler\index{plain ruler@\termlink{ruler}{plain ruler}|textbf} & $v$ drawn at distance $v$, in the row of its number of factors $3$. \\
+\boxhere{rulergap}ruler gap\index{ruler gap@\termlink{rulergap}{ruler gap}|textbf} & for neighbouring $3$-smooth numbers $a < b$: none lies strictly between $2b - a$ and $b^2/a$; open (\lean{RulerGap}).
+\end{wordbox}
+
 \section{What is left out}
 \label{sec:leftout}
 % Generation 70: first text. 3x-1: one remark, that it is left out, and why (user,
-% generation 67). "Shares and ratios" is proposed (a rule of the project: no shares or
-% ratios in the papers); "Other multipliers" decided in generation 78 (below).
+% generation 67). "Shares and ratios" decided in generation 83 (S33; a rule of the project:
+% no shares or ratios in the papers); "Other multipliers" decided in generation 78 (below).
 
 \subsection*{The map $3x - 1$}
 
@@ -988,7 +1003,7 @@ the classes (measured). It says nothing on the drop under $T$, and this paper le
 \subsection*{Shares and ratios}
 
 Shares, such as how many of the starts of Chapter~\ref{sec:three} stop by $\mathtt{D}$, and
-ratios seen on a range are no statements that hold for ever. They are left out.
+ratios seen on a range are not statements that hold for every number. They are left out.
 
 \subsection*{Other multipliers}
 % Generation 76 (B1): TBracketCountQ, TChainParseQ, TBracketDropQ; the measurement
@@ -1036,10 +1051,10 @@ Ch. & lean-file & content \\
 5 & \lean{TBisect}, \lean{TFloorSum}, \lean{TRecord$\{$Floor,Walk$\}$},
   \lean{TSmooth$\{$Program,ProgramConv,Rank$\}$}, \lean{TSternBrocotCert}
   & the A003586 program \\
-6 & \lean{SmoothRuler}, \lean{TRuler$\{$Check,Deficit,Pair,Record$\}$}
-  & the ruler gap, its reductions and the finite check \\
-8 & \lean{TUds$\{$,Count,Drop$\}$}
+7 & \lean{TUds$\{$,Count,Drop$\}$}
   & the three letters: the stop and the drop, the stop for large $k$, the classes, the count \\
+8 & \lean{SmoothRuler}, \lean{TRuler$\{$Check,Deficit,Pair,Record$\}$}
+  & the ruler gap, its reductions and the finite check \\
 9 & \lean{TBracketCountQ}, \lean{TChainParseQ}, \lean{TBracketDropQ}
   & every odd $q$: the bracket words, the parse, the brackets and the map $qx + 1$ \\
 \bottomrule
@@ -1050,6 +1065,12 @@ Ch. & lean-file & content \\
 \end{table}
 
 \begin{thebibliography}{99}
+\bibitem{BerstelLRS2008} J.~Berstel, A.~Lauve, C.~Reutenauer and F.~V. Saliola,
+  \emph{Combinatorics on Words: Christoffel Words and Repetitions in Words}, CRM Monograph
+  Series~27, Amer.\ Math.\ Soc., Providence, 2008.
+\bibitem{JacksonMatthews2002} T.~Jackson and K.~Matthews, \emph{On Shanks' algorithm for
+  computing the continued fraction of $\log_b a$}, J. Integer Sequences \textbf{5} (2002),
+  Article 02.2.7.
 \bibitem{Mahaney1982} S.~R. Mahaney, \emph{Sparse complete sets for NP: solution of a
   conjecture of Berman and Hartmanis}, J.\ Comput.\ System Sci.\ \textbf{25} (1982),
   130--143.
@@ -1076,6 +1097,8 @@ Ch. & lean-file & content \\
 \bibitem{Rhin1987} G.~Rhin, \emph{Approximants de Pad\'e et mesures effectives
   d'irrationalit\'e}, S\'eminaire de Th\'eorie des Nombres, Paris 1985--86,
   Progr.\ Math.\ 71, Birkh\"auser, Boston, 1987, 155--164.
+\bibitem{Shanks1954} D.~Shanks, \emph{A logarithm algorithm}, Math.\ Tables Aids Comput.\
+  \textbf{8} (1954), 60--64.
 \bibitem{VaillantDelarue2019} N.~Vaillant and P.~Delarue, \emph{The hidden face of the
   $3x+1$ problem. Part I: Intrinsic algorithm} (2019); linked from OEIS A324245.
 \bibitem{Winkler2026b} M.~Winkler, \emph{Admissible $qx+1$ sequences,
