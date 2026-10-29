@@ -3,6 +3,16 @@
 The changes to this repository since its first public release, newest
 first. Version names (R_65a, R_66, ...) are the authors' own labels.
 
+## R_85 (29 October 2026)
+
+- Lean: TChristoffel. At a record Order n with fraction P/n the
+  first P letters of the first word are the upper Christoffel
+  word of slope n/(P - n) (take_firstWord_recordFrac; all of it
+  at an upper record Order, firstWord_upperRecord, all but the
+  final halving at a lower one, firstBody_lowerRecord), and n and
+  P are coprime (RecordFrac.coprime). Paper 3, Ch. 3 cites it,
+  its Appendix A lists it; still 19 pages.
+
 ## R_84 (29 October 2026)
 
 - Paper 3 on the site as "Draft: R_84" (29 October 2026; the

@@ -425,7 +425,8 @@ At a record Order the first word is an upper Christoffel word~\cite[Definition~1
 with $P = p_2(n)$ at an upper record Order $n$, and $P = p_2(n) - 1$ at a lower one, its $o$-th
 odd step stands at $\lfloor (o-1)P/n \rfloor$, by $\lfloor iP/Q \rfloor + 1 = p_2(i)$ for a
 record fraction $P/Q$ (Chapter~\ref{sec:a003586}); with $\bw{0}$ as $x$ and $\bw{1}$ as $y$
-these $P$ letters are the upper Christoffel word of slope $n/(P - n)$ ($n$ and $P$ are coprime:
+these $P$ letters are the upper Christoffel word of slope $n/(P - n)$
+(\lean{take\_firstWord\_recordFrac}; $n$ and $P$ are coprime, \lean{RecordFrac.coprime}:
 a common factor would give an earlier record), and at a lower record Order a $\bw{0}$ follows.
 Below Order $200$ the first word has this form at no other Orders than these and $4$, $6$,
 $24$, $36$, $48$, $106$, $159$, where $(p_2(n) - 1)/n$ is the record fraction of a lower record
@@ -1023,7 +1024,7 @@ chapter over to every odd $q$.
 \section{The Lean formalization}
 \label{app:lean}
 % Generation 70: first text. The modules of the Lean names this paper cites, by chapter;
-% every name mapped to its module by grep in generation 70 (82 names, 29 modules); generation 71: Ch. 8 in Lean (5 names, 3 modules); generation 76: the PowDiff files (Ch. 3).
+% every name mapped to its module by grep in generation 70 (82 names, 29 modules); generation 71: Ch. 8 in Lean (5 names, 3 modules); generation 76: the PowDiff files (Ch. 3); generation 84: TChristoffel (Ch. 3).
 
 The Lean names this paper cites are proved in the Lean~4 project \lean{AcceleratedCollatz}
 of papers~1 and~2 (paper~2, Appendix~\ref{P2-app:lean}), without \texttt{sorry}; open
@@ -1042,9 +1043,10 @@ Ch. & lean-file & content \\
   \lean{TStaircase}, \lean{TWidth}, \lean{TMonksQ}
   & staircases, the bounds on $\rho$, the $3$-smooth numbers in order and between $3^n$
   and $2^{p_2(n)}$, the width identity, $\rho$ over the power series in $q$ \\
-3 & \lean{TRhin$\{$Bound,Check$\}$}, \lean{TRho$\{$Max,Slack$\}$},
+3 & \lean{TChristoffel}, \lean{TRhin$\{$Bound,Check$\}$}, \lean{TRho$\{$Max,Slack$\}$},
   \lean{TRhoMax$\{$Bound,Check,Record$\}$}
-  & the largest $\rho$, its slack, the finite reduction and its records, the Rhin check \\
+  & the largest $\rho$, the first word as a Christoffel word, its slack, the finite
+  reduction and its records, the Rhin check \\
 3 & \lean{PowDiff$\{$,Far,Rhin,Walk$\}$},
   \lean{PowDiffFar$\{$Bracket,Check,Nodes$\}$},
   \lean{PowDiffFar$\{$Low,Rhin$\}\{$1..4$\}$}
