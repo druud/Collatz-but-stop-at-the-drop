@@ -3,11 +3,15 @@
 The changes to this repository since its first public release, newest
 first. Version names (R_65a, R_66, ...) are the authors' own labels.
 
-## After R_81 (28 October 2026)
+## R_82 (29 October 2026)
 
-- Paper 3 is on the site as a draft, "Draft: R_81" on its front
+- Paper 3 is on the site as a draft, "Draft: R_82" on its front
   page, without a date: `R_collatz_stop_at_the_drop_3.pdf`, its
-  source and index in `src/`.
+  source and index in `src/` (first as "Draft: R_81", 28 October
+  2026).
+- Paper 3, Ch. 2 ("Over the power series in q"): Monks' Table 2,
+  with the coefficients as binary digits, is OEIS A389685; cited,
+  with an index entry.
 
 ## R_81 (28 October 2026)
 

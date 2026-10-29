@@ -227,7 +227,7 @@
 \title{\textbf{Collatz, but stop at the drop}\\[0.5ex]
   \Large [subtitle: to be decided]}
 \author{\textbf{Ruud H.G. van Tol} \\ \small with assistance from Claude (Anthropic)}
-\date{\textbf{Draft: R\_81}}  % on the public site as a draft; no date (user, 28 Oct 2026)
+\date{\textbf{Draft: R\_82}}  % on the public site as a draft; no date (user, 28 Oct 2026)
 
 \begin{document}
 \maketitle
@@ -372,7 +372,9 @@ for $A = 1 + q$, $B = 1$ and for $A = 1$, $B = 1 + q^2$, and asks for a closed f
 start $x$ that reaches $1$ after $L$ steps, $1$ corresponds to the point $B/(A + q^2)$ of the
 $2$-cycle of $T_{A,B}$, so its series is $(q^L B/(A + q^2) + B\rho_A)/A^n$; for $A = 1$,
 $B = 1 + q^2$ this is the polynomial $q^L + (1 + q^2)\sum_o q^{k_o}$, of degree $L$
-(checked for all 20 rows of both tables). The closed formula is the orbit itself.
+(checked for all 20 rows of both tables). With the coefficients as binary digits, the second
+table is OEIS A389685\index{OEIS!A389685}~\cite{OEIS_A389685}, the value at $q = 2$ of this
+polynomial (checked for $n \le 10^4$). The closed formula is the orbit itself.
 
 \nopagebreak
 
@@ -1069,6 +1071,8 @@ Ch. & lean-file & content \\
   \url{https://oeis.org/A324245}.
 \bibitem{OEIS_A363999} OEIS Foundation Inc., \emph{Sequence A363999},
   \url{https://oeis.org/A363999}.
+\bibitem{OEIS_A389685} OEIS Foundation Inc., \emph{Sequence A389685},
+  \url{https://oeis.org/A389685}.
 \bibitem{Rhin1987} G.~Rhin, \emph{Approximants de Pad\'e et mesures effectives
   d'irrationalit\'e}, S\'eminaire de Th\'eorie des Nombres, Paris 1985--86,
   Progr.\ Math.\ 71, Birkh\"auser, Boston, 1987, 155--164.
