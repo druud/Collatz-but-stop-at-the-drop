@@ -3,7 +3,7 @@
 The changes to this repository since its first public release, newest
 first. Version names (R_65a, R_66, ...) are the authors' own labels.
 
-## After R_82
+## R_84 (29 October 2026)
 
 - Paper 3 on the site as "Draft: R_84" (29 October 2026; the
   Christoffel remark checked against the book; first as "Draft:
