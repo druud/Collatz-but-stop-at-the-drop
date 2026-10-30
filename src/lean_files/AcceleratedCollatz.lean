@@ -44,6 +44,7 @@ import AcceleratedCollatz.TChainEquivQ
 import AcceleratedCollatz.TChainOrders
 import AcceleratedCollatz.TChainParse
 import AcceleratedCollatz.TChainQ
+import AcceleratedCollatz.TChristoffel
 import AcceleratedCollatz.TClass
 import AcceleratedCollatz.TCongruenceSplit
 import AcceleratedCollatz.TCorrespondence
@@ -54,6 +55,7 @@ import AcceleratedCollatz.TTerras
 import AcceleratedCollatz.TCutSweepQ
 import AcceleratedCollatz.TCycle
 import AcceleratedCollatz.TDrop
+import AcceleratedCollatz.TDropPeriod
 import AcceleratedCollatz.TEncode
 import AcceleratedCollatz.TFiniteCheck
 import AcceleratedCollatz.TFirstChainQ
@@ -75,7 +77,9 @@ import AcceleratedCollatz.TMarkerPointHigh
 import AcceleratedCollatz.TMarkerTree
 import AcceleratedCollatz.TMersenne
 import AcceleratedCollatz.TMod4
+import AcceleratedCollatz.TMonksDrop
 import AcceleratedCollatz.TMonksQ
+import AcceleratedCollatz.TMonksXi
 import AcceleratedCollatz.TNest
 import AcceleratedCollatz.TParity
 import AcceleratedCollatz.TPersistent
@@ -136,6 +140,7 @@ import AcceleratedCollatz.TSubwordCycle
 import AcceleratedCollatz.TSubwordJoint
 import AcceleratedCollatz.TSubwordShort
 import AcceleratedCollatz.TSubwordSuffix
+import AcceleratedCollatz.TSurvivors
 import AcceleratedCollatz.TSweep
 import AcceleratedCollatz.TSweepPerm
 import AcceleratedCollatz.TSweepPermQ
