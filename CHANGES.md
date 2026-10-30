@@ -3,6 +3,20 @@
 The changes to this repository since its first public release, newest
 first. Version names (R_65a, R_66, ...) are the authors' own labels.
 
+## R_86 (30 October 2026)
+
+- Lean, side results for the OEIS entries, read up to the drop:
+  TSurvivors: the classes mod 2^k not dropped after k steps,
+  counted by A076227 (card_survivorSet). TDropPeriod: A399760's
+  period 2^(L-2) when 4n-1 drops at L with an admissible word
+  (a399760_period). TMonksDrop: a conjugacy to Monks' T_{A,B}
+  read up to the drop (monksConj_drop, monksConj_two_mul).
+  TMonksXi: Monks' 2-adic reading as a rational, in integers
+  and rationals only; A401592's a(2n) = 2 a(n)
+  (monksQ_isXi_two_mul) and A401593's denominator dividing
+  2^(3*2^c) - 1 once 2^c is at least the odd steps over the drop
+  chain (monksQ_isXi, monksQ_isXi_of_dropOdd).
+
 ## R_85 (29 October 2026)
 
 - Lean: TChristoffel. At a record Order n with fraction P/n the
