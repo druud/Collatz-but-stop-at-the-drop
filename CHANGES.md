@@ -3,6 +3,13 @@
 The changes to this repository since its first public release, newest
 first. Version names (R_65a, R_66, ...) are the authors' own labels.
 
+## After R_87 (31 October 2026)
+
+- Paper 1, next version: "How to read this paper" says where the
+  script, building.html, the Lean files and the sources are. The
+  version on Zenodo is kept as
+  R_collatz_stop_at_the_drop_1_zenodo.pdf.
+
 ## R_87 (31 October 2026)
 
 - Lean, side results: TA399760, for OEIS A399760 read up to the

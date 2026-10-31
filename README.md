@@ -11,7 +11,8 @@ paper 2, with the Lean files, at [doi:10.5281/zenodo.23631546](https://doi.org/1
 
 | File | What |
 |---|---|
-| `R_collatz_stop_at_the_drop_1.pdf` | Paper 1, *Now with less noise*: an introduction without proofs (Ruud H.G. van Tol) |
+| `R_collatz_stop_at_the_drop_1.pdf` | Paper 1, *Now with less noise*: an introduction without proofs (Ruud H.G. van Tol); the next version after the one on Zenodo |
+| `R_collatz_stop_at_the_drop_1_zenodo.pdf` | Paper 1 as on Zenodo |
 | `R_collatz_stop_at_the_drop_2.pdf` | Paper 2, *A game with two letters: the proofs* (Ruud H.G. van Tol and Mike Winkler) |
 | `R_collatz_stop_at_the_drop_3.pdf` | Paper 3, a **draft** (marked with its version, e.g. "Draft: R_81"): what lies around the drop, in the language of the 3-smooth numbers; not archived, it may change (Ruud H.G. van Tol) |
 | `building.html` | the game of paper 1 in a browser: a building with stairs and poles, a rider to its drop; open it at [druud.github.io/Collatz-but-stop-at-the-drop/building.html](https://druud.github.io/Collatz-but-stop-at-the-drop/building.html) |
