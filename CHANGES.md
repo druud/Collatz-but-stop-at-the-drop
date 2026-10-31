@@ -3,7 +3,7 @@
 The changes to this repository since its first public release, newest
 first. Version names (R_65a, R_66, ...) are the authors' own labels.
 
-## After R_86
+## R_87 (31 October 2026)
 
 - Lean, side results: TA399760, for OEIS A399760 read up to the
   drop: the word of 4n-1 starts with A001511(n)+1 ones and a 0
