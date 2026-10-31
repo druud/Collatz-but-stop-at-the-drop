@@ -3,6 +3,19 @@
 The changes to this repository since its first public release, newest
 first. Version names (R_65a, R_66, ...) are the authors' own labels.
 
+## After R_86
+
+- Lean, side results: TA399760, for OEIS A399760 read up to the
+  drop: the word of 4n-1 starts with A001511(n)+1 ones and a 0
+  (take_tBits_four_mul_sub_one, unconditional); under an
+  admissible drop word L = A020914(A000120(a(n)))
+  (a399760_length), so a(n) fixes the word; first occurrences iff
+  4n-1 < 2^L when the smaller 4m-1 drop at admissible words
+  (a399760_first_oddWord_iff). TPrefixBlock: backlog item E at the
+  first block, c(1B) d(B) > rho(B), gives the drop of B's class
+  when 3c(1B)+1 <= 2^(1+|B|) (classDrop_of_prefixBlockBound); E
+  itself stays open.
+
 ## R_86 (30 October 2026)
 
 - Lean, side results for the OEIS entries, read up to the drop:
