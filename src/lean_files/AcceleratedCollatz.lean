@@ -47,6 +47,7 @@ import AcceleratedCollatz.TChainQ
 import AcceleratedCollatz.TChristoffel
 import AcceleratedCollatz.TClass
 import AcceleratedCollatz.TCongruenceSplit
+import AcceleratedCollatz.TPrefixBlock
 import AcceleratedCollatz.TCorrespondence
 import AcceleratedCollatz.TCount
 import AcceleratedCollatz.TCountQ
@@ -56,6 +57,7 @@ import AcceleratedCollatz.TCutSweepQ
 import AcceleratedCollatz.TCycle
 import AcceleratedCollatz.TDrop
 import AcceleratedCollatz.TDropPeriod
+import AcceleratedCollatz.TA399760
 import AcceleratedCollatz.TEncode
 import AcceleratedCollatz.TFiniteCheck
 import AcceleratedCollatz.TFirstChainQ
