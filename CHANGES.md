@@ -3,8 +3,27 @@
 The changes to this repository since its first public release, newest
 first. Version names (R_65a, R_66, ...) are the authors' own labels.
 
-## After R_87 (31 October 2026)
+## R_89 (2 November 2026)
 
+- Paper 2, next version: the lower bound on a(n) also follows from
+  Nakamigawa and Tokushige 2012, as Winkler's paper notes.
+- Lean, side result: TPrefixBlockFail: backlog item E is false. The
+  word of 31 is 1 B 0, of Order 35, with B the word of 47, its first
+  block; 31 d(B) < rho(B) (not_prefixBlockBound_47,
+  not_lt_classId_31). The width identity is not touched. Also
+  n <= 2 d(n) for the Orders below 2^10 (order_le_two_mul_d_23).
+- Paper 3, draft: the chapter on the cycle points of the blocks says
+  that this statement fails.
+- Lean, side result: TPrefixBlockRun, backlog item E at the first
+  block for the words B = 1^n 0^m with 3^n < 2^(n+m): E holds, or
+  T(c(1B)) is an integer cycle point with word B
+  (prefixBlockBound_oneRun_or). TPrefixBlockMod3: T(c(1B)) is
+  the first of c(B), c(B)+2^L, c(B)+2^(L+1) that is 2 (mod 3)
+  (tStep_classId_cons_eq); if it is not c(B), E follows from
+  n <= 2 d(B) (prefixBlockBound_of_lt_admissible). rho_oneRun_le:
+  1^n 0^m has the least rho of its Order.
+- Paper 3, draft: Belaga's perigee bound cited beside tau, with
+  Kaneda's short proof; tau(k) is at most Belaga's bound at d = 1.
 - Paper 1, next version: "How to read this paper" says where the
   script, building.html, the Lean files and the sources are. The
   version on Zenodo is kept as

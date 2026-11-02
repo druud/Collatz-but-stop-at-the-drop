@@ -227,7 +227,7 @@
 \title{\textbf{Collatz, but stop at the drop}\\[0.5ex]
   \Large The game on the grid of $2^j 3^i$}
 \author{\textbf{Ruud H.G. van Tol}}
-\date{\textbf{Draft: R\_84}}  % on the public site as a draft; no date (user, 28 Oct 2026)
+\date{\textbf{Draft: R\_89}}  % on the public site as a draft; no date (user, 28 Oct 2026)
 
 \begin{document}
 \maketitle
@@ -399,7 +399,11 @@ width identity needs checking only at class ids up to $\tau(n) = n\,3^{n-1}/d_{2
 (paper~2, Chapter~\ref{P2-sec:open}). This chapter replaces $n\,3^{n-1}$ by the largest
 $\rho$ that an admissible word of Order $n$ really has, a sum of $3$-smooth numbers, and
 shows that the finite reduction keeps its shape: its records are again exactly the upper
-record Orders.
+record Orders. For cycles of $3x+d$ with $k$ odd steps, Belaga bounds the least member by
+$d/(2^{\ell/k} - 3)$, with $\ell = \lceil k \log_2 3 \rceil$ for the bound in $k$ alone, by averaging over the
+rotations of the word, and so, with linear forms in logarithms, by $d\,k^{C}$ \cite{Belaga2003}
+(a short proof by another route: \cite{Kaneda2010}). At $d = 1$, Bernoulli's inequality gives
+$\tau(k) \le 1/(2^{\ell/k} - 3)$, with the two equal to first order in $\ell - k\log_2 3$.
 
 \subsection*{The largest rho}
 
@@ -678,6 +682,14 @@ the prefix $\bw{1}\,B_1 \cdots B_i$ lies above the cycle point of $B_i$, as $w$ 
 prefix have the same residue modulo $2^{L_P}$, $L_P$ the length of the prefix. But that
 statement holds the drop of $B_i$ itself whenever $T^{L_u}$ of the prefix's class id is
 the class id of $B_i$. So it is no easier than the width identity.
+
+Neither statement is true: both fail at Order $35$, past those measurements. The word $w$ of
+$31$ is $\bw{1}\,B\,\bw{0}$, with $B$ the word of $47$, of Order $34$ and length $54$, the first
+block of the chain of $w$. Here $c = 31$, $d(B) = 1\,337\,216\,809\,815\,415$ and
+$\rho(B) = 44\,834\,791\,551\,842\,521$, so $31\,d(B) < \rho(B)$: the class id lies below the
+cycle point of its block (\lean{not\_prefixBlockBound\_47}, \lean{not\_lt\_classId\_31}).
+The drop of $w$ is not touched: $31$ drops to $23$. So what follows measures how
+far the statement holds, not a way to the width identity.
 
 % Generation 76 (Backlog 11, A2): _keep/e2_block_index.py, Orders 2 to 21, exact.
 By the index $i$ of the block, the statement gets easier fast. On Orders $2$ to $21$ the
@@ -1016,7 +1028,7 @@ ratios seen on a range are not statements that hold for every number. They are l
 % counts are out of the paper (the History, generation 77).
 
 Other odd multipliers $q \ge 3$ are left out: paper~2 proves its chain decomposition and
-sweeps for every odd $q$, as in M.~Winkler's~\cite{Winkler2026b}, and the lean-files
+sweeps for every odd $q$, the setting of M.~Winkler's admissible sequences~\cite{Winkler2026b}, and the lean-files
 \lean{TBracketCountQ}, \lean{TChainParseQ} and \lean{TBracketDropQ} carry the rest of that
 chapter over to every odd $q$.
 
@@ -1070,12 +1082,16 @@ Ch. & lean-file & content \\
 \end{table}
 
 \begin{thebibliography}{99}
+\bibitem{Belaga2003} E.~G. Belaga, \emph{Effective polynomial upper bounds to perigees and
+numbers of $(3x+d)$-cycles of a given oddlength}, Acta Arith.\ 106 (2003), 197--206.
 \bibitem{BerstelLRS2008} J.~Berstel, A.~Lauve, C.~Reutenauer and F.~V. Saliola,
   \emph{Combinatorics on Words: Christoffel Words and Repetitions in Words}, CRM Monograph
   Series~27, Amer.\ Math.\ Soc., Providence, 2008.
 \bibitem{JacksonMatthews2002} T.~Jackson and K.~Matthews, \emph{On Shanks' algorithm for
   computing the continued fraction of $\log_b a$}, J. Integer Sequences \textbf{5} (2002),
   Article 02.2.7.
+\bibitem{Kaneda2010} M.~Kaneda, \emph{Two remarks on the Collatz cycle conjecture},
+arXiv:1010.6206.
 \bibitem{Mahaney1982} S.~R. Mahaney, \emph{Sparse complete sets for NP: solution of a
   conjecture of Berman and Hartmanis}, J.\ Comput.\ System Sci.\ \textbf{25} (1982),
   130--143.
