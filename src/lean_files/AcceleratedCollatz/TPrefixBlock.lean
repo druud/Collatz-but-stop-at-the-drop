@@ -4,10 +4,11 @@ import AcceleratedCollatz.TCongruenceSplit
 /-!
   Backlog 11's E at the first block (generation 85): for an admissible block B, E says that
   the class id of the word 1 :: B lies above the cycle point of B, c(1B) d(B) > rho(B)
-  (`PrefixBlockBound`; measured on every admissible word of Orders 2 to 31, never proved).
+  (`PrefixBlockBound`; measured on every admissible word of Orders 2 to 31, but false at Order
+  35: `TPrefixBlockFail`).
   When 3 c(1B) + 1 <= 2^(1 + |B|), c(B) = T(c(1B)) > c(1B) (`classId_tail_eq_tStep`), so E
   gives the drop of B's class, c(B) d(B) > rho(B) (`classDrop_of_prefixBlockBound`): E at
-  the first block is at least ClassDrops for those B, which is why it stays open. The
+  the first block is at least ClassDrops for those B. The
   smallest ratio c(1B) d(B) / rho(B) over Orders 4 to 31 is 35/23, at B = 11010
   (`prefixBlockBound_11010`).
 -/

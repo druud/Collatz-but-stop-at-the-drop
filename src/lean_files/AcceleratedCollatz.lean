@@ -48,6 +48,9 @@ import AcceleratedCollatz.TChristoffel
 import AcceleratedCollatz.TClass
 import AcceleratedCollatz.TCongruenceSplit
 import AcceleratedCollatz.TPrefixBlock
+import AcceleratedCollatz.TPrefixBlockRun
+import AcceleratedCollatz.TPrefixBlockMod3
+import AcceleratedCollatz.TPrefixBlockFail
 import AcceleratedCollatz.TCorrespondence
 import AcceleratedCollatz.TCount
 import AcceleratedCollatz.TCountQ

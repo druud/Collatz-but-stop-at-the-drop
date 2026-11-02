@@ -2,7 +2,7 @@
 import AcceleratedCollatz.TSieve
 
 /-!
-  The q-family (Winkler 2026, Def. 1): words in the factors q/2 (odd step, `true`)
+  The q-family (Winkler 2026, Def. 2 of arXiv v3): words in the factors q/2 (odd step, `true`)
   and 1/2 (halving, `false`) whose proper nonempty prefixes have level > 1 and
   whose whole product is < 1. An admissible word of Order n has length
   p2Q q n = log2(q^n) + 1 (`admissibleQ_length`); `admSetQ q n` collects them, cut out
