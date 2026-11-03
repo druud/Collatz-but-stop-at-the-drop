@@ -3,6 +3,15 @@
 The changes to this repository since its first public release, newest
 first. Version names (R_65a, R_66, ...) are the authors' own labels.
 
+## R_90 (3 November 2026)
+
+- Paper 3, draft: on E, the scan below 10^11 finds no other failure;
+  its minima at blocks 2 and 3 fall further out; c/p < 3/2 at the
+  word of 47. Belaga's bound in rationals: 2^l <= (3 + d/m)^k.
+- Paper 3, draft: the failure of E at i = 1 as a test on a start and its
+  drop, 3*2^L*(x - y) < d*(x + 1); the record lows of the gap-ratio
+  (x - y)/x are OEIS A398772, their Orders the upper record Orders.
+
 ## R_89 (2 November 2026)
 
 - Paper 2, next version: the lower bound on a(n) also follows from
