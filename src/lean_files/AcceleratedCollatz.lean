@@ -73,6 +73,7 @@ import AcceleratedCollatz.TFirstWordQ
 import AcceleratedCollatz.TFloorSum
 import AcceleratedCollatz.TFold
 import AcceleratedCollatz.TGMap
+import AcceleratedCollatz.TGapRatio
 import AcceleratedCollatz.TGridOrder
 import AcceleratedCollatz.TGridOrderQ
 import AcceleratedCollatz.TLastRecordsQ
