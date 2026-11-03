@@ -3,6 +3,16 @@
 The changes to this repository since its first public release, newest
 first. Version names (R_65a, R_66, ...) are the authors' own labels.
 
+## R_91 (3 November 2026)
+
+- Lean, side result: TGapRatio: at the drop, 2^L (x - y) + rho = d x
+  (gap_identity); of two starts with the same parity word, the
+  smaller has the smaller gap ratio (gap_mul_lt_of_lt), so each
+  record of A398772 is the least start of its word.
+- Paper 3, draft: the ratios on E are given as fractions only.
+- Paper 3, draft: no record low of the gap ratio between 10^11 and
+  10^12; the rows of A398772 are complete below 10^12.
+
 ## R_90 (3 November 2026)
 
 - Paper 3, draft: on E, the scan below 10^11 finds no other failure;
