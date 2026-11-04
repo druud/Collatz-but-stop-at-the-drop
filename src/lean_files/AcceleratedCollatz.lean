@@ -155,6 +155,7 @@ import AcceleratedCollatz.TSweepZ
 import AcceleratedCollatz.TUds
 import AcceleratedCollatz.TUdsCount
 import AcceleratedCollatz.TUdsDrop
+import AcceleratedCollatz.TUpperRecord
 import AcceleratedCollatz.TVectorLex
 import AcceleratedCollatz.TWidth
 import AcceleratedCollatz.TWidthBound
