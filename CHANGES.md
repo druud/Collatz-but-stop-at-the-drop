@@ -3,6 +3,15 @@
 The changes to this repository since its first public release, newest
 first. Version names (R_65a, R_66, ...) are the authors' own labels.
 
+## R_92 (4 November 2026)
+
+- Lean, side result: TUpperRecord: up to Order 971 the new lows of
+  (2^L - 3^n)/2^L are at 1, 3, 5, 17, 29, 41, 94, 147, 200, 253, 306,
+  971 (upperRecord_iff); p2(n + 53) = p2(n) + 84 for n < 306, and
+  p2(359) = p2(306) + 85 (pT_add_53, pT_359).
+- Paper 3, draft: cites TGapRatio and TUpperRecord; 14 record starts
+  of the gap ratio below 2^43.
+
 ## R_91 (3 November 2026)
 
 - Lean, side result: TGapRatio: at the drop, 2^L (x - y) + rho = d x

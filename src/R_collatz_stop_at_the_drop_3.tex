@@ -227,7 +227,7 @@
 \title{\textbf{Collatz, but stop at the drop}\\[0.5ex]
   \Large The game on the grid of $2^j 3^i$}
 \author{\textbf{Ruud H.G. van Tol}}
-\date{\textbf{Draft: R\_91}}  % on the public site as a draft; no date (user, 28 Oct 2026)
+\date{\textbf{Draft: R\_92}}  % on the public site as a draft; no date (user, 28 Oct 2026)
 
 \begin{document}
 \maketitle
@@ -709,10 +709,14 @@ ratio $(x - y)/x$ is $(1 - 3^n/2^{L})(1 - x^*/x)$, and the failure needs it smal
 $d_{23}/2^{L}$ is not. Its record lows, as continued fractions, are OEIS
 A398772\index{OEIS!A398772}~\cite{OEIS_A398772}, from $1$ ($y = 1$, as $1$ is the bottom)
 through $2, 3, 5, 11, 39, 47, 4591, \ldots$; each record start is the least start of its
-word, and $47$ is the only one among them that breaks the statement. Below $10^{12}$ there are no others, and from
-$11$ on, every record start but $47$ has an upper record Order ($3, 5, 41, 94, 147, 200,
-200, 253, 306$; from $41$ to $306$ in steps of $53$, as $2^{84} < 3^{53} < 2^{85}$ keeps
-$p_2(n + 53) = p_2(n) + 84$ there). At such an Order $d_{23}/2^{L}$ falls so far that
+word, as of two starts of one word the smaller has the smaller gap ratio
+(\lean{gap\_identity}, \lean{gap\_mul\_lt\_of\_lt}), and $47$ is the only one among them that
+breaks the statement. There are $14$ record starts below $2^{43}$, and from
+$11$ on, every one but $47$ has an upper record Order, one where $d_{23}/2^{L}$ reaches a new
+low ($3, 5, 41, 94, 147, 200, 200, 253, 306$). Up to $971$ those Orders are $1, 3, 5, 17, 29,
+41, 94, 147, 200, 253, 306, 971$ (\lean{upperRecord\_iff}): from $41$ to $306$ in steps of $53$,
+as $2^{84} < 3^{53} < 2^{85}$ keeps $p_2(n + 53) = p_2(n) + 84$ for $n < 306$, and
+$p_2(359) = p_2(306) + 85$ ends them (\lean{pT\_add\_53}, \lean{pT\_359}). At such an Order $d_{23}/2^{L}$ falls so far that
 every start of the Order beats the previous record, so the least one, A122442, is a
 record; a second start of the same Order can follow when $x^*/x$ is larger, as
 $604\,499\,583$ after $371\,871\,359$ at Order $200$. Only $47$, at Order $34$, is a record
