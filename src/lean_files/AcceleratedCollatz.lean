@@ -74,6 +74,7 @@ import AcceleratedCollatz.TFloorSum
 import AcceleratedCollatz.TFold
 import AcceleratedCollatz.TGMap
 import AcceleratedCollatz.TGapRatio
+import AcceleratedCollatz.TGapRecord
 import AcceleratedCollatz.TGridOrder
 import AcceleratedCollatz.TGridOrderQ
 import AcceleratedCollatz.TLastRecordsQ
