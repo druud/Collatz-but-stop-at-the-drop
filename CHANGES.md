@@ -3,6 +3,19 @@
 The changes to this repository since its first public release, newest
 first. Version names (R_65a, R_66, ...) are the authors' own labels.
 
+## R_96 (5 November 2026)
+
+- Lean: TFiniteCheckNext: five more steps of the Stern-Brocot walk
+  (sbWalk_107): 10781274 is an upper record Order, p2(10781274) =
+  17087915, none lies in (10781274, 64497107), widthBound 10781274 =
+  294401822513350; so a range check up to 294401822513350 gives
+  ClassDrops at every Order up to 64497106 (classDropsAt_le_64497106).
+- Lean, side result: A349414Count (self-contained extract, Mathlib
+  and ChainDecomposition only): the stop words of the A349414 run
+  with a >= 1 letters U or D number 2 A100982(a) (stop_count), S the
+  only one with none (stop_count_zero); with U -> 1, D -> 10, S -> 00
+  a stop word is an admissible PV v or v0, and each v gives both.
+
 ## R_95 (5 November 2026)
 
 - Lean, side result: A349414Run: the run stops for every odd k >= 3
