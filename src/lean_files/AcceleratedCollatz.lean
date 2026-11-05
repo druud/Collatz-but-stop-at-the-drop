@@ -63,6 +63,7 @@ import AcceleratedCollatz.TDropPeriod
 import AcceleratedCollatz.TA399760
 import AcceleratedCollatz.TEncode
 import AcceleratedCollatz.TFiniteCheck
+import AcceleratedCollatz.TFiniteCheckNext
 import AcceleratedCollatz.TFirstChainQ
 import AcceleratedCollatz.TFirstGreedy
 import AcceleratedCollatz.TFirstGreedyQ
