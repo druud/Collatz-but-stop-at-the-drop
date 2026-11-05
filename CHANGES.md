@@ -3,6 +3,22 @@
 The changes to this repository since its first public release, newest
 first. Version names (R_65a, R_66, ...) are the authors' own labels.
 
+## R_97 (5 November 2026)
+
+- Paper 3, draft: Ch. 7 cites stops_iff (every odd k >= 3 has a stop
+  iff every path reaches 1), stop_of_coeff and density (Terras 1976,
+  Everett 1977 in the bibliography); Appendix A lists the extracts
+  A349414Run and A349414Count beside TUds. 21 pages (Ch. 7 on two).
+- Lean, side result: A349414Pre (self-contained extract, Mathlib and
+  the extracts Rule505 and A349414Run only): the entry h 4 1 m =
+  (4^(m+1) - 1)/3 of A401763 (1, 5, 21, 85, ...) is the odd T-preimage
+  of 2^(2m+1) (tPre_odd_eq, T_h41), A282798(2m+1) + 1
+  (axisVal_odd_add_one; A282798(2m+3) = 4 h 4 1 m) and the offset of
+  the letter power S^(m+1) (pow_S_tPre); the letter S takes
+  h 4 1 (m+1) to h 4 1 m (st_h41), so these preimages form one S-chain
+  85 -> 21 -> 5 -> 1 (st_iter_h41); both extracts define the same T
+  (T_eq).
+
 ## R_96 (5 November 2026)
 
 - Lean: TFiniteCheckNext: five more steps of the Stern-Brocot walk

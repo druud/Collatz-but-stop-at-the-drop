@@ -227,7 +227,7 @@
 \title{\textbf{Collatz, but stop at the drop}\\[0.5ex]
   \Large The game on the grid of $2^j 3^i$}
 \author{\textbf{Ruud H.G. van Tol}}
-\date{\textbf{Draft: R\_96}}  % on the public site as a draft; no date (user, 28 Oct 2026)
+\date{\textbf{Draft: R\_97}}  % on the public site as a draft; no date (user, 28 Oct 2026)
 
 \begin{document}
 \maketitle
@@ -906,6 +906,8 @@ A122442\index{OEIS!A122442} & the smallest class id of each Order, in the OEIS.
 % for every odd k < 2^22 and the count to M = 16; the least starts recomputed (k < 2^22).
 % Generation 71: proved = in Lean (TUds, TUdsDrop, TUdsCount). The shares of the stops by D and by S are
 % left out (not wanted). The drafts A900001 to A900003 (postponed by the user) are not cited.
+% Generation 91 (A62): stops_iff, density and stop_of_coeff of the extract A349414Run;
+% Table A lists the extracts A349414Run and A349414Count beside TUds.
 
 \termhere{letters}Papers~1 and~2 play a game with two letters. OEIS A324245\index{OEIS!A324245}~\cite{OEIS_A324245}, the map of Vaillant
 and Delarue~\cite{VaillantDelarue2019} (paper~2, Chapter~\ref{P2-sec:fast}), has three \keyterm{letters}{letters}. It acts on $n$; on the odd number $k = 2n + 1$ it reads
@@ -930,7 +932,10 @@ value is the first odd value of the path below $k$, and $M$ is the Order of the 
 $k$. \termhere{merge}A stop by $\mathtt{S}$ is not: the path of $k$ under $T$ is still at or above $k$, and
 from the stop value on it goes the same way, a \keyterm{merge}{merge} before the drop. So $M$ is at most the
 Order of the drop, with equality exactly when the stop is by $\mathtt{D}$ (\lean{le\_order\_of\_isUdsStop}, \lean{isUdsStop\_of\_S}; checked
-for every odd $k < 2^{22}$). The number $7$ drops at Order~$4$, to $5$, one odd step after
+for every odd $k < 2^{22}$). That every odd $k \ge 3$ has a stop is equivalent to every
+path under $T$ reaching $1$ (\lean{stops\_iff}): a stop by $\mathtt{D}$ lands on a smaller
+value of the path, a stop by $\mathtt{S}$ on a smaller value with the same next odd value,
+so an induction over the values goes through. The number $7$ drops at Order~$4$, to $5$, one odd step after
 its merge with the path of $3$.
 
 \subsection*{The words}
@@ -942,7 +947,10 @@ factors and $c$ fixed by the prefix, so for all large $k$ of a class the stop co
 first prefix with $P < 1$ (\lean{isUdsStop\_iff\_of\_large}). It does so for every odd $k < 2^{22}$ (measured); whether
 it does for every $k$ is open. At the last letter of a class that stops by $\mathtt{D}$ it
 follows from the width identity of the word at which the class drops (\lean{ClassDrops};
-paper~2, Chapter~\ref{P2-sec:open}).
+paper~2, Chapter~\ref{P2-sec:open}). A prefix with $P < 1$ stops every $k > 2^e 3^m$ of its
+class, $e$ its bits and $m$ its letters $\mathtt{U}$ and $\mathtt{D}$ (\lean{stop\_of\_coeff}),
+and the odd $k$ modulo $2^{E+1}$ with no such prefix of at most $E$ bits are a share that goes
+to $0$ as $E$ grows (\lean{density}; Terras~\cite{Terras1976}, Everett~\cite{Everett1977}).
 
 By the product rule the bits of the letters up to the stop are an admissible word of
 Order~$M$, or one followed by \bw{0}. A \bw{1} followed by $z$ zeros splits in exactly one
@@ -1077,7 +1085,8 @@ The Lean names this paper cites are proved in the Lean~4 project \lean{Accelerat
 of papers~1 and~2 (paper~2, Appendix~\ref{P2-app:lean}), without \texttt{sorry}; open
 statements and theorems taken from the literature enter as named hypotheses
 (\lean{ClassDrops}, \lean{RulerGap}, \lean{RhinBound}, \lean{RhinInt}). Table~\ref{tab:lean3} lists the
-lean-files by chapter; the names of the \lean{PowDiff} files are in the namespace \lean{PowDiff}. Chapter~\ref{sec:minimal} is computed, not formalized.
+lean-files by chapter; the names of the \lean{PowDiff} files are in the namespace \lean{PowDiff},
+those of the two \lean{A349414} files, self-contained extracts, in namespaces of their file names. Chapter~\ref{sec:minimal} is computed, not formalized.
 
 \begin{table}[htbp]
 \centering
@@ -1103,8 +1112,9 @@ Ch. & lean-file & content \\
 5 & \lean{TBisect}, \lean{TFloorSum}, \lean{TRecord$\{$Floor,Walk$\}$},
   \lean{TSmooth$\{$Program,ProgramConv,Rank$\}$}, \lean{TSternBrocotCert}
   & the A003586 program \\
-7 & \lean{TUds$\{$,Count,Drop$\}$}
-  & the three letters: the stop and the drop, the stop for large $k$, the classes, the count \\
+7 & \lean{TUds$\{$,Count,Drop$\}$}, \lean{A349414$\{$Count,Run$\}$}
+  & the three letters: the stop and the drop, the stop for large $k$, the classes, the count;
+  the stop for every $k$ and the Collatz conjecture, the density \\
 8 & \lean{SmoothRuler}, \lean{TRuler$\{$Check,Deficit,Pair,Record$\}$}
   & the ruler gap, its reductions and the finite check \\
 9 & \lean{TBracketCountQ}, \lean{TChainParseQ}, \lean{TBracketDropQ}
@@ -1122,6 +1132,8 @@ numbers of $(3x+d)$-cycles of a given oddlength}, Acta Arith.\ 106 (2003), 197--
 \bibitem{BerstelLRS2008} J.~Berstel, A.~Lauve, C.~Reutenauer and F.~V. Saliola,
   \emph{Combinatorics on Words: Christoffel Words and Repetitions in Words}, CRM Monograph
   Series~27, Amer.\ Math.\ Soc., Providence, 2008.
+\bibitem{Everett1977} C.~J. Everett, \emph{Iteration of the number-theoretic function
+  $f(2n) = n$, $f(2n+1) = 3n+2$}, Adv.\ Math.\ \textbf{25} (1977), 42--45.
 \bibitem{JacksonMatthews2002} T.~Jackson and K.~Matthews, \emph{On Shanks' algorithm for
   computing the continued fraction of $\log_b a$}, J. Integer Sequences \textbf{5} (2002),
   Article 02.2.7.
@@ -1157,6 +1169,8 @@ arXiv:1010.6206.
   Progr.\ Math.\ 71, Birkh\"auser, Boston, 1987, 155--164.
 \bibitem{Shanks1954} D.~Shanks, \emph{A logarithm algorithm}, Math.\ Tables Aids Comput.\
   \textbf{8} (1954), 60--64.
+\bibitem{Terras1976} R.~Terras, \emph{A stopping time problem on the positive
+  integers}, Acta Arith.\ \textbf{30} (1976), 241--252.
 \bibitem{VaillantDelarue2019} N.~Vaillant and P.~Delarue, \emph{The hidden face of the
   $3x+1$ problem. Part I: Intrinsic algorithm} (2019); linked from OEIS A324245.
 \bibitem{Winkler2026b} M.~Winkler, \emph{Admissible $qx+1$ sequences,
