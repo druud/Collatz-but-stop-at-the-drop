@@ -3,6 +3,29 @@
 The changes to this repository since its first public release, newest
 first. Version names (R_65a, R_66, ...) are the authors' own labels.
 
+## R_94 (5 November 2026)
+
+- Lean, side result: TGapRecord: a gap-ratio record whose word has
+  Order > 0 and class id > 1 is that class id, where ClassDrops holds
+  at its Order (eq_classId_of_gapRecord); so up to Order 10781273
+  from the range check alone (eq_classId_of_gapRecord_le_10781273);
+  for a record x == 3 (mod 4) both conditions hold
+  (eq_classId_of_gapRecord_mod4).
+- Lean, side result: Rule505 (self-contained extract, Mathlib only):
+  Barker's two conjectured closed forms of A282798 (Rule 505, the
+  x-axis) proved, a(n) = 2^(n+1) - 1 for n even, 2 (2^n - 2)/3 for n
+  odd (axisVal_eq), and his recurrence (axisVal_rec); a(n) + 1 is the
+  T-preimage of 2^n of the reverse steps (axisVal_add_one).
+- Lean, side result: A349414Run (self-contained extract, Mathlib
+  only): the A349414 map on odd k run to the first value below k
+  stops when k drops (stops_of_drops); a stop by D is the drop
+  (stop_D), a stop by S a merge before it (stop_S); the stop has
+  3^m < 2^e (pow_lt_of_stop).
+- Paper 3, draft: an even x drops at once, x = 4i + 1 to 3i + 1; each
+  record x == 3 (mod 4) is the class id of its word up to Order
+  10781273 (eq_classId_of_gapRecord_mod4); 14 record starts of the
+  gap ratio below 2^46.
+
 ## R_92 (4 November 2026)
 
 - Lean, side result: TUpperRecord: up to Order 971 the new lows of

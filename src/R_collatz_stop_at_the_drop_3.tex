@@ -227,7 +227,7 @@
 \title{\textbf{Collatz, but stop at the drop}\\[0.5ex]
   \Large The game on the grid of $2^j 3^i$}
 \author{\textbf{Ruud H.G. van Tol}}
-\date{\textbf{Draft: R\_92}}  % on the public site as a draft; no date (user, 28 Oct 2026)
+\date{\textbf{Draft: R\_94}}  % on the public site as a draft; no date (user, 28 Oct 2026)
 
 \begin{document}
 \maketitle
@@ -710,8 +710,11 @@ $d_{23}/2^{L}$ is not. Its record lows, as continued fractions, are OEIS
 A398772\index{OEIS!A398772}~\cite{OEIS_A398772}, from $1$ ($y = 1$, as $1$ is the bottom)
 through $2, 3, 5, 11, 39, 47, 4591, \ldots$; each record start is the least start of its
 word, as of two starts of one word the smaller has the smaller gap ratio
-(\lean{gap\_identity}, \lean{gap\_mul\_lt\_of\_lt}), and $47$ is the only one among them that
-breaks the statement. There are $14$ record starts below $2^{43}$, and from
+(\lean{gap\_identity}, \lean{gap\_mul\_lt\_of\_lt}). An even $x$ drops at once, to $x/2$, and
+an $x = 4i + 1$ after two steps, to $3i + 1$ ($i = 0$ is $\mathrm{drop}(1) = 1$); up to Order $10\,781\,273$, where every class id
+above $1$ drops, each record start $x \equiv 3 \pmod 4$ is the class id of its word
+(\lean{eq\_classId\_of\_gapRecord\_mod4}). $47$ is the only one among them that
+breaks the statement. There are $14$ record starts below $2^{46}$, and from
 $11$ on, every one but $47$ has an upper record Order, one where $d_{23}/2^{L}$ reaches a new
 low ($3, 5, 41, 94, 147, 200, 200, 253, 306$). Up to $971$ those Orders are $1, 3, 5, 17, 29,
 41, 94, 147, 200, 253, 306, 971$ (\lean{upperRecord\_iff}): from $41$ to $306$ in steps of $53$,
