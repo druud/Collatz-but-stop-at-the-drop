@@ -3,6 +3,17 @@
 The changes to this repository since its first public release, newest
 first. Version names (R_65a, R_66, ...) are the authors' own labels.
 
+## R_95 (5 November 2026)
+
+- Lean, side result: A349414Run: the run stops for every odd k >= 3
+  iff every T-path reaches 1 (stops_iff); the letter powers U^n, D^n,
+  S^n in closed form with h r s n of A401763 (run_U, run_D, run_S,
+  h_mul); the starts of a word form one class (run_class); the run
+  reads the parities of T k, T^2 k, .. (path), binomially spread
+  (oc_eq); a Terras-type density: the share of odd k (mod 2^(E+1))
+  with no word of e <= E below product 1 goes to 0 (density), and
+  such a word stops every k > 2^e 3^m in its class (stop_of_coeff).
+
 ## R_94 (5 November 2026)
 
 - Lean, side result: TGapRecord: a gap-ratio record whose word has
