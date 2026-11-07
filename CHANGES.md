@@ -3,6 +3,12 @@
 The changes to this repository since its first public release, newest
 first. Version names (R_65a, R_66, ...) are the authors' own labels.
 
+## Since R_97
+
+- Paper 2: the version on Zenodo (R_75) is kept as
+  R_collatz_stop_at_the_drop_2_zenodo.pdf, as for paper 1.
+- README: the DOIs of the first Zenodo versions beside the concept DOIs.
+
 ## R_97 (5 November 2026)
 
 - Paper 3, draft: Ch. 7 cites stops_iff (every odd k >= 3 has a stop

@@ -8,12 +8,17 @@ Both papers are archived on Zenodo, each with its source files:
 paper 1 at [doi:10.5281/zenodo.23631043](https://doi.org/10.5281/zenodo.23631043),
 paper 2, with the Lean files, at [doi:10.5281/zenodo.23631546](https://doi.org/10.5281/zenodo.23631546)
 (these DOIs always point to the newest version).
+The first versions, of 25 October 2026 (R_75), are at
+[doi:10.5281/zenodo.23631044](https://doi.org/10.5281/zenodo.23631044) (paper 1) and
+[doi:10.5281/zenodo.23631547](https://doi.org/10.5281/zenodo.23631547) (paper 2);
+their PDFs are here as the `_zenodo.pdf` files.
 
 | File | What |
 |---|---|
 | `R_collatz_stop_at_the_drop_1.pdf` | Paper 1, *Now with less noise*: an introduction without proofs (Ruud H.G. van Tol); the next version after the one on Zenodo |
 | `R_collatz_stop_at_the_drop_1_zenodo.pdf` | Paper 1 as on Zenodo |
-| `R_collatz_stop_at_the_drop_2.pdf` | Paper 2, *A game with two letters: the proofs* (Ruud H.G. van Tol and Mike Winkler) |
+| `R_collatz_stop_at_the_drop_2.pdf` | Paper 2, *A game with two letters: the proofs* (Ruud H.G. van Tol and Mike Winkler); the next version after the one on Zenodo |
+| `R_collatz_stop_at_the_drop_2_zenodo.pdf` | Paper 2 as on Zenodo |
 | `R_collatz_stop_at_the_drop_3.pdf` | Paper 3, a **draft** (marked with its version, e.g. "Draft: R_81"): what lies around the drop, in the language of the 3-smooth numbers; not archived, it may change (Ruud H.G. van Tol) |
 | `building.html` | the game of paper 1 in a browser: a building with stairs and poles, a rider to its drop; open it at [druud.github.io/Collatz-but-stop-at-the-drop/building.html](https://druud.github.io/Collatz-but-stop-at-the-drop/building.html) |
 | `pv.py` | the admissible words: counts, ranks, class ids, chains, record Orders and more; `./pv.py test` runs the self-test (Python 3.8 or later, no extra packages) |
