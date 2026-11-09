@@ -60,6 +60,7 @@ import AcceleratedCollatz.TCutSweepQ
 import AcceleratedCollatz.TCycle
 import AcceleratedCollatz.TDrop
 import AcceleratedCollatz.TDropPeriod
+import AcceleratedCollatz.TA398772
 import AcceleratedCollatz.TA399760
 import AcceleratedCollatz.TEncode
 import AcceleratedCollatz.TFiniteCheck
