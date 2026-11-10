@@ -3,8 +3,19 @@
 The changes to this repository since its first public release, newest
 first. Version names (R_65a, R_66, ...) are the authors' own labels.
 
-## Since R_97
+## R_98 (10 November 2026)
 
+- Range check A20 (5-10 November 2026, 0 fails): every x with
+  1 < x <= 294401822513350 drops at its coefficient stopping time; with
+  classDropsAt_le_64497106 (TFiniteCheckNext) this gives ClassDrops at
+  every Order up to 64497106 (was 10781273).
+- Lean, TGapRecord: a gap-ratio record x == 3 (mod 4) is the class id
+  of its word up to Order 64497106
+  (eq_classId_of_gapRecord_mod4_le_64497106; also
+  eq_classId_of_gapRecord_le_64497106 and
+  eq_classId_of_gapRecord_mod4_of_classDrops).
+- Paper 3, draft: Ch. 3 and Ch. 4 at the new bound 64497106, Table A
+  rows 3 and 4; "Draft: R_98".
 - Paper 2: the version on Zenodo (R_75) is kept as
   R_collatz_stop_at_the_drop_2_zenodo.pdf, as for paper 1.
 - README: the DOIs of the first Zenodo versions beside the concept DOIs.
