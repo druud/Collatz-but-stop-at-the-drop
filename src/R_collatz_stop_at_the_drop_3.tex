@@ -329,8 +329,9 @@ difference $13$ is $d_{23}$.}
 
 \subsection*{The bounds on rho}
 
-Every point of the staircase is at most $3^{n-1}$, so $\rho \le n\,3^{n-1}$
-(\lean{rho\_le\_of\_admissible}); Chapter~\ref{sec:rhomax} finds the largest $\rho$, where
+Every point of the staircase is at most $3^{n-1}$, and only the first reaches it, so
+$\rho < n\,3^{n-1}$ from Order $2$ on (\lean{rho\_lt\_of\_admissible}); at Order $1$ the word
+$\bw{10}$ has $\rho = 1$; Chapter~\ref{sec:rhomax} finds the largest $\rho$, where
 every point stands as far right as the wall allows. From below, $k_o \ge o - 1$ in every
 word, so each point is at least $3^{n-o}\,2^{o-1}$ and
 $\rho \ge \sum_{o} 3^{n-o}\,2^{o-1} = 3^n - 2^n$, with equality exactly for the words that
@@ -475,8 +476,8 @@ earlier Order exactly at the upper record Orders (\lean{upperRecord\_iff\_rmax},
 \]
 work the same way: $\rho_{\max}(n)/3^n$ grows with $n$ (\lean{three\_pow\_mul\_rhoMax\_le}), and
 $1/f(n) - 1$ falls as the block factor $f(n)$ of paper~2, Chapter~\ref{P2-sec:chain}, rises. So a
-later Order with a block factor at least as large has a ratio at least as large
-(\lean{rmax\_le\_of\_le\_of\_blockFactor\_le}), and an upper record Order has a ratio above every
+later Order with a larger block factor has a larger ratio
+(\lean{rmax\_lt\_of\_lt\_of\_blockFactor\_lt}; two Orders never have the same block factor), and an upper record Order has a ratio above every
 earlier one.
 
 For the other direction, let $n$ be no upper record Order, $a$ the last upper record Order
@@ -716,10 +717,11 @@ word, as of two starts of one word the smaller has the smaller gap ratio
 after the starts up to $2^s$, a start $x > 2^s$ whose first $j \le s$ steps form an admissible
 word (fixed by $x \bmod 2^s$, \lean{admissible\_tBits\_of\_modEq}) first drops at step $j$,
 and the class id of that word, or $5$ when it is $1$, drops there too, is at most $2^s$ and has
-a gap ratio no larger; so $x$ is no record, and only the residues modulo $2^s$ with no
+a smaller gap ratio (at Order $0$, the word $\bw{0}$ of the even starts, both have $1/2$); so
+$x$ is no record, and only the residues modulo $2^s$ with no
 admissible prefix are scanned further. This needs the drop of the class id at the Order of the
 word, at most $10$ for $s \le 16$, where it holds unconditionally
-(\lean{sieve\_skip}, \lean{sieve\_skip\_16}). An even $x$ drops at once, to $x/2$, and
+(\lean{sieve\_skip\_lt}, \lean{sieve\_skip\_16\_lt}; \lean{sieve\_skip\_16} with the tie). An even $x$ drops at once, to $x/2$, and
 an $x = 4i + 1$ after two steps, to $3i + 1$ ($i = 0$ is $\mathrm{drop}(1) = 1$); up to Order $64\,497\,106$, where every class id
 above $1$ drops, each record start $x \equiv 3 \pmod 4$ is the class id of its word
 (\lean{eq\_classId\_of\_gapRecord\_mod4\_le\_64497106}). $47$ is the only one among them that

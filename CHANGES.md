@@ -8,7 +8,14 @@ first. Version names (R_65a, R_66, ...) are the authors' own labels.
 - Paper 3, draft, Ch. 4: the factored gap ratio (gap_ratio_eq) and the
   sieve of the gap-ratio record search, sound for s <= 16 with no
   hypothesis (sieve_skip, sieve_skip_16; Lean TA398772, OEIS A398772);
-  TA398772 in Table A, row 4.
+  TA398772 in Table A, row 4. At Order > 0 the skipped start has a
+  strictly larger gap ratio (sieve_skip_lt, sieve_skip_16_lt); at
+  Order 0 (even starts) both are 1/2.
+- Lean, TRhoBound: rho < n 3^(n-1) for admissible words of Order
+  n >= 2 (rho_lt_of_admissible; Order 1 is the word 10, rho = 1).
+- Paper 3, draft, Ch. 2 and 3: the strict forms, rho < n 3^(n-1) from
+  Order 2 on, and a later Order with a larger block factor has a
+  larger ratio rho_max/d_23 (rmax_lt_of_lt_of_blockFactor_lt).
 
 ## R_98 (10 November 2026)
 
