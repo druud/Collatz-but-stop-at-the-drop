@@ -3,6 +3,13 @@
 The changes to this repository since its first public release, newest
 first. Version names (R_65a, R_66, ...) are the authors' own labels.
 
+## Since R_98
+
+- Paper 3, draft, Ch. 4: the factored gap ratio (gap_ratio_eq) and the
+  sieve of the gap-ratio record search, sound for s <= 16 with no
+  hypothesis (sieve_skip, sieve_skip_16; Lean TA398772, OEIS A398772);
+  TA398772 in Table A, row 4.
+
 ## R_98 (10 November 2026)
 
 - Range check A20 (5-10 November 2026, 0 fails): every x with

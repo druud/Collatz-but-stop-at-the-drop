@@ -697,6 +697,7 @@ failure, at any block. So what follows measures how far the statement holds, not
 to the width identity.
 
 % Generation 86 (A33): _tmp/a32/gap.py, exact.
+% 10 Nov 2026 (B10): the factored gap ratio and the sieve, TA398772 (A93).
 The failure has a plain form in a start and its drop. Let $x = c_B$, of Order $n$, and $y =
 T^{L}(x)$ its drop, $L = p_2(n)$; then $x - y = d_{23}(x - x^*)/2^{L}$, with $x^*$ the
 cycle point of $B$. Where $T(c) = x$, so $c = (2x-1)/3$ and $x - c = (x+1)/3$, the
@@ -706,12 +707,19 @@ statement fails exactly when
 \]
 For $47$ this reads $3 \cdot 2^{54} < 48\,d(B)$, that is $16\,d(B) > 2^{54}$. Below $3 \cdot
 10^6$ no other $x \equiv 3 \pmod 4$ meets it, even without $x \equiv 2 \pmod 3$. The gap
-ratio $(x - y)/x$ is $(1 - 3^n/2^{L})(1 - x^*/x)$, and the failure needs it small while
+ratio $(x - y)/x$ is $(1 - 3^n/2^{L})(1 - x^*/x)$ (\lean{gap\_ratio\_eq}), and the failure needs it small while
 $d_{23}/2^{L}$ is not. Its record lows, as continued fractions, are OEIS
 A398772\index{OEIS!A398772}~\cite{OEIS_A398772}, from $1$ ($y = 1$, as $1$ is the bottom)
 through $2, 3, 5, 11, 39, 47, 4591, \ldots$; each record start is the least start of its
 word, as of two starts of one word the smaller has the smaller gap ratio
-(\lean{gap\_identity}, \lean{gap\_mul\_lt\_of\_lt}). An even $x$ drops at once, to $x/2$, and
+(\lean{gap\_identity}, \lean{gap\_mul\_lt\_of\_lt}). This gives a sieve for the search:
+after the starts up to $2^s$, a start $x > 2^s$ whose first $j \le s$ steps form an admissible
+word (fixed by $x \bmod 2^s$, \lean{admissible\_tBits\_of\_modEq}) first drops at step $j$,
+and the class id of that word, or $5$ when it is $1$, drops there too, is at most $2^s$ and has
+a gap ratio no larger; so $x$ is no record, and only the residues modulo $2^s$ with no
+admissible prefix are scanned further. This needs the drop of the class id at the Order of the
+word, at most $10$ for $s \le 16$, where it holds unconditionally
+(\lean{sieve\_skip}, \lean{sieve\_skip\_16}). An even $x$ drops at once, to $x/2$, and
 an $x = 4i + 1$ after two steps, to $3i + 1$ ($i = 0$ is $\mathrm{drop}(1) = 1$); up to Order $64\,497\,106$, where every class id
 above $1$ drops, each record start $x \equiv 3 \pmod 4$ is the class id of its word
 (\lean{eq\_classId\_of\_gapRecord\_mod4\_le\_64497106}). $47$ is the only one among them that
@@ -1080,7 +1088,7 @@ chapter over to every odd $q$.
 \section{The Lean formalization}
 \label{app:lean}
 % Generation 70: first text. The modules of the Lean names this paper cites, by chapter;
-% every name mapped to its module by grep in generation 70 (82 names, 29 modules); generation 71: Ch. 8 in Lean (5 names, 3 modules); generation 76: the PowDiff files (Ch. 3); generation 84: TChristoffel (Ch. 3).
+% every name mapped to its module by grep in generation 70 (82 names, 29 modules); generation 71: Ch. 8 in Lean (5 names, 3 modules); generation 76: the PowDiff files (Ch. 3); generation 84: TChristoffel (Ch. 3); 10 Nov 2026: TA398772 (Ch. 4).
 
 The Lean names this paper cites are proved in the Lean~4 project \lean{AcceleratedCollatz}
 of papers~1 and~2 (paper~2, Appendix~\ref{P2-app:lean}), without \texttt{sorry}; open
@@ -1109,9 +1117,9 @@ Ch. & lean-file & content \\
   \lean{PowDiffFar$\{$Low,Rhin$\}\{$1..4$\}$}
   & the lower side to $10^{60}$ and both sides to $10^{200}$, the differences $\lvert 2^i - 3^j \rvert$ (A014121, A363999) \\
 4 & \lean{TCongruenceSplit}, \lean{TPrefixBlockFail}, \lean{TGap$\{$Ratio,Record$\}$},
-  \lean{TUpperRecord}
+  \lean{TUpperRecord}, \lean{TA398772}
   & $\rho$ of a concatenation, the bound of a split, the failure of E, the gap ratio and its
-  records, the upper record Orders \\
+  records, the sieve of the record search, the upper record Orders \\
 5 & \lean{TBisect}, \lean{TFloorSum}, \lean{TRecord$\{$Floor,Walk$\}$},
   \lean{TSmooth$\{$Program,ProgramConv,Rank$\}$}, \lean{TSternBrocotCert}
   & the A003586 program \\
