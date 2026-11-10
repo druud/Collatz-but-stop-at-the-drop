@@ -227,7 +227,7 @@
 \title{\textbf{Collatz, but stop at the drop}\\[0.5ex]
   \Large The game on the grid of $2^j 3^i$}
 \author{\textbf{Ruud H.G. van Tol}}
-\date{\textbf{Draft: R\_97}}  % on the public site as a draft; no date (user, 28 Oct 2026)
+\date{\textbf{Draft: R\_98}}  % on the public site as a draft; no date (user, 28 Oct 2026)
 
 \begin{document}
 \maketitle
@@ -499,9 +499,10 @@ Table~\ref{tab:rhomax} puts $W(n)$ beside $\lfloor \tau(n) \rfloor$ at the upper
 Orders of paper~2's Table~\ref{P2-tab:tau}. With the last upper record Order $a$ up to $n$,
 $W$ of every Order up to $n$ is at most $W(a)$ (\lean{widthBoundMax\_le\_of\_upperRecord}), so
 a range check up to $W(a)$ gives the width identity at every Order up to $n$
-(\lean{classDropsAt\_of\_verifiedMax\_record}). For the Orders below $10\,781\,274$ the range
-check of paper~2 could have stopped at $W(190\,537) = 710\,220\,447\,737$ instead of
-$984\,572\,779\,224$.
+(\lean{classDropsAt\_of\_verifiedMax\_record}). The range check of paper~2 could have stopped
+at $W(190\,537)$ instead of $\lfloor \tau(190\,537) \rfloor$; one up to
+$\lfloor \tau(10\,781\,274) \rfloor = 294\,401\,822\,513\,350$ gives it up to Order $64\,497\,106$
+(\lean{classDropsAt\_le\_64497106}).
 
 \begin{table}[htbp]
 \centering
@@ -711,9 +712,9 @@ A398772\index{OEIS!A398772}~\cite{OEIS_A398772}, from $1$ ($y = 1$, as $1$ is th
 through $2, 3, 5, 11, 39, 47, 4591, \ldots$; each record start is the least start of its
 word, as of two starts of one word the smaller has the smaller gap ratio
 (\lean{gap\_identity}, \lean{gap\_mul\_lt\_of\_lt}). An even $x$ drops at once, to $x/2$, and
-an $x = 4i + 1$ after two steps, to $3i + 1$ ($i = 0$ is $\mathrm{drop}(1) = 1$); up to Order $10\,781\,273$, where every class id
+an $x = 4i + 1$ after two steps, to $3i + 1$ ($i = 0$ is $\mathrm{drop}(1) = 1$); up to Order $64\,497\,106$, where every class id
 above $1$ drops, each record start $x \equiv 3 \pmod 4$ is the class id of its word
-(\lean{eq\_classId\_of\_gapRecord\_mod4}). $47$ is the only one among them that
+(\lean{eq\_classId\_of\_gapRecord\_mod4\_le\_64497106}). $47$ is the only one among them that
 breaks the statement. There are $14$ record starts below $2^{46}$, and from
 $11$ on, every one but $47$ has an upper record Order, one where $d_{23}/2^{L}$ reaches a new
 low ($3, 5, 41, 94, 147, 200, 200, 253, 306$). Up to $971$ those Orders are $1, 3, 5, 17, 29,
@@ -1100,15 +1101,17 @@ Ch. & lean-file & content \\
   & staircases, the bounds on $\rho$, the $3$-smooth numbers in order and between $3^n$
   and $2^{p_2(n)}$, the width identity, $\rho$ over the power series in $q$ \\
 3 & \lean{TChristoffel}, \lean{TRhin$\{$Bound,Check$\}$}, \lean{TRho$\{$Max,Slack$\}$},
-  \lean{TRhoMax$\{$Bound,Check,Record$\}$}
+  \lean{TRhoMax$\{$Bound,Check,Record$\}$}, \lean{TFiniteCheckNext}
   & the largest $\rho$, the first word as a Christoffel word, its slack, the finite
-  reduction and its records, the Rhin check \\
+  reduction and its records, the Rhin check, the width identity up to Order $64\,497\,106$ \\
 3 & \lean{PowDiff$\{$,Far,Rhin,Walk$\}$},
   \lean{PowDiffFar$\{$Bracket,Check,Nodes$\}$},
   \lean{PowDiffFar$\{$Low,Rhin$\}\{$1..4$\}$}
   & the lower side to $10^{60}$ and both sides to $10^{200}$, the differences $\lvert 2^i - 3^j \rvert$ (A014121, A363999) \\
-4 & \lean{TCongruenceSplit}
-  & $\rho$ of a concatenation, the bound of a split \\
+4 & \lean{TCongruenceSplit}, \lean{TPrefixBlockFail}, \lean{TGap$\{$Ratio,Record$\}$},
+  \lean{TUpperRecord}
+  & $\rho$ of a concatenation, the bound of a split, the failure of E, the gap ratio and its
+  records, the upper record Orders \\
 5 & \lean{TBisect}, \lean{TFloorSum}, \lean{TRecord$\{$Floor,Walk$\}$},
   \lean{TSmooth$\{$Program,ProgramConv,Rank$\}$}, \lean{TSternBrocotCert}
   & the A003586 program \\
