@@ -2,6 +2,7 @@
 import AcceleratedCollatz.TGapRatio
 import AcceleratedCollatz.TRhoLower
 import AcceleratedCollatz.TFiniteCheck
+import AcceleratedCollatz.TFiniteCheckNext
 
 /-!
   A gap-ratio record is the class id of its word (A47, 4 Nov 2026; OEIS A398772). Let x drop
@@ -11,7 +12,9 @@ import AcceleratedCollatz.TFiniteCheck
   Up to Order 10781273 this needs only the range check below 984572779224
   (`eq_classId_of_gapRecord_le_10781273`). An even x drops at step 1, an x = 4i + 1 at step 2
   (to 3i + 1); for a record x == 3 (mod 4) both conditions on s hold
-  (`eq_classId_of_gapRecord_mod4`).
+  (`eq_classId_of_gapRecord_mod4_of_classDrops`, `eq_classId_of_gapRecord_mod4`). With the
+  range check below 294401822513350 (A20) the same holds up to Order 64497106
+  (`eq_classId_of_gapRecord_le_64497106`, `eq_classId_of_gapRecord_mod4_le_64497106`).
 -/
 
 namespace AcceleratedCollatz
@@ -50,6 +53,15 @@ theorem eq_classId_of_gapRecord_le_10781273
     x = classId s :=
   eq_classId_of_gapRecord s x hA ho hc (classDropsAt_le_10781273 hX _ hn) hR
 
+/-- Up to Order 64497106: a gap-ratio record is the class id of its word, from the range check
+  up to 294401822513350 alone. -/
+theorem eq_classId_of_gapRecord_le_64497106
+    (hX : ∀ x, 1 < x → x ≤ 294401822513350 → ∀ m, Admissible (tBits x m) → tStep^[m] x < x)
+    (s : List Bool) (x : ℕ) (hA : Admissible s) (ho : 0 < order s)
+    (hn : order s ≤ 64497106) (hc : 1 < classId s) (hR : GapRecordAt s x) :
+    x = classId s :=
+  eq_classId_of_gapRecord s x hA ho hc (classDropsAt_le_64497106 hX _ hn) hR
+
 /-- A start x == 3 (mod 4) with an admissible word s has |s| >= 2: an x == 1 (mod 4) drops at
   step 2, to 3i + 1 for x = 4i + 1, and an even x at step 1. -/
 theorem two_le_length_of_mod4 (s : List Bool) (x : ℕ) (hA : Admissible s)
@@ -66,12 +78,11 @@ theorem two_le_length_of_mod4 (s : List Bool) (x : ℕ) (hA : Admissible s)
   rw [hsv] at hlen
   simp [order, p2_of_one] at hlen
 
-/-- From 3 (mod 4) on, up to Order 10781273: a gap-ratio record x == 3 (mod 4) is the class id
-  of its word, from the range check up to 984572779224 alone. -/
-theorem eq_classId_of_gapRecord_mod4
-    (hX : ∀ x, 1 < x → x ≤ 984572779224 → ∀ m, Admissible (tBits x m) → tStep^[m] x < x)
-    (s : List Bool) (x : ℕ) (hA : Admissible s) (hn : order s ≤ 10781273) (h3 : x % 4 = 3)
-    (hR : GapRecordAt s x) : x = classId s := by
+/-- A gap-ratio record x == 3 (mod 4) is the class id of its word, if ClassDrops holds at the
+  Order of the word: the class id is > 1 and the Order is > 0. -/
+theorem eq_classId_of_gapRecord_mod4_of_classDrops
+    (s : List Bool) (x : ℕ) (hA : Admissible s) (h3 : x % 4 = 3)
+    (hCD : ClassDropsAt (order s)) (hR : GapRecordAt s x) : x = classId s := by
   have h2 := two_le_length_of_mod4 s x hA hR.1 h3
   have hm : x ≡ classId s [MOD 2 ^ 2] :=
     Nat.ModEq.of_dvd (pow_dvd_pow 2 h2)
@@ -85,6 +96,22 @@ theorem eq_classId_of_gapRecord_mod4
     have hlen := admissible_length s hA
     rw [show order s = 0 by omega, p2_of_zero] at hlen
     omega
-  exact eq_classId_of_gapRecord_le_10781273 hX s x hA ho hn hc hR
+  exact eq_classId_of_gapRecord s x hA ho hc hCD hR
+
+/-- From 3 (mod 4) on, up to Order 10781273: a gap-ratio record x == 3 (mod 4) is the class id
+  of its word, from the range check up to 984572779224 alone. -/
+theorem eq_classId_of_gapRecord_mod4
+    (hX : ∀ x, 1 < x → x ≤ 984572779224 → ∀ m, Admissible (tBits x m) → tStep^[m] x < x)
+    (s : List Bool) (x : ℕ) (hA : Admissible s) (hn : order s ≤ 10781273) (h3 : x % 4 = 3)
+    (hR : GapRecordAt s x) : x = classId s :=
+  eq_classId_of_gapRecord_mod4_of_classDrops s x hA h3 (classDropsAt_le_10781273 hX _ hn) hR
+
+/-- From 3 (mod 4) on, up to Order 64497106: a gap-ratio record x == 3 (mod 4) is the class id
+  of its word, from the range check up to 294401822513350 alone. -/
+theorem eq_classId_of_gapRecord_mod4_le_64497106
+    (hX : ∀ x, 1 < x → x ≤ 294401822513350 → ∀ m, Admissible (tBits x m) → tStep^[m] x < x)
+    (s : List Bool) (x : ℕ) (hA : Admissible s) (hn : order s ≤ 64497106) (h3 : x % 4 = 3)
+    (hR : GapRecordAt s x) : x = classId s :=
+  eq_classId_of_gapRecord_mod4_of_classDrops s x hA h3 (classDropsAt_le_64497106 hX _ hn) hR
 
 end AcceleratedCollatz
