@@ -3,6 +3,7 @@ import AcceleratedCollatz.TGapRatio
 import AcceleratedCollatz.TWidthBound
 import AcceleratedCollatz.TSieve
 import AcceleratedCollatz.TA399760
+import AcceleratedCollatz.TRhoLower
 
 /-!
   OEIS A398772, the record lows of the gap ratio g(x) = (x - y)/x at the drop (A93, 9 Nov 2026).
@@ -19,7 +20,8 @@ import AcceleratedCollatz.TA399760
     and the same word drops at j with g(x') <= g(x): x is no record (`sieve_skip`). It needs
     ClassDrops at the Order of that word (the class id drops), which holds unconditionally up
     to Order 10 (`classDropsAt_le_10`, from the x <= 31), so for s <= 16 the sieve is sound
-    with no hypothesis (`sieve_skip_16`; prows's default s is 16).
+    with no hypothesis (`sieve_skip_16`; prows's default s is 16). At Order > 0 the skipped x
+    has a strictly larger g (`sieve_skip_lt`, `sieve_skip_16_lt`); at Order 0 (even x) g = 1/2.
 -/
 
 namespace AcceleratedCollatz
@@ -169,5 +171,28 @@ theorem sieve_skip_16 (s j x : ℕ) (hs3 : 3 ≤ s) (hs : s ≤ 16) (hj : j ≤ 
         (x' - tStep^[j] x') * x ≤ (x - tStep^[j] x) * x' :=
   sieve_skip s j x hs3 hj hx hA
     (classDropsAt_le_10 _ (order_le_10_of_admissible (by omega) hA))
+
+/-- The strict sieve: at Order > 0 the skipped x has a strictly larger gap ratio than the
+  scanned x' (`gap_mul_lt_of_lt`); at Order 0 (the word [false], every even x) g = 1/2 for
+  both. -/
+theorem sieve_skip_lt (s j x : ℕ) (hs3 : 3 ≤ s) (hj : j ≤ s) (hx : 2 ^ s < x)
+    (hA : Admissible (tBits x j)) (hCD : ClassDropsAt (order (tBits x j)))
+    (h0 : 0 < order (tBits x j)) :
+    ∃ x', 1 < x' ∧ x' ≤ 2 ^ s ∧ tBits x' j = tBits x j ∧ tStep^[j] x' < x' ∧
+      (x' - tStep^[j] x') * x < (x - tStep^[j] x) * x' := by
+  obtain ⟨-, -, x', h1, h2, hb, hd, -⟩ := sieve_skip s j x hs3 hj hx hA hCD
+  refine ⟨x', h1, h2, hb, hd, ?_⟩
+  have := gap_mul_lt_of_lt (tBits x j) x x' hA ((rho_pos_iff _).mpr h0)
+    (by rw [length_tBits]) (by rw [length_tBits]; exact hb) (by omega)
+    (by rw [length_tBits]; exact hd)
+  simpa [length_tBits] using this
+
+/-- The strict sieve for 3 <= s <= 16, with no hypothesis but Order > 0. -/
+theorem sieve_skip_16_lt (s j x : ℕ) (hs3 : 3 ≤ s) (hs : s ≤ 16) (hj : j ≤ s) (hx : 2 ^ s < x)
+    (hA : Admissible (tBits x j)) (h0 : 0 < order (tBits x j)) :
+    ∃ x', 1 < x' ∧ x' ≤ 2 ^ s ∧ tBits x' j = tBits x j ∧ tStep^[j] x' < x' ∧
+      (x' - tStep^[j] x') * x < (x - tStep^[j] x) * x' :=
+  sieve_skip_lt s j x hs3 hj hx hA
+    (classDropsAt_le_10 _ (order_le_10_of_admissible (by omega) hA)) h0
 
 end AcceleratedCollatz

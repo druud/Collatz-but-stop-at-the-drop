@@ -5,7 +5,8 @@ import AcceleratedCollatz.TWidth
   A bound on rho. Each odd step at position k contributes 3^(n - o) 2^k to rho s
   (o = odd steps up to and including k), and before an odd step at k ≥ 1 the level of an
   admissible word is above 1, so 2^k < 3^(o - 1). Hence rho s ≤ n 3^(n-1) for admissible s
-  of Order n (`rho_le_of_admissible`). So every x with n 3^(n-1) < d_23 s * x drops at the
+  of Order n (`rho_le_of_admissible`), strictly at Order n ≥ 2 (`rho_lt_of_admissible`): the
+  first odd step alone reaches 3^(n-1). So every x with n 3^(n-1) < d_23 s * x drops at the
   end of its word s (`drop_of_large`), and ClassDrops only needs checking for class ids
   with d_23 * classId ≤ n 3^(n-1) (`classDrops_iff_small`).
 -/
@@ -105,6 +106,69 @@ theorem rho_le_of_admissible (s : List Bool) (hA : Admissible s) :
   · have h := hA.prefix_gt k hpos hlt
     rw [one_lt_seqProduct_iff, List.length_take, min_eq_left hlt.le] at h
     exact h.le
+
+/-- rho < n 3^(n-1) at Order n ≥ 2, when every odd step at a position k ≥ 1 has
+  2^k < 3^(odd steps before k): only the first odd step reaches 3^(n-1). -/
+theorem rho_lt_of_steps (s : List Bool)
+    (H : ∀ k, 0 < k → s[k]? = some true → 2 ^ k < 3 ^ order (s.take k))
+    (h2 : 2 ≤ order s) :
+    rho s < order s * 3 ^ (order s - 1) := by
+  induction s using List.reverseRecOn with
+  | nil =>
+    simp [order] at h2
+  | append_singleton p b ih =>
+    have Hp : ∀ k, 0 < k → p[k]? = some true → 2 ^ k < 3 ^ order (p.take k) := by
+      intro k hk0 hk
+      have hlt : k < p.length := by
+        by_contra hge
+        rw [List.getElem?_eq_none (by omega)] at hk
+        simp at hk
+      have hk' : (p ++ [b])[k]? = some true := by
+        rw [List.getElem?_append_left hlt]
+        exact hk
+      have h := H k hk0 hk'
+      rwa [List.take_append_of_le_length hlt.le] at h
+    have Hle : ∀ k, p[k]? = some true → 2 ^ k ≤ 3 ^ order (p.take k) := by
+      intro k hk
+      rcases Nat.eq_zero_or_pos k with h0 | hpos
+      · subst h0
+        simp [order]
+      · exact (Hp k hpos hk).le
+    have hp := rho_le_of_steps p Hle
+    cases b with
+    | false =>
+      rw [rho_append_false, order_append_single] at *
+      simp only [Bool.false_eq_true, ↓reduceIte, Nat.add_zero] at h2 ⊢
+      exact ih Hp h2
+    | true =>
+      rw [order_append_single] at h2
+      simp only [↓reduceIte] at h2
+      have hpos : 0 < p.length := by
+        rcases p with _ | ⟨c, q⟩
+        · simp [order] at h2
+        · simp
+      have hlast : 2 ^ p.length < 3 ^ order p := by
+        have h := H p.length hpos (by simp)
+        rwa [List.take_append_of_le_length le_rfl, List.take_length] at h
+      rw [rho_append_true, order_append_single]
+      simp only [↓reduceIte, Nat.add_sub_cancel]
+      have h3 := three_mul_mul_pow_pred (order p)
+      have hmul : 3 * rho p ≤ 3 * (order p * 3 ^ (order p - 1)) := Nat.mul_le_mul_left 3 hp
+      rw [add_mul, one_mul]
+      omega
+
+/-- rho s < n 3^(n-1) for an admissible word s of Order n ≥ 2 (equality only at Order 1,
+  the word [true, false] with rho = 1). -/
+theorem rho_lt_of_admissible (s : List Bool) (hA : Admissible s) (h2 : 2 ≤ order s) :
+    rho s < order s * 3 ^ (order s - 1) := by
+  apply rho_lt_of_steps s _ h2
+  intro k hpos hk
+  have hlt : k < s.length := by
+    by_contra hge
+    rw [List.getElem?_eq_none (by omega)] at hk
+    simp at hk
+  have h := hA.prefix_gt k hpos hlt
+  rwa [one_lt_seqProduct_iff, List.length_take, min_eq_left hlt.le] at h
 
 /-- A member x of an admissible class with n 3^(n-1) < d_23 x drops at the end of its word. -/
 theorem drop_of_large (s : List Bool) (x : ℕ) (hA : Admissible s)
