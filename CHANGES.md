@@ -3,7 +3,9 @@
 The changes to this repository since its first public release, newest
 first. Version names (R_65a, R_66, ...) are the authors' own labels.
 
-## Since R_98
+## R_99 (11 November 2026)
+
+- Paper 3, draft: "Draft: R_99".
 
 - Paper 3, draft, Ch. 4: the factored gap ratio (gap_ratio_eq) and the
   sieve of the gap-ratio record search, sound for s <= 16 with no
