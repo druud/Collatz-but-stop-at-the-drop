@@ -24,6 +24,11 @@ first. Version names (R_65a, R_66, ...) are the authors' own labels.
   half the class ids have an even drop value and much more slack (47
   from 1.40 to 20.3); the tight ones left have an odd drop value.
   Halving keeps the numbers small and hides this race.
+- Lean, TEvenDrop (in the root): for x with an admissible word of
+  Order n >= 2 and length L, n <= 3x: T^L(x) < 2x, and if T^L(x) is
+  even, T^(L+1)(x) < x (drop_succ_of_even). Paper 3, Ch. 4 cites it:
+  one extra zero is always enough; the hard case is an odd value at
+  the end of the word. Table A, row 4.
 
 ## R_99 (11 November 2026)
 

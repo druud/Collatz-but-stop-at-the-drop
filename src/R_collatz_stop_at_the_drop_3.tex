@@ -879,8 +879,14 @@ margin grows at least by the factor $1 + 2^L/d_{23}$; for $47$ from $1.40$ to $2
 drops to $46$. The tight class ids that are left all have $K = L$, an odd drop value: $63$
 ($1.75$), $27$ ($3.09$), $7$ ($4.51$). Dividing by $2$ keeps the numbers small, and so hides
 that the drop is a race between the trailing zeros, which move up at least one place per odd
-step, and the leading bits of $3^n c + \rho$. The hard case of the width identity is the one
-where no extra zero follows the word.
+step, and the leading bits of $3^n c + \rho$.
+
+One extra zero is always enough. Let $x$ have an admissible word of Order $n \ge 2$ and
+length $L$, with $n \le 3x$. Then $\rho < n\,3^{n-1} \le x\,3^n < x\,2^L$, so
+$T^L(x) < 2x$ (\lean{tStep\_iterate\_lt\_two\_mul}), and when $T^L(x)$ is even, $T^{L+1}(x) < x$
+(\lean{drop\_succ\_of\_even}). Counted by Order, the drop can come after the word only when
+the value at its end is odd: the hard case of the width identity is the one where no extra
+zero follows the word.
 
 \nopagebreak
 
@@ -1251,9 +1257,9 @@ Ch. & lean-file & content \\
   \lean{PowDiffFar$\{$Low,Rhin$\}\{$1..4$\}$}
   & the lower side to $10^{60}$ and both sides to $10^{200}$, the differences $\lvert 2^i - 3^j \rvert$ (A014121, A363999) \\
 4 & \lean{TCongruenceSplit}, \lean{TPrefixBlockFail}, \lean{TGap$\{$Ratio,Record$\}$},
-  \lean{TUpperRecord}, \lean{TA398772}
+  \lean{TUpperRecord}, \lean{TA398772}, \lean{TEvenDrop}
   & $\rho$ of a concatenation, the bound of a split, the failure of the block statement, the gap ratio and its
-  records, the sieve of the record search, the upper record Orders \\
+  records, the sieve of the record search, the upper record Orders, the even case \\
 5 & \lean{TBisect}, \lean{TFloorSum}, \lean{TRecord$\{$Floor,Walk$\}$},
   \lean{TSmooth$\{$Program,ProgramConv,Rank$\}$}, \lean{TSternBrocotCert}
   & the A003586 program \\
