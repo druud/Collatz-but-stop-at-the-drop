@@ -3,7 +3,9 @@
 The changes to this repository since its first public release, newest
 first. Version names (R_65a, R_66, ...) are the authors' own labels.
 
-## After R_99 (13 November 2026)
+## R_100 (13 November 2026)
+
+- Paper 3, draft: "Draft: R_100".
 
 - Paper 3, draft (23 pages): an abstract, "Main results" (Theorems A
   to D: the largest rho, powers of 2 and 3, the n-th 3-smooth number,
