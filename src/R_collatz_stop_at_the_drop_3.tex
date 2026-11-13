@@ -246,8 +246,8 @@ and admissibility is a wall. New here, as far as we know:
 
 \begin{enumerate}\setlength{\itemsep}{0.3ex}
 \item \emph{The largest $\rho$.} Of each Order it is a sum of $3$-smooth numbers, reached by
-  the first word only; it shortens the finite reduction of the width identity and keeps its
-  records at the upper record Orders. With a range check it gives the width identity up to
+  the first word only, and it shortens the finite reduction of the width identity (both
+  Terras's, 1976); its records are proved to lie exactly at the upper record Orders. With a range check it gives the width identity up to
   Order $64\,497\,106$.
 \item \emph{Powers of $2$ and $3$.} Lean's kernel checks
   $\min(2^i, 3^j) \le p_2(j)^2\,|2^i - 3^j|$ for every $j$ up to $10^{200}$, by a certified
@@ -275,7 +275,7 @@ Words, Orders, class ids, $p_2(n)$, $d_{23}(n) = 2^{p_2(n)} - 3^n$, the upper re
 Orders $1, 3, 5, 17, 29, \ldots$ and the width identity are those of paper~2; for a word
 of Order $n$, $T^{p_2(n)}(x) = (3^n x + \rho)/2^{p_2(n)}$.
 
-\begin{mainthm}[The largest $\rho$; Chapter~\ref{sec:rhomax}]
+\begin{mainthm}[The largest $\rho$; Chapter~\ref{sec:rhomax}; the bound after Terras]
 For every admissible word of Order $n$,
 \[
 \rho \le \rho_{\max}(n) = \sum_{m<n} 3^{\,n-1-m}\,2^{\,p_2(m)-1},
@@ -283,7 +283,7 @@ For every admissible word of Order $n$,
 with equality only for the first word (\lean{rho\_le\_rhoMax}, \lean{rho\_eq\_rhoMax\_iff}). The width
 identity holds if and only if, at every Order $n$, every class id $c > 1$ with
 $d_{23}(n)\,c \le \rho_{\max}(n)$ drops (\lean{classDrops\_iff\_small\_rhoMax}); at Order $n$ a range check up to
-$W(n) = \lfloor \rho_{\max}(n)/d_{23}(n) \rfloor$ gives it (\lean{classDropsAt\_of\_widthMax}), and $W(n)$ sets a new record exactly at the upper
+$W(n) = \lfloor \rho_{\max}(n)/d_{23}(n) \rfloor$ gives it (\lean{classDropsAt\_of\_widthMax}), and $W(n)$, Terras's bound~\cite[Thm.~2.10]{Terras1976}, sets a new record exactly at the upper
 record Orders (\lean{upperRecord\_iff\_widthBoundMax}). With a range check of every
 $1 < x \le 294\,401\,822\,513\,350$, entered as a hypothesis, the width identity holds at
 every Order up to $64\,497\,106$ (\lean{classDropsAt\_le\_64497106}).
@@ -323,14 +323,16 @@ papers~1 and~2~\cite{Paper1,Paper2} (the width identity is Terras's Conjecture~2
 Mintz~\cite{Mintz1981} counted the $3$-smooth numbers below $2^j 3^i$, the Christoffel
 words are those of Berstel, Lauve, Reutenauer and Saliola~\cite{BerstelLRS2008}, the
 bound on $2^{p_2(n)} - 3^n$ is Rhin's~\cite{Rhin1987}, and Belaga~\cite{Belaga2003}
-bounds the cycles of $3x + d$. Shanks~\cite{Shanks1954} and Jackson and
+bounds the cycles of $3x + d$. The largest $\rho$, its unique word and the bound $W(n)$ of
+Theorem~A are Terras's~\cite[Thm.~2.6, Thm.~2.10]{Terras1976}, who tabulated where the bound
+jumps; the estimate $T^{L}(x) < 3^n x/2^L + n/3$ is Garner's~\cite{Garner1981}. Shanks~\cite{Shanks1954} and Jackson and
 Matthews~\cite{JacksonMatthews2002} computed the continued fraction of a logarithm; the
 author's PARI program for the $n$-th $3$-smooth number is in OEIS
 A003586~\cite{OEIS_A003586}. Monks~\cite{Monks2025} carried $T$ over to the power series
 over the field with two elements, and the three letters are the map of Vaillant and
-Delarue~\cite{VaillantDelarue2019}. As far as we know, Theorems~A to~D, the two
-negative results of Chapter~\ref{sec:congruence} and the formalization
-(Appendix~\ref{app:lean}) are new.
+Delarue~\cite{VaillantDelarue2019}. As far as we know, the rest of Theorem~A (the records of $W$ proved, and the range),
+Theorems~B to~D, the two negative results of Chapter~\ref{sec:congruence} and the
+formalization (Appendix~\ref{app:lean}) are new.
 
 \section{One language for the drop and the 3-smooth numbers}
 \label{sec:language}
@@ -522,7 +524,9 @@ and $\rho \le \rho_{\max}(n)$ for every admissible word of Order $n$
 grid of Chapter~\ref{sec:staircases}, each odd step stands as close to the line as
 admissibility allows. The one admissible word with every odd step at its latest position is the first word
 of Order $n$ (rank~$1$), and it is the only word that reaches the bound
-(\lean{rho\_eq\_rhoMax\_iff}, \lean{rho\_lt\_rho\_firstWord}). For $n = 3$ the first word is
+(\lean{rho\_eq\_rhoMax\_iff}, \lean{rho\_lt\_rho\_firstWord}). This is Terras's Mini-Max
+theorem~\cite[Thm.~2.6]{Terras1976}, with the first word as his sequence $\nu$ of
+Theorem~2.4 there; here it is proved in Lean. For $n = 3$ the first word is
 \bw{11010}, with odd steps at $0$, $1$ and $3$, and $\rho_{\max}(3) = 9 + 6 + 8 = 23$,
 against $n\,3^{n-1} = 27$.
 
@@ -565,13 +569,18 @@ class ids with $d_{23}\,c \le \rho_{\max}(n)$ can fail:
 \]
 suffice, and a range check of every $x$ with $1 < x \le X$ gives the width identity at every
 Order with $W(n) \le X$ (\lean{classDropsAt\_of\_widthMax},
-\lean{classDropsAt\_of\_verifiedMax}, \lean{widthBoundMax\_le\_widthBound}).
+\lean{classDropsAt\_of\_verifiedMax}, \lean{widthBoundMax\_le\_widthBound}). The bound
+$\rho_{\max}(n)/d_{23}(n)$ is Terras's~\cite[Cor.~2.8, Thm.~2.10]{Terras1976}, in his notation
+$\omega/(2 - \mu)$ (equal as fractions at every upper record Order from $3$ to $1636$, computed); his
+Table~C lists its jumps up to length $2593$, at the lengths $p_2(n)$ of the upper record
+Orders, each as $W(n) + 1$ ($72\,059$ for $n = 306$).
 
 \subsection*{The records}
 
 The ratio $\rho_{\max}(n)/d_{23}(n)$, and its floor $W(n)$, are above their values at every
 earlier Order exactly at the upper record Orders (\lean{upperRecord\_iff\_rmax},
-\lean{upperRecord\_iff\_widthBoundMax}), as for $\tau$. Both factors of
+\lean{upperRecord\_iff\_widthBoundMax}), as for $\tau$: Terras's Table~C shows it up to length
+$2593$, and here it is proved. Both factors of
 \[
 \frac{\rho_{\max}(n)}{d_{23}(n)} = \frac{\rho_{\max}(n)/3^n}{1/f(n) - 1}
 \]
@@ -883,7 +892,8 @@ step, and the leading bits of $3^n c + \rho$.
 
 One extra zero is always enough. Let $x$ have an admissible word of Order $n \ge 2$ and
 length $L$, with $n \le 3x$. Then $\rho < n\,3^{n-1} \le x\,3^n < x\,2^L$, so
-$T^L(x) < 2x$ (\lean{tStep\_iterate\_lt\_two\_mul}), and when $T^L(x)$ is even, $T^{L+1}(x) < x$
+$T^L(x) < 2x$ (\lean{tStep\_iterate\_lt\_two\_mul}; Garner's estimate~\cite{Garner1981},
+$T^{L}(x) < 3^n x/2^L + n/3$, gives the same), and when $T^L(x)$ is even, $T^{L+1}(x) < x$
 (\lean{drop\_succ\_of\_even}). Counted by Order, the drop can come after the word only when
 the value at its end is odd: the hard case of the width identity is the one where no extra
 zero follows the word.
@@ -1285,6 +1295,9 @@ numbers of $(3x+d)$-cycles of a given oddlength}, Acta Arith.\ 106 (2003), 197--
   Series~27, Amer.\ Math.\ Soc., Providence, 2008.
 \bibitem{Everett1977} C.~J. Everett, \emph{Iteration of the number-theoretic function
   $f(2n) = n$, $f(2n+1) = 3n+2$}, Adv.\ Math.\ \textbf{25} (1977), 42--45.
+\bibitem{Garner1981} L.~E. Garner, \emph{On the Collatz $3n + 1$ algorithm}, Proc. Amer.
+  Math. Soc. 82 (1981), 19--22.
+
 \bibitem{JacksonMatthews2002} T.~Jackson and K.~Matthews, \emph{On Shanks' algorithm for
   computing the continued fraction of $\log_b a$}, J. Integer Sequences \textbf{5} (2002),
   Article 02.2.7.

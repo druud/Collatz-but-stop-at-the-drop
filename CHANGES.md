@@ -29,6 +29,13 @@ first. Version names (R_65a, R_66, ...) are the authors' own labels.
   even, T^(L+1)(x) < x (drop_succ_of_even). Paper 3, Ch. 4 cites it:
   one extra zero is always enough; the hard case is an odd value at
   the end of the word. Table A, row 4.
+- Paper 3: Terras (1976) and Garner (1981) read. The largest rho, its
+  unique word and the bound W(n) of Theorem A are Terras's (Mini-Max
+  theorem 2.6, Thm. 2.10; his omega/(2 - mu) equals rho_max/d_23 at
+  every upper record Order to 1636, his Table C lists W(n) + 1); new
+  are the records proved and the range. T^L(x) < 2x follows from
+  Garner's estimate. Abstract, Theorem A, Ch. 3, Ch. 4 and "What was
+  known" corrected; Garner added to the references.
 
 ## R_99 (11 November 2026)
 
