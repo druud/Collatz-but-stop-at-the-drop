@@ -404,6 +404,11 @@ $0$. After the whole word, $T^L(x) = (3^n x + \rho)/2^L$ with
 $i = n - o$ and $j = k_o$. From one odd step to the next the exponent of $3$ falls by one
 and the exponent of $2$ rises: the $n$ terms are a \keyterm{staircase}{staircase}, one point in each row
 $i = n-1, \dots, 0$ of the grid of the $3$-smooth numbers.
+As the exponents of $2$ rise while those of $3$ fall, no term divides another, and with
+$k_1 = 0$ the sum $\rho = 3^{n-1} + 3^{n-2}2^{k_2} + \cdots + 2^{k_n}$, $0 < k_2 < \cdots < k_n$, is
+what Blecksmith, McCallum and Selfridge~\cite{Blecksmith1998} call a special $3$-smooth
+representation of level $n - 1$, one in which every power $3^i$ with $i < n$ appears; they
+note its link with the $3x + 1$ problem.
 
 \subsection*{The slanted grid}
 
@@ -774,9 +779,11 @@ the split after the leading \bw{1}, $w = \bw{1}\,v$: when $3c + 1 \le 2^L$, the 
 $T(c) = (3c+1)/2$ is at most $2^{L-1}$ and has the steps $v$, so $T(c) = c_v$
 (\lean{classId\_tail\_eq\_tStep}), and the bound of this split is the drop at $c$ itself
 (\lean{split\_one\_iff}). The class ids that could break the width identity are at most
-$\lfloor n 3^{n-1}/d_{23} \rfloor$ (paper~2), and for every Order up to $3000$ these satisfy
-$3c + 1 \le 2^L$ (computed exactly): there the congruence bound is the width identity in
-other words.
+$\lfloor n 3^{n-1}/d_{23} \rfloor$ (paper~2), and these satisfy $3c + 1 \le 2^L$ at every
+Order up to $10^{60}$ (\lean{three\_mul\_widthBound\_add\_one\_le\_upTo}), and at every Order under
+Rhin's bound (\lean{three\_mul\_widthBound\_add\_one\_le\_of\_rhin}): with $3^n \le L^C\,d_{23}$ they
+are at most $n L^C$, and $3 L^{C+1} < 2^L$ once $L$ is large, the Orders below that checked
+by the kernel. There the congruence bound is the width identity in other words.
 
 Measured, on every admissible word of Orders $2$ to $12$: whenever some split at the end of
 a block gives $X_u > x^*$, the split after the leading \bw{1} does. On Orders $2$ to $18$
@@ -866,6 +873,46 @@ the width identity: every admissible word $B$ is the first block of the words th
 $c$, the class id of $\bw{1}\,B$, has $3c + 1 \le 2^{1 + L_B}$, the class id of $B$ is
 $T(c) > c$ (\lean{classId\_tail\_eq\_tStep}); so $c$ above the cycle point of $B$ gives the
 drop of $B$. (On Order $14$, $3c + 1 \le 2^{1 + L_B}$ holds for $5927$ of the $17\,637$ words, measured.)
+
+\subsection*{The drop amount over the blocks}
+% 13 Nov 2026 (B43, B45): _tmp/bits_01/ksplit.py, cover.py, depthcover.py, need.py; on paper, not in Lean.
+
+What does go block by block is the amount of the drop, in integers. Let $c$ be the class id
+of $w = \bw{1}\,B_1 \cdots B_k$, of Order $n$, and $k(c) = c - T^{L}(c)$ its drop amount; the
+width identity is $k(c) \ge 1$. Let $v_i$ be the value at the start of $B_i$, so $v_1 = T(c) = c +
+(c+1)/2$ and $v_{k+1} = T^L(c)$. As $v_i$ has the steps $B_i$, $v_i = c_i + q_i\,2^{L_i}$ with $c_i$
+the class id of $B_i$ and $q_i \ge 0$, and $v_i - v_{i+1} = (v_i d_i - \rho_i)/2^{L_i}$, with $d_i$
+and $\rho_i$ those of $B_i$ (for a block \bw{0}, the class of the even numbers, take $c_i = 0$,
+so $q_i = v_i/2$). So
+\[
+k(c) \;=\; \sum_{i=1}^{k} \bigl(k(c_i) + q_i\,d_i\bigr) \;-\; \frac{c+1}{2},
+\]
+where $k(c_i) = (c_i d_i - \rho_i)/2^{L_i}$ is the drop amount of the block's own class id,
+and $(c+1)/2$ the rise of the leading \bw{1}. For the word of $27$: $T(27) = 41$ starts the
+block \bw{10} ($c_1 = 1$, $q_1 = 10$, $d_1 = 1$), and $31$ starts the block of Order $35$, the
+word of $31$ itself ($q_2 = 0$); so $k(27) = 10 + k(31) - 14 = 4$. Likewise $k(31) = k(47) +
+23 - 16 = 8$ and $k(47) = k(71) + 15 - 24 = 1$: the tight class ids hand their margins on
+along the path of $27$, read backwards.
+
+This gives an induction on the Order that settles part of the words. Suppose $c_B d_B \ge
+\rho_B$ for every admissible word $B$ of Order below $n$, so $k(c_i) \ge 0$. Then $k(c) \ge \sum_i
+q_i d_i - (c+1)/2$, and $c\,d_{23} \ge \rho$ follows for every word of Order $n$ with $\sum_i q_i d_i
+\ge (c+1)/2$; equality would make $c$ a point of a cycle. In particular this holds for every word
+with a block \bw{0}: its start value $v$ is even and above $c$ (every proper prefix of an
+admissible word has $3^m/2^j \ge 1$), and that block alone gives $v/2 \ge (c+1)/2$. The two
+blocks of $d = 1$, \bw{0} ($2^1 - 3^0$) and \bw{10} ($2^2 - 3^1$), pay their whole $q$; they carry
+most of the payments: $58\%$ of them over the class ids below $2 \cdot 10^6$, measured.
+
+Measured on the $56\,507$ class ids below $2 \cdot 10^6$: $32\,698$ are settled this way,
+$16\,432$ of them by a block \bw{0}. Taking the blocks with $q_i = 0$ apart in turn, with the
+same bound inside, settles $10\,970$ more at the second level, $5283$ at the third, and so on;
+but no fixed depth is enough: $1\,441\,407$ (Order $94$) needs $28$ levels, and the deficit
+handed down does not shrink level by level but rides the climb of the path to its top. The
+reason is exact. For the $8847$ words of the form $w = \bw{1}\,B$, with $B$ the whole word of
+$v = T(c)$ and no block that pays ($39$, $159$, $255$, $447$, \ldots), $k(c) = k(v) -
+(c+1)/2$: what $v$ must deliver is $k(v) \ge (v+1)/3 + 1$, that $v$ drops below $(2v-1)/3 = c$,
+and that is the width identity of $c$ itself. So the induction over the blocks closes only with
+the statement it is meant to prove as its hypothesis.
 
 \subsection*{With the zeros kept}
 % 13 Nov 2026 (B38): the trailing 0-bits kept; _tmp/bits_01/zeros.py.
@@ -1267,9 +1314,9 @@ Ch. & lean-file & content \\
   \lean{PowDiffFar$\{$Low,Rhin$\}\{$1..4$\}$}
   & the lower side to $10^{60}$ and both sides to $10^{200}$, the differences $\lvert 2^i - 3^j \rvert$ (A014121, A363999) \\
 4 & \lean{TCongruenceSplit}, \lean{TPrefixBlockFail}, \lean{TGap$\{$Ratio,Record$\}$},
-  \lean{TUpperRecord}, \lean{TA398772}, \lean{TEvenDrop}
+  \lean{TUpperRecord}, \lean{TA398772}, \lean{TEvenDrop}, \lean{TRhinSplit}
   & $\rho$ of a concatenation, the bound of a split, the failure of the block statement, the gap ratio and its
-  records, the sieve of the record search, the upper record Orders, the even case \\
+  records, the sieve of the record search, the upper record Orders, the even case, $3c + 1 \le 2^L$ under Rhin's bound \\
 5 & \lean{TBisect}, \lean{TFloorSum}, \lean{TRecord$\{$Floor,Walk$\}$},
   \lean{TSmooth$\{$Program,ProgramConv,Rank$\}$}, \lean{TSternBrocotCert}
   & the A003586 program \\
@@ -1293,6 +1340,8 @@ numbers of $(3x+d)$-cycles of a given oddlength}, Acta Arith.\ 106 (2003), 197--
 \bibitem{BerstelLRS2008} J.~Berstel, A.~Lauve, C.~Reutenauer and F.~V. Saliola,
   \emph{Combinatorics on Words: Christoffel Words and Repetitions in Words}, CRM Monograph
   Series~27, Amer.\ Math.\ Soc., Providence, 2008.
+\bibitem{Blecksmith1998} R.~Blecksmith, M.~McCallum and J.~L. Selfridge, \emph{$3$-smooth
+representations of integers}, Amer.\ Math.\ Monthly 105 (1998), 529--543.
 \bibitem{Everett1977} C.~J. Everett, \emph{Iteration of the number-theoretic function
   $f(2n) = n$, $f(2n+1) = 3n+2$}, Adv.\ Math.\ \textbf{25} (1977), 42--45.
 \bibitem{Garner1981} L.~E. Garner, \emph{On the Collatz $3n + 1$ algorithm}, Proc. Amer.
