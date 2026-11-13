@@ -3,6 +3,22 @@
 The changes to this repository since its first public release, newest
 first. Version names (R_65a, R_66, ...) are the authors' own labels.
 
+## After R_99 (13 November 2026)
+
+- Paper 3, draft (23 pages): an abstract, "Main results" (Theorems A
+  to D: the largest rho, powers of 2 and 3, the n-th 3-smooth number,
+  three letters) and "What was known", as in paper 2.
+- Paper 3, Ch. 4: the gap-ratio records over x >= 2 (13 starts below
+  2^46; x = 1 left out, as drop(1) = 1 gives 0), as in OEIS A398772.
+- Paper 3, a cold read and a claim audit: the slack is half the sum
+  of the lower deficits; M counts the letters up to the stop, the last
+  included; the count 2 A100982(m) is of the letter words of the
+  product rule; the range check is a hypothesis, not a named one, and
+  Table A says so; "measured" added where a claim was computed only;
+  smaller fixes of wording and references. The early stop of Ch. 7 is
+  named: equivalent to the Collatz conjecture, at a merge before the
+  drop.
+
 ## R_99 (11 November 2026)
 
 - Paper 3, draft: "Draft: R_99".
