@@ -1549,17 +1549,17 @@ In terms of levels, a bracket closes at the first later point of lower level.
 Scaled by $2^L$, the level of the point after $j$ steps with $o$ odd ones is the
 integer $3^o\,2^{L-j}$, a $3$-smooth number (A003586\index{OEIS!A003586}~\cite{OEIS_A003586}).
 The sweep sorts the points by their place among the $3$-smooth numbers, which
-Mintz~\cite{Mintz1981} counted exactly: below $2^j 3^i$ there are
-$ij + \sum_{k=1}^{i} p_2(k) + \sum_{k=1}^{j} u(k)$ of them, with $u(k)$ the number of
+Mintz~\cite{Mintz1981} counted exactly: below $2^i 3^j$ there are
+$ij + \sum_{k=1}^{j} p_2(k) + \sum_{k=1}^{i} u(k)$ of them, with $u(k)$ the number of
 powers of $3$ below $2^k$ (\lean{card\_smoothBelowAt}; \pv{smooth 51} prints $2^5 3^4$).
 Listed in increasing order, the $3$-smooth numbers walk through their grid by record
-steps only (Figure~\ref{fig:smooth}). From $2^j 3^i$ the next one is $1/f(b)$ times it,
-for the last upper record Order $b \le i$ ($b = 0$ is the doubling), or $2 f(a)$ times it,
-for the last lower record Order $a \ge 1$ with $p_2(a) - 1 \le j$, if there is one: the smaller of the two
+steps only (Figure~\ref{fig:smooth}). From $2^i 3^j$ the next one is $1/f(b)$ times it,
+for the last upper record Order $b \le j$ ($b = 0$ is the doubling), or $2 f(a)$ times it,
+for the last lower record Order $a \ge 1$ with $p_2(a) - 1 \le i$, if there is one: the smaller of the two
 (\lean{smooth\_next}, \lean{smooth\_succ}, \lean{smooth\_succ\_of\_pow\_three}).
-Those of $B \ge 2$ binary digits are $2^{B - p_2(i)}\,3^i$ for the Orders $i < u(B)$; with
+Those of $B \ge 2$ binary digits are $2^{B - p_2(j)}\,3^j$ for the Orders $j < u(B)$; with
 $a$ and $b$ the last lower and upper record Orders below $u(B)$, they rise along
-$i = ka \bmod (a+b)$, $k = 0, 1, \ldots$, skipping $i \ge u(B)$
+$j = ka \bmod (a+b)$, $k = 0, 1, \ldots$, skipping $j \ge u(B)$
 (\lean{smooth\_digits}, \lean{exists\_mul\_mod\_eq\_of\_lastRecords},
 \lean{smooth\_class\_mul\_mod\_lt}).
 

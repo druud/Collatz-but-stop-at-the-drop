@@ -55,6 +55,12 @@ first. Version names (R_65a, R_66, ...) are the authors' own labels.
   (1, 0), (2, 1), and 2^a + 1 = 3^b only for (1, 1), (3, 2) (Levi ben
   Gershon, De numeris harmonicis, 1343). Paper 3, Ch. 4. Table A, row 4.
 - Paper 3: 25 pages.
+- Paper 3, notation (B53 to B57): i is the exponent of 2 and j that of
+  3 everywhere (the grid 2^i 3^j, as in Theorem B and OEIS A014121; also
+  in paper 2's Mintz passage); one letter, one meaning per chapter
+  (the drop amount delta(c), start values V_i, d_23(B_i), L for p_2(n),
+  n_1 + n_2 for a split, y < z for neighbours, and others); undefined
+  symbols defined at first use; unused macros removed.
 
 ## R_99 (11 November 2026)
 
