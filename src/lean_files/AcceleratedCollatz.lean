@@ -61,6 +61,9 @@ import AcceleratedCollatz.TCycle
 import AcceleratedCollatz.TDrop
 import AcceleratedCollatz.TDropPeriod
 import AcceleratedCollatz.TA398772
+import AcceleratedCollatz.TEvenDrop
+import AcceleratedCollatz.TRhinSplit
+import AcceleratedCollatz.TGersonides
 import AcceleratedCollatz.TA399760
 import AcceleratedCollatz.TEncode
 import AcceleratedCollatz.TFiniteCheck
