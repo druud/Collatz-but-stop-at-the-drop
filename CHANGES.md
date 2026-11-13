@@ -22,7 +22,7 @@ first. Version names (R_65a, R_66, ...) are the authors' own labels.
   Z -> 3Z + 2^nu(Z), the trailing 0-bits kept; Z_n = 3^n c + rho, and
   c drops when the odd part of Z_n is below c. Measured below 2^20:
   half the class ids have an even drop value and much more slack (47
-  from 1.40 to 20.3); the tight ones left have an odd drop value.
+  from below 2 to above 20); the tight ones left have an odd drop value.
   Halving keeps the numbers small and hides this race.
 - Lean, TEvenDrop (in the root): for x with an admissible word of
   Order n >= 2 and length L, n <= 3x: T^L(x) < 2x, and if T^L(x) is
