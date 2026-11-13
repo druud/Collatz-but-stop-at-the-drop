@@ -36,6 +36,25 @@ first. Version names (R_65a, R_66, ...) are the authors' own labels.
   are the records proved and the range. T^L(x) < 2x follows from
   Garner's estimate. Abstract, Theorem A, Ch. 3, Ch. 4 and "What was
   known" corrected; Garner added to the references.
+- Paper 3, Ch. 2: the staircase as a special 3-smooth representation
+  of level n - 1 (Blecksmith, McCallum and Selfridge 1998). B39.
+- Paper 3, Ch. 4, "The drop amount over the blocks": with v_i the value
+  at the start of block B_i, k(c) = sum (k(c_i) + q_i d_i) - (c+1)/2;
+  the tight class ids hand their margins on along the path of 27. By
+  induction on the Order this settles every word with sum q_i d_i >=
+  (c+1)/2, every word with a block 0 among them (measured: 32698 of the
+  56507 class ids below 2*10^6). No fixed depth settles all: for the
+  words 1 B with B the whole word of T(c), the hypothesis needed is the
+  width identity of c itself. The d = 1 blocks 0 and 10 are the only
+  ones (Levi ben Gershon). B43, B45, B46.
+- Lean, TRhinSplit (in the root): 3 widthBound(n) + 1 <= 2^p2(n) at
+  every Order up to 10^60, and at every Order under RhinBound 1 14. Paper
+  3, Ch. 4, "The bound of a split", cites it (was: computed to Order
+  3000). Table A, row 4.
+- Lean, TGersonides (in the root): 3^b + 1 = 2^a only for (a, b) =
+  (1, 0), (2, 1), and 2^a + 1 = 3^b only for (1, 1), (3, 2) (Levi ben
+  Gershon, De numeris harmonicis, 1343). Paper 3, Ch. 4. Table A, row 4.
+- Paper 3: 25 pages.
 
 ## R_99 (11 November 2026)
 
