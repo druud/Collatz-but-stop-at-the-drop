@@ -214,6 +214,8 @@
 
 \ifpaper\pretocmd{\section}{\clearpage}{}{}\fi
 \newtheorem{theorem}{Theorem}
+\newtheorem{mainthm}{Theorem}
+\renewcommand{\themainthm}{\Alph{mainthm}}
 \emergencystretch=3em
 % A float on a page of its own stands at the top
 \makeatletter\setlength{\@fptop}{0pt}\makeatother
@@ -231,6 +233,104 @@
 
 \begin{document}
 \maketitle
+
+% 13 Nov 2026 (B33): abstract, Main results and What was known, as in paper 2.
+\bigskip
+\begin{center}\textbf{Abstract}\end{center}
+\begin{quotation}\small\noindent
+Papers~1 and~2 reduce the question whether every $x > 1$ eventually falls below itself
+under the reduced Collatz map $T$ to two open statements. This paper reads the admissible
+words of paper~2 on the grid of the $3$-smooth numbers $2^j 3^i$: the odd steps of a word
+are a staircase on that grid, the constant $\rho$ of the word is the sum of its points,
+and admissibility is a wall. New here, as far as we know:
+
+\begin{enumerate}\setlength{\itemsep}{0.3ex}
+\item \emph{The largest $\rho$.} Of each Order it is a sum of $3$-smooth numbers, reached by
+  the first word only; it shortens the finite reduction of the width identity and keeps its
+  records at the upper record Orders. With a range check it gives the width identity up to
+  Order $64\,497\,106$.
+\item \emph{Powers of $2$ and $3$.} Lean's kernel checks
+  $\min(2^i, 3^j) \le p_2(j)^2\,|2^i - 3^j|$ for every $j$ up to $10^{200}$, by a certified
+  walk towards $\log_2 3$ that forms no large power of $3$.
+\item \emph{The $n$-th $3$-smooth number.} A program that forms no $3$-smooth number
+  returns the exponents of the $n$-th one, proved for every $n$, with $\log_2 3$ replaced by
+  fractions that the program certifies itself.
+\item \emph{Three letters.} For the map of OEIS A324245, the stop comes at the drop or
+  earlier, at a merge of paths, and every odd number above $1$ stops exactly when every
+  path under $T$ reaches $1$: an early stop, equivalent to the Collatz conjecture.
+\end{enumerate}
+
+\noindent
+Two hopes fail: the drop of a word does not follow from the drops of its blocks, and a
+natural strengthening of the width identity, block by block, is false at Order $35$.
+Every result with a Lean name is proved in Lean~4 with Mathlib, without \texttt{sorry};
+open statements and a published bound enter as named hypotheses, the range check as a
+hypothesis.
+\end{quotation}
+
+\section*{Main results}
+\addcontentsline{toc}{section}{Main results}
+
+Words, Orders, class ids, $p_2(n)$, $d_{23}(n) = 2^{p_2(n)} - 3^n$, the upper record
+Orders $1, 3, 5, 17, 29, \ldots$ and the width identity are those of paper~2; for a word
+of Order $n$, $T^{p_2(n)}(x) = (3^n x + \rho)/2^{p_2(n)}$.
+
+\begin{mainthm}[The largest $\rho$; Chapter~\ref{sec:rhomax}]
+For every admissible word of Order $n$,
+\[
+\rho \le \rho_{\max}(n) = \sum_{m<n} 3^{\,n-1-m}\,2^{\,p_2(m)-1},
+\]
+with equality only for the first word (\lean{rho\_le\_rhoMax}, \lean{rho\_eq\_rhoMax\_iff}). The width
+identity holds if and only if, at every Order $n$, every class id $c > 1$ with
+$d_{23}(n)\,c \le \rho_{\max}(n)$ drops (\lean{classDrops\_iff\_small\_rhoMax}); at Order $n$ a range check up to
+$W(n) = \lfloor \rho_{\max}(n)/d_{23}(n) \rfloor$ gives it (\lean{classDropsAt\_of\_widthMax}), and $W(n)$ sets a new record exactly at the upper
+record Orders (\lean{upperRecord\_iff\_widthBoundMax}). With a range check of every
+$1 < x \le 294\,401\,822\,513\,350$, entered as a hypothesis, the width identity holds at
+every Order up to $64\,497\,106$ (\lean{classDropsAt\_le\_64497106}).
+\end{mainthm}
+
+\begin{mainthm}[Powers of $2$ and $3$; Chapter~\ref{sec:rhomax}]
+For $1 \le j \le 10^{200}$ and every $i$,
+$\min(2^i, 3^j) \le p_2(j)^2\,|2^i - 3^j|$ (\lean{min\_le\_of\_walk\_200}), checked by
+Lean's kernel along a walk down the Stern--Brocot tree towards $\log_2 3$ from a bracket
+$2^a \le 3^K < 2^b$; any walk that reaches Order $N$ gives the same up to $N$
+(\lean{min\_le\_of\_walks}). Without any bound, a congruence sieve proves the first
+$3000$ terms of OEIS A014121 (\lean{a014121\_iff}).
+\end{mainthm}
+
+\begin{mainthm}[The $n$-th $3$-smooth number; Chapter~\ref{sec:a003586}]
+For every $n \ge 1$, a program that computes only floor sums of the numerators and
+denominators of record fractions returns $(j, i)$ with exactly $n - 1$ of the $3$-smooth
+numbers below $2^j 3^i$; its fraction comes from a Stern--Brocot walk decided in
+integers, and no convergent of $\log_2 3$ is assumed (\lean{latticeOrd\_smoothJIFind}).
+\end{mainthm}
+
+\begin{mainthm}[Three letters; Chapter~\ref{sec:three}]
+For the map of OEIS A324245 on the odd numbers $k \ge 3$, the number $M$ of its steps
+$\mathtt{U}$ and $\mathtt{D}$ up to and including the first value below $k$ is at most the Order of the drop of $k$
+under $T$, with equality exactly when the last step is $\mathtt{D}$
+(\lean{le\_order\_of\_isUdsStop}, \lean{isUdsStop\_of\_S}); and every odd $k \ge 3$
+reaches a value below $k$ if and only if every path under $T$ reaches $1$
+(\lean{stops\_iff}).
+\end{mainthm}
+
+\subsection*{What was known}
+
+The formula for $T^{L}$, the residue classes of the parity words and the density result
+are due to Terras~\cite{Terras1976} and Everett~\cite{Everett1977}; the admissible words,
+their chains, the record Orders and the width identity are those of
+papers~1 and~2~\cite{Paper1,Paper2} (the width identity is Terras's Conjecture~2.9).
+Mintz~\cite{Mintz1981} counted the $3$-smooth numbers below $2^j 3^i$, the Christoffel
+words are those of Berstel, Lauve, Reutenauer and Saliola~\cite{BerstelLRS2008}, the
+bound on $2^{p_2(n)} - 3^n$ is Rhin's~\cite{Rhin1987}, and Belaga~\cite{Belaga2003}
+bounds the cycles of $3x + d$. Shanks~\cite{Shanks1954} and Jackson and
+Matthews~\cite{JacksonMatthews2002} computed the continued fraction of a logarithm; the
+author's PARI program for the $n$-th $3$-smooth number is in OEIS
+A003586~\cite{OEIS_A003586}. Monks~\cite{Monks2025} carried $T$ over to the power series
+over the field with two elements, and the three letters are the map of Vaillant and
+Delarue~\cite{VaillantDelarue2019}. As far as we know, Theorems~A to~D, the two
+negative results of Chapter~\ref{sec:congruence} and the formalization
+(Appendix~\ref{app:lean}) are new.
 
 \section{One language for the drop and the 3-smooth numbers}
 \label{sec:language}
@@ -352,7 +452,7 @@ $12 = 2^2 \cdot 3$ lies between $9$ and $16$.
 
 Walking up through the $3$-smooth numbers from $3^n$ to $2^{p_2(n)}$, each step is one of
 the two of paper~2, Chapter~\ref{P2-sec:chain}: from $2^j 3^i$ the exponent of $3$ falls by
-the last upper record Order $b \le i$, or rises by the last lower record Order $a$ with
+the last upper record Order $b \le i$ ($b = 0$ is the doubling), or rises by the last lower record Order $a$ with
 $p_2(a) \le j + 1$ (\lean{smooth\_succ}). After a power of $3$ it is always the step down by
 $b$ (\lean{smooth\_succ\_of\_pow\_three}); at an upper record Order $n$ that one step, with
 $b = n$, goes from $3^n$ straight to $2^{p_2(n)}$.
@@ -379,14 +479,14 @@ $2$-cycle of $T_{A,B}$, so its series is $(q^L B/(A + q^2) + B\rho_A)/A^n$; for 
 $B = 1 + q^2$ this is the polynomial $q^L + (1 + q^2)\sum_o q^{k_o}$, of degree $L$
 (checked for all 20 rows of both tables). With the coefficients as binary digits, the second
 table is OEIS A389685\index{OEIS!A389685}~\cite{OEIS_A389685}, the value at $q = 2$ of this
-polynomial (checked for $n \le 10^4$). The closed formula is the orbit itself.
+polynomial (checked for the first $10^4$ terms). The closed formula is the orbit itself.
 
 \nopagebreak
 
 \begin{wordbox}
 \boxhere{staircase}staircase\index{staircase@\termlink{staircase}{staircase}|textbf} & the $n$ terms $3^{n-o}\,2^{k_o}$ of $\rho$ of a word of Order $n$, one point in each row of the grid of the $3$-smooth numbers. \\
 \boxhere{slanted}slanted grid\index{slanted grid@\termlink{slanted}{slanted grid}|textbf} & $2^j 3^i$ drawn at $j + i\log_2 3$ in row $i$: the points stand in the order of their values. \\
-\boxhere{wall}wall\index{wall@\termlink{wall}{wall}|textbf} & the vertical line through $3^{n-1}$; a word is admissible when every point after the first lies left of it, and its length is $p_2(n)$.
+\boxhere{wall}wall\index{wall@\termlink{wall}{wall}|textbf} & the vertical line through $3^{n-1}$; a word is admissible when its staircase starts at $3^{n-1}$, every later point lies left of it, and its length is $p_2(n)$.
 \end{wordbox}
 
 \section{The largest rho and the finite reduction}
@@ -401,7 +501,7 @@ width identity needs checking only at class ids up to $\tau(n) = n\,3^{n-1}/d_{2
 $\rho$ that an admissible word of Order $n$ really has, a sum of $3$-smooth numbers, and
 shows that the finite reduction keeps its shape: its records are again exactly the upper
 record Orders. For cycles of $3x+d$ with $k$ odd steps, Belaga bounds the least member $m$ by
-$2^{\ell} \le (3 + d/m)^k$, with $\ell = p_2(k)$ for the bound in $k$ alone, by averaging over the
+$2^{\ell} \le (3 + d/m)^k$, with $\ell \ge p_2(k)$ for the bound in $k$ alone, by averaging over the
 rotations of the word, and so, with linear forms in logarithms, by $d\,k^{C}$ \cite{Belaga2003}
 (a short proof by another route: \cite{Kaneda2010}). At $d = 1$, Bernoulli's inequality gives
 $2^{\ell} = 3^k + d_{23}(k) \le (3 + 1/\tau(k))^k$, so $\tau(k)$ obeys the same bound.
@@ -410,7 +510,7 @@ $2^{\ell} = 3^k + d_{23}(k) \le (3 + 1/\tau(k))^k$, so $\tau(k)$ obeys the same 
 
 \termhere{rhomax}In $\rho = \sum 3^{n-o}\,2^{k}$ the $o$-th odd step stands at position $k$. In an
 admissible word the odd step that follows $m$ odd steps stands at a position $k$ with
-$k + 1 \le p_2(m)$ (\lean{admissible\_step\_le}): before it the level is at least $1$.
+$k + 1 \le p_2(m)$ (\lean{admissible\_step\_le}): before it the level of paper~2, the running product of $3/2$ per \bw{1} and $1/2$ per \bw{0}, is at least $1$.
 Each term grows with its position, so $\rho$ is largest when every odd step stands as late
 as it may, at $k = p_2(o - 1) - 1$. That gives
 \[
@@ -426,7 +526,7 @@ of Order $n$ (rank~$1$), and it is the only word that reaches the bound
 \bw{11010}, with odd steps at $0$, $1$ and $3$, and $\rho_{\max}(3) = 9 + 6 + 8 = 23$,
 against $n\,3^{n-1} = 27$.
 
-At a record Order the first word is an upper Christoffel word~\cite[Definition~1.1]{BerstelLRS2008}:
+At an upper record Order the first word is an upper Christoffel word~\cite[Definition~1.1]{BerstelLRS2008}, at a lower one such a word followed by \bw{0}:
 with $P = p_2(n)$ at an upper record Order $n$, and $P = p_2(n) - 1$ at a lower one, its $o$-th
 odd step stands at $\lfloor (o-1)P/n \rfloor$, by $\lfloor iP/Q \rfloor + 1 = p_2(i)$ for a
 record fraction $P/Q$ (Chapter~\ref{sec:a003586}); with $\bw{0}$ as $x$ and $\bw{1}$ as $y$
@@ -438,7 +538,7 @@ $24$, $36$, $48$, $106$, $159$, where $(p_2(n) - 1)/n$ is the record fraction of
 Order, not in lowest terms, and the first $p_2(n) - 1$ letters a power of that Order's
 Christoffel word (measured).
 
-\termhere{slack}What the bound $n\,3^{n-1}$ gives away, its \keyterm{slack}{slack}, is a sum of the lower deficits
+\termhere{slack}What the bound $n\,3^{n-1}$ gives away, its \keyterm{slack}{slack}, is half a sum of the lower deficits
 $2 \cdot 3^m - 2^{p_2(m)}$:
 \[
 2\,\bigl(n\,3^{n-1} - \rho_{\max}(n)\bigr) = \sum_{m < n} 3^{\,n-1-m}\,
@@ -448,7 +548,8 @@ $2 \cdot 3^m - 2^{p_2(m)}$:
 $(2 \cdot 3^m - 2^{p_2(m)})\,3^k$ and $(2 \cdot 3^k - 2^{p_2(k)})\,3^m$
 (\lean{slackTerm\_lt\_iff}), and the term of $m$ is below every earlier one from $k = 1$ on
 exactly when $m$ is a lower record Order (\lean{lowerRecord\_iff\_slackTerm}). So the upper
-record Orders are where $d_{23}$ is smallest so far, the lower ones where a term of the slack is.
+record Orders are where $d_{23}(n)/3^n$ is smallest so far, the lower ones where
+$(2 \cdot 3^m - 2^{p_2(m)})/3^m$ is.
 
 \subsection*{The finite reduction with the largest rho}
 
@@ -477,11 +578,12 @@ earlier Order exactly at the upper record Orders (\lean{upperRecord\_iff\_rmax},
 work the same way: $\rho_{\max}(n)/3^n$ grows with $n$ (\lean{three\_pow\_mul\_rhoMax\_le}), and
 $1/f(n) - 1$ falls as the block factor $f(n)$ of paper~2, Chapter~\ref{P2-sec:chain}, rises. So a
 later Order with a larger block factor has a larger ratio
-(\lean{rmax\_lt\_of\_lt\_of\_blockFactor\_lt}; two Orders never have the same block factor), and an upper record Order has a ratio above every
+(\lean{rmax\_lt\_of\_lt\_of\_blockFactor\_lt}; two Orders never have the same block factor, as $3^n/2^{p_2(n)}$ fixes $n$), and an upper record Order has a ratio above every
 earlier one.
 
 For the other direction, let $n$ be no upper record Order, $a$ the last upper record Order
-below it and $b = n - a$. Then $p_2$ is additive at every split $a + j$ with $1 \le j \le b$,
+below it and $b = n - a$. Then $p_2$ is additive at every split $a + j$ with $1 \le j \le b$
+(\lean{p2\_of\_add\_of\_upperRecord}),
 and
 \[
 \rho_{\max}(a + b) = 3^b\,\rho_{\max}(a) + 2^{p_2(a)}\,\rho_{\max}(b)
@@ -496,7 +598,7 @@ the ratio at $b$ at most that at $a$ (by induction), the ratio at $n$ is below t
 two Orders $c < n$ with $f(3) \le f(c) \le f(n)$, the ratio at $n$ is at least $1$ above
 that at $c$ (\lean{rmax\_add\_one\_le}).
 
-Table~\ref{tab:rhomax} puts $W(n)$ beside $\lfloor \tau(n) \rfloor$ at the upper record
+Table~\ref{tab:rhomax} puts $W(n)$ beside $\lfloor \tau(n) \rfloor$ at $3$ and the upper record
 Orders of paper~2's Table~\ref{P2-tab:tau}. With the last upper record Order $a$ up to $n$,
 $W$ of every Order up to $n$ is at most $W(a)$ (\lean{widthBoundMax\_le\_of\_upperRecord}), so
 a range check up to $W(a)$ gives the width identity at every Order up to $n$
@@ -522,7 +624,7 @@ n & p_2(n) & \lfloor \tau(n) \rfloor & W(n) \\
 \bottomrule
 \end{array}$
 \caption{The bound of paper~2 and the bound with the largest $\rho$, at some upper record
-Orders (exact).}
+Orders (computed exactly).}
 \label{tab:rhomax}
 \end{table}
 
@@ -544,7 +646,8 @@ $b\,n + \lfloor K/\lfloor p^2/2 \rfloor \rfloor + 1 \le p\,K$, a comparison of n
 $181$ digits, by $(1 + p^2)^K \le 2^{\lfloor K/\lfloor p^2/2\rfloor\rfloor + 1}\,p^{2K}$
 (\lean{rhinOK\_spec}, \lean{succ\_pow\_le}). The walk itself is certified with the same bracket:
 $649$ steps until the sum of its two denominators passes $10^{60}$,
-with $320$ upper record Orders among them (\lean{rhinWalk\_ok}, computed by the kernel).
+with $320$ upper record Orders among them (\lean{rhinWalk\_ok}, computed by the kernel; the two
+counts measured).
 
 \subsection*{The lower side, and the differences of powers of 2 and 3}
 % Generation 76: PowDiff, PowDiffRhin, PowDiffWalk (namespace PowDiff); the seqfan thread
@@ -600,7 +703,7 @@ the number. The cases $i < 8$ or $j < 3$ are checked directly.
 
 \begin{wordbox}
 \boxhere{rhomax}$\rho_{\max}(n)$\index{rho max@\termlink{rhomax}{$\rho_{\max}(n)$}|textbf} & the largest $\rho$ of an admissible word of Order $n$, reached by the first word only. \\
-\boxhere{slack}slack\index{slack@\termlink{slack}{slack}|textbf} & $n\,3^{n-1} - \rho_{\max}(n)$, a sum of lower deficits. \\
+\boxhere{slack}slack\index{slack@\termlink{slack}{slack}|textbf} & $n\,3^{n-1} - \rho_{\max}(n)$, half a sum of lower deficits. \\
 \boxhere{W}$W(n)$\index{W(n)@\termlink{W}{$W(n)$}|textbf} & $\lfloor \rho_{\max}(n)/d_{23}(n) \rfloor$: the class ids of Order $n$ up to it decide the width identity there.
 \end{wordbox}
 
@@ -709,9 +812,10 @@ statement fails exactly when
 For $47$ this reads $3 \cdot 2^{54} < 48\,d(B)$, that is $16\,d(B) > 2^{54}$. Below $3 \cdot
 10^6$ no other $x \equiv 3 \pmod 4$ meets it, even without $x \equiv 2 \pmod 3$. The gap
 ratio $(x - y)/x$ is $(1 - 3^n/2^{L})(1 - x^*/x)$ (\lean{gap\_ratio\_eq}), and the failure needs it small while
-$d_{23}/2^{L}$ is not. Its record lows, as continued fractions, are OEIS
-A398772\index{OEIS!A398772}~\cite{OEIS_A398772}, from $1$ ($y = 1$, as $1$ is the bottom)
-through $2, 3, 5, 11, 39, 47, 4591, \ldots$; each record start is the least start of its
+$d_{23}/2^{L}$ is not. Its record lows over $x \ge 2$ ($x = 1$ is left out: the path stops at the bottom $1$, so
+$\mathrm{drop}(1) = 1$ and the gap ratio of $1$ is $0$, which no $x \ge 2$ reaches), as continued fractions, are OEIS
+A398772\index{OEIS!A398772}~\cite{OEIS_A398772}, at the record starts
+$2, 3, 5, 11, 39, 47, 4591, \ldots$; each record start is the least start of its
 word, as of two starts of one word the smaller has the smaller gap ratio
 (\lean{gap\_identity}, \lean{gap\_mul\_lt\_of\_lt}). This gives a sieve for the search:
 after the starts up to $2^s$, a start $x > 2^s$ whose first $j \le s$ steps form an admissible
@@ -723,18 +827,18 @@ admissible prefix are scanned further. This needs the drop of the class id at th
 word, at most $10$ for $s \le 16$, where it holds unconditionally
 (\lean{sieve\_skip\_lt}, \lean{sieve\_skip\_16\_lt}; \lean{sieve\_skip\_16} with the tie). An even $x$ drops at once, to $x/2$, and
 an $x = 4i + 1$ after two steps, to $3i + 1$ ($i = 0$ is $\mathrm{drop}(1) = 1$); up to Order $64\,497\,106$, where every class id
-above $1$ drops, each record start $x \equiv 3 \pmod 4$ is the class id of its word
-(\lean{eq\_classId\_of\_gapRecord\_mod4\_le\_64497106}). $47$ is the only one among them that
-breaks the statement. There are $14$ record starts below $2^{46}$, and from
+above $1$ drops given the range check of Chapter~\ref{sec:rhomax}, each record start $x \equiv 3 \pmod 4$ is the class id of its word
+(\lean{eq\_classId\_of\_gapRecord\_mod4\_le\_64497106}). Below $2^{46}$, $47$ is the only one among them that
+breaks the statement (measured). There are $13$ record starts below $2^{46}$, and from
 $11$ on, every one but $47$ has an upper record Order, one where $d_{23}/2^{L}$ reaches a new
 low ($3, 5, 41, 94, 147, 200, 200, 253, 306$). Up to $971$ those Orders are $1, 3, 5, 17, 29,
 41, 94, 147, 200, 253, 306, 971$ (\lean{upperRecord\_iff}): from $41$ to $306$ in steps of $53$,
 as $2^{84} < 3^{53} < 2^{85}$ keeps $p_2(n + 53) = p_2(n) + 84$ for $n < 306$, and
-$p_2(359) = p_2(306) + 85$ ends them (\lean{pT\_add\_53}, \lean{pT\_359}). At such an Order $d_{23}/2^{L}$ falls so far that
+$p_2(359) = p_2(306) + 85$ ends them (\lean{pT\_add\_53}, \lean{pT\_359}). Below $2^{46}$, at each of these Orders $d_{23}/2^{L}$ falls so far that
 every start of the Order beats the previous record, so the least one, A122442, is a
 record; a second start of the same Order can follow when $x^*/x$ is larger, as
-$604\,499\,583$ after $371\,871\,359$ at Order $200$. Only $47$, at Order $34$, is a record
-by lying close to its cycle point.
+$604\,499\,583$ after $371\,871\,359$ at Order $200$; only $47$, at Order $34$, is a record
+by lying close to its cycle point (measured).
 
 % Generation 76 (Backlog 11, A2): _keep/e2_block_index.py, Orders 2 to 21, exact.
 By the index $i$ of the block, the statement gets easier fast. On Orders $2$ to $21$ the
@@ -746,13 +850,13 @@ smallest ratio of the class id of $\bw{1}\,B_1 \cdots B_i$ to the cycle point of
 \]
 for $i = 1, \ldots, 5$; the first three are reached at Orders $4$, $7$ and $12$, and stay the
 smallest at every higher Order measured there; further out they do fall, below $6$ for $i = 2$ at the word
-of $27$ (Order $37$) and below $30$ for $i = 3$ at the word of $155$. The cycle point of a block is at most $W$ of its
-Order, which grows like a power of the Order, while the class id of a longer prefix is fixed
+of $27$ (Order $37$) and below $30$ for $i = 3$ at the word of $155$ (measured). The cycle point of a block is at most $\rho_{\max}/d_{23}$ of its
+Order, which under Rhin's bound grows like a power of the Order (paper~2, Chapter~\ref{P2-sec:open}), while the class id of a longer prefix is fixed
 by more bits. So the first block is where the statement is tight, and there it contains
-the width identity: every admissible word $B$ is the first block of $\bw{1}\,B$, and when
+the width identity: every admissible word $B$ is the first block of the words that begin with $\bw{1}\,B$, and when
 $c$, the class id of $\bw{1}\,B$, has $3c + 1 \le 2^{1 + L_B}$, the class id of $B$ is
 $T(c) > c$ (\lean{classId\_tail\_eq\_tStep}); so $c$ above the cycle point of $B$ gives the
-drop of $B$. (On Order $14$ this holds for $5927$ of the $17\,637$ words.)
+drop of $B$. (On Order $14$, $3c + 1 \le 2^{1 + L_B}$ holds for $5927$ of the $17\,637$ words, measured.)
 
 \nopagebreak
 
@@ -858,7 +962,7 @@ class id drops at the end of its own word, which is checked for every term below
 
 \termhere{scan}The terms are found by a \keyterm{scan}{scan}. A
 residue $x \bmod 2^W$ fixes the first $W$ steps of $x$; the residues with no admissible prefix within
-those $W$ steps are kept, $3\,524\,586$ of them for $W = 28$; for the others the residue fixes
+those $W$ steps are kept, $3\,524\,586$ of them for $W = 28$ (measured); for the others the residue fixes
 the Order. The kept
 residues are then taken in increasing order of $x$, round by round, and each $x$ is followed
 to its drop. As $x$ grows, a term is final as soon as it is found. Each term is checked when
@@ -869,7 +973,7 @@ $a(397) = 87\,784\,734\,829\,927$.
 \subsection*{Why not a smarter search}
 
 The class id of a word is fixed by a congruence modulo $2^L$, and that is easy: for one
-word, $c \equiv -\rho\,3^{-n} \pmod{2^L}$ (Chapter~\ref{sec:congruence}). The hard part is
+word, $c \equiv -\rho\,3^{-n} \pmod{2^L}$ (paper~2, Chapter~\ref{P2-sec:dropformula}). The hard part is
 the choice of the word. Two attempts to choose it well, and why they fail:
 \begin{itemize}
 \item \emph{Local moves.} Moving the $r$-th odd step of a word from position $k$ to $k'$,
@@ -931,7 +1035,7 @@ The steps $\mathtt{U}$ and $\mathtt{D}$ go from $k$ to the next odd value of its
 under $T$. The step $\mathtt{S}$ does not: it replaces $k$ by the smaller odd number
 $(k-1)/4$, which has the same next odd value, as $3\,(k-1)/4 + 1 = (3k+1)/4$. \termhere{stop}\termhere{M}\termhere{letterword}Follow $k$ by
 these steps and \keyterm{stop}{stop} at the first value below $k$; let \keysym{M}{$M$} be the number of steps
-$\mathtt{U}$ and $\mathtt{D}$ before the stop. For $k = 7$ the steps are
+$\mathtt{U}$ and $\mathtt{D}$ up to the stop, the last step included. For $k = 7$ the steps are
 $7 \to 11 \to 17 \to 13 \to 3$, its \keyterm{letterword}{letter word} is $\mathtt{UUDS}$, and $M = 3$; for $k = 9$ one
 step $\mathtt{D}$ goes to $7$, and $M = 1$.
 
@@ -946,7 +1050,8 @@ Order of the drop, with equality exactly when the stop is by $\mathtt{D}$ (\lean
 for every odd $k < 2^{22}$). That every odd $k \ge 3$ has a stop is equivalent to every
 path under $T$ reaching $1$ (\lean{stops\_iff}): a stop by $\mathtt{D}$ lands on a smaller
 value of the path, a stop by $\mathtt{S}$ on a smaller value with the same next odd value,
-so an induction over the values goes through. The number $7$ drops at Order~$4$, to $5$, one odd step after
+so an induction over the values goes through. So the early stop is equivalent to the
+Collatz conjecture, and comes sooner: at a merge, before the drop. The number $7$ drops at Order~$4$, to $5$, one odd step after
 its merge with the path of $3$.
 
 \subsection*{The words}
@@ -960,15 +1065,16 @@ it does for every $k$ is open. At the last letter of a class that stops by $\mat
 follows from the width identity of the word at which the class drops (\lean{ClassDrops};
 paper~2, Chapter~\ref{P2-sec:open}). A prefix with $P < 1$ stops every $k > 2^e 3^m$ of its
 class, $e$ its bits and $m$ its letters $\mathtt{U}$ and $\mathtt{D}$ (\lean{stop\_of\_coeff}),
-and the odd $k$ modulo $2^{E+1}$ with no such prefix of at most $E$ bits are a share that goes
+and the odd $k$ modulo $2^{E+1}$ with no such prefix of at most $E$ bits are a part of the classes that goes
 to $0$ as $E$ grows (\lean{density}; Terras~\cite{Terras1976}, Everett~\cite{Everett1977}).
 
-By the product rule the bits of the letters up to the stop are an admissible word of
+Call a letter word one \emph{of the product rule} when it ends at the first prefix with
+$P < 1$. By the product rule its bits are an admissible word of
 Order~$M$, or one followed by \bw{0}. A \bw{1} followed by $z$ zeros splits in exactly one
 way into letters: $\mathtt{U}$ and $z/2$ letters $\mathtt{S}$ when $z$ is even,
 $\mathtt{D}$ and $(z-1)/2$ letters $\mathtt{S}$ when $z$ is odd. The first product below $1$
 falls at the end of an admissible word or one bit later, and both occur for every admissible
-word. So for $m \ge 1$ there are $2\,\mathrm{A100982}(m)$\index{OEIS!A100982}~\cite{OEIS_A100982} letter words with $M = m$
+word. So for $m \ge 1$ there are $2\,\mathrm{A100982}(m)$\index{OEIS!A100982}~\cite{OEIS_A100982} letter words of the product rule with $M = m$
 (paper~2, Chapter~\ref{P2-sec:count}), $\mathrm{A100982}(m)$ of them fixing $k$ modulo
 $2^{p_2(m)+1}$ and as many modulo $2^{p_2(m)+2}$ (\lean{card\_udsStopSet}, \lean{udsWord\_class}; counted for $m \le 16$). For $k = 7$
 the bits are \bw{111000}, the admissible word \bw{11100} of Order~$3$ followed by \bw{0}.
@@ -987,7 +1093,7 @@ $m + 1$ (Chapter~\ref{sec:minimal}).
 \boxhere{stop}stop\index{stop@\termlink{stop}{stop}|textbf} & the first value below $k$ reached by the letters. \\
 \boxhere{letterword}letter word\index{letter word@\termlink{letterword}{letter word}|textbf} & the letters of $k$ up to its stop; in bits \bw{1}, \bw{10}, \bw{00}. \\
 \boxhere{M}$M$\index{M@\termlink{M}{$M$}|textbf} & the number of letters $\mathtt{U}$ and $\mathtt{D}$ up to the stop. \\
-\boxhere{merge}merge\index{merge@\termlink{merge}{merge}|textbf} & a stop by $\mathtt{S}$: the stop value joins the path of $k$ under $T$ before its drop. \\
+\boxhere{merge}merge\index{merge@\termlink{merge}{merge}|textbf} & a stop by $\mathtt{S}$: the next odd value of the stop value lies on the path of $k$ under $T$, before its drop. \\
 A100982\index{OEIS!A100982} & the number of admissible words of each Order, in the OEIS. \\
 A324245\index{OEIS!A324245} & the map of the three letters, on $n = (k-1)/2$, in the OEIS.
 \end{wordbox}
@@ -1046,7 +1152,7 @@ Lean's kernel checks the pair inequalities for every pair of neighbouring record
 to $10^{60}$ (\lean{upperPairs\_upTo}, \lean{lowerPairs\_upTo}), with the certified walk of
 Chapter~\ref{sec:rhomax}, here at $K = 2^{500}$ (\lean{rulerUpWalk\_ok}, \lean{rulerLowWalk\_ok}).
 With an upper and a lower record Order between $10^{59}$ and $10^{60}$
-(\lean{exists\_records\_between}), the ruler gap holds for every exponent of $2$ and every
+(\lean{exists\_records\_between}), the ruler gap holds for every exponent of $2$, with every
 exponent of $3$ up to $10^{59}$ (\lean{rulerGapUpTo\_ten\_pow}). This is a finite check; the
 ruler gap itself stays open.
 
@@ -1083,8 +1189,8 @@ ratios seen on a range are not statements that hold for every number. They are l
 
 Other odd multipliers $q \ge 3$ are left out: paper~2 proves its chain decomposition and
 sweeps for every odd $q$, the setting of M.~Winkler's admissible sequences~\cite{Winkler2026b}, and the lean-files
-\lean{TBracketCountQ}, \lean{TChainParseQ} and \lean{TBracketDropQ} carry the rest of that
-chapter over to every odd $q$.
+\lean{TBracketCountQ}, \lean{TChainParseQ} and \lean{TBracketDropQ} carry the rest of paper~2's
+Chapter~\ref{P2-sec:chain} over to every odd $q$.
 
 \appendix
 \section{The Lean formalization}
@@ -1095,7 +1201,8 @@ chapter over to every odd $q$.
 The Lean names this paper cites are proved in the Lean~4 project \lean{AcceleratedCollatz}
 of papers~1 and~2 (paper~2, Appendix~\ref{P2-app:lean}), without \texttt{sorry}; open
 statements and theorems taken from the literature enter as named hypotheses
-(\lean{ClassDrops}, \lean{RulerGap}, \lean{RhinBound}, \lean{RhinInt}). Table~\ref{tab:lean3} lists the
+(\lean{ClassDrops}, \lean{RulerGap}, \lean{RhinBound}, \lean{RhinInt}), and the range check of
+Chapter~\ref{sec:rhomax} as a hypothesis of the theorems that use it. Table~\ref{tab:lean3} lists the
 lean-files by chapter; the names of the \lean{PowDiff} files are in the namespace \lean{PowDiff},
 those of the two \lean{A349414} files, self-contained extracts, in namespaces of their file names. Chapter~\ref{sec:minimal} is computed, not formalized.
 
@@ -1113,14 +1220,14 @@ Ch. & lean-file & content \\
 3 & \lean{TChristoffel}, \lean{TRhin$\{$Bound,Check$\}$}, \lean{TRho$\{$Max,Slack$\}$},
   \lean{TRhoMax$\{$Bound,Check,Record$\}$}, \lean{TFiniteCheckNext}
   & the largest $\rho$, the first word as a Christoffel word, its slack, the finite
-  reduction and its records, the Rhin check, the width identity up to Order $64\,497\,106$ \\
+  reduction and its records, the Rhin check, the width identity up to Order $64\,497\,106$ given the range check \\
 3 & \lean{PowDiff$\{$,Far,Rhin,Walk$\}$},
   \lean{PowDiffFar$\{$Bracket,Check,Nodes$\}$},
   \lean{PowDiffFar$\{$Low,Rhin$\}\{$1..4$\}$}
   & the lower side to $10^{60}$ and both sides to $10^{200}$, the differences $\lvert 2^i - 3^j \rvert$ (A014121, A363999) \\
 4 & \lean{TCongruenceSplit}, \lean{TPrefixBlockFail}, \lean{TGap$\{$Ratio,Record$\}$},
   \lean{TUpperRecord}, \lean{TA398772}
-  & $\rho$ of a concatenation, the bound of a split, the failure of E, the gap ratio and its
+  & $\rho$ of a concatenation, the bound of a split, the failure of the block statement, the gap ratio and its
   records, the sieve of the record search, the upper record Orders \\
 5 & \lean{TBisect}, \lean{TFloorSum}, \lean{TRecord$\{$Floor,Walk$\}$},
   \lean{TSmooth$\{$Program,ProgramConv,Rank$\}$}, \lean{TSternBrocotCert}

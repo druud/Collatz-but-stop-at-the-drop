@@ -1,54 +1,54 @@
 \begin{theindex}
 
-  \item \termlink{splitbound}{bound of a split}, \textbf{10}
+  \item \termlink{splitbound}{bound of a split}, \textbf{12}
 
   \indexspace
 
-  \item \termlink{letterword}{letter word}, \textbf{15}
+  \item \termlink{letterword}{letter word}, \textbf{17}
 
   \indexspace
 
-  \item \termlink{M}{$M$}, \textbf{15}
-  \item \termlink{measured}{measured}, \textbf{1}
-  \item \termlink{merge}{merge}, \textbf{15}
+  \item \termlink{M}{$M$}, \textbf{17}
+  \item \termlink{measured}{measured}, \textbf{3}
+  \item \termlink{merge}{merge}, \textbf{17}
 
   \indexspace
 
   \item OEIS
-    \subitem A003586, 11, 12
-    \subitem A100982, 14, 15
-    \subitem A122442, 13
-    \subitem A324245, 14, 15
-    \subitem A389685, 3
-    \subitem A398772, 9
+    \subitem A003586, 13, 14
+    \subitem A100982, 16, 17
+    \subitem A122442, 15
+    \subitem A324245, 16, 17
+    \subitem A389685, 5
+    \subitem A398772, 11
 
   \indexspace
 
-  \item \termlink{ruler}{plain ruler}, \textbf{16}
-  \item \termlink{proved}{proved}, \textbf{1}
+  \item \termlink{ruler}{plain ruler}, \textbf{18}
+  \item \termlink{proved}{proved}, \textbf{3}
 
   \indexspace
 
-  \item \termlink{recordfrac}{record fraction}, \textbf{12}
-  \item \termlink{rhomax}{$\rho_{\max}(n)$}, \textbf{7}
-  \item \termlink{rulergap}{ruler gap}, \textbf{16}
+  \item \termlink{recordfrac}{record fraction}, \textbf{14}
+  \item \termlink{rhomax}{$\rho_{\max}(n)$}, \textbf{9}
+  \item \termlink{rulergap}{ruler gap}, \textbf{18}
 
   \indexspace
 
-  \item \termlink{S}{$S(k)$}, \textbf{12}
-  \item \termlink{scan}{scan}, \textbf{13}
-  \item \termlink{slack}{slack}, \textbf{7}
-  \item \termlink{slanted}{slanted grid}, \textbf{3}
-  \item \termlink{staircase}{staircase}, \textbf{3}
-  \item \termlink{stop}{stop}, \textbf{15}
+  \item \termlink{S}{$S(k)$}, \textbf{14}
+  \item \termlink{scan}{scan}, \textbf{15}
+  \item \termlink{slack}{slack}, \textbf{9}
+  \item \termlink{slanted}{slanted grid}, \textbf{5}
+  \item \termlink{staircase}{staircase}, \textbf{5}
+  \item \termlink{stop}{stop}, \textbf{17}
 
   \indexspace
 
-  \item \termlink{letters}{U, D, S}, \textbf{15}
+  \item \termlink{letters}{U, D, S}, \textbf{17}
 
   \indexspace
 
-  \item \termlink{W}{$W(n)$}, \textbf{7}
-  \item \termlink{wall}{wall}, \textbf{3}
+  \item \termlink{W}{$W(n)$}, \textbf{9}
+  \item \termlink{wall}{wall}, \textbf{5}
 
 \end{theindex}
