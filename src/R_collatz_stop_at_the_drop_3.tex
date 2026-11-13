@@ -858,10 +858,35 @@ $c$, the class id of $\bw{1}\,B$, has $3c + 1 \le 2^{1 + L_B}$, the class id of 
 $T(c) > c$ (\lean{classId\_tail\_eq\_tStep}); so $c$ above the cycle point of $B$ gives the
 drop of $B$. (On Order $14$, $3c + 1 \le 2^{1 + L_B}$ holds for $5927$ of the $17\,637$ words, measured.)
 
+\subsection*{With the zeros kept}
+% 13 Nov 2026 (B38): the trailing 0-bits kept; _tmp/bits_01/zeros.py.
+
+\termhere{zeroskept}Halving an even number only sheds a trailing $0$-bit. Keeping them, the \keyterm{zeroskept}{zeros kept}, makes the odd step
+$Z \mapsto 3Z + 2^{\nu(Z)}$, where $2^{\nu(Z)}$ is the lowest set bit of $Z$: for $Z = 2^k v$
+with $v$ odd it gives $2^k(3v + 1)$. From $Z_0 = c$, after $n$ odd steps
+\[
+Z_n = 3^n c + \rho ,
+\]
+and the points $3^{n-o}\,2^{k_o}$ of the staircase are the lowest bits $2^{\nu(Z_{o-1})} = 2^{k_o}$,
+each times the factors $3$ that follow it (by induction on $n$). The trailing zeros only move
+up, $\nu(Z_o) \ge \nu(Z_{o-1}) + 1$, and between two odd steps the path is $Z_n/2^j$. So $c$
+drops at Order $n$, the first $n$ at which the odd part of $Z_n$ is below $c$, that is $Z_n < c\,2^K$ with
+$K = \nu(Z_n) \ge L$. The margin of the drop is then $c\,(2^K - 3^n)/\rho$ instead of
+$c\,(2^L - 3^n)/\rho$, and $K - L$ counts the $0$-bits that follow the word: those of the drop value.
+
+Measured, on the $31\,730$ class ids below $2^{20}$: $16\,045$ have $K > L$, and for them the
+margin grows at least by the factor $1 + 2^L/d_{23}$; for $47$ from $1.40$ to $20.3$, as $47$
+drops to $46$. The tight class ids that are left all have $K = L$, an odd drop value: $63$
+($1.75$), $27$ ($3.09$), $7$ ($4.51$). Dividing by $2$ keeps the numbers small, and so hides
+that the drop is a race between the trailing zeros, which move up at least one place per odd
+step, and the leading bits of $3^n c + \rho$. The hard case of the width identity is the one
+where no extra zero follows the word.
+
 \nopagebreak
 
 \begin{wordbox}
-\boxhere{splitbound}bound of a split\index{bound of a split@\termlink{splitbound}{bound of a split}|textbf} & $X_u = (2^{L_u} c_v - \rho(u))/3^{n_u}$ for $w = uv$: the class id $c$ of $w$ is at least $X_u$.
+\boxhere{splitbound}bound of a split\index{bound of a split@\termlink{splitbound}{bound of a split}|textbf} & $X_u = (2^{L_u} c_v - \rho(u))/3^{n_u}$ for $w = uv$: the class id $c$ of $w$ is at least $X_u$. \\
+\boxhere{zeroskept}zeros kept\index{zeros kept@\termlink{zeroskept}{zeros kept}|textbf} & the odd step as $Z \mapsto 3Z + 2^{\nu(Z)}$, the trailing $0$-bits kept: $Z_n = 3^n c + \rho$, and $c$ drops at Order $n$ when the odd part of $Z_n$ is below $c$.
 \end{wordbox}
 
 \section{The \texorpdfstring{$n$}{n}-th 3-smooth number, without the list}

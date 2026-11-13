@@ -18,6 +18,12 @@ first. Version names (R_65a, R_66, ...) are the authors' own labels.
   smaller fixes of wording and references. The early stop of Ch. 7 is
   named: equivalent to the Collatz conjecture, at a merge before the
   drop.
+- Paper 3, Ch. 4, "With the zeros kept": the odd step as
+  Z -> 3Z + 2^nu(Z), the trailing 0-bits kept; Z_n = 3^n c + rho, and
+  c drops when the odd part of Z_n is below c. Measured below 2^20:
+  half the class ids have an even drop value and much more slack (47
+  from 1.40 to 20.3); the tight ones left have an odd drop value.
+  Halving keeps the numbers small and hides this race.
 
 ## R_99 (11 November 2026)
 
