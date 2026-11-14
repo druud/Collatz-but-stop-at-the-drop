@@ -3,6 +3,13 @@
 The changes to this repository since its first public release, newest
 first. Version names (R_65a, R_66, ...) are the authors' own labels.
 
+## After R_100 (14 November 2026)
+
+- Paper 3, references: the three-gap theorem now cites Sós (1958) and
+  Świerczkowski (1958); Levi ben Gershon's result on 2^a 3^b differing
+  by 1 also cites Simonson (2000, p. 245) for the statement and
+  Carlebach (1910) for the Latin text.
+
 ## R_100 (13 November 2026)
 
 - Paper 3, draft: "Draft: R_100".
