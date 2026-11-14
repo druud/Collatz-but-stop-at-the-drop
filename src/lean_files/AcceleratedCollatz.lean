@@ -88,6 +88,7 @@ import AcceleratedCollatz.TMarkerPoint
 import AcceleratedCollatz.TMarkerPointHigh
 import AcceleratedCollatz.TMarkerTree
 import AcceleratedCollatz.TMersenne
+import AcceleratedCollatz.TMerge
 import AcceleratedCollatz.TMod4
 import AcceleratedCollatz.TMonksDrop
 import AcceleratedCollatz.TMonksQ
