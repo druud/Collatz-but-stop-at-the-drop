@@ -5,6 +5,14 @@ first. Version names (R_65a, R_66, ...) are the authors' own labels.
 
 ## After R_100 (14 November 2026)
 
+- Paper 3, Ch. 4: a new subsection "Periodic stretches and merging
+  paths": parity bits as 2-adic digits, the cycle point of a repeated
+  word, the shift identity after a periodic stretch; the stretches in
+  the record climbs come with the density of odd steps; two paths merge
+  in a pair o, 3o + 1, and x, x + 1 meet at least 3 steps after the drop
+  of x (measured below 2^21; exactly 3 for x = 5 mod 32, in Lean).
+- Lean: TMerge (`tStep_eq_tStep_iff`, `merge_thirtytwo_add_five`).
+
 - Paper 3, references: the three-gap theorem now cites Sós (1958) and
   Świerczkowski (1958); Levi ben Gershon's result on 2^a 3^b differing
   by 1 also cites Simonson (2000, p. 245) for the statement and

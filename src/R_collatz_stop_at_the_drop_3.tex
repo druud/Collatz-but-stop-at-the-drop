@@ -940,6 +940,34 @@ $T^{L}(x) < 3^n x/2^L + n/3$, gives the same), and when $T^L(x)$ is even, $T^{L+
 the value at its end is odd: the hard case of the width identity is the one where no extra
 zero follows the word.
 
+\subsection*{Periodic stretches and merging paths}
+% 14 Nov 2026 (B63, B64, B66, B67, B68): _tmp/bits_01/burst.py, burst_density.py, merge2.py.
+
+Read the parity bits of the path of $x$ as the binary digits of a $2$-adic integer. Then
+$x \equiv y \pmod{2^k}$ exactly when the first $k$ parity bits of $x$ and $y$ agree
+(Terras~\cite{Terras1976}). A word $u$ of length $p$ and Order $m$ with $3^m > 2^p$, repeated
+forever, is the parity sequence of its cycle point $q_u = \rho(u)/(2^p - 3^m)$, a negative
+rational: $-1$ for \bw{1}, $-5$ for \bw{110}. A value that agrees with $q_u$ in exactly $k$
+bits repeats $u$ for exactly $k$ steps, and with $x = q_u + 2^k e$,
+\[
+T^k(x) = T^k(q_u) + 3^s e ,
+\]
+$s$ the odd steps among the $k$ (on the integers, \lean{tStep\_iterate\_shift}): the stretch
+uses up the $k$ agreeing bits, and what follows is set by $e$ alone. So $2^k - 1$, near $-1$,
+starts with $k$ odd steps (\lean{mersenne\_iterate}), and other values are $2^k - 1$ in
+disguise near other cycle points. The climbs of the stopping-time records below
+$2 \cdot 10^7$ are mostly such stretches. But so are the windows with as many odd steps on
+any path: over windows of $40$ steps, $47.2$ per cent of the records' climbs lie in
+stretches of words up to length $8$ repeated at least twice, against $44.2$ per cent for all
+windows with the same numbers of odd steps on the paths of the odd $x$ in
+$[2^{20}, 2^{20} + 2^{16})$. The stretches come with the density of odd steps, not with the records.
+
+Two different values with the same image under $T$ are an odd $o$ and $3o + 1$
+(\lean{tStep\_eq\_tStep\_iff}), so two paths merge in such a pair. Measured: for every odd
+$x < 2^{21}$ whose path meets the path of $x + 1$ before $1$, they meet at least $3$ steps after the
+drop of $x$; exactly $3$ for $x = 7$ and for every $x \equiv 5 \pmod{32}$, where $x = 32a + 5$
+drops at step $2$ and both paths reach $9a + 2$ at step $5$ (\lean{merge\_thirtytwo\_add\_five}).
+
 \nopagebreak
 
 \begin{wordbox}
@@ -1309,9 +1337,9 @@ Ch. & lean-file & content \\
   \lean{PowDiffFar$\{$Low,Rhin$\}\{$1..4$\}$}
   & the lower side to $10^{60}$ and both sides to $10^{200}$, the differences $\lvert 2^i - 3^j \rvert$ (A014121, A363999) \\
 4 & \lean{TCongruenceSplit}, \lean{TPrefixBlockFail}, \lean{TGap$\{$Ratio,Record$\}$},
-  \lean{TUpperRecord}, \lean{TA398772}, \lean{TEvenDrop}, \lean{TRhinSplit}, \lean{TGersonides}
+  \lean{TUpperRecord}, \lean{TA398772}, \lean{TEvenDrop}, \lean{TRhinSplit}, \lean{TGersonides}, \lean{TAffine}, \lean{TMersenne}, \lean{TMerge}
   & $\rho$ of a concatenation, the bound of a split, the failure of the block statement, the gap ratio and its
-  records, the sieve of the record search, the upper record Orders, the even case, $3c + 1 \le 2^L$ under Rhin's bound, the powers of $2$ and $3$ that differ by $1$ \\
+  records, the sieve of the record search, the upper record Orders, the even case, $3c + 1 \le 2^L$ under Rhin's bound, the powers of $2$ and $3$ that differ by $1$, the shift of a class, $2^k - 1$, merging paths \\
 5 & \lean{TBisect}, \lean{TFloorSum}, \lean{TRecord$\{$Floor,Walk$\}$},
   \lean{TSmooth$\{$Program,ProgramConv,Rank$\}$}, \lean{TSternBrocotCert}
   & the A003586 program \\
