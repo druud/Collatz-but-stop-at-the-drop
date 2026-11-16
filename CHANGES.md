@@ -5,6 +5,15 @@ first. Version names (R_65a, R_66, ...) are the authors' own labels.
 
 ## After R_100 (14 November 2026)
 
+- Paper 3, Ch. 4, merging paths: the gap of at least 3 steps between
+  the drop of x and the meeting of x, x + 1 does not go on beyond 2^21:
+  x = 2244603 meets x + 1 at step 55, 2 steps after its drop, and
+  x = 100335611 at step 39, before it drops (164 such odd x below 2^31).
+- Lean: TRunCoord (`odd_run_end_shift`, `one_in_front`,
+  `run_coord_step`, `run_coord_iterate`: a run in one step, the run
+  coordinate) and TFlip (`point_of_reach_one`, `flip_digit`: the flip of
+  one parity digit, in the integers).
+
 - Paper 3, Ch. 4: a new subsection "Periodic stretches and merging
   paths": parity bits as 2-adic digits, the cycle point of a repeated
   word, the shift identity after a periodic stretch; the stretches in
