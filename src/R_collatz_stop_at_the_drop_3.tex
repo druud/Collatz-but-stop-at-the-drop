@@ -455,7 +455,7 @@ $b = n$, goes from $3^n$ straight to $2^{p_2(n)}$.
 
 \subsection*{Over the power series in $q$}
 % Generation 80 (user, S36: B, C): TMonksQ; Monks' tables checked exactly in Python
-% (_tmp/monks/monks_h_01.py, _02.py; all 20 rows of each table).
+% (_keep/monks/monks_h_01.py, _02.py; all 20 rows of each table).
 
 K.~G.~Monks~\cite{Monks2025} carries $T$ over to the power series in $q$ over the field with
 two elements: for $A$ and $B$ with constant term $1$, $T_{A,B}(x) = x/q$ when $q$ divides
@@ -806,7 +806,7 @@ smallest over all words with class id below $2 \cdot 10^{10}$. A scan of the sta
 failure, at any block. So what follows measures how far the statement holds, not a way
 to the width identity.
 
-% Generation 86 (A33): _tmp/a32/gap.py, exact.
+% Generation 86 (A33): _keep/a32/gap.py, exact.
 % 10 Nov 2026 (B10): the factored gap ratio and the sieve, TA398772 (A93).
 The failure has a plain form in a start and its drop. Let $x = c_B$, of Order $n$, and $y =
 T^{L}(x)$ its drop, $L = p_2(n)$; then $x - y = d_{23}(x - x^*)/2^{L}$, with $x^*$ the
@@ -865,7 +865,7 @@ $T(c) > c$ (\lean{classId\_tail\_eq\_tStep}); so $c$ above the cycle point of $B
 drop of $B$. (On Order $14$, $3c + 1 \le 2^{1 + L_B}$ holds for $5927$ of the $17\,637$ words, measured.)
 
 \subsection*{The drop amount over the blocks}
-% 13 Nov 2026 (B43, B45): _tmp/bits_01/ksplit.py, cover.py, depthcover.py, need.py; on paper, not in Lean.
+% 13 Nov 2026 (B43, B45): _keep/bits_01/ksplit.py, cover.py, depthcover.py, need.py; on paper, not in Lean.
 
 What does go block by block is the amount of the drop, in integers. Let $c$ be the class id
 of $w = \bw{1}\,B_1 \cdots B_k$, of Order $n$ and length $L = p_2(n)$, and $\delta(c) = c - T^{L}(c)$
@@ -910,7 +910,7 @@ and that is the width identity of $c$ itself. So the induction over the blocks c
 the statement it is meant to prove as its hypothesis.
 
 \subsection*{With the zeros kept}
-% 13 Nov 2026 (B38): the trailing 0-bits kept; _tmp/bits_01/zeros.py.
+% 13 Nov 2026 (B38): the trailing 0-bits kept; _keep/bits_01/zeros.py.
 
 \termhere{zeroskept}Halving an even number only sheds a trailing $0$-bit. Keeping them, the \keyterm{zeroskept}{zeros kept}, makes the odd step
 $Z \mapsto 3Z + 2^{\nu(Z)}$, where $2^{\nu(Z)}$ is the lowest set bit of $Z$: for $Z = 2^k Y$
@@ -941,7 +941,7 @@ the value at its end is odd: the hard case of the width identity is the one wher
 zero follows the word.
 
 \subsection*{Periodic stretches and merging paths}
-% 14 Nov 2026 (B63, B64, B66, B67, B68): _tmp/bits_01/burst.py, burst_density.py, merge2.py.
+% 14 Nov 2026 (B63, B64, B66, B67, B68): _keep/bits_01/burst.py, burst_density.py, merge2.py.
 
 Read the parity bits of the path of $x$ as the binary digits of a $2$-adic integer. Then
 $x \equiv y \pmod{2^k}$ exactly when the first $k$ parity bits of $x$ and $y$ agree
@@ -1060,7 +1060,7 @@ A003586\index{OEIS!A003586} & the $3$-smooth numbers in the OEIS.
 \section{The minimal class ids}
 \label{sec:minimal}
 % Generation 69: first text. Backlog 5; the History (generation 35, the negatives). Terms:
-% the run to 400 (_tmp/a122442_search_03.out) had a(1..397) at the time of writing:
+% the run to 400 (OEIS/_keep/a122442/a122442_search_03.out) had a(1..397) at the time of writing:
 % update the count when the run ends. Left out: the measured heuristics of generation 35
 % (not wanted). Generation 76: the complexity placement (Manders-Adleman 1978, Theorem 2;
 % Mahaney 1982, Theorem 3.1 and Corollary 3.6; both PDFs in _keep/).
@@ -1296,7 +1296,7 @@ ratios seen on a range are not statements that hold for every number. They are l
 
 \subsection*{Other multipliers}
 % Generation 76 (B1): TBracketCountQ, TChainParseQ, TBracketDropQ; the measurement
-% _keep/q_family_measure_01.py (_tmp/q_family_measure_01.out), Orders 1 to 10, exact.
+% _keep/q_family_measure_01.py (_keep/q_family_measure_01.out), Orders 1 to 10, exact.
 % Generation 78 (user): cut to one sentence; the q = 5, 7, 9 measurement and the q = 9
 % counts are out of the paper (the History, generation 77).
 
