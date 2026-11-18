@@ -21,6 +21,7 @@ their PDFs are here as the `_zenodo.pdf` files.
 | `R_collatz_stop_at_the_drop_2_zenodo.pdf` | Paper 2 as on Zenodo |
 | `R_collatz_stop_at_the_drop_3.pdf` | Paper 3, a **draft** (marked with its version, e.g. "Draft: R_81"): what lies around the drop, in the language of the 3-smooth numbers; not archived, it may change (Ruud H.G. van Tol) |
 | `building.html` | the game of paper 1 in a browser: a building with stairs and poles, a rider to its drop; open it at [druud.github.io/Collatz-but-stop-at-the-drop/building.html](https://druud.github.io/Collatz-but-stop-at-the-drop/building.html) |
+| `drop_tree.html` | the admissible words of Orders 1 to N as one tree (paper 3, Chapter 3), with the best class id of each Order drawn bold; options for the max Order, the best, the order at a split, shape and layout; open it from disk in a browser |
 | `pv.py` | the admissible words: counts, ranks, class ids, chains, record Orders and more; `./pv.py test` runs the self-test (Python 3.8 or later, no extra packages) |
 | `CHANGES.md` | the changes since the first public release, newest first |
 | `src/` | the LaTeX sources of the three papers with their index files (see below); `lean_files/`, the Lean sources, and `lean_files.zip`, the same as one file: unzip, then `lake exe cache get && lake build` in `lean_files/` |

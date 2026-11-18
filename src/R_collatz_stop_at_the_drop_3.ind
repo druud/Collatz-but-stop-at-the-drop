@@ -1,62 +1,67 @@
 \begin{theindex}
 
-  \item \termlink{splitbound}{bound of a split}, \textbf{14}
+  \item \termlink{bestorder}{best of the Order}, \textbf{6}
+  \item \termlink{splitbound}{bound of a split}, \textbf{16}
 
   \indexspace
 
-  \item \termlink{letterword}{letter word}, \textbf{19}
+  \item \termlink{letterword}{letter word}, \textbf{21}
 
   \indexspace
 
-  \item \termlink{M}{$M$}, \textbf{19}
+  \item \termlink{M}{$M$}, \textbf{21}
   \item \termlink{measured}{measured}, \textbf{3}
-  \item \termlink{merge}{merge}, \textbf{19}
+  \item \termlink{merge}{merge}, \textbf{21}
 
   \indexspace
 
-  \item \termlink{oddpartdrop}{odd part at the drop}, \textbf{14}
+  \item \termlink{oddpartdrop}{odd part at the drop}, \textbf{16}
   \item OEIS
-    \subitem A003586, 15, 16
-    \subitem A007310, 13
-    \subitem A067745, 13
-    \subitem A100982, 18, 19
-    \subitem A122442, 17
-    \subitem A122790, 13
-    \subitem A324245, 18, 19
+    \subitem A003586, 17, 18
+    \subitem A007310, 15
+    \subitem A067745, 15
+    \subitem A100982, 20, 21
+    \subitem A122442, 19
+    \subitem A122790, 15
+    \subitem A324245, 20, 21
     \subitem A389685, 5
-    \subitem A398772, 11
+    \subitem A398772, 13
 
   \indexspace
 
-  \item \termlink{ruler}{plain ruler}, \textbf{20}
+  \item \termlink{ruler}{plain ruler}, \textbf{22}
   \item \termlink{proved}{proved}, \textbf{3}
 
   \indexspace
 
-  \item \termlink{recordfrac}{record fraction}, \textbf{16}
-  \item \termlink{rhomax}{$\rho_{\max}(n)$}, \textbf{9}
-  \item \termlink{rulergap}{ruler gap}, \textbf{20}
+  \item \termlink{recordfrac}{record fraction}, \textbf{18}
+  \item \termlink{rhomax}{$\rho_{\max}(n)$}, \textbf{11}
+  \item \termlink{rulergap}{ruler gap}, \textbf{22}
 
   \indexspace
 
-  \item \termlink{S}{$S(k)$}, \textbf{16}
-  \item \termlink{scan}{scan}, \textbf{17}
-  \item \termlink{slack}{slack}, \textbf{9}
+  \item \termlink{S}{$S(k)$}, \textbf{18}
+  \item \termlink{scan}{scan}, \textbf{19}
+  \item \termlink{slack}{slack}, \textbf{11}
   \item \termlink{slanted}{slanted grid}, \textbf{5}
   \item \termlink{staircase}{staircase}, \textbf{5}
-  \item \termlink{stop}{stop}, \textbf{19}
+  \item \termlink{stop}{stop}, \textbf{21}
 
   \indexspace
 
-  \item \termlink{letters}{U, D, S}, \textbf{19}
+  \item \termlink{tree}{tree of the words}, \textbf{6}
 
   \indexspace
 
-  \item \termlink{W}{$W(n)$}, \textbf{9}
+  \item \termlink{letters}{U, D, S}, \textbf{21}
+
+  \indexspace
+
+  \item \termlink{W}{$W(n)$}, \textbf{11}
   \item \termlink{wall}{wall}, \textbf{5}
 
   \indexspace
 
-  \item \termlink{zeroskept}{zeros kept}, \textbf{14}
+  \item \termlink{zeroskept}{zeros kept}, \textbf{16}
 
 \end{theindex}

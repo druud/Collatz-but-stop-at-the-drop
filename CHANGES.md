@@ -5,6 +5,19 @@ first. Version names (R_65a, R_66, ...) are the authors' own labels.
 
 ## After R_100 (14 November 2026)
 
+- Paper 3, a new Chapter 3, "The words as one tree": the admissible
+  words of all Orders as the leaves of one binary tree (figure for
+  Orders 1 to 6, from tree_tikz.py); proved on paper: the subtree
+  below a prefix depends only on its counts; the words up to Order N
+  with the alive prefixes at N + 1 odd steps form a complete code
+  (weights 2^(1 - l) add up to 1, Terras's density theorem in the
+  limit); those prefixes number a(N + 1). The best of each Order
+  (largest T^L(c)/c, the smallest relative margin in the width
+  identity): 5, 3, 11, 7, 39, 347, ... (measured). Later chapters
+  are renumbered.
+
+- drop_tree.html: the same tree as a page, with options.
+
 - Paper 3, "The odd part at the drop": the Lean names of TOddPartDrop;
   S and E bounded in rationals by the survivors' share, 82 and 87
   certified partial quotients (Order 3000).

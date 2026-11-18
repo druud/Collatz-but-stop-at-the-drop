@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Drop Word Tree</title>
+<style>
+:root { --bg:#fff; --fg:#222; --mut:#888; --edge:#999; --node:#444; --panel:#f4f4f4; }
+@media (prefers-color-scheme: dark) { :root { --bg:#1b1b1b; --fg:#ddd; --mut:#999; --edge:#777; --node:#bbb; --panel:#2a2a2a; } }
+body { margin:0; background:var(--bg); color:var(--fg); font:14px Helvetica, Arial, sans-serif; }
+header { position:sticky; top:0; z-index:1; background:var(--panel); padding:8px 16px; display:flex; flex-wrap:wrap; gap:8px 18px; align-items:center; }
+header label { white-space:nowrap; }
+header .info { color:var(--mut); }
+#wrap { padding:8px 16px 24px; overflow:auto; }
+svg text { fill:currentColor; }
+</style>
+</head>
+<body>
+<header>
+  <label>Max Order <input id="n" type="number" min="1" max="10" value="6" style="width:3.5em"></label>
+  <label>Best of Order
+    <select id="best">
+      <option value="ratio">Highest ratio</option>
+      <option value="minr">Smallest start value</option>
+      <option value="none">None</option>
+    </select></label>
+  <label>Split
+    <select id="split"><option value="01">0 first</option><option value="leaves" selected>Fewer leaves first</option><option value="more">More leaves first</option></select></label>
+  <label>Shape
+    <select id="shape"><option value="r">Rectangular</option><option value="s">Spread</option></select></label>
+  <label>Layout
+    <select id="lay"><option value="p">Portrait</option><option value="l">Landscape</option></select></label>
+  <label>Hide Order &gt; N <input id="hide" type="checkbox" checked></label>
+  <button id="save">Save SVG</button>
+  <span class="info" id="info"></span>
+</header>
+<div id="wrap"></div>
+<script>
+/* Drop words of Orders 1..N as one binary tree (B119). T(x) = x/2 or (3x+1)/2.
+ | A node is a word w (first letter 1) with T^L(2^L i + r) = a i + b, a = 3^ones, L = |w|;
+ | built letter by letter, all in BigInt: for the next letter e pick t with a t + b = e (mod 2),
+ | r += t 2^L, then a i' + (a t + b)/2 (e = 0) or 3a i' + (3(a t + b) + 1)/2 (e = 1).
+ | Leaf: 3^m < 2^L (a drop word); stub: more than N ones (Orders > N only).
+ | Start value r1 = r (the class id), or r + 2^L when r = 1 (1 is bottom); its drop value c' = T^L(r1).
+ |*/
+const COL = ['#c0392b','#d35400','#b7950b','#1e8449','#1f618d','#7d3c98','#16a085','#a04000','#2e4053','#b03a2e'];
+const $ = id => document.getElementById(id);
+try { const s = JSON.parse(localStorage.getItem('dropTree2') || '{}');
+  if (s.n) $('n').value = s.n; if (s.lay) $('lay').value = s.lay; if (s.best) $('best').value = s.best; if (s.shape) $('shape').value = s.shape; if (s.split) $('split').value = s.split; if ('hide' in s) $('hide').checked = !!s.hide; } catch (e) {}
+
+function build(N, rect, split, hide, how) {
+  const rows = [], all = [];
+  function walk(nd) {
+    all.push(nd);
+    const two = 1n << BigInt(nd.w.length);
+    if (nd.a < two) { nd.kind = 'leaf'; rows.push(nd); return; }
+    if (nd.m > N) { nd.kind = 'open'; rows.push(nd); return; }
+    nd.kind = 'inner'; nd.kids = [];
+    for (const e of [0n, 1n]) {
+      const t = ((e - nd.b) % 2n + 2n) % 2n, v = nd.a * t + nd.b;
+      const k = e ? { a: 3n * nd.a, b: (3n * v + 1n) / 2n, m: nd.m + 1 } : { a: nd.a, b: v / 2n, m: nd.m };
+      k.w = nd.w + e; k.r = nd.r + t * two; k.up = nd; nd.kids.push(k); walk(k);
+    }
+  }
+  walk({ w: '1', r: 1n, a: 3n, b: 2n, m: 1 });
+  for (const nd of rows) if (nd.kind === 'leaf') {
+    const L = BigInt(nd.w.length);
+    nd.r1 = nd.r > 1n ? nd.r : nd.r + (1n << L);
+    nd.c1 = nd.r > 1n ? nd.b : nd.a + nd.b;         // T^L(r1)
+  }
+  const best = new Map();                           // Order -> its best leaf
+  if (how !== 'none') for (const nd of rows) if (nd.kind === 'leaf') {
+    const o = best.get(nd.m); if (!o || BETTER[how](nd, o)) best.set(nd.m, nd);
+  }
+  // leaves (Orders <= N) and rows (leaves and stubs) below each node; optionally the smaller side first (ties: 0 first)
+  (function count(nd) {
+    if (nd.kind !== 'inner') { nd.leaves = nd.kind === 'leaf' ? 1 : 0; nd.rows = 1; return; }
+    nd.kids.forEach(count);
+    const [x, y] = nd.kids;
+    nd.leaves = x.leaves + y.leaves; nd.rows = x.rows + y.rows;
+    const [a, b] = [x.leaves, y.leaves];
+    if (split === 'leaves' ? b < a : split === 'more' ? b > a : false) nd.kids.reverse();
+  })(all[0]);
+  // hide: drop the stubs and every node with no leaf below (Orders > N only); vis = the children drawn
+  for (const nd of all) if (nd.kind === 'inner') nd.vis = hide ? nd.kids.filter(k => k.leaves > 0) : nd.kids;
+  const stubs = all.filter(nd => nd.kind === 'open').length, shown = [];
+  rows.length = 0;
+  (function order(nd) { shown.push(nd); if (nd.kind === 'inner') nd.vis.forEach(order); else rows.push(nd); })(all[0]);
+  if (rect) {                                       // a 0 stays on its parent's row, a 1 opens the next free row
+    let next = 0;
+    (function place(nd, row) { nd.row = row; if (nd.kind === 'inner') { place(nd.vis[0], row); if (nd.vis[1]) place(nd.vis[1], ++next); } })(all[0], 0);
+  } else {                                          // an inner node at the middle of its rows
+    rows.forEach((nd, i) => nd.row = i);
+    (function place(nd) { if (nd.kind === 'inner') nd.row = nd.vis.reduce((t, k) => t + place(k), 0) / nd.vis.length; return nd.row; })(all[0]);
+  }
+  return { rows, all: shown, stubs, best };
+}
+// a better than b?  ratios c'/r compared by cross products
+const BETTER = {
+  ratio:    (x, y) => x.c1 * y.r1 > y.c1 * x.r1,
+  minr:     (x, y) => x.r1 < y.r1,
+};
+function gcd(a, b) { while (b) [a, b] = [b, a % b]; return a; }
+
+function draw() {
+  const N = Math.max(1, Math.min(10, parseInt($('n').value) || 6)), land = $('lay').value === 'l', how = $('best').value || ($('best').value = 'ratio'), rect = $('shape').value === 'r', split = $('split').value || ($('split').value = 'leaves'), hide = $('hide').checked;
+  try { localStorage.setItem('dropTree2', JSON.stringify({ n: N, lay: $('lay').value, best: how, shape: $('shape').value, split, hide })); } catch (e) {}
+  const { rows, all, stubs, best } = build(N, rect, split, hide, how), D = (3n ** BigInt(N)).toString(2).length;
+  const SD = land ? 70 : 46, SR = 22, P0 = 40, PD = land ? 60 : 30;
+  // depth coordinate d, row coordinate q; portrait: x = d, y = q; landscape: x = q, y = d
+  const dpos = nd => PD + (nd.w.length - 1) * SD, qpos = nd => P0 + 30 + nd.row * SR;
+  const XY = nd => land ? [qpos(nd), dpos(nd)] : [dpos(nd), qpos(nd)];
+  // edge parent -> child as points; rectangular: a 1 runs along the parent's depth, then 45 degrees into the child
+  const EP = (nd, k) => {
+    if (!rect || k === nd.vis[0]) return [XY(nd), XY(k)];
+    const d = Math.min(SD, SR), q = qpos(k) - d, p = dpos(nd);
+    return [XY(nd), land ? [q, p] : [p, q], XY(k)];
+  };
+  const leafText = nd => `${nd.m}  ${nd.w}  ${nd.r} mod ${1n << BigInt(nd.w.length)}  &#8594; ${nd.a} i + ${nd.b}`;
+  const lab = PD + D * SD + 10;
+  // the best-of-class phrases in a column of their own, after the longest leaf label (about 6.4 px a character)
+  const chars = Math.max(0, ...rows.filter(nd => nd.kind === 'leaf').map(nd => leafText(nd).replace(/&#8594;/g, '>').length));
+  const bx = lab + Math.round(chars * 6.4) + 40, labW = bx - lab + (best.size ? 300 : 0);
+  const span = P0 + 30 + rows.length * SR + 30;
+  const W = land ? span : lab + labW, H = land ? lab + labW : span;
+  const s = [];
+  s.push(`<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" font-family="Helvetica, Arial, sans-serif">`);
+  s.push(`<text x="16" y="22" font-size="15">Drop words of Orders 1 to ${N} as one tree: ${split !== '01' ? 'at each split the side with ' + (split === 'more' ? 'more' : 'fewer') + ' leaves first' : rect ? (land ? '0 straight down, 1 to the right' : '0 straight on, 1 down') : (land ? '0 left, 1 right' : '0 up, 1 down')}; a leaf is a drop word (3^m &lt; 2^L)</text>`);
+  if (best.size) s.push(land
+    ? `<line x1="${P0}" y1="${bx - 16}" x2="${span - 20}" y2="${bx - 16}" stroke="#bbb"/><text x="${P0}" y="${bx}" font-size="12" fill="#888" transform="rotate(90 ${P0} ${bx})">best of Order</text>`
+    : `<line x1="${bx - 16}" y1="${P0}" x2="${bx - 16}" y2="${span - 20}" stroke="#bbb"/><text x="${bx}" y="${P0 + 12}" font-size="12" fill="#888">best of Order</text>`);
+  for (let d = 1; d <= D; d++) {
+    const p = PD + (d - 1) * SD;
+    s.push(land ? `<text x="16" y="${p + 4}" font-size="11" fill="#888">${d}</text>`
+                : `<text x="${p}" y="${P0 + 12}" font-size="11" fill="#888" text-anchor="middle">${d}</text>`);
+  }
+  for (const nd of all) if (nd.kind === 'inner') for (const k of nd.vis) {
+    const pp = EP(nd, k), [x1, y1] = pp[pp.length - 2], [x2, y2] = pp[pp.length - 1];
+    s.push(`<polyline points="${pp.map(t => t.join(',')).join(' ')}" fill="none" stroke="#999" stroke-width="1.2"/>`);
+    const e = k.w.slice(-1), [mx, my] = [(x1 + x2) / 2, (y1 + y2) / 2];
+    s.push(land ? `<text x="${mx + (k === nd.vis[0] ? -10 : 4)}" y="${my}" font-size="9" fill="#999">${e}</text>`
+                : `<text x="${mx - 3}" y="${my + (k === nd.vis[0] ? -3 : 10)}" font-size="9" fill="#999">${e}</text>`);
+  }
+  // best paths: lower Orders wider and underneath, so shared edges show every Order
+  for (const m of [...best.keys()].sort((a, b) => a - b)) {
+    const pts = [XY(best.get(m)).join(',')];
+    for (let nd = best.get(m); nd.up; nd = nd.up) pts.push(...EP(nd.up, nd).slice(0, -1).reverse().map(t => t.join(',')));
+    s.push(`<polyline points="${pts.join(' ')}" fill="none" stroke="${COL[(m - 1) % 10]}" stroke-width="${3 + 2 * (N - m) / Math.max(1, N - 1) * 3}" stroke-linejoin="round" opacity="0.8"/>`);
+  }
+  for (const nd of all) if (nd.kind === 'inner') { const [x, y] = XY(nd); s.push(`<circle cx="${x}" cy="${y}" r="3" fill="#444"/>`); }
+  const cnt = Array(N + 1).fill(0);
+  for (const nd of rows) {
+    const [x, y] = XY(nd), q = qpos(nd);
+    const T = (t, txt, attr = '', fs = 12) => land
+      ? `<text x="${q + 4}" y="${t}" font-size="${fs}" ${attr} transform="rotate(90 ${q + 4} ${t})">${txt}</text>`
+      : `<text x="${t}" y="${q + 4}" font-size="${fs}" ${attr}>${txt}</text>`;
+    if (nd.kind === 'open') {
+      const d = dpos(nd);
+      s.push(land ? `<line x1="${q}" y1="${d}" x2="${q}" y2="${d + 24}" stroke="#999" stroke-dasharray="3,3"/>`
+                  : `<line x1="${d}" y1="${q}" x2="${d + 24}" y2="${q}" stroke="#999" stroke-dasharray="3,3"/>`);
+      s.push(T(d + 30, `${nd.w}...  Order &gt; ${N}`, 'fill="#888"', 11));
+      continue;
+    }
+    const c = COL[(nd.m - 1) % 10], L = nd.w.length; cnt[nd.m]++;
+    s.push(`<circle cx="${x}" cy="${y}" r="5" fill="${c}"/>`);
+    s.push(land ? `<line x1="${q}" y1="${dpos(nd) + 6}" x2="${q}" y2="${lab - 4}" stroke="${c}" stroke-width="0.6" stroke-dasharray="1,3"/>`
+                : `<line x1="${dpos(nd) + 6}" y1="${q}" x2="${lab - 4}" y2="${q}" stroke="${c}" stroke-width="0.6" stroke-dasharray="1,3"/>`);
+    s.push(T(lab, leafText(nd).replace(/^\d+/, t => `<tspan font-weight="bold">${t}</tspan>`), `fill="${c}"`));
+    if (best.get(nd.m) === nd) {
+      const h = gcd(nd.c1, nd.r1);
+      s.push(T(bx, `${nd.m}-best: ${nd.r1} &#8594; ${nd.c1}, ratio ${nd.c1 / h}/${nd.r1 / h}`, `fill="${c}" font-weight="bold"`));
+    }
+  }
+  s.push('</svg>');
+  $('wrap').innerHTML = s.join('\n');
+  $('info').textContent = `leaves per Order: ${cnt.slice(1).join(', ')}; stubs: ${stubs}${hide ? ' (hidden)' : ''}`;
+}
+for (const id of ['n', 'lay', 'best', 'shape', 'split', 'hide']) $(id).addEventListener('input', draw);
+$('save').onclick = () => {
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([$('wrap').innerHTML], { type: 'image/svg+xml' }));
+  a.download = `drop_tree_${$('n').value}${$('lay').value}${$('shape').value}_${$('split').value}${$('hide').checked ? 'h' : ''}_${$('best').value}.svg`; a.click();
+};
+draw();
+</script>
+</body>
+</html>
