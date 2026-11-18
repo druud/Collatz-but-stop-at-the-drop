@@ -75,6 +75,7 @@ import AcceleratedCollatz.TFirstOrders
 import AcceleratedCollatz.TFirstOrdersQ
 import AcceleratedCollatz.TFirstWord
 import AcceleratedCollatz.TFirstWordQ
+import AcceleratedCollatz.TFlip
 import AcceleratedCollatz.TFloorSum
 import AcceleratedCollatz.TFold
 import AcceleratedCollatz.TGMap
@@ -95,6 +96,7 @@ import AcceleratedCollatz.TMonksQ
 import AcceleratedCollatz.TMonksXi
 import AcceleratedCollatz.TNest
 import AcceleratedCollatz.TParity
+import AcceleratedCollatz.TPairLink
 import AcceleratedCollatz.TPersistent
 import AcceleratedCollatz.TPrefixCount
 import AcceleratedCollatz.TRank
@@ -119,6 +121,7 @@ import AcceleratedCollatz.TRulerCheck
 import AcceleratedCollatz.TRulerDeficit
 import AcceleratedCollatz.TRulerPair
 import AcceleratedCollatz.TRulerRecord
+import AcceleratedCollatz.TRunCoord
 import AcceleratedCollatz.TSieve
 import AcceleratedCollatz.TSmoothBetween
 import AcceleratedCollatz.TSmoothClass
