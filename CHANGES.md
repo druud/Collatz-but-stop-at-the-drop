@@ -5,6 +5,14 @@ first. Version names (R_65a, R_66, ...) are the authors' own labels.
 
 ## After R_100 (14 November 2026)
 
+- Paper 3, "The odd part at the drop": the Lean names of TOddPartDrop;
+  S and E bounded in rationals by the survivors' share, 82 and 87
+  certified partial quotients (Order 3000).
+
+- Lean: TOddPartDrop (`orderOf_two_zmod_three_pow`: 2 has order
+  2 3^n mod 3^(n+1); `exists_odd_part_at_drop`: every odd part coprime
+  to 6 in every drop class; `exists_trailing_class`).
+
 - Paper 3, Ch. 4: a new subsection "The odd part at the drop": the
   split of a class by the trailing zeros of the drop value; every class
   reaches every odd number coprime to 6 (2 a primitive root mod 3^n);
