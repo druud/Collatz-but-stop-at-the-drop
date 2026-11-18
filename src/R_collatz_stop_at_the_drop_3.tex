@@ -940,6 +940,49 @@ $T^{L}(x) < 3^n x/2^L + n/3$, gives the same), and when $T^L(x)$ is even, $T^{L+
 the value at its end is odd: the hard case of the width identity is the one where no extra
 zero follows the word.
 
+\subsection*{The odd part at the drop}
+% 17-18 Nov 2026 (B108-B111): _keep/bits_01/xodd.py, xone.cpp, xslope.py, xchain.py.
+
+\termhere{oddpartdrop}A word of Order $n \ge 1$ and length $L$ with class id $c$ holds the
+$x = c + 2^L i$, and $T^L(x) = T^L(c) + 3^n i$ (\lean{tStep\_iterate\_shift}), with
+$T^L(c)$ coprime to $3$: after an odd step the value is $2$ modulo $3$, and halving keeps it
+off $0$. Shedding the trailing zeros of the drop value gives the
+\keyterm{oddpartdrop}{odd part at the drop}, the end of the path. As $3^n$ is odd, $T^L(x)$
+has exactly $e$ trailing zeros on one class of $i$ modulo $2^{e+1}$, for every $e \ge 0$: the
+class splits into the words $w\,\bw{0}^e$, each a class modulo $2^{L+e+1}$ with share
+$1/2^{e+1}$. For $1 \bmod 4$ the drop value is $3i + 1$, and the odd parts are those of
+$3j - 2$ (A067745\index{OEIS!A067745}~\cite{OEIS_A067745}).
+
+Each class reaches every odd number coprime to $6$
+(A007310\index{OEIS!A007310}~\cite{OEIS_A007310}), each infinitely often. For such an $o$,
+$o\,2^e = T^L(c) + 3^n i$ asks $2^e \equiv T^L(c)/o \pmod{3^n}$, and $2$ is a primitive root
+modulo $3^n$, of order $2 \cdot 3^{n-1}$: the solutions are one class of $e$ modulo
+$2 \cdot 3^{n-1}$, and every large enough $e$ in it gives $i \ge 0$. For $3 \bmod 16$, with drop
+value $9i + 2$, the odd part $1$ comes at $e = 1, 7, 13, \ldots$ So the number of odd $x < 2^N$
+with odd part $o$ at the drop grows by the same amount per binary digit for every $o$:
+\[
+S = \sum_{n \ge 1} \frac{\mathrm{A100982}(n)}{2 \cdot 3^{n-1}} = \frac{3}{4}\,E , \qquad
+E = \sum_{n \ge 1} \frac{\mathrm{A100982}(n)}{2^{p_2(n)-1}} \cdot \frac{2^{p_2(n)}}{3^n} ,
+\]
+$E$ the average of $2^L/3^n$ over the odd $x$, the factor by which $x$ exceeds its drop value
+in the limit. Exact word counts to Order $1200$ give, as rationals,
+$S = [1; 28, 7, 3, 8, 5, 1, 1, 1, 1, 1, 3, 9, 7, \ldots]$ and
+$E = [1; 2, 1, 1, 1, 2, 9, 2, 2, 1, 12, 1, \ldots]$. The same counts give Wagon's constant, the average of $L + n$
+(A122790\index{OEIS!A122790}~\cite{OEIS_A122790}), to the $29$ digits listed there. Below
+$2^{24}$ the odd $x$ with odd part $1$ at the drop are $3, 5, 21, 75, 85, 151, 227, 341, \ldots$
+
+Two classes of one length and one Order can share their odd parts at the drop member by
+member: the drop value of $2z + 1$ twice that of $z$, on the whole class. With $x$ on the path of $z$ and $y$ on
+that of $2z + 1$: $y = 2x + 1$ while $x$ is odd ($T(2x + 1) = 2T(x) + 1$). If the word of $z$
+starts $\bw{1}^a\bw{01}$, then $T^{a+2}(2z + 1) = 2\,T^{a+2}(z)$ (\lean{pair\_link}); from then
+on $2z + 1$ runs one step behind $z$, and after every later \bw{0} of $z$, so at its drop,
+$T^L(2z + 1) = 2\,T^L(z)$ (\lean{pair\_link\_double}): the same odd part, when $2z + 1$ has
+not dropped before. For $11, 23 \bmod 32$ (words \bw{11010}, \bw{11100}) the drop values are
+$27i + 10$ and $27i + 20$. This route is not the only one: from $L = 20$ on $y - 2x$ can also
+go from $1$ to $-2$ and then to $0$, and chains $z, 2z + 1, 4z + 3$ with one odd part at the drop
+appear, such as $439039 \bmod 2^{20}$ (drop values $222515$, $445030$, $890060$). Measured,
+the pairs per length $L = p_2(n) = 5, 7, 8, \ldots, 23$ number $1, 1, 2, 3, 7, 19, 37, 99, 194, 531, 1598, 3451$.
+
 \subsection*{Periodic stretches and merging paths}
 % 14 Nov 2026 (B63, B64, B66, B67, B68): _keep/bits_01/burst.py, burst_density.py, merge2.py.
 
@@ -974,7 +1017,8 @@ $x = 100335611$ meets it at step $39$, before it drops ($164$ such odd $x$ below
 
 \begin{wordbox}
 \boxhere{splitbound}bound of a split\index{bound of a split@\termlink{splitbound}{bound of a split}|textbf} & $X_u = (2^{L_u} c_v - \rho(u))/3^{n_u}$ for $w = uv$: the class id $c$ of $w$ is at least $X_u$. \\
-\boxhere{zeroskept}zeros kept\index{zeros kept@\termlink{zeroskept}{zeros kept}|textbf} & the odd step as $Z \mapsto 3Z + 2^{\nu(Z)}$, the trailing $0$-bits kept: $Z_n = 3^n c + \rho$, and $c$ drops at Order $n$ when the odd part of $Z_n$ is below $c$.
+\boxhere{zeroskept}zeros kept\index{zeros kept@\termlink{zeroskept}{zeros kept}|textbf} & the odd step as $Z \mapsto 3Z + 2^{\nu(Z)}$, the trailing $0$-bits kept: $Z_n = 3^n c + \rho$, and $c$ drops at Order $n$ when the odd part of $Z_n$ is below $c$. \\
+\boxhere{oddpartdrop}odd part at the drop\index{odd part at the drop@\termlink{oddpartdrop}{odd part at the drop}|textbf} & the drop value without its trailing zeros: the end of the path. Each class reaches every odd number coprime to $6$.
 \end{wordbox}
 
 \section{The \texorpdfstring{$n$}{n}-th 3-smooth number, without the list}
@@ -1391,12 +1435,18 @@ arXiv:1010.6206.
   J. Integer Sequences \textbf{28} (2025), Article 25.6.8.
 \bibitem{OEIS_A003586} OEIS Foundation Inc., \emph{Sequence A003586},
   \url{https://oeis.org/A003586}.
+\bibitem{OEIS_A007310} OEIS Foundation Inc., \emph{Sequence A007310},
+  \url{https://oeis.org/A007310}.
 \bibitem{OEIS_A014121} OEIS Foundation Inc., \emph{Sequence A014121},
   \url{https://oeis.org/A014121}.
+\bibitem{OEIS_A067745} OEIS Foundation Inc., \emph{Sequence A067745},
+  \url{https://oeis.org/A067745}.
 \bibitem{OEIS_A100982} OEIS Foundation Inc., \emph{Sequence A100982},
   \url{https://oeis.org/A100982}.
 \bibitem{OEIS_A122442} OEIS Foundation Inc., \emph{Sequence A122442},
   \url{https://oeis.org/A122442}.
+\bibitem{OEIS_A122790} OEIS Foundation Inc., \emph{Sequence A122790},
+  \url{https://oeis.org/A122790}.
 \bibitem{OEIS_A324245} OEIS Foundation Inc., \emph{Sequence A324245},
   \url{https://oeis.org/A324245}.
 \bibitem{OEIS_A363999} OEIS Foundation Inc., \emph{Sequence A363999},

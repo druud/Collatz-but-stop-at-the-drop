@@ -1,50 +1,54 @@
 \begin{theindex}
 
-  \item \termlink{splitbound}{bound of a split}, \textbf{13}
+  \item \termlink{splitbound}{bound of a split}, \textbf{14}
 
   \indexspace
 
-  \item \termlink{letterword}{letter word}, \textbf{18}
+  \item \termlink{letterword}{letter word}, \textbf{19}
 
   \indexspace
 
-  \item \termlink{M}{$M$}, \textbf{18}
+  \item \termlink{M}{$M$}, \textbf{19}
   \item \termlink{measured}{measured}, \textbf{3}
-  \item \termlink{merge}{merge}, \textbf{18}
+  \item \termlink{merge}{merge}, \textbf{19}
 
   \indexspace
 
+  \item \termlink{oddpartdrop}{odd part at the drop}, \textbf{14}
   \item OEIS
-    \subitem A003586, 14, 15
-    \subitem A100982, 17, 18
-    \subitem A122442, 16
-    \subitem A324245, 17, 18
+    \subitem A003586, 15, 16
+    \subitem A007310, 13
+    \subitem A067745, 13
+    \subitem A100982, 18, 19
+    \subitem A122442, 17
+    \subitem A122790, 13
+    \subitem A324245, 18, 19
     \subitem A389685, 5
     \subitem A398772, 11
 
   \indexspace
 
-  \item \termlink{ruler}{plain ruler}, \textbf{19}
+  \item \termlink{ruler}{plain ruler}, \textbf{20}
   \item \termlink{proved}{proved}, \textbf{3}
 
   \indexspace
 
-  \item \termlink{recordfrac}{record fraction}, \textbf{15}
+  \item \termlink{recordfrac}{record fraction}, \textbf{16}
   \item \termlink{rhomax}{$\rho_{\max}(n)$}, \textbf{9}
-  \item \termlink{rulergap}{ruler gap}, \textbf{19}
+  \item \termlink{rulergap}{ruler gap}, \textbf{20}
 
   \indexspace
 
-  \item \termlink{S}{$S(k)$}, \textbf{15}
-  \item \termlink{scan}{scan}, \textbf{16}
+  \item \termlink{S}{$S(k)$}, \textbf{16}
+  \item \termlink{scan}{scan}, \textbf{17}
   \item \termlink{slack}{slack}, \textbf{9}
   \item \termlink{slanted}{slanted grid}, \textbf{5}
   \item \termlink{staircase}{staircase}, \textbf{5}
-  \item \termlink{stop}{stop}, \textbf{18}
+  \item \termlink{stop}{stop}, \textbf{19}
 
   \indexspace
 
-  \item \termlink{letters}{U, D, S}, \textbf{18}
+  \item \termlink{letters}{U, D, S}, \textbf{19}
 
   \indexspace
 
@@ -53,6 +57,6 @@
 
   \indexspace
 
-  \item \termlink{zeroskept}{zeros kept}, \textbf{13}
+  \item \termlink{zeroskept}{zeros kept}, \textbf{14}
 
 \end{theindex}
