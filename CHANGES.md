@@ -9,7 +9,7 @@ first. Version names (R_65a, R_66, ...) are the authors' own labels.
   split of a class by the trailing zeros of the drop value; every class
   reaches every odd number coprime to 6 (2 a primitive root mod 3^n);
   the count per odd part grows by S = (3/4) E per binary digit, E the
-  average of 2^L/3^n, as continued fractions; z and 2z + 1 with the same
+  average of 2^L/3^n, as continued fractions (not (3/2) log 2); z and 2z + 1 with the same
   odd part at the drop (TPairLink); three OEIS references (A007310,
   A067745, A122790).
 
