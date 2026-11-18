@@ -5,6 +5,17 @@ first. Version names (R_65a, R_66, ...) are the authors' own labels.
 
 ## After R_100 (14 November 2026)
 
+- Paper 3, Ch. 4: a new subsection "The odd part at the drop": the
+  split of a class by the trailing zeros of the drop value; every class
+  reaches every odd number coprime to 6 (2 a primitive root mod 3^n);
+  the count per odd part grows by S = (3/4) E per binary digit, E the
+  average of 2^L/3^n, as continued fractions; z and 2z + 1 with the same
+  odd part at the drop (TPairLink); three OEIS references (A007310,
+  A067745, A122790).
+
+- Lean: TPairLink (`pair_link`, `pair_link_behind`, `pair_link_double`:
+  the direct route of z and 2z + 1, word 1^a 0 1 ...).
+
 - Paper 3, Ch. 4, merging paths: the gap of at least 3 steps between
   the drop of x and the meeting of x, x + 1 does not go on beyond 2^21:
   x = 2244603 meets x + 1 at step 55, 2 steps after its drop, and
