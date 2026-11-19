@@ -3,7 +3,7 @@
 % (Lean/best_of_order/, namespace BestOfOrder, one bridge file to AcceleratedCollatz; exact statements only,
 % the table of bests is script data), the failed detectors in Appendix A, one line each; no li/zeta analogy.
 % For Zenodo, then linked from the OEIS sequence of the bests per Order, A402443. Unnumbered in the series.
-% Draft (19 Nov 2026): proofs, Introduction and Lean section written; \fillin marks the values still to come.
+% Draft (19 Nov 2026), Zenodo version 1: Orders 1..347 (B148); version 2 to 399 when boo_scan is DONE. \fillin marks values still to come (none now).
 % Scripts: _keep/tree_01/ (boo.py, bnb.py, boo_scan.cpp, run_boo_scan.sh) and _keep/tree_01/zeta/.
 \documentclass[10pt,a4paper,titlepage]{article}
 \usepackage[utf8]{inputenc}
@@ -540,6 +540,8 @@ cost, Chapter~\ref{sec:observations} what the bests of Orders $1$ to $347$ show,
 Chapter~\ref{sec:lean} the formalization in Lean. Appendix~\ref{app:failed} lists the ways to guess the
 best that did not work, and Appendix~\ref{app:table} the bests.
 
+The Lean package, the scripts and the data (the bests with their certificates) are at
+\url{https://github.com/druud/Collatz-but-stop-at-the-drop}, in \texttt{src/best\_of\_order/}.
 The Lean files, the scripts and this text were written with the assistance of Claude
 (Anthropic) (Chapter~\ref{sec:lean}); the author checked the statements and takes
 responsibility for them.
@@ -981,7 +983,7 @@ One line each, with the reason (measured; scripts in \texttt{\_keep/tree\_01/zet
 The best $c$ of Order $n$ and its drop value $T^L(c)$; $\ast$: $c$ differs from the smallest start
 $a(n+1)$ of A122442. The column $c$ is OEIS A402443~\cite{OEIS_A402443} (with $a(0) = 2$ for Order $0$).
 For Orders $125$ to $347$ only the rows marked $\ast$ are listed; all bests are in the b-file of
-A402443 and in the repository (\texttt{best\_of\_order/data/}), with a certificate file (\texttt{best\_cert\_347.txt}: $n$, $c$, $T^L(c)$
+A402443 and in the repository (\texttt{src/best\_of\_order/data/}), with a certificate file (\texttt{best\_cert\_347.txt}: $n$, $c$, $T^L(c)$
 and the window of Theorem~\ref{thm:window}).
 
 {\footnotesize
