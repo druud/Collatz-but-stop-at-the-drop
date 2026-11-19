@@ -627,8 +627,13 @@ $n \ge 2$), so $c = r < 2^L$.
 \label{rem:ties}
 Two class ids of one Order can share their drop ratio: the first case is Order $9$, where $21223$ and
 $25691$ have the same $\rho/c$; Order $13$ has $16$ class ids with one ratio, and Order $16$ has
-$56$ sets of equal ratios. The best has no tie for Orders $1$ to $229$ (\texttt{boo\_ties.cpp}, exact); that it
-never has one is open. Where we say \emph{the} best, a tie would mean the smallest of them.
+$56$ sets of equal ratios. A class id $c$ ties $c^\ast$ only if $\rho c^\ast = \rho^\ast c$, so $c$ is a multiple of
+$u = c^\ast/\gcd(c^\ast, \rho^\ast)$; and a tie of the best lies in the window of
+Theorem~\ref{thm:window} (with $\le$ for $<$), so $c = ku$ with $k \le W/u$. For Orders $1$ to $347$
+that leaves $6906$ candidates (at most $1063$, at Order $262$), and none is a tie
+(\texttt{boo\_tie\_mult.py}, exact): the best has no tie for Orders $1$ to $347$. Independently, a
+depth-first search of the words with the window of the best finds none for Orders $1$ to $229$
+(\texttt{boo\_ties.cpp}). That it never has one is open. Where we say \emph{the} best, a tie would mean the smallest of them.
 \end{remark}
 
 %------------------------------------------------------------------------------------------------
@@ -939,6 +944,7 @@ Lemma~\ref{lem:dinkelbach} & \lean{F\_strictAnti}, \lean{F\_lamStar}, \lean{eq\_
 Lemma~\ref{lem:walk} & \lean{rho\_eq\_sum}, \lean{walk} \\
 Theorem~\ref{thm:split} (C) & \lean{split\_identity}, \lean{mem\_split\_iff}, \lean{mem\_of\_meet}, \lean{exists\_start\_iff} \\
 Theorem~\ref{thm:window} (B) & \lean{window}, \lean{window\_prefix} \\
+Remark~\ref{rem:ties} & \lean{tie\_rho}, \lean{tie\_dvd} \\
 \bottomrule
 \end{tabular}
 \end{center}
