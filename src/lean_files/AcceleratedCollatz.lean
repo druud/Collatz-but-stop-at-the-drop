@@ -95,6 +95,7 @@ import AcceleratedCollatz.TMonksDrop
 import AcceleratedCollatz.TMonksQ
 import AcceleratedCollatz.TMonksXi
 import AcceleratedCollatz.TNest
+import AcceleratedCollatz.TOddPartDrop
 import AcceleratedCollatz.TParity
 import AcceleratedCollatz.TPairLink
 import AcceleratedCollatz.TPersistent
