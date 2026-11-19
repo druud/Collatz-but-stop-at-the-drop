@@ -26,6 +26,17 @@
 % Skeleton only: the plan of a proof, and a value still to fill in
 \newcommand{\plan}[1]{\par\noindent{\small\color{black!60}\emph{Proof plan.} #1}\par}
 \newcommand{\fillin}[1]{{\color{red!60!black}[#1]}}
+
+% Layout: paper (default) or screen: pdflatex "\def\screenversion{}\input{file}" (as papers 1 and 2)
+\newif\ifpaper
+\papertrue
+\ifdefined\screenversion \paperfalse \fi
+% Paragraphs are never split across pages (paper version), so a chapter's first lines stay with its heading
+\raggedbottom
+\ifpaper
+\interlinepenalty=10000
+\postdisplaypenalty=10000
+\fi
 \ExplSyntaxOn
 \seq_new:N \l__bw_parts_seq
 \bool_new:N \l__bw_first_bool
@@ -507,6 +518,7 @@ A122442~\cite{OEIS_A122442}. The admissible words, their tree and the names used
 the series this paper stands beside~\cite{Paper1,Paper2,Paper3}. As far as we know, the
 question of the best of the Order and Theorems~A to~D are new.
 
+\ifpaper\clearpage\fi
 \tableofcontents
 
 %------------------------------------------------------------------------------------------------
@@ -542,9 +554,8 @@ best that did not work, and Appendix~\ref{app:table} the bests.
 
 The Lean package, the scripts and the data (the bests with their certificates) are at
 \url{https://github.com/druud/Collatz-but-stop-at-the-drop}, in \texttt{src/best\_of\_order/}.
-The Lean files, the scripts and this text were written with the assistance of Claude
-(Anthropic) (Chapter~\ref{sec:lean}); the author checked the statements and takes
-responsibility for them.
+The paper, the Lean proofs and the scripts were made with Claude (Anthropic) as a working
+partner; Chapter~\ref{sec:lean} tells how.
 
 \begin{figure}[htbp]
 \centering
@@ -556,6 +567,7 @@ each node the $0$ goes straight on and the $1$ to the next free row. Each word e
 \end{figure}
 
 %------------------------------------------------------------------------------------------------
+\ifpaper\clearpage\fi
 \section{Words and Orders}
 \label{sec:words}
 
@@ -639,6 +651,7 @@ depth-first search of the words with the window of the best finds none for Order
 \end{remark}
 
 %------------------------------------------------------------------------------------------------
+\ifpaper\clearpage\fi
 \section{The wall}
 \label{sec:wall}
 
@@ -883,6 +896,7 @@ Order on the way, and its first start of each Order is checked against A122442.
 \end{remark}
 
 %------------------------------------------------------------------------------------------------
+\ifpaper\clearpage\fi
 \section{Observations}
 \label{sec:observations}
 % Data only, measured; each with its script.
@@ -919,7 +933,7 @@ more often than other starts (Appendix~\ref{app:failed}).
 %------------------------------------------------------------------------------------------------
 \section{The Lean formalization}
 \label{sec:lean}
-The package \texttt{Lean/best\_of\_order/} (namespace \lean{BestOfOrder}) states and proves the
+The package \texttt{best\_of\_order/} (namespace \lean{BestOfOrder}) states and proves the
 results below in Lean~4 with Mathlib, without \texttt{sorry}. Its words (\lean{List Bool}, a one for an
 odd step), the map $T$ (\lean{tStep}), the word of a start (\lean{tBits}), the constant $\rho$
 (\lean{rho}), the Order (\lean{order}), admissibility (\lean{Admissible}) and $R(n)$ (\lean{rhoMax}) come
@@ -955,8 +969,20 @@ The width identity, on which the scan rests (the remark after Theorem~\ref{thm:c
 \lean{WidthIdentity} of that library; its range to Order $10\,781\,273$ uses a range check outside
 Lean~\cite{Paper2}.
 
+\subsection*{How this was made}
+
+The Lean files, the scripts and this text were written in conversation with Claude (Anthropic):
+ideas were tried numerically first, in exact integers, then stated and proved in Lean, compiled
+locally, and every open end was logged for the next session; the long runs (the scan, the tie
+search) ran on the author's computer. Some of it went better than planned: the ties, first
+searched word by word, turned out to need only the multiples of one number below the window
+(Remark~\ref{rem:ties}). The author checked the statements and takes responsibility for them.
+The same workflow is open to any reader: the Lean proofs can be checked on any computer, and the
+scripts recompute the table of bests and its certificates.
+
 \appendix
 %------------------------------------------------------------------------------------------------
+\ifpaper\clearpage\fi
 \section{Detectors that fail}
 \label{app:failed}
 One line each, with the reason (measured; scripts in \texttt{\_keep/tree\_01/zeta/}).
@@ -1086,6 +1112,7 @@ $n$ & $c$ & $T^L(c)$ & & $n$ & $c$ & $T^L(c)$ & \\
 \end{longtable}
 }
 
+\ifpaper\clearpage\fi
 \begin{thebibliography}{99}
 \bibitem{ChenZhengXia2025} H.~Chen, C.~Zheng and Y.~Xia, \emph{Accelerated Dinkelbach method},
   arXiv:2510.26257 (2025).
