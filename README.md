@@ -20,16 +20,17 @@ their PDFs are here as the `_zenodo.pdf` files.
 | `R_collatz_stop_at_the_drop_2.pdf` | Paper 2, *A game with two letters: the proofs* (Ruud H.G. van Tol and Mike Winkler); the next version after the one on Zenodo |
 | `R_collatz_stop_at_the_drop_2_zenodo.pdf` | Paper 2 as on Zenodo |
 | `R_collatz_stop_at_the_drop_3.pdf` | Paper 3, a **draft** (marked with its version, e.g. "Draft: R_81"): what lies around the drop, in the language of the 3-smooth numbers; not archived, it may change (Ruud H.G. van Tol) |
+| `R_collatz_stop_at_the_drop_best.pdf` | *The start words with the highest drop ratio*, a **draft** beside the series: the best of the Order, the class id whose drop falls the least (OEIS A402443), with the bests of Orders 1 to 347 and their certificates (Ruud H.G. van Tol); to be archived on Zenodo as an active document |
 | `building.html` | the game of paper 1 in a browser: a building with stairs and poles, a rider to its drop; open it at [druud.github.io/Collatz-but-stop-at-the-drop/building.html](https://druud.github.io/Collatz-but-stop-at-the-drop/building.html) |
 | `drop_tree.html` | the admissible words of Orders 1 to N as one tree (paper 3, Chapter 3), with the best class id of each Order drawn bold; options for the max Order, the best, the order at a split, shape and layout; open it from disk in a browser |
 | `pv.py` | the admissible words: counts, ranks, class ids, chains, record Orders and more; `./pv.py test` runs the self-test (Python 3.8 or later, no extra packages) |
 | `CHANGES.md` | the changes since the first public release, newest first |
-| `src/` | the LaTeX sources of the three papers with their index files (see below); `lean_files/`, the Lean sources, and `lean_files.zip`, the same as one file: unzip, then `lake exe cache get && lake build` in `lean_files/` |
+| `src/` | the LaTeX sources of the three papers with their index files (see below); `lean_files/`, the Lean sources, and `lean_files.zip`, the same as one file: unzip, then `lake exe cache get && lake build` in `lean_files/`; `best_of_order/`, the Lean package of the best of the Order (it uses `lean_files/` beside it; `lake build` there after `lean_files/`), with its scripts (`scripts/`) and the bests with their certificates (`data/`), and `best_of_order.zip`, the same as one file |
 
 ## Building the papers
 
 In `src/`, run `pdflatex R_collatz_stop_at_the_drop_1.tex` three times, then the
-same for `_2.tex`, then for `_3.tex`: paper 2 links into paper 1 through `xr-hyper` and
+same for `_2.tex`, then for `_3.tex` (and `_best.tex`, on its own): paper 2 links into paper 1 through `xr-hyper` and
 reads its `.aux`; paper 3 links into both.
 
 ## Licence

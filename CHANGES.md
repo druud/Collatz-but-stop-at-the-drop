@@ -5,6 +5,15 @@ first. Version names (R_65a, R_66, ...) are the authors' own labels.
 
 ## After R_100 (14 November 2026)
 
+- A new paper beside the series, a draft: *Collatz, but stop at the
+  drop: the start words with the highest drop ratio*. The best of the
+  Order (the class id c > 1 with the highest T^L(c)/c, OEIS A402443)
+  is the word whose cycle point lies closest to c; a window outside
+  which no start can win; the meeting split of the search; the bests
+  of Orders 1 to 347, each with a certificate. Lean package
+  `src/best_of_order/` (on top of `lean_files/`), with its scripts
+  and data; `src/best_of_order.zip`.
+
 - Paper 3, a new Chapter 3, "The words as one tree": the admissible
   words of all Orders as the leaves of one binary tree (figure for
   Orders 1 to 6, from tree_tikz.py); proved on paper: the subtree
