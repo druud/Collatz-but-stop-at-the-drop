@@ -42,6 +42,6 @@ Copies of the scripts the paper cites (originals in the local `_keep/tree_01/`),
 | `scripts/boo_hubs.py` | the odd parts of the drop values (merging trajectories) |
 | `scripts/ceiling_check.py` | the ceiling x*(wall) < t_n for n <= 2000 |
 | `scripts/dinkel_suffix.py` | the backward ranking k0 (Orders 2..21) |
-| `scripts/inv_grow.py`, `scripts/inv_hub.py`, `scripts/mitm.py` | Appendix A (ways that did not work) |
+| `scripts/inv_grow.py`, `scripts/inv_hub.py`, `scripts/mitm.py`, `scripts/mitm4.py` | Appendix A (ways that did not work) |
 | `data/b402443_347.txt` | the bests, n = 0..347 (OEIS A402443 b-file; a(0) = 2) |
 | `data/best_cert_347.txt` | per Order n: c, d = T^L(c), the window W of Theorem B (6.1) |
