@@ -3,9 +3,9 @@
 //   2. Remark "Cost": the nodes of the best-first search seeded with the smallest start, Orders 1..124
 //      (as boo.py: nodes popped by residue), and its bests against data/best_cert_347.txt.
 //   3. Appendix A: the same search with a first ratio guessed from the previous Order, Orders 2..75.
-// Compile: g++ -O3 -std=c++17 scripts/paper_numbers_slow.cpp -o paper_numbers_slow \
+// Compile: mkdir -p _tmp; g++ -O3 -std=c++17 scripts/paper_numbers_slow.cpp -o _tmp/paper_numbers_slow \
 //            -I/opt/homebrew/include -L/opt/homebrew/lib -lgmpxx -lgmp
-// Run from Lean/best_of_order:  ./paper_numbers_slow [FILE]
+// Run from Lean/best_of_order:  _tmp/paper_numbers_slow [FILE]
 //   FILE: the b-file of A122442 (a(n+1) = the smallest start of Order n), data/b122442.txt by default;
 //   if it cannot be read, only Table 1 is checked. One thread, about 2 minutes; memory: the heap of the search, about 2.4 GB at its peak.
 // Integers only: Table 1 in u64 / i128 from exact tables (Orders to 21, checked), the search in GMP.

@@ -13,7 +13,9 @@ import Mathlib.Algebra.Order.Field.Basic
   l = L (`cyclePt_length`) and stay above x* on every proper prefix of an admissible word
   (`cyclePoint_lt_cyclePt`); T^l(x) = x*_l + (x - x*) 3^(w_l)/2^l (`iterate_eq_split`); the
   cycle point of a nonempty proper prefix as a word of its own is negative
-  (`prefix_cyclePoint_neg`).
+  (`prefix_cyclePoint_neg`). Each odd step of the rational cycle multiplies by at most 3 + 1/x*
+  (`cyclePt_le_pow`), so 2^L ≤ (3 + 1/x*)^n, and x* lies below the ceiling t_n
+  (`cyclePoint_lt_ceiling`).
 -/
 
 namespace BestOfOrder
@@ -187,5 +189,109 @@ theorem prefix_cyclePoint_neg {s : List Bool} (hA : Admissible s) {l : ℕ} (hl1
   have hden : ((2 : ℚ) ^ l - 3 ^ order (s.take l)) < 0 := by linarith
   rw [div_lt_iff_of_neg hden, zero_mul]
   exact hr
+
+/-- 2^l x*_l = 3^(w_l) x* + rho_l. -/
+theorem two_pow_mul_cyclePt (s : List Bool) (l : ℕ) :
+    (2 : ℚ) ^ l * cyclePt s l = 3 ^ order (s.take l) * cyclePoint s + rho (s.take l) := by
+  rw [cyclePt]
+  field_simp
+
+/-- x*_0 = x*. -/
+theorem cyclePt_zero (s : List Bool) : cyclePt s 0 = cyclePoint s := by
+  simp [cyclePt, order, rho, affineNum]
+
+/-- x* ≤ x*_l for l < L (an admissible word). -/
+theorem cyclePoint_le_cyclePt {s : List Bool} (hA : Admissible s) {l : ℕ} (hl : l < s.length) :
+    cyclePoint s ≤ cyclePt s l := by
+  rcases Nat.eq_zero_or_pos l with rfl | h1
+  · rw [cyclePt_zero]
+  · exact (cyclePoint_lt_cyclePt hA h1 hl).le
+
+/-- The cycle point of a word of positive Order with 3^n < 2^L is positive. -/
+theorem cyclePoint_pos {s : List Bool} (hn : 0 < order s) (hd : 3 ^ order s < 2 ^ s.length) :
+    0 < cyclePoint s := by
+  have hr : (0 : ℚ) < rho s := by exact_mod_cast (rho_pos_iff s).mpr hn
+  have hd' : ((3 : ℚ) ^ order s) < 2 ^ s.length := by exact_mod_cast hd
+  unfold cyclePoint
+  apply div_pos hr
+  linarith
+
+/-- Along the rational cycle every odd step multiplies by at most 3 + 1/x*:
+    2^l x*_l ≤ (3 + 1/x*)^(w_l) x* for l ≤ L. -/
+theorem cyclePt_le_pow {s : List Bool} (hA : Admissible s) (hn : 0 < order s) :
+    ∀ l ≤ s.length, (2 : ℚ) ^ l * cyclePt s l ≤
+      (3 + 1 / cyclePoint s) ^ order (s.take l) * cyclePoint s := by
+  have hd := ((admissible_iff_pow s).mp hA).2
+  have hx := cyclePoint_pos hn hd
+  intro l
+  induction l with
+  | zero => intro _; simp [cyclePt_zero, order]
+  | succ l ih =>
+    intro hl
+    have hlt : l < s.length := by omega
+    have ih' := ih hlt.le
+    have hge := cyclePoint_le_cyclePt hA hlt
+    have htake : s.take (l + 1) = s.take l ++ [s[l]] := List.take_succ_eq_append_getElem hlt
+    have e0 := two_pow_mul_cyclePt s l
+    have e1 := two_pow_mul_cyclePt s (l + 1)
+    rw [htake, AcceleratedCollatz.rho_append, AcceleratedCollatz.order_append] at e1
+    rw [htake, AcceleratedCollatz.order_append]
+    rw [List.length_take, min_eq_left hlt.le] at e1
+    set x := cyclePoint s
+    set A := (2 : ℚ) ^ l * cyclePt s l
+    have hc : (0 : ℚ) < 3 + 1 / x := by positivity
+    cases hb : s[l] with
+    | false =>
+      have ho : order [false] = 0 := rfl
+      have hr : rho [false] = 0 := rfl
+      rw [hb, ho, hr] at e1
+      rw [ho, add_zero, e1]
+      push_cast
+      simp only [one_mul, mul_zero, add_zero]
+      rw [← e0]
+      exact ih'
+    | true =>
+      have ho : order [true] = 1 := rfl
+      have hr : rho [true] = 1 := rfl
+      rw [hb, ho, hr] at e1
+      rw [ho, e1, pow_succ]
+      push_cast
+      -- 2^(l+1) x*_{l+1} = 3 A + 2^l, with A = 2^l x*_l ≥ 2^l x*
+      have hA2 : (2 : ℚ) ^ l * x ≤ A := by
+        have h2 : (0 : ℚ) ≤ 2 ^ l := by positivity
+        exact mul_le_mul_of_nonneg_left hge h2
+      have key : 3 * (3 ^ order (s.take l) * x + rho (s.take l)) + (2 : ℚ) ^ l ≤ (3 + 1 / x) * A := by
+        rw [← e0]
+        have : (2 : ℚ) ^ l ≤ A / x := by rw [le_div_iff₀ hx]; exact hA2
+        have hAx : A / x = 1 / x * A := by ring
+        nlinarith
+      calc 3 ^ order (s.take l) * 3 ^ 1 * x + (3 ^ 1 * (rho (s.take l) : ℚ) + 2 ^ l * 1)
+          = 3 * (3 ^ order (s.take l) * x + rho (s.take l)) + 2 ^ l := by ring
+        _ ≤ (3 + 1 / x) * A := key
+        _ ≤ (3 + 1 / x) * ((3 + 1 / x) ^ order (s.take l) * x) := mul_le_mul_of_nonneg_left ih' hc.le
+        _ = (3 + 1 / x) ^ (order (s.take l) + 1) * x := by ring
+
+/-- Proposition 4.7 (the ceiling): for an admissible word of Order n ≥ 1 and length
+    L, 2^L ≤ (3 + 1/x*)^n, so every t > 0 with (3t + 1)^n < 2^L t^n lies above the cycle point. -/
+theorem cyclePoint_lt_ceiling {s : List Bool} (hA : Admissible s) (hn : 0 < order s) {t : ℕ}
+    (ht0 : 0 < t) (ht : (3 * t + 1) ^ order s < 2 ^ s.length * t ^ order s) :
+    cyclePoint s < t := by
+  have hd := ((admissible_iff_pow s).mp hA).2
+  have hx := cyclePoint_pos hn hd
+  have hb := cyclePt_le_pow hA hn s.length le_rfl
+  rw [cyclePt_length hd, List.take_length] at hb
+  have h2 : (2 : ℚ) ^ s.length ≤ (3 + 1 / cyclePoint s) ^ order s := le_of_mul_le_mul_right hb hx
+  have ht' : ((3 : ℚ) * t + 1) ^ order s < 2 ^ s.length * (t : ℚ) ^ order s := by exact_mod_cast ht
+  have htq : (0 : ℚ) < t := by exact_mod_cast ht0
+  have h3 : (3 + 1 / (t : ℚ)) ^ order s < 2 ^ s.length := by
+    rw [show (3 + 1 / (t : ℚ)) = (3 * t + 1) / t by field_simp, div_pow, div_lt_iff₀ (by positivity)]
+    exact ht'
+  by_contra hc
+  have hle : (t : ℚ) ≤ cyclePoint s := not_lt.mp hc
+  have : 3 + 1 / cyclePoint s ≤ 3 + 1 / (t : ℚ) := by
+    gcongr
+  have := pow_le_pow_left₀ (by positivity) this (order s)
+  linarith
+
 
 end BestOfOrder
