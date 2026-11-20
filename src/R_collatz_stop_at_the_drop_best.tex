@@ -526,7 +526,7 @@
 \title{\textbf{Collatz, but stop at the drop}\\[0.5ex]
   \Large The start words with the highest drop ratio}
 \author{\textbf{Ruud H.G. van Tol}}
-\date{\textbf{Draft (33)}\\[8ex]  % the number of commits of this .tex: one up with each committed change
+\date{\textbf{Draft (34)}\\[8ex]  % the number of commits of this .tex: one up with each committed change
   {\small\copyright\ 2026 Ruud H.G. van Tol. Licensed under \href{https://creativecommons.org/licenses/by/4.0/}{CC BY 4.0}.}
   % DOI line after the Zenodo upload
 }
@@ -568,7 +568,7 @@ $c > x^\ast$, and $x^\ast$ is the strict minimum of its own cycle.
 \end{mainthm}
 
 \begin{mainthm}[The window; Chapter~\ref{sec:search}]
-If a class id of Order $n$ has $T^L(c)/c > g/h > 3^n/2^L$, then $c\,(2^L g - 3^n h) < R(n)\,h$, where
+If class ids $c$ and $x$ of Order $n$ have $\operatorname{drop}(c)/c > \operatorname{drop}(x)/x$, with $\operatorname{drop}(x) = T^L(x)$ the drop value, then $c\,(2^L \operatorname{drop}(x) - 3^n x) < R(n)\,x$, where
 $R(n) = \sum_{q=1}^{n} 3^{n-q} 2^{p_2(q-1)-1}$ is the largest $\rho$ of the Order. Seeded with any
 class id of Order $n$, a scan over the starts in increasing order is complete once it passes the
 window of the best found; so is a best-first search over the word tree.
@@ -717,7 +717,7 @@ and $e$ with $e_L$ appended is one class modulo $2^{L+1}$. \cite[§1]{Terras1976
 \begin{definition}[Class id, drop value]
 The \emph{class id} of an admissible word $e$ of Order $n$ is the least $c > 1$ whose word starts with $e$
 (for the residue $r < 2^L$ of the class: $c = r$ if $r > 1$, else $c = r + 2^L$; Order~$1$ gives $c = 5$).
-\termhere{dropvalue}Its \keyterm{dropvalue}{drop value} is $d = T^L(c)$.
+\termhere{dropvalue}Its \keyterm{dropvalue}{drop value} is $d = T^L(c)$; for any start $x$ of Order $n$ we write $\operatorname{drop}(x) = T^L(x)$, so the drop ratio of $x$ is $\operatorname{drop}(x)/x$.
 \end{definition}
 
 \begin{lemma}
@@ -806,7 +806,7 @@ depth-first search of the words with the window of the best finds none for Order
 \boxhere{word}word\index{word@\termlink{word}{word}|textbf} & the parity sequence $e_0 e_1 e_2\ldots$ of a start under $T$; $1$ for an odd step. \\ \hline
 \boxhere{p2}$p_2(n)$\index{p2@\termlink{p2}{$p_2(n)$}|textbf} & the bit length of $3^n$: the length $L$ of a word of Order $n$. \\ \hline
 \boxhere{rho}constant $\rho$\index{constant rho@\termlink{rho}{constant $\rho$}|textbf} & $\sum_q 3^{n-q}2^{k_q}$ over the ones of a word; $2^L T^L(x) = 3^n x + \rho$ on its class. \\ \hline
-\boxhere{dropvalue}drop value $d$\index{drop value@\termlink{dropvalue}{drop value $d$}|textbf} & $T^L(c)$, the value of the class id at its drop. \\ \hline
+\boxhere{dropvalue}drop value $d$, $\operatorname{drop}(x)$\index{drop value@\termlink{dropvalue}{drop value $d$, $\operatorname{drop}(x)$}|textbf} & $T^L(c)$, the value of the class id at its drop; $\operatorname{drop}(x) = T^L(x)$ for any start of the Order. \\ \hline
 \boxhere{tie}tie\index{tie@\termlink{tie}{tie}|textbf} & two class ids of one Order with the same drop ratio. \\ \hline
 A100982\index{OEIS!A100982} & the number of words of each Order.
 \end{wordbox}
@@ -1073,14 +1073,14 @@ is $\ge 0$; with the true maxima, the drop side keeps $1$ to $3$ words (measured
 
 \begin{theorem}[The window]
 \label{thm:window}
-\termhere{window}Let $g/h > 3^n/2^L$ be the ratio of some class id of Order $n$. A class id $c$ of Order $n$ with
-$T^L(c)/c > g/h$ satisfies $c\,(2^L g - 3^n h) < R(n)\,h$, that is, $c < W = \lceil R(n)\,h/(2^L g - 3^n h) \rceil$, the window of $g/h$. For a prefix with $j$ ones, constant $\rho_j$ and
+\termhere{window}Let $x$ be a class id of Order $n \ge 1$. A class id $c$ of Order $n$ with
+$\operatorname{drop}(c)/c > \operatorname{drop}(x)/x$ satisfies $c\,(2^L \operatorname{drop}(x) - 3^n x) < R(n)\,x$, that is, $c < W = \lceil R(n)\,x/(2^L \operatorname{drop}(x) - 3^n x) \rceil$, the window of $x$. For a prefix with $j$ ones, constant $\rho_j$ and
 residue $r$, every class id below it with a higher ratio satisfies
-$r\,(2^L g - 3^n h) < \bigl(3^{n-j}\rho_j + \sum_{q>j} 3^{\,n-q} 2^{p_2(q-1)-1}\bigr)\,h$.
+$r\,(2^L \operatorname{drop}(x) - 3^n x) < \bigl(3^{n-j}\rho_j + \sum_{q>j} 3^{\,n-q} 2^{p_2(q-1)-1}\bigr)\,x$.
 \end{theorem}
 \begin{proof}
-$T^L(c)/c > g/h$ means $h\,2^L T^L(c) > g\,2^L c$, that is $h(3^n c + \rho) > 2^L g\,c$, that is
-$c\,(2^L g - 3^n h) < \rho\,h$. Now $\rho \le R(n)$ by Theorem~\ref{thm:wall}; below a prefix,
+$2^L \operatorname{drop}(x) - 3^n x > 0$: it is the constant of $x$'s word. $\operatorname{drop}(c)/c > \operatorname{drop}(x)/x$ means $x\,2^L \operatorname{drop}(c) > \operatorname{drop}(x)\,2^L c$, that is $x(3^n c + \rho) > 2^L \operatorname{drop}(x)\,c$, that is
+$c\,(2^L \operatorname{drop}(x) - 3^n x) < \rho\,x$. Now $\rho \le R(n)$ by Theorem~\ref{thm:wall}; below a prefix,
 $\rho$ is at most the bound of Corollary~\ref{cor:tail}, and $c \ge r$ as $c \equiv r \pmod{2^\ell}$,
 $c > 0$, $0 < r < 2^\ell$.
 \end{proof}
@@ -1137,7 +1137,7 @@ $230$ to $347$ by the scan alone.
 \nopagebreak
 
 \begin{wordbox}
-\boxhere{window}window $W$\index{window@\termlink{window}{window $W$}|textbf} & the bound $c\,(2^L g - 3^n h) < R(n)\,h$, or $c < W$, that a class id must meet to beat the ratio $g/h$ (Theorem~\ref{thm:window}). \\ \hline
+\boxhere{window}window $W$\index{window@\termlink{window}{window $W$}|textbf} & the bound $c\,(2^L \operatorname{drop}(x) - 3^n x) < R(n)\,x$, or $c < W$, that a class id $c$ must meet to beat the drop ratio $\operatorname{drop}(x)/x$ of a class id $x$ (Theorem~\ref{thm:window}). \\ \hline
 \boxhere{bestfirst}best-first search\index{best-first search@\termlink{bestfirst}{best-first search}|textbf} & the prefixes popped by residue and pruned by the window (\texttt{boo.py}). \\ \hline
 \boxhere{scan}scan\index{scan@\termlink{scan}{scan}|textbf} & all starts in increasing order, up to the window of the best found (\texttt{boo\_scan.cpp}). \\ \hline
 \boxhere{seed}seed $s_0$\index{seed@\termlink{seed}{seed $s_0$}|textbf} & the smallest start of the Order (A122442), the first candidate of both searches.

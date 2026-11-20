@@ -19,7 +19,8 @@
 
   \item \termlink{drop}{drop}, \textbf{4}
   \item \termlink{dropratio}{drop ratio}, \textbf{4}
-  \item \termlink{dropvalue}{drop value $d$}, \textbf{6}
+  \item \termlink{dropvalue}{drop value $d$, $\operatorname{drop}(x)$}, 
+		\textbf{6}
 
   \indexspace
 
