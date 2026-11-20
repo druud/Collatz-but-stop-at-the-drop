@@ -26,6 +26,7 @@ first. Version names (R_65a, R_66, ...) are the authors' own labels.
   are renumbered.
 
 - drop_tree.html: the same tree as a page, with options.
+- drop_turn.html: the words of one Order as turns around the unit circle; its Order 6 view is the picture on the title page of the paper beside the series.
 
 - Paper 3, "The odd part at the drop": the Lean names of TOddPartDrop;
   S and E bounded in rationals by the survivors' share, 82 and 87

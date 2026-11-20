@@ -1,0 +1,219 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Drop Word Turns</title>
+<style>
+:root { --bg:#fff; --fg:#222; --mut:#888; --ring:#e6e6e6; --disc:#f4f4f4; --panel:#f4f4f4; --grey:#bbb; }
+@media (prefers-color-scheme: dark) { :root { --bg:#1b1b1b; --fg:#ddd; --mut:#999; --ring:#383838; --disc:#262626; --panel:#2a2a2a; --grey:#666; } }
+body { margin:0; background:var(--bg); color:var(--fg); font:14px Helvetica, Arial, sans-serif; }
+header { position:sticky; top:0; z-index:1; background:var(--panel); padding:8px 16px; display:flex; flex-wrap:wrap; gap:8px 18px; align-items:center; }
+header label { white-space:nowrap; }
+header .info { color:var(--mut); }
+#main { display:flex; flex-wrap:wrap; gap:8px 24px; padding:8px 16px 24px; align-items:flex-start; }
+#list { font:12px Menlo, Consolas, monospace; max-height:780px; overflow:auto; }
+#list div { padding:1px 6px; cursor:pointer; white-space:pre; border-left:4px solid transparent; }
+#list div:hover { background:var(--panel); }
+#list div.on { background:var(--panel); font-weight:bold; }
+svg text { fill:currentColor; }
+</style>
+</head>
+<body>
+<header>
+  <label>Order <input id="n" type="number" min="2" max="14" value="6" style="width:3.5em"></label>
+  <label>Scale
+    <select id="scale"><option value="all">By all 0's not yet used (z)</option><option value="tail">By the trailing 0's (s)</option><option value="fair">Each 1 carries its share of the 0's (f)</option><option value="no">None (u)</option></select></label>
+  <label>Radius
+    <select id="rad"><option value="lin">Linear (lin)</option><option value="log">Powers of 2 (log)</option></select></label>
+  <label>Angle
+    <select id="ang"><option value="earn">A 1 turns by its share of S (earn)</option><option value="nat">A 1 turns by log_2 of its factor, spiral (nat)</option><option value="eq">Equal steps (eq)</option></select></label>
+  <label>Show
+    <select id="show"><option value="marked">Marked only (marked)</option><option value="top">The 10 highest ratios (top)</option><option value="all">All words (all)</option></select></label>
+  <button id="save">Save SVG</button>
+  <button id="link">Copy link</button>
+  <span class="info" id="info"></span>
+</header>
+<div id="main"><div id="wrap"></div><div id="list"></div></div>
+<script>
+/* The words of one Order as closed turns around the unit circle (C24, 20 Nov 2026). T(x) = x/2 or (3x+1)/2.
+ | A word of Order n: n ones in L = bit length of 3^n letters, 3^j > 2^l after every earlier letter; written
+ | head(body)tail = 11(...)0..0. Radius = value / start: the start is at (1, 0). A 1 steps outward (times
+ | (3 + 1/x)/2), a 0 inward (times 1/2). Angle (C33): a 0 goes straight inward; a 1 turns by the share of S that it
+ | earns, where 1 + S/c = d 2^L / (c 3^n) is the word's own part of the ratio d/c and a 1 at value x multiplies it by
+ | 1 + 1/(3x). So a turn depends on all the letters before it, the whole word makes one full turn and ends at (d/c, 0).
+ | Other angles: log_2 of the factor of a 1 (every word then runs on the one spiral "a full turn doubles the radius",
+ | and ends off the axis), or equal steps (each of the K letters before the z trailing 0's turns by 1/K).
+ | After K letters the trailing 0's take the path straight inward (dashed) to d/c, just under 1. Scaled by the trailing 0's: every radius divided by 2^z from the start, so the
+ | path starts at 1/2^z and its last step ends just under 1: the unit circle is the finish.
+ | Scaled by all 0's not yet used: the radius after l letters is divided by 2^(0's still to come); a 0 then changes
+ | nothing, a 1 multiplies the radius by (3 + 1/x)/2, and the path rises from 1/2^(L-n) to d/c.
+ | Each 1 carries its share of the 0's (C36): a 1 at value x multiplies the radius by (3 + 1/x)/2^(L/n), a 0 changes
+ | nothing: the path starts at (1, 0), runs along the unit circle and ends at d/c.
+ | The unit circle is drawn as large as is feasible: the radial scale bends there (see the rings, at powers of 2).
+ | Words and ratios are exact (BigInt); only the drawing coordinates are floating point.
+ |*/
+// Okabe-Ito, colour-blind safe (Okabe and Ito 2002, https://jfly.uni-koeln.de/color/)
+const VER = '#d55e00', BLU = '#0072b2', ORA = '#e69f00', GRN = '#009e73', PUR = '#cc79a7';
+const $ = id => document.getElementById(id);
+try { const s = JSON.parse(localStorage.getItem('dropTurn1') || '{}');
+  if (s.n) $('n').value = s.n; if (s.rad) $('rad').value = s.rad; if (s.show) $('show').value = s.show; if (s.sc) $('scale').value = s.sc; } catch (e) {}
+const bitlen = x => x.toString(2).length;
+function wordsOf(n) {
+  const L = bitlen(3n ** BigInt(n)), out = [];
+  (function rec(l, j, r, b, w) {
+    if (l > 0 && 3n ** BigInt(j) < 1n << BigInt(l)) { if (j === n) out.push({ w, c: r > 1n ? r : r + (1n << BigInt(L)) }); return; }
+    if (j > n) return;
+    for (const t of [0n, 1n]) {
+      const v = 3n ** BigInt(j) * t + b, r2 = r + (t << BigInt(l));
+      if (v & 1n) rec(l + 1, j + 1, r2, (3n * v + 1n) / 2n, w + '1'); else rec(l + 1, j, r2, v / 2n, w + '0');
+    }
+  })(0, 0, 0n, 0n, '');
+  for (const o of out) {
+    o.xs = [o.c]; for (let i = 0; i < L; i++) { const x = o.xs[i]; o.xs.push(x & 1n ? (3n * x + 1n) / 2n : x / 2n); }
+    o.d = o.xs[L]; o.core = o.w.replace(/0+$/, ''); o.z = L - o.core.length; o.K = o.core.length;
+    o.rho = (1n << BigInt(L)) * o.d - 3n ** BigInt(n) * o.c;
+    o.name = `11(${o.core.slice(2)})${'0'.repeat(o.z)}`;
+  }
+  out.sort((a, b) => { const s = b.d * a.c - a.d * b.c; return s > 0n ? 1 : s < 0n ? -1 : (a.c < b.c ? -1 : 1); });   // highest ratio first
+  // ratio d/c to k decimals, rounded with integers only
+  const fmt = (o, k) => { const p = 10n ** BigInt(k), q = (2n * p * o.d + o.c) / (2n * o.c); return `${q / p}.${String(q % p).padStart(k, '0')}`; };
+  return { L, words: out, fmt };
+}
+let cur = null, pinned = new Set(), wantPins = new Set();
+// The link: the page's state after '#', as short tokens joined by dots: the Order, then one token per list (scale: z, s,
+// f or u; radius: lin or log; angle: earn, nat or eq; show: marked, top or all), then the start value of every pinned
+// word. A token left out of a link means that list's default (z, lin, earn, marked).
+// Example: drop_turn.html#11.z.log.earn.top.23547
+const OPTS = { u: ['scale', 'no'], s: ['scale', 'tail'], z: ['scale', 'all'], f: ['scale', 'fair'], lin: ['rad', 'lin'], log: ['rad', 'log'], earn: ['ang', 'earn'], nat: ['ang', 'nat'], eq: ['ang', 'eq'], all: ['show', 'all'], top: ['show', 'top'], marked: ['show', 'marked'] };
+const DEF = { scale: 'all', rad: 'lin', ang: 'earn', show: 'marked' };
+function fromHash() {
+  const t = location.hash.slice(1).split('.').filter(x => x); if (!t.length || !/^\d+$/.test(t[0])) return;
+  $('n').value = t[0]; for (const id in DEF) $(id).value = DEF[id];
+  cur = null; wantPins = new Set();
+  for (const x of t.slice(1)) if (/^\d+$/.test(x)) wantPins.add(x); else if (OPTS[x]) $(OPTS[x][0]).value = OPTS[x][1];
+}
+function toHash(n) {
+  const t = [n]; for (const [k, [id, v]] of Object.entries(OPTS)) if ($(id).value === v) t.push(k);
+  for (const o of cur.words) if (pinned.has(o)) t.push(o.c);
+  const h = '#' + t.join('.');
+  if (location.hash !== h) try { history.replaceState(null, '', h); } catch (e) { location.hash = h; }
+}
+function draw() {
+  const n = Math.max(2, Math.min(14, +$('n').value || 6)), sc = $('scale').value, scaled = sc !== 'no', rad = $('rad').value, show = $('show').value, am = $('ang').value;
+  try { localStorage.setItem('dropTurn1', JSON.stringify({ n, rad, show, sc })); } catch (e) {}
+  if (!cur || cur.n !== n) { cur = wordsOf(n); cur.n = n; pinned = new Set(cur.words.filter(o => wantPins.has(String(o.c)))); wantPins = new Set(); }
+  const { L, words } = cur, best = words[0];
+  const wall = words.reduce((a, b) => (b.rho > a.rho ? b : a)), early = words.find(o => !o.core.includes('0')), small = words.reduce((a, b) => (b.c < a.c ? b : a));
+  const tags = [[best, VER, 'best'], [small, GRN, 'smallest start'], [early, ORA, 'ones first'], [wall, BLU, 'wall']];
+  const marks = new Map(); for (const [o, col, lab] of tags) if (marks.has(o)) marks.get(o)[1] += ', ' + lab; else marks.set(o, [col, lab]);
+  // radius: value / start; scaled by the trailing 0's: divided by 2^z; by all 0's not yet used: divided by 2^(0's after
+  // letter l), so a 0 leaves the radius and a 1 multiplies it by (3 + 1/x)/2: it rises from 1/2^(L-n) to d/c
+  // each 1 carries its share of the 0's (C36): radius (x_l/c) 2^(l - j L/n), j the ones so far: the start is at (1, 0), a 0
+  // leaves the radius, a 1 at value x multiplies it by (3 + 1/x)/2^(L/n), and the end is d/c (2^(L/n): drawing only)
+  const zu = o => o.zu || (o.zu = [...o.w].reduce((a, ch) => (a.push(a[a.length - 1] + (ch === '0')), a), [0]));
+  const val = (o, l) => Number(o.xs[l] * 1000000n / o.c) / 1000000 / (sc === 'tail' ? 2 ** o.z : sc === 'all' ? 2 ** (L - n - zu(o)[l]) : sc === 'fair' ? 2 ** ((l - zu(o)[l]) * L / n - l) : 1);
+  const shown = show === 'all' ? words : show === 'top' ? words.slice(0, 10) : [];
+  const drawn = [...new Set([...shown, ...marks.keys(), ...pinned])];
+  // decimals: the fewest (4 or more, at most 24) at which the marked and pinned words with different ratios show differently
+  const mk = cur.words.filter(o => marks.has(o) || pinned.has(o)); let k = 4;
+  for (; k < 24; k++) { let ok = true; for (let i = 1; ok && i < mk.length; i++) ok = mk[i - 1].d * mk[i].c === mk[i].d * mk[i - 1].c || cur.fmt(mk[i - 1], k) !== cur.fmt(mk[i], k); if (ok) break; }
+  if (cur.k !== k) { cur.k = k; for (const o of cur.words) o.ratio = cur.fmt(o, k); }
+  let vmax = 1, vmin = 1;
+  for (const o of drawn) for (let l = 0; l <= L; l++) { const v = val(o, l); if (v > vmax) vmax = v; if (v < vmin) vmin = v; }
+  const W = 820, H = 800, cx = W / 2, cy = H / 2 + 6, RR = 370;
+  // the unit circle as large as is feasible: it gets the radius the outside does not need. Outside it the
+  // values 1..vmax share a band of at most 2/5 of the radius (less when little lies outside); inside it the
+  // values share the disc. Each side is linear or by powers of 2, so the scale has a bend at the unit circle.
+  const lmin = Math.floor(Math.log2(vmin)) - 1, lout = Math.log2(vmax);
+  const R1 = RR * (1 - Math.min(0.4, lout / (lout - lmin)));
+  const f = v => v <= 1 ? (rad === 'lin' ? R1 * v : R1 * (Math.log2(v) - lmin) / -lmin)
+                        : R1 + (RR - R1) * (rad === 'lin' ? (v - 1) / (vmax - 1) : Math.log2(v) / lout);
+  const s = [];
+  s.push(`<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" font-family="Helvetica, Arial, sans-serif" style="color:inherit">`);
+  s.push(`<text x="12" y="20" font-size="15">Order ${n}: ${words.length} words, L = ${L}${sc === 'tail' ? '; every radius divided by 2^(trailing 0\'s)' : sc === 'all' ? '; every radius divided by 2^(0\'s not yet used)' : sc === 'fair' ? '; each 1 carries its share of the 0\'s' : ''}</text>`);
+  for (let k = Math.ceil(Math.log2(vmin)); 2 ** k <= vmax; k++) if (k !== 0) {
+    const r = f(2 ** k); if (r < 6) continue;
+    s.push(`<circle cx="${cx}" cy="${cy}" r="${r.toFixed(1)}" fill="none" stroke="var(--ring, #e6e6e6)"/><text x="${(cx + r + 2).toFixed(1)}" y="${cy + 12}" font-size="10" fill="#999">${k > 0 ? 2 ** k : '1/' + 2 ** -k}</text>`);
+  }
+  s.push(`<line x1="${cx}" y1="${cy}" x2="${cx + RR + 14}" y2="${cy}" stroke="var(--ring, #e6e6e6)"/>`);
+  s.push(`<circle cx="${cx}" cy="${cy}" r="${f(1).toFixed(1)}" fill="var(--disc, #f4f4f4)" fill-opacity="0.6" stroke="#777" stroke-width="2.5"/><text x="${(cx + f(1) + 2).toFixed(1)}" y="${cy + 12}" font-size="10" fill="#777">1</text>`);
+  // angle after l letters, in turns. Share of S: a 0 goes straight inward, a 1 turns by the share of the word's S that it
+  // earns: the angle is S_l / S = rho_l 3^(n-j) / rho, with rho_l = 2^l x_l - 3^j c (exact); one full turn in all.
+  // Spiral: a 1 at value x turns by log_2((3 + 1/x)/2); the angle is then log_2(radius) plus whole turns. Equal steps: l/K.
+  const angs = o => {
+    if (o.am === am) return o.ang;
+    const a = [0]; let j = 0;
+    for (let l = 1; l <= o.K; l++) {
+      const one = o.w[l - 1] === '1'; if (one) j++;
+      a.push(am === 'eq' ? l / o.K : !one ? a[l - 1]
+        : am === 'earn' ? Number(((1n << BigInt(l)) * o.xs[l] - 3n ** BigInt(j) * o.c) * 3n ** BigInt(n - j) * 1000000000n / o.rho) / 1e9
+        : a[l - 1] + Math.log2(Number(o.xs[l] * 1000000000n / o.xs[l - 1]) / 1e9));
+    }
+    o.am = am; return o.ang = a;
+  };
+  const xy = (r, a) => `${(cx + r * Math.cos(2 * Math.PI * a)).toFixed(1)}" cy="${(cy - r * Math.sin(2 * Math.PI * a)).toFixed(1)}`;
+  const path = (o, col, wd, op) => {
+    const pts = [], ang = angs(o), aK = ang[o.K], rK = f(val(o, o.K));
+    // each letter one step: the angle and the drawn radius run evenly from its start to its end (no chord through the disc)
+    for (let l = 0; l <= o.K; l++) {
+      const r1 = f(val(o, l)), r0 = l ? f(val(o, l - 1)) : r1;
+      const a0 = l ? ang[l - 1] : 0, SUB = l ? Math.max(1, Math.ceil((ang[l] - a0) * (wd > 1 ? 48 : 12))) : 1;
+      for (let k = l ? 1 : SUB; k <= SUB; k++) {
+        const a = 2 * Math.PI * (a0 + (ang[l] - a0) * k / SUB), r = r0 + (r1 - r0) * k / SUB;
+        pts.push(`${(cx + r * Math.cos(a)).toFixed(1)},${(cy - r * Math.sin(a)).toFixed(1)}`);
+      }
+    }
+    s.push(`<polyline points="${pts.join(' ')}" fill="none" stroke="${col}" stroke-width="${wd}" stroke-linejoin="round" opacity="${op}"/>`);
+    const rL = f(val(o, L)), ca = Math.cos(2 * Math.PI * aK), sa = Math.sin(2 * Math.PI * aK);
+    if (!scaled) s.push(`<line x1="${(cx + rK * ca).toFixed(1)}" y1="${(cy - rK * sa).toFixed(1)}" x2="${(cx + rL * ca).toFixed(1)}" y2="${(cy - rL * sa).toFixed(1)}" stroke="${col}" stroke-width="${wd}" stroke-dasharray="3,3" opacity="${op}"/>`);
+    if (wd > 1) {
+      for (let l = 1; l < o.K; l++) {                                    // a dot after every letter: filled after a 1, open after a 0
+        const r = f(val(o, l)), one = o.w[l - 1] === '1';
+        s.push(`<circle cx="${xy(r, ang[l])}" r="2" fill="${one ? col : 'var(--bg, #fff)'}" stroke="${col}" stroke-width="0.8"/>`);
+      }
+      s.push(`<circle cx="${(cx + f(val(o, 0))).toFixed(1)}" cy="${cy}" r="3.5" fill="none" stroke="${col}" stroke-width="1.2"/>`);              // start
+      s.push(`<circle cx="${xy(scaled ? rK : rL, aK)}" r="2.6" fill="${col}"/>`);                                 // end
+    }
+  };
+  const colOf = o => marks.has(o) ? marks.get(o)[0] : pinned.has(o) ? PUR : null;
+  for (const o of drawn) if (!colOf(o)) path(o, 'var(--grey, #bbb)', 0.8, 0.9);
+  for (const o of drawn) if (colOf(o) === PUR) path(o, PUR, 1.6, 1);
+  for (const o of new Set([wall, early, small, best])) path(o, marks.get(o)[0], o === best ? 2.2 : 1.5, 1);
+  let y = H - 4 - 16 * new Set([wall, early, small, best]).size;
+  const leg = [...new Set([best, small, early, wall])], mx = f => Math.max(...leg.map(o => f(o).length));
+  const lw = mx(o => marks.get(o)[1]), nw = mx(o => o.name), cw0 = mx(o => String(o.c)), dw = mx(o => String(o.d));
+  for (const o of leg) {   // fixed-width columns
+    const col = marks.get(o)[0], t = `${(marks.get(o)[1] + ':').padEnd(lw + 1)} ${(o.name + ',').padEnd(nw + 1)} ${String(o.c).padStart(cw0)} &#8594; ${String(o.d).padStart(dw)}, ${o.ratio}`;
+    y += 16; s.push(`<text x="12" y="${y}" font-size="12" font-family="ui-monospace, Menlo, Consolas, monospace" font-weight="bold" xml:space="preserve" fill="${col}" style="fill:${col};white-space:pre">${t}</text>`);
+  }
+  s.push('</svg>');
+  $('wrap').innerHTML = s.join('\n');
+  toHash(n);
+  // the list: every word, highest ratio first; click to pin
+  const cw = String(words.reduce((a, b) => (b.c > a.c ? b : a)).c).length;
+  $('list').innerHTML = words.slice(0, 400).map((o, i) => {
+    const col = colOf(o), lab = marks.has(o) ? '  ' + marks.get(o)[1] : '';
+    return `<div data-i="${i}" class="${col ? 'on' : ''}" style="${col ? `border-left-color:${col}` : ''}">${String(i + 1).padStart(3)}  ${o.name},  ${String(o.c).padStart(cw)} &#8594; ${String(o.d).padEnd(cw)}  ${o.ratio}${lab}</div>`;
+  }).join('') + (words.length > 400 ? `<div>... ${words.length - 400} more</div>` : '');
+  $('info').textContent = `drawn: ${drawn.length}; click a word in the list to mark it`;
+}
+$('list').addEventListener('click', e => {
+  const d = e.target.closest('div[data-i]'); if (!d) return;
+  const o = cur.words[+d.dataset.i]; pinned.has(o) ? pinned.delete(o) : pinned.add(o); draw();
+});
+for (const id of ['n', 'scale', 'rad', 'ang', 'show']) $(id).addEventListener('input', draw);
+$('save').onclick = () => {
+  const a = document.createElement('a');
+  const svg = $('wrap').innerHTML.replace(/var\(--ring, (#[0-9a-f]+)\)/g, '$1').replace(/var\(--disc, (#[0-9a-f]+)\)/g, '$1').replace(/var\(--grey, (#[0-9a-f]+)\)/g, '$1').replace(/var\(--bg, (#[0-9a-f]+)\)/g, '$1');
+  a.href = URL.createObjectURL(new Blob([svg], { type: 'image/svg+xml' }));
+  a.download = `drop_turn_${$('n').value}${{ no: '', tail: 's', all: 'z', fair: 'f' }[$('scale').value]}_${$('rad').value}_${$('show').value}.svg`; a.click();
+};
+$('link').onclick = async () => {
+  const b = $('link'); try { await navigator.clipboard.writeText(location.href); b.textContent = 'Copied'; setTimeout(() => (b.textContent = 'Copy link'), 1200); } catch (e) { window.prompt('Link', location.href); }
+};
+window.addEventListener('hashchange', () => { fromHash(); draw(); });
+fromHash(); draw();
+</script>
+</body>
+</html>
