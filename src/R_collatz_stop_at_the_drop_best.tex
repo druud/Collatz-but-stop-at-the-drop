@@ -22,11 +22,13 @@
 \newcommand{\termlink}[2]{\hyperlink{term:#1}{#2}}
 % A key term where it is introduced: italic, with a link to its entry in the box
 % of its chapter (\boxhere)
-\newcommand{\keyterm}[2]{\hyperlink{box:#1}{\emph{#2}}}
+% a key term on a light blue background (user, 20 Nov 2026)
+\newcommand{\linkbg}[1]{{\setlength{\fboxsep}{1pt}\colorbox{blue!8}{\strut\emph{#1}}}}
+\newcommand{\keyterm}[2]{\hyperlink{box:#1}{\linkbg{#2}}}
 % A symbol that is a key term, where its meaning is given: the same link, no italics
 \newcommand{\keysym}[2]{\hyperlink{box:#1}{#2}}
 % A term used before its chapter (the Introduction): italic, linking to where it is introduced
-\newcommand{\fwdterm}[2]{\hyperlink{term:#1}{\emph{#2}}}
+\newcommand{\fwdterm}[2]{\hyperlink{term:#1}{\linkbg{#2}}}
 \newcommand{\fwdsym}[2]{\hyperlink{term:#1}{#2}}
 \usepackage{booktabs}
 \usepackage{array}
@@ -518,7 +520,7 @@
 \title{\textbf{Collatz, but stop at the drop}\\[0.5ex]
   \Large The start words with the highest drop ratio}
 \author{\textbf{Ruud H.G. van Tol}}
-\date{\textbf{Draft}\\[8ex]
+\date{\textbf{Draft (30)}\\[8ex]  % the number of commits of this .tex: one up with each committed change
   {\small\copyright\ 2026 Ruud H.G. van Tol. Licensed under \href{https://creativecommons.org/licenses/by/4.0/}{CC BY 4.0}.}
   % DOI line after the Zenodo upload
 }
