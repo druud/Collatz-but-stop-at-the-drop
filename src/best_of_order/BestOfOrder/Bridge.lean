@@ -14,7 +14,7 @@ import AcceleratedCollatz.TAttrs
   first L steps of x, `rho` the constant of a word and `rhoMax n` the constant of the wall word
   of Order n. Paper, Chapters 2 and 3: Terras's affine form (`affine`), the class of a word
   (`mem_class_iff`), the constant of a concatenation (`rho_append`), the wall
-  (`rho_le_wall`, `rho_eq_wall_iff`, `wall_eq_sum`), the lower wall (`three_pow_le_rho_add'`,
+  (`rho_le_wall`, `rho_eq_wall_iff`, `wall_eq_sum`, `rhoMax_le_mul`), the lower wall (`three_pow_le_rho_add'`,
   `rho_eq_lower_iff`) and admissibility in powers
   (`admissible_iff_pow`).
 -/
@@ -89,6 +89,26 @@ theorem rho_eq_lower_iff (s : List Bool) :
 theorem wall_eq_sum (n : ℕ) :
     rhoMax n = ∑ m ∈ Finset.range n, 3 ^ (n - 1 - m) * 2 ^ (p2_of m - 1) :=
   rhoMax_eq_sum n
+
+/-- 2^(p2(m) - 1) ≤ 3^m, for every m. -/
+theorem two_pow_p2_sub_one_le (m : ℕ) : 2 ^ (p2_of m - 1) ≤ 3 ^ m := by
+  rw [p2_of, Nat.add_sub_cancel]
+  exact Nat.pow_log_le_self 2 (by positivity)
+
+/-- Proposition 3.4, the wall from above: R(n) ≤ n 3^(n-1). -/
+theorem rhoMax_le_mul (n : ℕ) : rhoMax n ≤ n * 3 ^ (n - 1) := by
+  rw [wall_eq_sum]
+  calc ∑ m ∈ Finset.range n, 3 ^ (n - 1 - m) * 2 ^ (p2_of m - 1)
+      ≤ ∑ _m ∈ Finset.range n, 3 ^ (n - 1) := by
+        apply Finset.sum_le_sum
+        intro m hm
+        have hm' : m ≤ n - 1 := by
+          have := Finset.mem_range.mp hm
+          omega
+        calc 3 ^ (n - 1 - m) * 2 ^ (p2_of m - 1) ≤ 3 ^ (n - 1 - m) * 3 ^ m :=
+              Nat.mul_le_mul_left _ (two_pow_p2_sub_one_le m)
+          _ = 3 ^ (n - 1) := by rw [← pow_add, Nat.sub_add_cancel hm']
+    _ = n * 3 ^ (n - 1) := by simp
 
 /-- 2^k < 3^n iff k < p2(n), for n ≥ 1. -/
 theorem two_pow_lt_three_pow_iff' (k n : ℕ) (hn : 1 ≤ n) : 2 ^ k < 3 ^ n ↔ k < p2_of n :=

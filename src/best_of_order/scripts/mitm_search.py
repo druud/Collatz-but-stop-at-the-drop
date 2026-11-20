@@ -1,5 +1,5 @@
 # B120: the best of Order n by meeting in the middle, cut after the w-th 1 (w = n//2 by default).
-# lam0 = rho/c of the smallest start s (b122442.txt: A122442, a(n+1)); a word beats s only if
+# lam0 = rho/c of the smallest start s (data/b122442.txt: A122442, a(n+1)); a word beats s only if
 # G = rho - lam0 c >= 0, G = A + B: A = rho_p (3^(n-w) + lam0/3^w) (start side), B = rho_s - lam0 2^m y/3^w.
 # Start side: the admissible prefixes ending in their w-th 1 (the Order-w words), per length m: max A, and
 #   (r, b, rho_p) with T^m(2^m h + r) = 3^w h + b.
@@ -8,12 +8,12 @@
 #   at a cut (n - w ones, letter m-1 a 1), the middle value y >= z, so B <= rho_s - lam0 2^m z/3^w; kept if
 #   that + maxA[m] >= 0. Kept suffixes are joined with the prefixes of the same m by CRT (y = z mod 2^k,
 #   y = b mod 3^w, b <= y < b + 3^w 2^k), c = r + 2^m (y - b)/3^w, exact. Integers and rationals only.
-# Usage, from Lean/best_of_order with b122442.txt (OEIS A122442) there: python3 scripts/mitm_search.py n_from n_to [w]
+# Usage, from Lean/best_of_order (the smallest starts from data/b122442.txt, OEIS A122442): python3 scripts/mitm_search.py n_from n_to [w]
 # (Appendix A, the backward search primed with the smallest start: mitm_search.py 22 22 0 x seedc: nodes 96743)
 import sys, time
 from fractions import Fraction as F
 p2 = lambda m: (3**m).bit_length()
-A122 = {int(a): int(b) for a, b in (l.split() for l in open('b122442.txt'))}
+A122 = {int(a): int(b) for a, b in (l.split() for l in open('data/b122442.txt'))}
 def run(n, w):
     L = p2(n); s0 = A122[n+1]; x = s0
     for _ in range(L): x = (3*x+1)//2 if x & 1 else x//2

@@ -1,4 +1,4 @@
-# B138/B148: per Order n <= N, from the bests (b-file "n c") and the smallest starts (b122442.txt, s0 = a(n+1)):
+# B138/B148: per Order n <= N, from the bests (b-file "n c") and the smallest starts (data/b122442.txt, s0 = a(n+1)):
 # checks each best's word (Order n, first drop at L), its drop value d and window W = the largest x a class id
 # with a higher ratio could have (Theorem B: x (2^L d - 3^n c) < R c), and theta(s0)/theta(best) = (rho0 c)/(rho c0).
 # Writes the certificate file "n c d W". Integers and fractions only. Usage: boo_obs.py bests N certfile
@@ -6,7 +6,7 @@ import sys
 from fractions import Fraction as F
 p2 = lambda m: (3**m).bit_length()
 B = {int(a): int(b) for a, b in (l.split() for l in open(sys.argv[1]) if l.strip() and not l.startswith('#'))}
-A = {int(a): int(b) for a, b in (l.split() for l in open('b122442.txt'))}
+A = {int(a): int(b) for a, b in (l.split() for l in open('data/b122442.txt'))}
 N = int(sys.argv[2])
 def drop(x, n, L):
     y = x; k = 0

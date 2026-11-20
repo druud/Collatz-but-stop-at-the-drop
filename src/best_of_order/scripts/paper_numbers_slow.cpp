@@ -5,9 +5,9 @@
 //   3. Appendix A: the same search with a first ratio guessed from the previous Order, Orders 2..75.
 // Compile: g++ -O3 -std=c++17 scripts/paper_numbers_slow.cpp -o paper_numbers_slow \
 //            -I/opt/homebrew/include -L/opt/homebrew/lib -lgmpxx -lgmp
-// Run from Lean/best_of_order:  ./paper_numbers_slow [b122442.txt]
-//   b122442.txt: the OEIS b-file of A122442 (a(n+1) = the smallest start of Order n); without it only
-//   Table 1 is checked. One thread, about 2 minutes; memory: the heap of the search, about 2.4 GB at its peak.
+// Run from Lean/best_of_order:  ./paper_numbers_slow [FILE]
+//   FILE: the b-file of A122442 (a(n+1) = the smallest start of Order n), data/b122442.txt by default;
+//   if it cannot be read, only Table 1 is checked. One thread, about 2 minutes; memory: the heap of the search, about 2.4 GB at its peak.
 // Integers only: Table 1 in u64 / i128 from exact tables (Orders to 21, checked), the search in GMP.
 #include <gmpxx.h>
 #include <algorithm>
@@ -188,14 +188,16 @@ int main(int argc, char **argv) {
     check("Table 1: k0 for Orders 2..21", got.str(), paper.str());
 
     std::cout << "--- Chapter 6: the cost of the best-first search" << std::endl;
-    if (argc < 2) {
+    const char *seedf = argc > 1 ? argv[1] : "data/b122442.txt";
+    std::ifstream fs(seedf);
+    if (!fs) {
         nskip++;
-        std::cout << "SKIP the best-first search and its node counts: needs the b-file of A122442 as argument" << std::endl;
+        std::cout << "SKIP the best-first search and its node counts: cannot read " << seedf << std::endl;
     } else {
         std::map<int, mpz_class> seed, cert;
         std::string line;
-        std::ifstream fs(argv[1]), fc("data/best_cert_347.txt");
-        if (!fs || !fc) { std::cerr << "cannot read " << argv[1] << " or data/best_cert_347.txt\n"; return 2; }
+        std::ifstream fc("data/best_cert_347.txt");
+        if (!fc) { std::cerr << "cannot read data/best_cert_347.txt\n"; return 2; }
         while (std::getline(fs, line)) {
             if (line.empty() || line[0] == '#') continue;
             std::istringstream is(line);

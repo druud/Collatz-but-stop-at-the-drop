@@ -2,23 +2,28 @@
 # The numbers of the paper "The best of the Order", recomputed and compared with the paper's text.
 # Exact integers and fractions only. Every check prints OK, DIFF (computed against the paper) or SKIP.
 # Run from Lean/best_of_order:
-#   python3 scripts/paper_numbers.py [--seeds=b122442.txt]
-# Without options: what the two data files of data/ and a word list up to Order 16 can show (about a
-#   minute).
-# --seeds=FILE: the OEIS b-file of A122442 (https://oeis.org/A122442/b122442.txt; a(n+1) = the smallest
-#   start of Order n), for the numbers that need the smallest starts beyond Order 21.
+#   python3 scripts/paper_numbers.py [--seeds=FILE] [--appendix] [--beam]
+# Without options: what the data files of data/ and a word list up to Order 16 can show (a few minutes).
+# --seeds=FILE: another copy of the b-file of A122442 (a(n+1) = the smallest start of Order n) than
+#   data/b122442.txt (the run to n = 400 that the searches used; https://oeis.org/A122442/b122442.txt).
+# --appendix: also rerun the scripts of Appendix A and Remark "Both sides in turns" (mitm4.py, aim_cross.py,
+#   aim_area.py, ideal_lines.py, mitm_search.py, boo.py; about 3 minutes) and compare their numbers.
+# --beam: also rerun boo_beam.py 3 8 (long, one thread) and compare it with data/boo_beam_3_8.out; without
+#   it the Orders of Appendix A are read from that saved output.
 # The two slow checks are in C++ (paper_numbers_slow.cpp, about 2 minutes): Table 1 for Orders 17..21 and
 #   the node counts of the best-first search for Orders 1..124.
 # A few numbers have their own scripts and are not rerun here; the output ends with their list.
-import sys, heapq, time
+import sys, heapq, time, os, re, subprocess
 from fractions import Fraction as F
 from math import gcd
 from collections import defaultdict
 
-SEEDS = None
+SEEDS, APPENDIX, BEAM = 'data/b122442.txt', False, False
 for a in sys.argv[1:]:
     if a.startswith('--seeds='): SEEDS = a[8:]
-    else: sys.exit('usage: paper_numbers.py [--seeds=b122442.txt]')
+    elif a == '--appendix': APPENDIX = True
+    elif a == '--beam': BEAM = True
+    else: sys.exit('usage: paper_numbers.py [--seeds=FILE] [--appendix] [--beam]')
 
 p2 = lambda m: (3 ** m).bit_length()
 T = lambda x: (3 * x + 1) // 2 if x & 1 else x // 2
@@ -181,7 +186,7 @@ if seed:
     check('the five Orders with the smallest theta(s0)/theta(best)', [n for r, n in th[:5]], [272, 256, 91, 268, 221])
     check('the smallest lies between 25/100 and 26/100', F(25, 100) < th[0][0] < F(26, 100), True)
 else:
-    skip('seeds as bests (98, 285), windows of Orders 348..399, theta(s0)/theta(best)', 'needs --seeds=b122442.txt')
+    skip('seeds as bests (98, 285), windows of Orders 348..399, theta(s0)/theta(best)', 'needs the b-file of A122442')
 
 print('--- Chapter 7: backward ranking (Table 1)')
 K0 = dict(zip(range(2, 22), [1, 1, 3, 2, 6, 4, 8, 7, 9, 9, 12, 13, 19, 14, 16, 16, 18, 24, 21, 23]))
@@ -271,15 +276,51 @@ if seed:
     check('best-first search, Orders 1..60: the bests of the certificate file', list(b), [BEST[n] for n in range(1, 61)])
     skip('node counts of the best-first search, Orders 1..124', 'in paper_numbers_slow.cpp')
 else:
-    skip('the best-first search and its node counts', 'needs --seeds=b122442.txt; the counts are in paper_numbers_slow.cpp')
+    skip('the best-first search and its node counts', 'needs the b-file of A122442; the counts are in paper_numbers_slow.cpp')
 
-print('--- Checked by their own scripts (not rerun here)')
-for t in ('Remark "Both sides in turns": 1 to 3 words pass both tests, Orders 4..13: mitm4.py 4 13 (the last number per cut)',
-          'Remark "Seeds", Appendix A: a guessed first ratio costs about twice the nodes: paper_numbers_slow.cpp',
-          'Appendix A: candidates from earlier Orders beat s0 at Orders 6, 8, 107 only: boo_beam.py 3 8 (its output: data/boo_beam_3_8.out)',
-          'Appendix A: the backward search, Order 22, 96743 nodes against 1505: mitm_search.py 22 22 0 x seedc; boo.py 22 22',
-          'Appendix A: 2 to 8 crossings (Orders 4..14): aim_cross.py 4 14; area ranks 3 to 1337 (Orders 5..13): aim_area.py 5 13',
-          'Appendix A: ranks by the diagonal, 2 to 6425 (Orders 5..13): ideal_lines.py 5 13',
+print('--- Appendix A and Remark "Both sides in turns": their own scripts')
+def run(*args):
+    """Output of scripts/<args[0]> run from Lean/best_of_order with this Python."""
+    r = subprocess.run([sys.executable, os.path.join('scripts', args[0])] + list(args[1:]), capture_output=True, text=True)
+    if r.returncode: sys.exit('%s failed:\n%s' % (' '.join(args), r.stderr))
+    return r.stdout
+def span(v): return (min(v), max(v))
+if APPENDIX:
+    out = run('mitm4.py', '4', '13')
+    check('words passing both tests at each cut, Orders 4..13 (mitm4.py): fewest, most',
+          span([int(k) for k in re.findall(r' \d+:\d+/\d+,(\d+)', out)]), (1, 3))
+    out = run('aim_cross.py', '4', '14')
+    check("the best's crossings with the aim, Orders 4..14 (aim_cross.py): fewest, most",
+          span([int(k) for k in re.findall(r'crossings best (\d+)', out)]), (2, 8))
+    out = run('aim_area.py', '5', '13')
+    check('the rank of the best by the area, Orders 5..13 (aim_area.py): lowest, highest',
+          span([int(k) for k in re.findall(r'area rank (\d+)', out)]), (3, 1337))
+    out = run('ideal_lines.py', '5', '13')
+    check('the rank of the best by the diagonal, Orders 5..13 (ideal_lines.py): lowest, highest',
+          span([int(k) for k in re.findall(r'diag rank (\d+)', out)]), (2, 6425))
+    if seed:
+        out = run('mitm_search.py', '22', '22', '0', 'x', 'seedc')
+        check('the backward search primed with s0, Order 22 (mitm_search.py): best, nodes',
+              re.findall(r'best (\d+) ok .* nodes (\d+)', out), [('871', '96743')])
+        out = run('boo.py', '22', '22')
+        check('the best-first search, Order 22 (boo.py): best, nodes', out.split()[:4], ['22', '871', 'nodes', '1505'])
+    else: skip('mitm_search.py, boo.py at Order 22', 'need the b-file of A122442')
+else:
+    skip('mitm4.py, aim_cross.py, aim_area.py, ideal_lines.py, mitm_search.py, boo.py', 'add --appendix (about 3 minutes)')
+saved = open('data/boo_beam_3_8.out').read()
+if BEAM:
+    out = run('boo_beam.py', '3', '8')
+    check('boo_beam.py 3 8 against data/boo_beam_3_8.out (lines that differ)',
+          sum(a != b for a, b in zip(out.splitlines(), saved.splitlines())) + abs(len(out.splitlines()) - len(saved.splitlines())), 0)
+else: out = saved
+check('candidates from earlier Orders that beat s0 (boo_beam.py 3 8%s): Orders' % ('' if BEAM else ', saved output'),
+      [int(l.split()[0]) for l in out.splitlines() if '=best' in l], [6, 8, 107])
+if seed:
+    check('... the run covers exactly the Orders 3..124 whose best is not s0', [int(l.split()[0]) for l in out.splitlines()],
+          [n for n in range(3, 125) if seed[n] != BEST[n]])
+
+print('--- Checked elsewhere')
+for t in ('Remark "Seeds", Appendix A: a guessed first ratio costs about twice the nodes: paper_numbers_slow.cpp',
           'Chapter 6: that the scan found no better class id: boo_scan.cpp, boo_ties.cpp (the runs themselves)'):
     print('     ' + t)
 print('--- %d OK, %d DIFF, %d SKIP (%.0f s)' % (count['OK'], count['DIFF'], count['SKIP'], time.time() - t00))

@@ -1,11 +1,11 @@
 # Best of the Order (largest T^L(c)/c, c > 1) by best-first search on r, seeded with the smallest start
-# value s (A122442, a(n+1), from b122442.txt). For an Order-n word with constant rho (2^L T^L(c) = 3^n c + rho)
+# value s (A122442, a(n+1), from data/b122442.txt). For an Order-n word with constant rho (2^L T^L(c) = 3^n c + rho)
 # the ratio is 3^n/2^L + rho/(2^L c), so it beats the ratio q only if c < rho/(2^L q - 3^n); per node
 # rho <= rho_hi = 3^(n-j) rho_j + tail_j (walls) and c >= r. Nodes are popped by r; the search stops at the
 # first r beyond the global window rho_hi(root)/(2^L q - 3^n). Integers only. Usage: python3 boo.py N0 N1
 import sys, heapq, time
 p2 = lambda m: (3 ** m).bit_length()
-A = {int(a): int(b) for a, b in (l.split() for l in open('b122442.txt'))}
+A = {int(a): int(b) for a, b in (l.split() for l in open('data/b122442.txt'))}
 def T(x, L):
     for _ in range(L): x = (3 * x + 1) // 2 if x & 1 else x // 2
     return x

@@ -2,7 +2,7 @@
 # when p2(n) = p2(n-1) + 2) anywhere in its word; keep the admissible Order-n words; their best ratio is
 # a certified start for boo.py (a word attains it). Compared with q(s0) (A122442) and the true best.
 # theta = x*/c, the share of the gap (1 - q = (1 - 3^n/2^L)(1 - theta)). Integers and rationals only.
-# Usage, from Lean/best_of_order with b122442.txt (OEIS A122442) there: python3 scripts/boo_cand.py N0 N1
+# Usage, from Lean/best_of_order (the smallest starts from data/b122442.txt, OEIS A122442): python3 scripts/boo_cand.py N0 N1
 # (N1 <= 124; the bests from data/b402443_347.txt)
 import sys
 from fractions import Fraction as F
@@ -25,7 +25,7 @@ def cid(w, n):                                   # class id of an Order-n word, 
     return r if r > 1 else r + 2 ** len(w)
 def theta(c, n):
     L = p2(n); return F(2 ** L * T(c, L) - 3 ** n * c, c * (2 ** L - 3 ** n))
-A = {int(a): int(b) for a, b in (l.split() for l in open('b122442.txt'))}
+A = {int(a): int(b) for a, b in (l.split() for l in open('data/b122442.txt'))}
 ref = {int(a): int(b) for a, b in (l.split() for l in open('data/b402443_347.txt') if l.strip() and l[0] != '#') if 1 <= int(a) <= 124}
 N0, N1 = int(sys.argv[1]), int(sys.argv[2]); win = [0, 0, 0]
 for n in range(N0, N1 + 1):
