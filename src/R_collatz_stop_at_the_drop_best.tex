@@ -934,8 +934,11 @@ program over a finite set.
 
 \begin{lemma}[Dinkelbach~\cite{Dinkelbach1967}]
 \label{lem:dinkelbach}
-\termhere{lambdastar}Let \keysym{lambdastar}{$\lambda^\ast$} be the largest $\rho/c$ and $F(\lambda) = \max(\rho - \lambda c)$ over the words of
-Order $n$. Then $F$ is strictly decreasing, $F(\lambda^\ast) = 0$, and from any class id the step
+\termhere{lambdastar}Let \keysym{lambdastar}{$\lambda^\ast$} be the largest $\rho/c$ over the words of Order $n$, and
+\[
+F(\lambda) = \max_{w} \,(\rho - \lambda c),
+\]
+the maximum over the same words. Then $F$ is strictly decreasing, $F(\lambda^\ast) = 0$, and from any class id the step
 $\lambda \mapsto \rho/c$ of an argmax of $\rho - \lambda c$ reaches $\lambda^\ast$ in finitely many steps.
 \end{lemma}
 \begin{proof}
@@ -945,6 +948,24 @@ Let $\lambda = \rho_0/c_0 \le \lambda^\ast$ be the ratio of some class id. Then 
 $F(\lambda) = 0$, then $\lambda = \lambda^\ast$. Otherwise an argmax has $\rho - \lambda c > 0$, so its
 $\rho/c > \lambda$: the steps strictly increase within a finite set, and stop at $\lambda^\ast$.
 \end{proof}
+
+\begin{remark}[The steps]
+\label{rem:steps}
+In Order $6$ (Remark~\ref{rem:order6}) one step suffices from either end. From the smallest start,
+$\lambda = 697/287$ gives
+\[
+F(697/287) = \frac{1024}{7} > 0,
+\]
+with the argmax $347$, and $F(989/347) = 0$; from the wall word, $\lambda = 1085/507$ gives the same
+argmax. Order $13$ ($8045$ words) takes four steps from its wall word,
+\[
+941\,051 \to 40\,699 \to 6\,427 \to 319 \to 159,
+\]
+and none from its smallest start $159$, which is the best. For Orders $2$ to $16$ the smallest start
+needs at most one step (Orders $6$, $8$, $14$), the wall word at most four (Orders $13$, $16$)
+(\texttt{boo\_count.py}, all words, an argmax tie taken at the smaller class id). This is the reason to
+seed with $s_0$ (Remark~\ref{rem:seeds}).
+\end{remark}
 
 \begin{lemma}[The walk]
 \label{lem:walk}
@@ -1058,6 +1079,7 @@ could beat it.
 \end{proof}
 
 \begin{remark}[Seeds]
+\label{rem:seeds}
 \termhere{seed}The smallest start of Order $n$, \keysym{seed}{$s_0$} $= a(n+1)$ of A122442, is the best itself for $98$ of the Orders $1$
 to $124$ (and for $285$ of the Orders $1$ to $347$). A guess from the previous Order (its $\theta$, halved until a word beats it) is exact as
 well but costs about twice the nodes, and certified candidates built from the bests of earlier Orders
