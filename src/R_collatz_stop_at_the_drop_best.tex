@@ -661,8 +661,12 @@ A402443\index{OEIS!A402443} & the bests of the Orders (Appendix~\ref{app:table})
 $T(x) = x/2$ for even $x$, $T(x) = (3x+1)/2$ for odd $x$. \termhere{word}The \keyterm{word}{word} of $x$ is its parity
 sequence $e_0 e_1 e_2 \ldots$, $e_\ell = T^\ell(x) \bmod 2$. \termhere{p2}Let \keysym{p2}{$p_2(n)$} be the bit length of $3^n$,
 so $2^{p_2(n)-1} < 3^n < 2^{p_2(n)}$. A word of length $L$ with $n$ letters $1$ is
-\emph{admissible} of \emph{Order} $n$ if $3^{j} > 2^{\ell}$ for each nonempty proper prefix, with $j$ ones
-among its $\ell$ letters, and $3^n < 2^L$. Then $L = p_2(n)$ and the last letter is $0$: the prefix of
+\emph{admissible} of \emph{Order} $n$ if
+\[
+3^{j} > 2^{\ell} \quad\text{for each nonempty proper prefix ($j$ ones among its $\ell$ letters)},
+\qquad 3^n < 2^L.
+\]
+Then $L = p_2(n)$ and the last letter is $0$: the prefix of
 length $L-1$ has $3^{j} > 2^{L-1}$; were the last letter $1$, then $j = n - 1$ and
 $3^n = 3 \cdot 3^{n-1} > 3 \cdot 2^{L-1} > 2^L$. So $j = n$ and $2^{L-1} < 3^n < 2^L$.
 \end{definition}
@@ -706,8 +710,11 @@ modulo $2^L$.
 Every $x > 1$ of the class of $w$ has $T^L(x)/x \le T^L(c)/c$, with equality only for $x = c$.
 \end{lemma}
 \begin{proof}
-By Lemma~\ref{lem:affine}, $T^L(x)/x = 3^n/2^L + \rho/(2^L x)$ with the same $\rho > 0$ for the whole
-class, and $x \ge c$ by the choice of $c$.
+By Lemma~\ref{lem:affine},
+\[
+\frac{T^L(x)}{x} = \frac{3^n}{2^L} + \frac{\rho}{2^L x}
+\]
+with the same $\rho > 0$ for the whole class, and $x \ge c$ by the choice of $c$.
 \end{proof}
 
 \begin{definition}[Best of the Order]
@@ -721,6 +728,39 @@ The words of all Orders form one binary tree (Figure~\ref{fig:tree}); \cite[Ch.~
 For Order $1$ the residue is $1$ and $c = 5$; for $n \ge 2$ the residue of an admissible word is
 more than $1$ (the word of $1$ is $\bw{1010}\ldots$, and $\bw{10}$ is not a prefix of a word of Order
 $n \ge 2$), so $c = r < 2^L$.
+\end{remark}
+
+\begin{remark}[Order $6$]
+\label{rem:order6}
+Order $6$ has $L = p_2(6) = 10$ and $12$ words (Figure~\ref{fig:tree}). The word \bw{1101110100} has its
+ones at the letters $0, 1, 3, 4, 5, 7$, so
+\[
+\rho = 3^5 + 3^4\cdot 2 + 3^3\cdot 2^3 + 3^2\cdot 2^4 + 3\cdot 2^5 + 2^7 = 989.
+\]
+Its class id is $c = 347$ (Lemma~\ref{lem:congruence}), and
+\[
+3^6\cdot 347 + 989 = 253\,952 = 2^{10}\cdot 248,
+\]
+so $d = 248$ and the drop ratio is $248/347$. By Lemma~\ref{lem:member} the best of the Order is the
+word with the largest $\rho/c$: a large constant (ones late) against a small class id. The wall word
+\bw{1101101100} (Chapter~\ref{sec:wall}) has the largest constant, $\rho = 1085$, with $c = 507$; the
+word \bw{1111101000} has the smallest class id, $c = 287$ (A122442), with $\rho = 697$. Neither wins:
+\[
+\frac{989}{347} > \frac{697}{287} > \frac{1085}{507},
+\]
+and these three lead the twelve words of Order $6$; the best is $347$ (\texttt{boo\_count.py}).
+\end{remark}
+
+\begin{remark}[The number of words]
+\label{rem:count}
+Counted by ones and letters, the number of words of Order $n$ is
+OEIS A100982\index{OEIS!A100982}~\cite{OEIS_A100982}:
+\[
+1,\ 1,\ 2,\ 3,\ 7,\ 12,\ 30,\ 85,\ 173,\ 476 \qquad (n = 1, \ldots, 10).
+\]
+Order $124$ has a number of words of $53$ digits, Order $347$ one of $154$ digits
+(\texttt{boo\_count.py}, exact). So the searches of Chapter~\ref{sec:search} never list the words of an
+Order: they stop at a window on the class ids.
 \end{remark}
 
 \begin{remark}[Ties]
@@ -743,7 +783,8 @@ depth-first search of the words with the window of the best finds none for Order
 \boxhere{p2}$p_2(n)$\index{p2@\termlink{p2}{$p_2(n)$}|textbf} & the bit length of $3^n$: the length $L$ of a word of Order $n$. \\
 \boxhere{rho}constant $\rho$\index{constant rho@\termlink{rho}{constant $\rho$}|textbf} & $\sum_q 3^{n-q}2^{k_q}$ over the ones of a word; $2^L T^L(x) = 3^n x + \rho$ on its class. \\
 \boxhere{dropvalue}drop value $d$\index{drop value@\termlink{dropvalue}{drop value $d$}|textbf} & $T^L(c)$, the value of the class id at its drop. \\
-\boxhere{tie}tie\index{tie@\termlink{tie}{tie}|textbf} & two class ids of one Order with the same drop ratio.
+\boxhere{tie}tie\index{tie@\termlink{tie}{tie}|textbf} & two class ids of one Order with the same drop ratio. \\
+A100982\index{OEIS!A100982} & the number of words of each Order.
 \end{wordbox}
 
 %------------------------------------------------------------------------------------------------
@@ -1268,6 +1309,8 @@ $n$ & $c$ & $T^L(c)$ & & $n$ & $c$ & $T^L(c)$ & \\
   \textbf{13} (1967), 492--498.
 \bibitem{Everett1977} C.~J. Everett, \emph{Iteration of the number-theoretic function
   $f(2n) = n$, $f(2n+1) = 3n+2$}, Adv.\ Math.\ \textbf{25} (1977), 42--45.
+\bibitem{OEIS_A100982} OEIS Foundation Inc., \emph{Sequence A100982},
+  \url{https://oeis.org/A100982}.
 \bibitem{OEIS_A122442} OEIS Foundation Inc., \emph{Sequence A122442},
   \url{https://oeis.org/A122442}.
 \bibitem{OEIS_A402443} OEIS Foundation Inc., \emph{Sequence A402443},

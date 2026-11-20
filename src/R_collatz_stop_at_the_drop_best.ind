@@ -33,6 +33,7 @@
   \indexspace
 
   \item OEIS
+    \subitem A100982, 7
     \subitem A122442, 4, 5
     \subitem A402443, 5
   \item \termlink{order}{Order $n$}, \textbf{5}
