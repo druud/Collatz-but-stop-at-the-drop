@@ -6,6 +6,7 @@
 // Compile: mkdir -p _tmp; g++ -O3 -std=c++17 scripts/paper_numbers_slow.cpp -o _tmp/paper_numbers_slow \
 //            -I/opt/homebrew/include -L/opt/homebrew/lib -lgmpxx -lgmp
 // Run from Lean/best_of_order:  _tmp/paper_numbers_slow [FILE]
+//   or _tmp/paper_numbers_slow --k0=N: Table 1 for Orders 22..N (N <= 25; about 5 minutes for 25), and nothing else.
 //   FILE: the b-file of A122442 (a(n+1) = the smallest start of Order n), data/b122442.txt by default;
 //   if it cannot be read, only Table 1 is checked. One thread, about 2 minutes; memory: the heap of the search, about 2.4 GB at its peak.
 // Integers only: Table 1 in u64 / i128 from exact tables (Orders to 21, checked), the search in GMP.
@@ -173,6 +174,30 @@ static std::pair<mpz_class, u64> boo(int n, const mpz_class &seed, const mpz_cla
 int main(int argc, char **argv) {
     P3[0] = 1; for (int i = 1; i <= 40; i++) P3[i] = P3[i - 1] * 3;     // 3^40 < 2^64
     P2[0] = 1; for (int i = 1; i <= 63; i++) P2[i] = P2[i - 1] * 2;
+
+    if (argc > 1 && std::string(argv[1]).rfind("--k0=", 0) == 0) {   // Table 1 beyond Order 21 (not in the default run: long)
+        int N = std::atoi(argv[1] + 5);
+        if (N < 22 || N > 25) { std::cerr << "--k0=N needs 22 <= N <= 25 (i128 sums overflow above 25)\n"; return 2; }
+        std::map<int, std::string> bf;
+        std::ifstream fb("data/b402443_347.txt");
+        for (std::string line; std::getline(fb, line);) {
+            std::istringstream is(line); int k; std::string v;
+            if (line.empty() || line[0] == '#') continue;
+            if (is >> k >> v) bf[k] = v;
+        }
+        const int K0b[4] = {25, 24, 29, 29};   // Table 1, Orders 22..25
+        std::cout << "--- Chapter 7: Table 1, k0 for Orders 22.." << N << " (and L/2 < k0 < 4L/5)" << std::endl;
+        for (int n = 22; n <= N; n++) {
+            int k = k0_of(n), L = p2(n);
+            std::cout << "     Order " << n << ": " << nwords << " words, best " << cb << ", L = " << L << ", k0 = " << k
+                      << " (" << (long)secs() << " s)" << std::endl;
+            check("Order " + std::to_string(n) + ": the best equals the b-file of A402443", std::to_string(cb), bf[n]);
+            check("Table 1: k0 for Order " + std::to_string(n), std::to_string(k), std::to_string(K0b[n - 22]));
+            check("Order " + std::to_string(n) + ": L/2 < k0 < 4L/5", (L < 2 * k && 5 * k < 4 * L) ? "yes" : "no", "yes");
+        }
+        std::cout << "--- " << nok << " OK, " << ndiff << " DIFF (" << (long)secs() << " s)" << std::endl;
+        return ndiff ? 1 : 0;
+    }
 
     std::cout << "--- Chapter 7: backward ranking (Table 1)" << std::endl;
     const int K0[20] = {1, 1, 3, 2, 6, 4, 8, 7, 9, 9, 12, 13, 19, 14, 16, 16, 18, 24, 21, 23};

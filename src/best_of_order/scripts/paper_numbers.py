@@ -189,7 +189,7 @@ else:
     skip('seeds as bests (98, 285), windows of Orders 348..399, theta(s0)/theta(best)', 'needs the b-file of A122442')
 
 print('--- Chapter 7: backward ranking (Table 1)')
-K0 = dict(zip(range(2, 22), [1, 1, 3, 2, 6, 4, 8, 7, 9, 9, 12, 13, 19, 14, 16, 16, 18, 24, 21, 23]))
+K0 = dict(zip(range(2, 26), [1, 1, 3, 2, 6, 4, 8, 7, 9, 9, 12, 13, 19, 14, 16, 16, 18, 24, 21, 23, 25, 24, 29, 29]))
 def k0(n, ws):
     L = p2(n); cb, rb = max(((c, r) for c, r, d, w in ws), key=lambda t: (F(t[1], t[0]), -t[0]))
     def sums(c, w):                                          # c_best * S_k for k = 1..L
@@ -209,10 +209,10 @@ def k0(n, ws):
     return last + 1
 got = {n: k0(n, WL[n]) for n in WL}
 top = 16
-skip('Table 1, Orders 17..21', 'in paper_numbers_slow.cpp')
+skip('Table 1, Orders 17..21', 'in paper_numbers_slow.cpp (22..25: its --k0=25)')
 check('Table 1: k0 for Orders 2..%d' % top, [got[n] for n in range(2, top + 1)], [K0[n] for n in range(2, top + 1)])
-check('Table 1: L for Orders 2..21', [p2(n) for n in range(2, 22)], [4, 5, 7, 8, 10, 12, 13, 15, 16, 18, 20, 21, 23, 24, 26, 27, 29, 31, 32, 34])
-check('Table 1 as printed: L/2 < k0 < 4L/5 for Orders 15..21', all(p2(n) < 2 * K0[n] and 5 * K0[n] < 4 * p2(n) for n in range(15, 22)), True)
+check('Table 1: L for Orders 2..25', [p2(n) for n in range(2, 26)], [4, 5, 7, 8, 10, 12, 13, 15, 16, 18, 20, 21, 23, 24, 26, 27, 29, 31, 32, 34, 35, 37, 39, 40])
+check('Table 1 as printed: L/2 < k0 < 4L/5 for Orders 15..25', all(p2(n) < 2 * K0[n] and 5 * K0[n] < 4 * p2(n) for n in range(15, 26)), True)
 check('Order 14: k0 and L', (got[14], p2(14)), (19, 23))
 
 print('--- Chapter 7: merging trajectories')

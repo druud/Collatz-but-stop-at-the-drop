@@ -8,7 +8,8 @@ import Mathlib.Tactic.LinearCombination
   constant of the wall word (`window`). The paper states it for the drop ratio drop(x)/x of a class id; here the ratio is b/a, stated as b x < a T^L(x), so a may be any
   natural number; with b/a the ratio of a class id of the Order, this is the window of the search.
   With the lower wall rho ≥ 3^n - 2^n the window of a start y is at most R(n) y / (3^n - 2^n)
-  (`window_seed`); with R(n) ≤ n 3^(n-1) that gives 2x < n y for n ≥ 3 (`window_seed_half`).
+  (`window_seed`); with R(n) ≤ n 3^(n-1) that gives 2x < n y for n ≥ 3 (`window_seed_half`), and the share of s_0 is at least 2/n of
+  the best's (`share_ratio_ge`).
 -/
 
 namespace BestOfOrder
@@ -87,6 +88,29 @@ theorem window_seed_half {s t : List Bool} (hs : Admissible s) (ht : Admissible 
       _ < n * 3 ^ (n - 1) * y := by omega
       _ = n * y * 3 ^ (n - 1) := by ring
   exact Nat.lt_of_mul_lt_mul_right h4
+
+/-- Corollary 6.2, the shares: for a member y of a class of Order n ≥ 3 (word s) and a member x ≥ y
+    of a class of Order n (word t), 2 rho_t y ≤ n rho_s x. With y = s_0 and x = c*:
+    θ(s_0)/θ(c*) = rho_0 c*/(rho* s_0) ≥ 2/n. -/
+theorem share_ratio_ge {s t : List Bool} (ht : Admissible t) (ho : order t = order s)
+    (hn : 3 ≤ order s) {x y : ℕ} (hxy : y ≤ x) :
+    2 * rho t * y ≤ order s * rho s * x := by
+  have hR := rhoMax_le_mul (order s)
+  have hw := rho_le_wall ht
+  rw [ho] at hw
+  have hlow := three_pow_le_rho_add' s
+  have h23 := two_pow_le_three_pow_pred hn
+  set n := order s
+  have h3 : 3 ^ n = 3 * 3 ^ (n - 1) := by
+    rw [← pow_succ']
+    congr 1
+    omega
+  have h1 : 2 * rho t ≤ n * rho s := by
+    calc 2 * rho t ≤ 2 * (n * 3 ^ (n - 1)) := by omega
+      _ = n * (2 * 3 ^ (n - 1)) := by ring
+      _ ≤ n * rho s := Nat.mul_le_mul_left _ (by omega)
+  calc 2 * rho t * y ≤ n * rho s * y := Nat.mul_le_mul_right _ h1
+    _ ≤ n * rho s * x := Nat.mul_le_mul_left _ hxy
 
 /-- Remark 2.10 (ties): two starts with the same word length L and Order, x of word s and y of word t,
     with equal ratios T^L(x)/x = T^L(y)/y, have rho s * y = rho t * x. -/
