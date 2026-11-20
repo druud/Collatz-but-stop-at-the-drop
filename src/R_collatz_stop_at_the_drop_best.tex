@@ -20,6 +20,7 @@
   \Hy@raisedlink{\hyper@anchorstart{box:#1}\hyper@anchorend}}
 \makeatother
 \newcommand{\termlink}[2]{\hyperlink{term:#1}{#2}}
+\newcommand{\oeisidx}[1]{\index{OEIS!#1@\protect\hyperlink{cite.OEIS_#1}{#1}}}
 % A key term where it is introduced: italic, with a link to its entry in the box
 % of its chapter (\boxhere)
 % a key term on a light blue background (user, 20 Nov 2026)
@@ -612,7 +613,7 @@
   \Large The start words with the highest drop ratio}
 \author{\textbf{Ruud H.G. van Tol}}
 \date{\begin{tikzpicture}\dropturnfig\end{tikzpicture}\\[5ex]
-  \textbf{Draft (41)}\\[8ex]  % the number of commits of this .tex: one up with each committed change
+  \textbf{Draft (42)}\\[8ex]  % the number of commits of this .tex: one up with each committed change
   {\small\copyright\ 2026 Ruud H.G. van Tol. Licensed under \href{https://creativecommons.org/licenses/by/4.0/}{CC BY 4.0}.}
   % DOI line after the Zenodo upload
 }
@@ -673,8 +674,8 @@ $w$ without their final $0$'s.
 \end{mainthm}
 
 \begin{maincomp}[The bests; Chapter~\ref{sec:search}, Appendix~\ref{app:table}]
-The bests of Orders $1$ to $347$ are computed and certified (OEIS A402443~\cite{OEIS_A402443}). For $285$ of the Orders $1$ to
-$347$ the best is the smallest start of its Order (OEIS A122442); at the others the $\theta$ of the smallest start
+The bests of Orders $1$ to $347$ are computed and certified (OEIS A402443\oeisidx{A402443}~\cite{OEIS_A402443}). For $285$ of the Orders $1$ to
+$347$ the best is the smallest start of its Order (OEIS A122442\oeisidx{A122442}); at the others the $\theta$ of the smallest start
 is more than $1/4$ of the best's (smallest at Order $272$).
 \end{maincomp}
 
@@ -686,7 +687,7 @@ $\rho/(2^L - 3^n)$, is Böhm and Sontacchi's~\cite[Prop.~5]{BohmSontacchi1978} a
 and over the rationals with odd denominator, Lagarias's~\cite[Thm.~2.1]{Lagarias1990}. The parametric method for
 fractional programs is Dinkelbach's~\cite{Dinkelbach1967}; accelerated versions are in
 \cite{DadushKNV2021} and~\cite{ChenZhengXia2025}. The smallest start of each Order is OEIS
-A122442~\cite{OEIS_A122442}. The admissible words, their tree and the names used here are those of
+A122442\oeisidx{A122442}~\cite{OEIS_A122442}. The admissible words, their tree and the names used here are those of
 the series this paper stands beside~\cite{Paper1,Paper2,Paper3}. As far as we know, the
 question of the best of the Order is new, and so are the share and the least point of the cycle in
 Theorem~A, Theorems~B and~C, and the table of Computation~D.
@@ -720,7 +721,7 @@ $x^\ast = \rho/(2^L - 3^n)$, the strict minimum of its own rational cycle, and t
 with the largest \fwdterm{share}{share} $\theta = x^\ast/c$. Since $\rho$ is at most the constant \fwdsym{R}{$R(n)$} of the \fwdterm{wallword}{wall word}
 (Chapter~\ref{sec:wall}), a start can only win inside a \fwdterm{window}{window} (Theorem~\ref{thm:window}); this turns
 the question into two exact searches, a \fwdterm{bestfirst}{best-first search} over the word tree and a \fwdterm{scan}{scan} over the starts
-in increasing order, both seeded with the \fwdterm{seed}{smallest start} of the Order (OEIS A122442\index{OEIS!A122442}).
+in increasing order, both seeded with the \fwdterm{seed}{smallest start} of the Order (OEIS A122442\oeisidx{A122442}).
 
 \medskip
 As a fractional program the
@@ -772,8 +773,8 @@ kinds of colour blindness; each Order is also written as a number.}
 \boxhere{dropratio}drop ratio\index{drop ratio@\termlink{dropratio}{drop ratio}|textbf} & $T^L(x)/x$: how far a start falls at its drop; at least $3^n/2^L$. \\ \hline
 \boxhere{best}best of the Order\index{best of the Order@\termlink{best}{best of the Order}|textbf} & the class id of Order $n$ with the highest drop ratio: the one that falls the least. \\ \hline
 \boxhere{widthidentity}width identity\index{width identity@\termlink{widthidentity}{width identity}|textbf} & every class id $c > 1$ drops at the end of its word (Terras's coefficient stopping time conjecture); it holds for Orders up to $10\,781\,273$~\cite{Paper2}. \\ \hline
-A122442\index{OEIS!A122442} & the smallest start of each Order. \\ \hline
-A402443\index{OEIS!A402443} & the bests of the Orders (Appendix~\ref{app:table}).
+A122442\oeisidx{A122442} & the smallest start of each Order. \\ \hline
+A402443\oeisidx{A402443} & the bests of the Orders (Appendix~\ref{app:table}).
 \end{wordbox}
 
 %------------------------------------------------------------------------------------------------
@@ -867,7 +868,7 @@ Its class id is $c = 347$ (Lemma~\ref{lem:congruence}), and
 so $d = 248$ and the drop ratio is $248/347$. By Lemma~\ref{lem:member} the best of the Order is the
 word with the largest $\rho/c$: a large constant (ones late) against a small class id. The wall word
 \bw{1101101100} (Chapter~\ref{sec:wall}) has the largest constant, $\rho = 1085$, with $c = 507$; the
-word \bw{1111101000} has the smallest class id, $c = 287$ (A122442), with $\rho = 697$. Neither wins:
+word \bw{1111101000} has the smallest class id, $c = 287$ (A122442\oeisidx{A122442}), with $\rho = 697$. Neither wins:
 \[
 \frac{989}{347} > \frac{697}{287} > \frac{1085}{507},
 \]
@@ -877,7 +878,7 @@ and these three lead the twelve words of Order $6$; the best is $347$ (\texttt{b
 \begin{remark}[The number of words]
 \label{rem:count}
 Counted by ones and letters, the number of words of Order $n$ is
-OEIS A100982\index{OEIS!A100982}~\cite{OEIS_A100982}:
+OEIS A100982\oeisidx{A100982}~\cite{OEIS_A100982}:
 \[
 1,\ 1,\ 2,\ 3,\ 7,\ 12,\ 30,\ 85,\ 173,\ 476 \qquad (n = 1, \ldots, 10).
 \]
@@ -907,7 +908,7 @@ depth-first search of the words with the window of the best finds none for Order
 \boxhere{rho}constant $\rho$\index{constant rho@\termlink{rho}{constant $\rho$}|textbf} & $\sum_q 3^{n-q}2^{k_q}$ over the ones of a word; $2^L T^L(x) = 3^n x + \rho$ on its class. \\ \hline
 \boxhere{dropvalue}drop value $d$\index{drop value@\termlink{dropvalue}{drop value $d$}|textbf} & $T^L(c)$, the value of the class id at its drop. \\ \hline
 \boxhere{tie}tie\index{tie@\termlink{tie}{tie}|textbf} & two class ids of one Order with the same drop ratio. \\ \hline
-A100982\index{OEIS!A100982} & the number of words of each Order.
+A100982\oeisidx{A100982} & the number of words of each Order.
 \end{wordbox}
 
 %------------------------------------------------------------------------------------------------
@@ -1226,12 +1227,14 @@ Let $s_0$ be the smallest class id above $1$ of Order $n$, with constant $\rho_0
 s_0 \;\le\; c^\ast \;\le\; \frac{R(n)}{\rho_0}\,s_0 \;\le\; \frac{R(n)}{3^n - 2^n}\,s_0 ,
 \qquad\text{and}\qquad c^\ast < \frac{n}{2}\,s_0 \quad (n \ge 3).
 \]
+For $n \ge 3$ also $\theta(s_0) \ge 2\,\theta(c^\ast)/n$.
 \end{corollary}
 \begin{proof}
 If $c^\ast \ne s_0$, its ratio is above that of $s_0$ (a tie would make $s_0$ the best), and
 Theorem~\ref{thm:window} with $g/h$ the ratio of $s_0$ has $2^L g - 3^n h = \rho_0$, so
 $c^\ast \rho_0 < R(n)\,s_0$. Then $\rho_0 \ge 3^n - 2^n$ and $R(n) \le n\,3^{n-1}$ by
-Proposition~\ref{prop:lowerwall}, and $2\cdot 3^{n-1} \le 3^n - 2^n$ for $n \ge 3$.
+Proposition~\ref{prop:lowerwall}, and $2\cdot 3^{n-1} \le 3^n - 2^n$ for $n \ge 3$. The shares:
+$\theta(s_0)/\theta(c^\ast) = \rho_0\,c^\ast/(\rho^\ast s_0) \ge \rho_0/R(n) \ge 2/n$ by the same two bounds and $c^\ast \ge s_0$.
 \end{proof}
 
 \begin{remark}[The size of that range]
@@ -1266,7 +1269,7 @@ could beat it.
 
 \begin{remark}[Seeds]
 \label{rem:seeds}
-\termhere{seed}The smallest start of Order $n$, \keysym{seed}{$s_0$} $= a(n+1)$ of A122442, is the best itself for $98$ of the Orders $1$
+\termhere{seed}The smallest start of Order $n$, \keysym{seed}{$s_0$} $= a(n+1)$ of A122442\oeisidx{A122442}, is the best itself for $98$ of the Orders $1$
 to $124$ (and for $285$ of the Orders $1$ to $347$). A guess from the previous Order (its $\theta$, halved until a word beats it) is exact as
 well but costs about twice the nodes, and certified candidates built from the bests of earlier Orders
 beat $s_0$ only at Orders $6$, $8$ and $107$ (Appendix~\ref{app:failed}).
@@ -1316,19 +1319,24 @@ $25/100$ and $26/100$), then Orders $256$, $91$, $268$ and $221$; equality of $s
 \begin{observation}[Backward ranking]
 At $\lambda = \lambda^\ast$ let $S_k = \sum_{\ell=L-k}^{L-1} 2^\ell \delta_\ell$ be the sum of the walk over the
 last $k$ letters. \termhere{backward}The best is the strict maximum of $S_k$ over all words of its Order for every
-$k \ge$ \keysym{backward}{$k_0$}, with $k_0$ in Table~\ref{tab:k0} (Orders $2$ to $21$, all words, \texttt{dinkel\_suffix.py}).
-For Orders $15$ to $21$, $L/2 < k_0 < 4L/5$; Order $14$ needs $19$ of its $23$ letters.
+$k \ge$ \keysym{backward}{$k_0$}, with $k_0$ in Table~\ref{tab:k0} (Orders $2$ to $21$, all words, \texttt{dinkel\_suffix.py}; $22$ to $25$, \texttt{paper\_numbers\_slow --k0=25}).
+For Orders $15$ to $25$, $L/2 < k_0 < 4L/5$; Order $14$ needs $19$ of its $23$ letters.
 \end{observation}
 
 \begin{herefloat}{table}
 \[
 \setlength{\extrarowheight}{1pt}
-\begin{array}{|r||r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|}
+\begin{array}{|r||r|r|r|r|r|r|r|r|r|r|r|r|}
 \hline
-n & 2&3&4&5&6&7&8&9&10&11&12&13&14&15&16&17&18&19&20&21\\
+n & 2&3&4&5&6&7&8&9&10&11&12&13\\
 \hline
-L & 4&5&7&8&10&12&13&15&16&18&20&21&23&24&26&27&29&31&32&34\\
-k_0 & 1&1&3&2&6&4&8&7&9&9&12&13&19&14&16&16&18&24&21&23\\
+L & 4&5&7&8&10&12&13&15&16&18&20&21\\
+k_0 & 1&1&3&2&6&4&8&7&9&9&12&13\\
+\hline\hline
+n & 14&15&16&17&18&19&20&21&22&23&24&25\\
+\hline
+L & 23&24&26&27&29&31&32&34&35&37&39&40\\
+k_0 & 19&14&16&16&18&24&21&23&25&24&29&29\\
 \hline
 \end{array}
 \]
@@ -1348,9 +1356,9 @@ more often than other starts (Appendix~\ref{app:failed}).
 \subsection*{Open questions}
 \begin{enumerate}\setlength{\itemsep}{0.2ex}
 \item Does the best of an Order ever have a tie (Remark~\ref{rem:ties}; none for Orders $1$ to $347$)?
-\item Is $\theta(s_0)/\theta(\text{best}) > 1/4$ for every Order, or bounded below at all?
+\item Is $\theta(s_0)/\theta(\text{best}) > 1/4$ for every Order, or bounded below by a constant at all (it is at least $2/n$, Corollary~\ref{cor:bestrange})?
 \item Is the smallest start the best for infinitely many Orders ($285$ of the first $347$)?
-\item Does $L/2 < k_0 < 4L/5$ hold beyond Order $21$ (Table~\ref{tab:k0})?
+\item Does $L/2 < k_0 < 4L/5$ hold beyond Order $25$ (Table~\ref{tab:k0})?
 \item At the true maxima, does the drop side of the meeting split keep a bounded number of words
   ($1$ to $3$ measured)? A search on the split would then be a third, independent one.
 \item The width identity itself (Remark~\ref{rem:width}).
@@ -1398,7 +1406,7 @@ Theorem~\ref{thm:split} (C) & \lean{split\_identity}, \lean{mem\_split\_iff}, \l
  & \lean{admissible\_split\_iff}, \lean{prefix\_pow\_of\_admissible} \\
 Theorem~\ref{thm:window} (B) & \lean{window}, \lean{window\_prefix} \\
 Proposition~\ref{prop:lowerwall} & \lean{rho\_eq\_lower\_iff}, \lean{rhoMax\_le\_mul} \\
-Corollary~\ref{cor:bestrange} & \lean{window\_seed}, \lean{window\_seed\_half} \\
+Corollary~\ref{cor:bestrange} & \lean{window\_seed}, \lean{window\_seed\_half}, \lean{share\_ratio\_ge} \\
 Remark~\ref{rem:ties} & \lean{tie\_rho}, \lean{tie\_dvd} \\
 Remark~\ref{rem:cert} & \lean{cert\_rows} \\
 \hline
@@ -1453,7 +1461,7 @@ One line each, with the reason (measured; scripts in \texttt{src/best\_of\_order
 \section{The bests}
 \label{app:table}
 The best $c$ of Order $n$ and its drop value $T^L(c)$; $\ast$: $c$ differs from the smallest start
-$a(n+1)$ of A122442. The column $c$ is OEIS A402443~\cite{OEIS_A402443} (with $a(0) = 2$ for Order $0$).
+$a(n+1)$ of A122442\oeisidx{A122442}. The column $c$ is OEIS A402443\oeisidx{A402443}~\cite{OEIS_A402443} (with $a(0) = 2$ for Order $0$).
 Table~\ref{tab:bests} lists Orders $1$ to $96$; for Orders $97$ to $347$ only the rows marked $\ast$ are listed (Table~\ref{tab:bests2}); all bests are in the b-file of
 A402443 and in the repository (\texttt{src/best\_of\_order/data/}), with a certificate file (\texttt{best\_cert\_347.txt}: $n$, $c$, $T^L(c)$
 and the window of Theorem~\ref{thm:window}).
@@ -1579,11 +1587,11 @@ $n$ & $c$ & $T^L(c)$ & & $n$ & $c$ & $T^L(c)$ & \\
   $f(2n) = n$, $f(2n+1) = 3n+2$}, Adv.\ Math.\ \textbf{25} (1977), 42--45.
 \bibitem{Lagarias1990} J.~C. Lagarias, \emph{The set of rational cycles for the $3x+1$ problem},
   Acta Arith.\ \textbf{56} (1990), 33--53.
-\bibitem{OEIS_A100982} OEIS Foundation Inc., \emph{Sequence A100982},
+\bibitem{OEIS_A100982} OEIS Foundation Inc., \emph{Sequence A100982}\oeisidx{A100982},
   \url{https://oeis.org/A100982}.
-\bibitem{OEIS_A122442} OEIS Foundation Inc., \emph{Sequence A122442},
+\bibitem{OEIS_A122442} OEIS Foundation Inc., \emph{Sequence A122442}\oeisidx{A122442},
   \url{https://oeis.org/A122442}.
-\bibitem{OEIS_A402443} OEIS Foundation Inc., \emph{Sequence A402443},
+\bibitem{OEIS_A402443} OEIS Foundation Inc., \emph{Sequence A402443}\oeisidx{A402443},
   \url{https://oeis.org/A402443}.
 \bibitem{OkabeIto2002} M.~Okabe and K.~Ito, \emph{Color Universal Design (CUD): how to make figures and
   presentations that are friendly to colorblind people}, 2002, \url{https://jfly.uni-koeln.de/color/}.

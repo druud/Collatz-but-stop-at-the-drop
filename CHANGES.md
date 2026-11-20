@@ -5,6 +5,12 @@ first. Version names (R_65a, R_66, ...) are the authors' own labels.
 
 ## After R_101 (20 November 2026)
 
+- The best paper, Draft (42): theta(s_0) >= 2 theta(c*)/n for
+  n >= 3 (Corollary 6.2; Lean `share_ratio_ge`); Table 1 extended to
+  Order 25 (`scripts/paper_numbers_slow --k0=25`), with
+  L/2 < k0 < 4L/5 for Orders 15 to 25; the OEIS A-numbers in the
+  index link to the References.
+
 - The best paper, Draft (41): the ceiling x* < t_n is proved for
   every Order and every word (Proposition 4.7; Lean
   `cyclePoint_lt_ceiling`), so one open question is closed; the index
