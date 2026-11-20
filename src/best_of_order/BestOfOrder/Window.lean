@@ -5,7 +5,7 @@ import Mathlib.Tactic.LinearCombination
 /-!
   The window (paper, Theorem B and Theorem 6.1). If a member x of the class of an admissible word
   of Order n has T^L(x)/x > b/a, then x (2^L b - 3^n a) < R(n) a, with R(n) = `rhoMax n` the
-  constant of the wall word (`window`). The ratio g/h of the paper is b/a here, stated as b x < a T^L(x), so a may be any
+  constant of the wall word (`window`). The paper states it for the drop ratio drop(x)/x of a class id; here the ratio is b/a, stated as b x < a T^L(x), so a may be any
   natural number; with b/a the ratio of a class id of the Order, this is the window of the search.
 -/
 
