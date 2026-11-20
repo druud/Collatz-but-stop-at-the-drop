@@ -6,11 +6,11 @@ import Mathlib.Algebra.BigOperators.Intervals
 
 /-!
   The congruence of the class, the walk, the tail bound and the window below a prefix
-  (paper, Lemma 2.4, Lemma 5.2, Corollary 3.3 and Theorem 6.1).
+  (paper, Lemma 2.4, Lemma 5.3, Corollary 3.3 and Theorem 6.1).
 
   * `congruence`: x ≡ -rho · 3^(-n) (mod 2^L) for every x of the class of a word.
-  * `rho_eq_sum`: rho = Σ_l e_l 3^(n - w_l) 2^l, with n - w_l the ones after letter l.
-  * `walk`: rho - λ c = Σ_l 2^l (e_l 3^(n - w_l) - λ t_l), t_l the bits of c < 2^L.
+  * `rho_eq_sum`: rho = Σ_l e_l 3^(n - q_l) 2^l, with n - q_l the ones after letter l.
+  * `walk`: rho - λ c = Σ_l 2^l (e_l 3^(n - q_l) - λ t_l), t_l the bits of c < 2^L.
   * `tail_bound`: below a prefix p (j ones), rho ≤ 3^(n-j) rho_p + (R(n) - 3^(n-j) R(j)), stated
     without subtraction; R(n) - 3^(n-j) R(j) is the sum of the wall terms of the ones after j.
   * `window_prefix`: the window for every member x ≥ r of the class below a prefix.
@@ -49,7 +49,7 @@ theorem rhoTerm_append {s : List Bool} (b : Bool) {l : ℕ} (hl : l < s.length) 
   rw [List.getD_append _ _ _ _ hl, List.drop_append_of_le_length (by omega), order_append, hb]
   split_ifs <;> ring
 
-/-- Lemma 5.2, the constant: rho = Σ_l e_l 3^(n - w_l) 2^l. -/
+/-- Lemma 5.3, the constant: rho = Σ_l e_l 3^(n - q_l) 2^l. -/
 theorem rho_eq_sum (s : List Bool) :
     rho s = ∑ l ∈ Finset.range s.length, rhoTerm s l := by
   induction s using List.reverseRecOn with
@@ -77,7 +77,7 @@ theorem mod_eq_sum_bits (c L : ℕ) :
   | succ L ih =>
     rw [Finset.sum_range_succ, ← ih, pow_succ, Nat.mod_mul]
 
-/-- Lemma 5.2, the walk: for c < 2^L, rho - λ c = Σ_l 2^l (e_l 3^(n - w_l) - λ t_l). -/
+/-- Lemma 5.3, the walk: for c < 2^L, rho - λ c = Σ_l 2^l (e_l 3^(n - q_l) - λ t_l). -/
 theorem walk (s : List Bool) {c : ℕ} (hc : c < 2 ^ s.length) (lam : ℚ) :
     (rho s : ℚ) - lam * c = ∑ l ∈ Finset.range s.length,
       2 ^ l * ((if s.getD l false then (3 : ℚ) ^ order (s.drop (l + 1)) else 0) -

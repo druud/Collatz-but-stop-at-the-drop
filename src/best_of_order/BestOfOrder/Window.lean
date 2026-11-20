@@ -31,7 +31,7 @@ theorem window {s : List Bool} (hA : Admissible s) {x a b : ℕ} (hx : tBits x s
   have h3 : (a : ℤ) * rho s ≤ a * rhoMax (order s) := mul_le_mul_of_nonneg_left hR (by positivity)
   nlinarith
 
-/-- Remark 2.8 (ties): two starts with the same word length L and Order, x of word s and y of word t,
+/-- Remark 2.10 (ties): two starts with the same word length L and Order, x of word s and y of word t,
     with equal ratios T^L(x)/x = T^L(y)/y, have rho s * y = rho t * x. -/
 theorem tie_rho {s t : List Bool} (hl : s.length = t.length) (ho : order s = order t) {x y : ℕ}
     (hx : tBits x s.length = s) (hy : tBits y t.length = t)
@@ -48,7 +48,7 @@ theorem tie_rho {s t : List Bool} (hl : s.length = t.length) (ho : order s = ord
   zify
   linear_combination -(y : ℤ) * h1' + (x : ℤ) * h2' + (2 : ℤ) ^ s.length * h'
 
-/-- Remark 2.8 (ties), the divisibility: a start x tying y (as in `tie_rho`, y > 0) is a multiple of
+/-- Remark 2.10 (ties), the divisibility: a start x tying y (as in `tie_rho`, y > 0) is a multiple of
     u = y / gcd(y, rho t). So the ties of the best c* are among the multiples of c*/gcd(c*, rho*)
     below the window (`window`, non-strict). -/
 theorem tie_dvd {s t : List Bool} (hl : s.length = t.length) (ho : order s = order t) {x y : ℕ}
