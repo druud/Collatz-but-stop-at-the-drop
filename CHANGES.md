@@ -3,6 +3,16 @@
 The changes to this repository since its first public release, newest
 first. Version names (R_65a, R_66, ...) are the authors' own labels.
 
+## After R_101 (20 November 2026)
+
+- The best paper, Draft (40): Corollary 6.2 in the abstract and in
+  Theorem B (c* < n s_0/2 for n >= 3), and both of its bounds in Lean
+  (`rhoMax_le_mul`, `window_seed_half`). `src/best_of_order/data/`
+  holds the b-file of A122442 (n = 1..400) that the searches used;
+  the scripts read it from there. `scripts/paper_numbers.py
+  --appendix` reruns the scripts of Appendix A against the text,
+  `--beam` also `boo_beam.py 3 8`.
+
 ## R_101 (20 November 2026)
 
 - Paper 3, draft: "Draft: R_101" (28 pages).

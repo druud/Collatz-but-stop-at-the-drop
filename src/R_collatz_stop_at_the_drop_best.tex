@@ -610,7 +610,7 @@
   \Large The start words with the highest drop ratio}
 \author{\textbf{Ruud H.G. van Tol}}
 \date{\begin{tikzpicture}\dropturnfig\end{tikzpicture}\\[5ex]
-  \textbf{Draft (39)}\\[8ex]  % the number of commits of this .tex: one up with each committed change
+  \textbf{Draft (40)}\\[8ex]  % the number of commits of this .tex: one up with each committed change
   {\small\copyright\ 2026 Ruud H.G. van Tol. Licensed under \href{https://creativecommons.org/licenses/by/4.0/}{CC BY 4.0}.}
   % DOI line after the Zenodo upload
 }
@@ -625,7 +625,7 @@ falls below itself with $n$ odd steps does so after $L = p_2(n)$ steps, where $p
 length of $3^n$ (for every $n$ checked, up to $10\,781\,273$; Terras's conjecture for all $n$); $n$ is the Order of the drop. Among the class ids of Order $n$ we ask which one
 falls the least: the start $c$ with the highest drop ratio $T^L(c)/c$, the \emph{best of the Order}.
 We show that the best is the word whose cycle point $x^\ast = \rho/(2^L - 3^n)$ lies
-closest to $c$, give a window outside which no start can win, split the search exactly into a
+closest to $c$, give a window outside which no start can win (below $n/2$ times the smallest start), split the search exactly into a
 start side and a drop side that meet in one congruence modulo $3^w$, and compute the bests of
 Orders $1$ to $347$, each with a certificate. The statements are formalized in Lean~4 with
 Mathlib, without \texttt{sorry}; the table of bests is script data.
@@ -655,7 +655,8 @@ $c > x^\ast$, and $x^\ast$ is the strict minimum of its own cycle.
 If a class id of Order $n$ has $T^L(c)/c > g/h > 3^n/2^L$, then $c\,(2^L g - 3^n h) < R(n)\,h$, where
 $R(n) = \sum_{q=1}^{n} 3^{n-q} 2^{p_2(q-1)-1}$ is the largest $\rho$ of the Order. Seeded with any
 class id of Order $n$, a scan over the starts in increasing order is complete once it passes the
-window of the best found; so is a best-first search over the word tree.
+window of the best found; so is a best-first search over the word tree. The best $c^\ast$ lies
+below $n\,s_0/2$ for $n \ge 3$, $s_0$ the smallest start of the Order (Corollary~\ref{cor:bestrange}).
 \end{mainthm}
 
 \begin{mainthm}[The meeting split; Chapter~\ref{sec:dinkelbach}]
@@ -742,7 +743,7 @@ $2/3$ as far as the one before it, and each $0$ between them doubles that. A dot
 \texttt{drop\_turn.html} of the repository draws this picture for the Orders $2$ to $14$, with other scalings.
 
 \medskip
-The Lean package, the scripts and the data (the bests with their certificates) are at
+The Lean package, the scripts and the data (the bests with their certificates, the smallest starts) are at
 \url{https://github.com/druud/Collatz-but-stop-at-the-drop}, in \texttt{src/best\_of\_order/}.
 The script \texttt{paper\_numbers.py} there recomputes the numbers of this paper and compares each
 with the text.
@@ -1388,7 +1389,8 @@ Lemma~\ref{lem:walk} & \lean{rho\_eq\_sum}, \lean{walk} \\
 Theorem~\ref{thm:split} (C) & \lean{split\_identity}, \lean{mem\_split\_iff}, \lean{mem\_of\_meet}, \lean{exists\_start\_iff} \\
  & \lean{admissible\_split\_iff}, \lean{prefix\_pow\_of\_admissible} \\
 Theorem~\ref{thm:window} (B) & \lean{window}, \lean{window\_prefix} \\
-Proposition~\ref{prop:lowerwall}, Corollary~\ref{cor:bestrange} & \lean{rho\_eq\_lower\_iff}, \lean{window\_seed} \\
+Proposition~\ref{prop:lowerwall} & \lean{rho\_eq\_lower\_iff}, \lean{rhoMax\_le\_mul} \\
+Corollary~\ref{cor:bestrange} & \lean{window\_seed}, \lean{window\_seed\_half} \\
 Remark~\ref{rem:ties} & \lean{tie\_rho}, \lean{tie\_dvd} \\
 Remark~\ref{rem:cert} & \lean{cert\_rows} \\
 \hline
