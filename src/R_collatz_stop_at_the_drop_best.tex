@@ -526,7 +526,7 @@
 \title{\textbf{Collatz, but stop at the drop}\\[0.5ex]
   \Large The start words with the highest drop ratio}
 \author{\textbf{Ruud H.G. van Tol}}
-\date{\textbf{Draft (31)}\\[8ex]  % the number of commits of this .tex: one up with each committed change
+\date{\textbf{Draft (32)}\\[8ex]  % the number of commits of this .tex: one up with each committed change
   {\small\copyright\ 2026 Ruud H.G. van Tol. Licensed under \href{https://creativecommons.org/licenses/by/4.0/}{CC BY 4.0}.}
   % DOI line after the Zenodo upload
 }
@@ -536,9 +536,9 @@
 
 \begin{center}\textbf{Abstract}\end{center}
 \begin{quotation}\small\noindent
-Under the map $T(x) = x/2$ for even $x$ and $(3x+1)/2$ for odd $x$, every odd start $x > 1$ that
-falls below itself does so after $L = p_2(n)$ steps, $n$ of them odd, where $p_2(n)$ is the bit
-length of $3^n$; $n$ is the Order of the drop. Among the class ids of Order $n$ we ask which one
+Under the map $T(x) = x/2$ for even $x$ and $(3x+1)/2$ for odd $x$, an odd start $x > 1$ that
+falls below itself with $n$ odd steps does so after $L = p_2(n)$ steps, where $p_2(n)$ is the bit
+length of $3^n$ (for every $n$ checked, up to $10\,781\,273$; Terras's conjecture for all $n$); $n$ is the Order of the drop. Among the class ids of Order $n$ we ask which one
 falls the least: the start $c$ with the highest drop ratio $T^L(c)/c$, the \emph{best of the Order}.
 We show that the best is the word whose cycle point $x^\ast = \rho/(2^L - 3^n)$ lies
 closest to $c$, give a window outside which no start can win, split the search exactly into a
@@ -569,7 +569,7 @@ $c > x^\ast$, and $x^\ast$ is the strict minimum of its own cycle.
 
 \begin{mainthm}[The window; Chapter~\ref{sec:search}]
 If a class id of Order $n$ has $T^L(c)/c > b/a > 3^n/2^L$, then $c\,(2^L b - 3^n a) < R(n)\,a$, where
-$R(n) = \sum_{m<n} 3^{n-1-m} 2^{p_2(m)-1}$ is the largest $\rho$ of the Order. Seeded with any
+$R(n) = \sum_{q=1}^{n} 3^{n-q} 2^{p_2(q-1)-1}$ is the largest $\rho$ of the Order. Seeded with any
 class id of Order $n$, a scan over the starts in increasing order is complete once it passes the
 window of the best found; so is a best-first search over the word tree.
 \end{mainthm}
@@ -594,12 +594,15 @@ is more than $1/4$ of the best's (smallest at Order $272$).
 \subsection*{What was known}
 The formula for $T^L$, the residue classes of the parity words and the density of the starts that
 drop are due to Terras~\cite{Terras1976} and Everett~\cite{Everett1977}; the largest $\rho$ of an
-Order and its unique word are Terras's~\cite[Thm.~2.6]{Terras1976}. The parametric method for
+Order and its unique word are Terras's~\cite[Thm.~2.6]{Terras1976}. The cycle point of a parity word,
+$\rho/(2^L - 3^n)$, is Böhm and Sontacchi's~\cite[Prop.~5]{BohmSontacchi1978} and, for every word
+and over the rationals with odd denominator, Lagarias's~\cite[Thm.~2.1]{Lagarias1990}. The parametric method for
 fractional programs is Dinkelbach's~\cite{Dinkelbach1967}; accelerated versions are in
 \cite{DadushKNV2021} and~\cite{ChenZhengXia2025}. The smallest start of each Order is OEIS
 A122442~\cite{OEIS_A122442}. The admissible words, their tree and the names used here are those of
 the series this paper stands beside~\cite{Paper1,Paper2,Paper3}. As far as we know, the
-question of the best of the Order and Theorems~A to~D are new.
+question of the best of the Order is new, and so are the share and the least point of the cycle in
+Theorem~A, and Theorems~B to~D.
 
 \ifpaper\clearpage\fi
 \tableofcontents
@@ -610,7 +613,8 @@ question of the best of the Order and Theorems~A to~D are new.
 \termhere{drop}Run the map $T(x) = x/2$ for even $x$, $T(x) = (3x+1)/2$ for odd $x$, from a start $x > 1$, and
 stop at the \keyterm{drop}{drop}: the first step at which the value falls below $x$. \termhere{admissible}\termhere{order}Even starts drop at once; an odd
 start rises first, and its parity \fwdterm{word}{word} up to the drop is an \keyterm{admissible}{admissible} word: $n$ odd steps in
-$L = p_2(n)$ steps, \fwdsym{p2}{$p_2(n)$} the bit length of $3^n$, with $3^j > 2^\ell$ after every earlier step.
+$L = p_2(n)$ steps, \fwdsym{p2}{$p_2(n)$} the bit length of $3^n$, with $3^j > 2^\ell$ after every earlier step
+(for every $n$ up to $10\,781\,273$, and for all $n$ if Terras's conjecture holds: Remark~\ref{rem:width}).
 This $n$ is the \keyterm{order}{Order} of the drop. \termhere{classid}Each admissible word is the start of one residue class modulo
 $2^L$, and its least member above $1$, the \keyterm{classid}{class id} $c$, stands for the whole class
 (Chapter~\ref{sec:words}).
@@ -668,7 +672,7 @@ kinds of colour blindness; each Order is also written as a number.}
 \boxhere{classid}class id $c$\index{class id@\termlink{classid}{class id $c$}|textbf} & the least member above $1$ of the residue class of an admissible word; it stands for the class. \\ \hline
 \boxhere{dropratio}drop ratio\index{drop ratio@\termlink{dropratio}{drop ratio}|textbf} & $T^L(x)/x$: how far a start falls at its drop; at least $3^n/2^L$. \\ \hline
 \boxhere{best}best of the Order\index{best of the Order@\termlink{best}{best of the Order}|textbf} & the class id of Order $n$ with the highest drop ratio: the one that falls the least. \\ \hline
-\boxhere{widthidentity}width identity\index{width identity@\termlink{widthidentity}{width identity}|textbf} & every class id $c > 1$ drops at the end of its word (Terras's coefficient stopping time conjecture); proved for Orders up to $10\,781\,273$. \\ \hline
+\boxhere{widthidentity}width identity\index{width identity@\termlink{widthidentity}{width identity}|textbf} & every class id $c > 1$ drops at the end of its word (Terras's coefficient stopping time conjecture); it holds for Orders up to $10\,781\,273$~\cite{Paper2}. \\ \hline
 A122442\index{OEIS!A122442} & the smallest start of each Order. \\ \hline
 A402443\index{OEIS!A402443} & the bests of the Orders (Appendix~\ref{app:table}).
 \end{wordbox}
@@ -680,38 +684,38 @@ A402443\index{OEIS!A402443} & the bests of the Orders (Appendix~\ref{app:table})
 \begin{definition}[The map, the word, the Order]
 $T(x) = x/2$ for even $x$, $T(x) = (3x+1)/2$ for odd $x$. \termhere{word}The \keyterm{word}{word} of $x$ is its parity
 sequence $e_0 e_1 e_2 \ldots$, $e_\ell = T^\ell(x) \bmod 2$. \termhere{p2}Let \keysym{p2}{$p_2(n)$} be the bit length of $3^n$,
-so $2^{p_2(n)-1} < 3^n < 2^{p_2(n)}$. A word of length $L$ with $n$ letters $1$ is
+so $2^{p_2(n)-1} \le 3^n < 2^{p_2(n)}$, with equality only for $n = 0$. A word of length $L$ with $n$ letters $1$ is
 \emph{admissible} of \emph{Order} $n$ if
 \[
 3^{j} > 2^{\ell} \quad\text{for each nonempty proper prefix ($j$ ones among its $\ell$ letters)},
 \qquad 3^n < 2^L.
 \]
-Then $L = p_2(n)$ and the last letter is $0$: the prefix of
+Order $0$ is the word \bw{0} of the even starts, with $L = 1 = p_2(0)$. For $n \ge 1$ again $L = p_2(n)$ and the last letter is $0$: the prefix of
 length $L-1$ has $3^{j} > 2^{L-1}$; were the last letter $1$, then $j = n - 1$ and
 $3^n = 3 \cdot 3^{n-1} > 3 \cdot 2^{L-1} > 2^L$. So $j = n$ and $2^{L-1} < 3^n < 2^L$.
 \end{definition}
 
 \begin{lemma}[Terras]
 \label{lem:affine}
-\termhere{rho}Let $w$ be a word of length $L$ with $n$ ones, the $q$-th at letter $k_q$ ($0$-based). For every $x$
-whose word starts with $w$,
+\termhere{rho}Let $e = e_0 e_1 \ldots e_{L-1}$ be a word of length $L$ with $n$ ones, the $q$-th at letter $k_q$ ($0$-based). For every $x$
+whose word starts with $e$,
 \[
 2^L\,T^L(x) = 3^n x + \rho, \qquad \rho = \sum_{q=1}^{n} 3^{\,n-q}\,2^{k_q},
 \]
-and these $x$ form one residue class modulo $2^L$; \keysym{rho}{$\rho$} is the \emph{constant} of $w$.
+and these $x$ form one residue class modulo $2^L$; \keysym{rho}{$\rho$} is the \emph{constant} of $e$.
 \end{lemma}
 \begin{proof}
 Induction on $L$; for $L = 0$, $\rho = 0$ and the class is all of $\mathbb{Z}$. Let the statement hold for
-$w$ and append a letter $e$. If $e = 0$, then $T^L(x)$ is even and
-$2^{L+1}T^{L+1}(x) = 2^L T^L(x) = 3^n x + \rho$. If $e = 1$, then
+$e$ and append a letter $e_L$. If $e_L = 0$, then $T^L(x)$ is even and
+$2^{L+1}T^{L+1}(x) = 2^L T^L(x) = 3^n x + \rho$. If $e_L = 1$, then
 $2^{L+1}T^{L+1}(x) = 3 \cdot 2^L T^L(x) + 2^L = 3^{n+1}x + 3\rho + 2^L$, and $3\rho + 2^L$ is the constant
-with a new one at letter $k_{n+1} = L$. For the classes: writing $x = 2^L i + r$ in the class of $w$,
-$T^L(x) = 3^n i + T^L(r)$, whose parity is that of $i + T^L(r)$; so each letter $e$ fixes $i \bmod 2$,
-and $wx$ with $e$ appended is one class modulo $2^{L+1}$. \cite[§1]{Terras1976}.
+with a new one at letter $k_{n+1} = L$. For the classes: writing $x = 2^L i + r$ in the class of $e$,
+$T^L(x) = 3^n i + T^L(r)$, whose parity is that of $i + T^L(r)$; so the letter $e_L$ fixes $i \bmod 2$,
+and $e$ with $e_L$ appended is one class modulo $2^{L+1}$. \cite[§1]{Terras1976}.
 \end{proof}
 
 \begin{definition}[Class id, drop value]
-The \emph{class id} of an admissible word $w$ of Order $n$ is the least $c > 1$ whose word starts with $w$
+The \emph{class id} of an admissible word $e$ of Order $n$ is the least $c > 1$ whose word starts with $e$
 (for the residue $r < 2^L$ of the class: $c = r$ if $r > 1$, else $c = r + 2^L$; Order~$1$ gives $c = 5$).
 \termhere{dropvalue}Its \keyterm{dropvalue}{drop value} is $d = T^L(c)$.
 \end{definition}
@@ -727,7 +731,7 @@ modulo $2^L$.
 
 \begin{lemma}
 \label{lem:member}
-Every $x > 1$ of the class of $w$ has $T^L(x)/x \le T^L(c)/c$, with equality only for $x = c$.
+Every $x > 1$ of the class of an admissible word of Order $n \ge 1$, with class id $c$, has $T^L(x)/x \le T^L(c)/c$, with equality only for $x = c$.
 \end{lemma}
 \begin{proof}
 By Lemma~\ref{lem:affine},
@@ -787,9 +791,9 @@ Order: they stop at a window on the class ids.
 \label{rem:ties}
 \termhere{tie}Two class ids of one Order can share their drop ratio, a \keyterm{tie}{tie}: the first case is Order $9$, where $21223$ and
 $25691$ have the same $\rho/c$; Order $13$ has $16$ class ids with one ratio, and Order $16$ has
-$56$ sets of equal ratios. A class id $c$ ties $c^\ast$ only if $\rho c^\ast = \rho^\ast c$, so $c$ is a multiple of
+$56$ sets of equal ratios. Within an Order the constant fixes the word~\cite[Cor.~2.1a]{Lagarias1990}, so a tie has two different constants. A class id $c$ ties $c^\ast$ only if $\rho c^\ast = \rho^\ast c$, so $c$ is a multiple of
 $u = c^\ast/\gcd(c^\ast, \rho^\ast)$; and a tie of the best lies in the window of
-Theorem~\ref{thm:window} (with $\le$ for $<$), so $c = ku$ with $k \le W/u$. For Orders $1$ to $347$
+Theorem~\ref{thm:window} (with $\le$ for $<$), so $c = ku$ with $k \le W/u$, $W$ the window of $c^\ast$. For Orders $1$ to $347$
 that leaves $6906$ candidates (at most $1063$, at Order $262$), and none is a tie
 (\texttt{boo\_tie\_mult.py}, exact): the best has no tie for Orders $1$ to $347$. Independently, a
 depth-first search of the words with the window of the best finds none for Orders $1$ to $229$
@@ -874,8 +878,9 @@ is a word of Order $n$, and $p$ is its prefix ending in its $w$-th one. Cf.~\cit
 \label{sec:cycle}
 
 \begin{definition}[Cycle point, share]
+\label{def:cycle}
 \termhere{cyclepoint}\termhere{share}For a word of Order $n$ let \keysym{cyclepoint}{$x^\ast$} $= \rho/(2^L - 3^n)$, the rational fixed point of
-$x \mapsto (3^n x + \rho)/2^L$, and for its class id $c$ let \keysym{share}{$\theta$} $= x^\ast/c$, its \emph{share}.
+$x \mapsto (3^n x + \rho)/2^L$~\cite[Prop.~5]{BohmSontacchi1978}, \cite[Thm.~2.1]{Lagarias1990}, and for its class id $c$ let \keysym{share}{$\theta$} $= x^\ast/c$, its \emph{share}.
 \end{definition}
 
 \begin{theorem}
@@ -890,10 +895,13 @@ $1 - 3^n/2^L > 0$, the ratio $T^L(c)/c$ grows with $\theta$, and $T^L(c) < c$ ex
 \end{proof}
 
 \begin{remark}
+\label{rem:width}
 That every class id $c > 1$ of every Order satisfies $c > x^\ast$ is the width identity of the series
-(Terras's coefficient stopping time conjecture~\cite[Conj.~2.9]{Terras1976}; \cite[Thm.~A]{Paper3}):
-open in general, and the best of the Order is its hardest case. It holds for every Order up to
-$10\,781\,273$~\cite{Paper2}, so for all Orders of this paper. Before letter $L$ every start of the word
+(Terras's coefficient stopping time conjecture~\cite[Conj.~2.9]{Terras1976}):
+open in general, and the best of the Order is its hardest case. Terras proved it for the words of
+length up to $2592$~\cite[p.~252]{Terras1976}, which covers the Orders of this paper
+($p_2(347) = 550$); with a range check it holds for every Order up to
+$10\,781\,273$~\cite{Paper2}. Before letter $L$ every start of the word
 rises: $T^\ell(x) = (3^{w_\ell}x + \rho_\ell)/2^\ell > x$ for $0 < \ell < L$. So each start $x > 1$ of an
 Order $n \le 10\,781\,273$ first falls below itself exactly at step $L = p_2(n)$.
 \end{remark}
@@ -956,7 +964,7 @@ program over a finite set.
 \label{lem:dinkelbach}
 \termhere{lambdastar}Let \keysym{lambdastar}{$\lambda^\ast$} be the largest $\rho/c$ over the words of Order $n$, and
 \[
-F(\lambda) = \max_{w} \,(\rho - \lambda c),
+F(\lambda) = \max\,(\rho - \lambda c),
 \]
 the maximum over the same words. Then $F$ is strictly decreasing, $F(\lambda^\ast) = 0$, and from any class id the step
 $\lambda \mapsto \rho/c$ of an argmax of $\rho - \lambda c$ reaches $\lambda^\ast$ in finitely many steps.
@@ -991,12 +999,12 @@ seed with $s_0$ (Remark~\ref{rem:seeds}).
 \label{lem:walk}
 \termhere{walk}Let $n \ge 2$. With $c = \sum_\ell t_\ell 2^\ell$ ($t_\ell$ the bits of $c < 2^L$) and $e_\ell$ the letters,
 \[
-\rho - \lambda c = \sum_{\ell=0}^{L-1} 2^\ell \delta_\ell,\qquad \delta_\ell = e_\ell\,3^{\,n-w_\ell} - \lambda\,t_\ell,
+\rho - \lambda c = \sum_{\ell=0}^{L-1} 2^\ell \delta_\ell,\qquad \delta_\ell = e_\ell\,3^{\,n-q_\ell} - \lambda\,t_\ell,
 \]
-$w_\ell$ the ones among the letters $0..\ell$.
+$q_\ell$ the ones among the letters $0..\ell$ (so $q_\ell = w_{\ell+1}$).
 \end{lemma}
 \begin{proof}
-A one at letter $\ell = k_q$ has $w_\ell = q$, so $\rho = \sum_\ell e_\ell\,3^{n-w_\ell}2^\ell$ by
+A one at letter $\ell = k_q$ has $q_\ell = q$, so $\rho = \sum_\ell e_\ell\,3^{n-q_\ell}2^\ell$ by
 Lemma~\ref{lem:affine}; $c < 2^L$ by Remark~\ref{rem:residue}.
 \end{proof}
 
@@ -1055,7 +1063,7 @@ is $\ge 0$; with the true maxima, the drop side keeps $1$ to $3$ words (measured
 
 \begin{wordbox}
 \boxhere{lambdastar}$\lambda^\ast$, $F(\lambda)$\index{lambda star@\termlink{lambdastar}{$\lambda^\ast$, $F(\lambda)$}|textbf} & the largest $\rho/c$ of Order $n$, and $F(\lambda) = \max(\rho - \lambda c)$, zero exactly at $\lambda^\ast$ (Dinkelbach). \\ \hline
-\boxhere{walk}walk $\delta_\ell$\index{walk@\termlink{walk}{walk $\delta_\ell$}|textbf} & $\rho - \lambda c$ letter by letter: $\delta_\ell = e_\ell 3^{n-w_\ell} - \lambda t_\ell$, with $t_\ell$ the bits of $c$. \\ \hline
+\boxhere{walk}walk $\delta_\ell$\index{walk@\termlink{walk}{walk $\delta_\ell$}|textbf} & $\rho - \lambda c$ letter by letter: $\delta_\ell = e_\ell 3^{n-q_\ell} - \lambda t_\ell$, with $q_\ell$ the ones among the letters $0..\ell$ and $t_\ell$ the bits of $c$. \\ \hline
 \boxhere{meetingsplit}meeting split\index{meeting split@\termlink{meetingsplit}{meeting split}|textbf} & a word cut after its $w$-th one into a start part and a drop part (constant $\sigma$), tied only by a congruence modulo $3^w$.
 \end{wordbox}
 
@@ -1066,7 +1074,7 @@ is $\ge 0$; with the true maxima, the drop side keeps $1$ to $3$ words (measured
 \begin{theorem}[The window]
 \label{thm:window}
 \termhere{window}Let $b/a > 3^n/2^L$ be the ratio of some class id of Order $n$. A class id $c$ of Order $n$ with
-$T^L(c)/c > b/a$ satisfies $c\,(2^L b - 3^n a) < R(n)\,a$. For a prefix with $j$ ones, constant $\rho_j$ and
+$T^L(c)/c > b/a$ satisfies $c\,(2^L b - 3^n a) < R(n)\,a$, that is, $c < W = \lceil R(n)\,a/(2^L b - 3^n a) \rceil$, the window of $b/a$. For a prefix with $j$ ones, constant $\rho_j$ and
 residue $r$, every class id below it with a higher ratio satisfies
 $r\,(2^L b - 3^n a) < \bigl(3^{n-j}\rho_j + \sum_{q>j} 3^{\,n-q} 2^{p_2(q-1)-1}\bigr)\,a$.
 \end{theorem}
@@ -1111,15 +1119,25 @@ For Orders $1$ to $124$ the best-first search seeded with $s_0$ visits $164\,801
 (Order $124$: $15\,147\,961$); the scan finishes Orders $1$ to $124$ at $x < 2^{26}$. The scan for
 Orders $1$ to $347$ covers every start below $80\,887\,088\,311\,813$, the window of Order $346$ and the
 largest of these Orders (Theorem~\ref{thm:window}), on a wheel modulo $2^{28}$ that leaves $3\,524\,586$ residues; Orders
-$348$ to $399$ need it up to $17\,216\,187\,145\,311\,549$. Without a seed, the scan finds the smallest start of each
+$348$ to $399$ need it at most up to $17\,216\,187\,145\,311\,549$ (the windows of their seeds). Without a seed, the scan finds the smallest start of each
 Order on the way, and its first start of each Order is checked against A122442.
+\end{remark}
+
+\begin{remark}[The certificates]
+\label{rem:cert}
+The certificate of an Order is the line $n$, $c$, $T^L(c)$, $W$. Checking it shows that $c$ is a
+class id of Order $n$ with that drop value, and that every class id with a higher ratio is below
+$W$ (Theorem~\ref{thm:window}); that there is none is the search itself. Orders $1$ to $124$ were
+searched twice, by the best-first search and by the scan; Orders $125$ to $229$ by the scan and by a
+depth-first search of the words inside $W$ (\texttt{boo\_ties.cpp}: none better, none equal); Orders
+$230$ to $347$ by the scan alone.
 \end{remark}
 
 
 \nopagebreak
 
 \begin{wordbox}
-\boxhere{window}window\index{window@\termlink{window}{window}|textbf} & the bound $c\,(2^L b - 3^n a) < R(n)\,a$ that a class id must meet to beat the ratio $b/a$ (Theorem~\ref{thm:window}). \\ \hline
+\boxhere{window}window $W$\index{window@\termlink{window}{window $W$}|textbf} & the bound $c\,(2^L b - 3^n a) < R(n)\,a$, or $c < W$, that a class id must meet to beat the ratio $b/a$ (Theorem~\ref{thm:window}). \\ \hline
 \boxhere{bestfirst}best-first search\index{best-first search@\termlink{bestfirst}{best-first search}|textbf} & the prefixes popped by residue and pruned by the window (\texttt{boo.py}). \\ \hline
 \boxhere{scan}scan\index{scan@\termlink{scan}{scan}|textbf} & all starts in increasing order, up to the window of the best found (\texttt{boo\_scan.cpp}). \\ \hline
 \boxhere{seed}seed $s_0$\index{seed@\termlink{seed}{seed $s_0$}|textbf} & the smallest start of the Order (A122442), the first candidate of both searches.
@@ -1214,7 +1232,11 @@ Remark~\ref{rem:ties} & \lean{tie\_rho}, \lean{tie\_dvd} \\
 
 The width identity, on which the scan rests (the remark after Theorem~\ref{thm:cycle}), is
 \lean{WidthIdentity} of that library; its range to Order $10\,781\,273$ uses a range check outside
-Lean~\cite{Paper2}.
+Lean~\cite{Paper2}; the Orders of this paper lie within Terras's own range (Remark~\ref{rem:width}).
+Lemma~\ref{lem:dinkelbach} is formalized for any finite family of ratios; that the steps end follows
+from \lean{step\_lt}, as the family is finite. Böhm and Sontacchi's paper, with the cycle point of
+Definition~\ref{def:cycle}, has a Lean formalization of its own~\cite{BohmSontacchiLean}, the first paper
+formalized in the Collatz Conjecture Challenge~\cite{CCChallenge}.
 
 \subsection*{How this was made}
 
@@ -1360,6 +1382,14 @@ $n$ & $c$ & $T^L(c)$ & & $n$ & $c$ & $T^L(c)$ & \\
 
 \ifpaper\clearpage\fi
 \begin{thebibliography}{99}
+\bibitem{BohmSontacchi1978} C.~Böhm and G.~Sontacchi, \emph{On the existence of cycles of given
+  length in integer sequences like $x_{n+1} = x_n/2$ if $x_n$ even, and $x_{n+1} = 3x_n + 1$
+  otherwise}, Atti Accad.\ Naz.\ Lincei Rend.\ Cl.\ Sci.\ Fis.\ Mat.\ Natur.\ (8) \textbf{64} (1978),
+  260--264.
+\bibitem{BohmSontacchiLean} \emph{Formalization of Böhm--Sontacchi 1978} (Lean~4),
+  \url{https://github.com/tcosmo/BohmSontacchi1978_lean}.
+\bibitem{CCChallenge} \emph{The Collatz Conjecture Challenge: formalising the Collatz literature, one
+  paper at a time}, \url{https://ccchallenge.org/}.
 \bibitem{ChenZhengXia2025} H.~Chen, C.~Zheng and Y.~Xia, \emph{Accelerated Dinkelbach method},
   arXiv:2510.26257 (2025).
 \bibitem{DadushKNV2021} D.~Dadush, Z.~K. Koh, B.~Natura and L.~A. V\'egh, \emph{An accelerated
@@ -1369,6 +1399,8 @@ $n$ & $c$ & $T^L(c)$ & & $n$ & $c$ & $T^L(c)$ & \\
   \textbf{13} (1967), 492--498.
 \bibitem{Everett1977} C.~J. Everett, \emph{Iteration of the number-theoretic function
   $f(2n) = n$, $f(2n+1) = 3n+2$}, Adv.\ Math.\ \textbf{25} (1977), 42--45.
+\bibitem{Lagarias1990} J.~C. Lagarias, \emph{The set of rational cycles for the $3x+1$ problem},
+  Acta Arith.\ \textbf{56} (1990), 33--53.
 \bibitem{OEIS_A100982} OEIS Foundation Inc., \emph{Sequence A100982},
   \url{https://oeis.org/A100982}.
 \bibitem{OEIS_A122442} OEIS Foundation Inc., \emph{Sequence A122442},
