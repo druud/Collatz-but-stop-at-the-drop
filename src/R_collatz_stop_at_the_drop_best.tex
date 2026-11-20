@@ -518,17 +518,14 @@
 \title{\textbf{Collatz, but stop at the drop}\\[0.5ex]
   \Large The start words with the highest drop ratio}
 \author{\textbf{Ruud H.G. van Tol}}
-\date{\textbf{Draft}}
+\date{\textbf{Draft}\\[8ex]
+  {\small\copyright\ 2026 Ruud H.G. van Tol. Licensed under \href{https://creativecommons.org/licenses/by/4.0/}{CC BY 4.0}.}
+  % DOI line after the Zenodo upload
+}
 
 \begin{document}
 \maketitle
 
-\begin{center}\small
-  \copyright\ 2026 Ruud H.G. van Tol. Licensed under \href{https://creativecommons.org/licenses/by/4.0/}{CC BY 4.0}.
-  % DOI line after the Zenodo upload
-\end{center}
-
-\bigskip
 \begin{center}\textbf{Abstract}\end{center}
 \begin{quotation}\small\noindent
 Under the map $T(x) = x/2$ for even $x$ and $(3x+1)/2$ for odd $x$, every odd start $x > 1$ that
@@ -546,7 +543,8 @@ Mathlib, without \texttt{sorry}; the table of bests is script data.
 Dinkelbach method, Lean~4.
 \end{quotation}
 
-\section*{Main results}
+% no new page here: Main results and What was known share the page of the abstract
+\begingroup\let\clearpage\relax\section*{Main results}\endgroup
 \addcontentsline{toc}{section}{Main results}
 
 Words, Orders, class ids and the constant $\rho$ are defined in Chapter~\ref{sec:words}; for a word
