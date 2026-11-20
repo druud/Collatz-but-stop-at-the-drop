@@ -28,6 +28,7 @@
 \usepackage{booktabs}
 \usepackage{array}
 \usepackage{longtable}
+\usepackage{colortbl} % thin grey rules in the key-terms boxes
 \usepackage{xcolor}
 \usepackage{tikz}
 \usepackage{etoolbox}
@@ -93,7 +94,7 @@
 \newenvironment{wordbox}
   {\par\ifpaper\vspace*{\fill}\vspace{\bigskipamount}\else\medskip\fi
    \noindent\begin{lrbox}{\wordboxbin}%
-   \begin{minipage}{\dimexpr\linewidth-6pt-2\fboxrule\relax}\small\renewcommand{\arraystretch}{1.2}%
+   \begin{minipage}{\dimexpr\linewidth-6pt-2\fboxrule\relax}\small\renewcommand{\arraystretch}{1.2}\setlength{\arrayrulewidth}{0.25pt}\arrayrulecolor{black!35}%
    \begin{tabular}{@{}>{\bfseries\boldmath\raggedright\arraybackslash}p{0.24\linewidth}|p{\dimexpr0.76\linewidth-2\tabcolsep-\arrayrulewidth\relax}@{}}}
   {\end{tabular}\end{minipage}\end{lrbox}%
    \begingroup\setlength{\fboxsep}{0pt}%
