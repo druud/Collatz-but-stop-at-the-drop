@@ -527,7 +527,7 @@
 \title{\textbf{Collatz, but stop at the drop}\\[0.5ex]
   \Large The start words with the highest drop ratio}
 \author{\textbf{Ruud H.G. van Tol}}
-\date{\textbf{Draft (35)}\\[8ex]  % the number of commits of this .tex: one up with each committed change
+\date{\textbf{Draft (36)}\\[8ex]  % the number of commits of this .tex: one up with each committed change
   {\small\copyright\ 2026 Ruud H.G. van Tol. Licensed under \href{https://creativecommons.org/licenses/by/4.0/}{CC BY 4.0}.}
   % DOI line after the Zenodo upload
 }
@@ -569,7 +569,7 @@ $c > x^\ast$, and $x^\ast$ is the strict minimum of its own cycle.
 \end{mainthm}
 
 \begin{mainthm}[The window; Chapter~\ref{sec:search}]
-If class ids $c$ and $x$ of Order $n$ have $\operatorname{drop}(c)/c > \operatorname{drop}(x)/x$, with $\operatorname{drop}(x) = T^L(x)$ the drop value, then $c\,(2^L \operatorname{drop}(x) - 3^n x) < R(n)\,x$, where
+If a class id of Order $n$ has $T^L(c)/c > g/h > 3^n/2^L$, then $c\,(2^L g - 3^n h) < R(n)\,h$, where
 $R(n) = \sum_{q=1}^{n} 3^{n-q} 2^{p_2(q-1)-1}$ is the largest $\rho$ of the Order. Seeded with any
 class id of Order $n$, a scan over the starts in increasing order is complete once it passes the
 window of the best found; so is a best-first search over the word tree.
@@ -718,7 +718,7 @@ and $e$ with $e_L$ appended is one class modulo $2^{L+1}$. \cite[§1]{Terras1976
 \begin{definition}[Class id, drop value]
 The \emph{class id} of an admissible word $e$ of Order $n$ is the least $c > 1$ whose word starts with $e$
 (for the residue $r < 2^L$ of the class: $c = r$ if $r > 1$, else $c = r + 2^L$; Order~$1$ gives $c = 5$).
-\termhere{dropvalue}Its \keyterm{dropvalue}{drop value} is $d = T^L(c)$; for any start $x$ of Order $n$ we write $\operatorname{drop}(x) = T^L(x)$, so the drop ratio of $x$ is $\operatorname{drop}(x)/x$.
+\termhere{dropvalue}Its \keyterm{dropvalue}{drop value} is $d = T^L(c)$.
 \end{definition}
 
 \begin{lemma}
@@ -807,7 +807,7 @@ depth-first search of the words with the window of the best finds none for Order
 \boxhere{word}word\index{word@\termlink{word}{word}|textbf} & the parity sequence $e_0 e_1 e_2\ldots$ of a start under $T$; $1$ for an odd step. \\ \hline
 \boxhere{p2}$p_2(n)$\index{p2@\termlink{p2}{$p_2(n)$}|textbf} & the bit length of $3^n$: the length $L$ of a word of Order $n$. \\ \hline
 \boxhere{rho}constant $\rho$\index{constant rho@\termlink{rho}{constant $\rho$}|textbf} & $\sum_q 3^{n-q}2^{k_q}$ over the ones of a word; $2^L T^L(x) = 3^n x + \rho$ on its class. \\ \hline
-\boxhere{dropvalue}drop value $d$, $\operatorname{drop}(x)$\index{drop value@\termlink{dropvalue}{drop value $d$, $\operatorname{drop}(x)$}|textbf} & $T^L(c)$, the value of the class id at its drop; $\operatorname{drop}(x) = T^L(x)$ for any start of the Order. \\ \hline
+\boxhere{dropvalue}drop value $d$\index{drop value@\termlink{dropvalue}{drop value $d$}|textbf} & $T^L(c)$, the value of the class id at its drop. \\ \hline
 \boxhere{tie}tie\index{tie@\termlink{tie}{tie}|textbf} & two class ids of one Order with the same drop ratio. \\ \hline
 A100982\index{OEIS!A100982} & the number of words of each Order.
 \end{wordbox}
@@ -1052,6 +1052,21 @@ parts: $p$ alone fixes $\rho_p$, $m$, $w$; $v$ alone fixes $\sigma$ and the clas
 Checked exactly by \texttt{mitm.py}.
 \end{proof}
 
+\begin{remark}[Order $6$, cut at $w = 3$]
+\label{rem:splitex}
+The best of Order $6$, $c = 347$ with the word \bw{1101110100} (Remark~\ref{rem:order6}), cut after its
+third one: the start part is $p = \bw{1101}$, $m = 4$, and the drop part $v = \bw{110100}$. Both have
+their ones at the letters $0, 1, 3$, so $\rho_p = \sigma = 3^2 + 3\cdot 2 + 2^3 = 23$, and
+\[
+\rho = 3^3\cdot 23 + 2^4\cdot 23 = 989, \qquad y = T^4(347) = 587, \qquad c = \frac{2^4\cdot 587 - 23}{3^3} = 347.
+\]
+The start part is the word \bw{11010} of Order $3$ (class id $11$, and $347 \equiv 11 \pmod{2^4}$)
+without its final $0$; the drop part alone asks $y \equiv 11 \pmod{2^6}$, and the two meet in
+$2^4 \cdot 587 = 9392 \equiv 23 \pmod{3^3}$. What the split is for: the start sides at a cut are the
+words of one lower Order, the same for every $n > w$, and each side can be bounded without the other;
+the searches of Chapter~\ref{sec:search} do not use it yet.
+\end{remark}
+
 \begin{remark}[Both sides in turns]
 By Lemma~\ref{lem:startparts} the start side at cut $w$ is the set of words of Order $w$, the same
 for every $n > w$. The drop side grows backward from the last letter on residues $y \bmod 2^k$
@@ -1074,14 +1089,14 @@ is $\ge 0$; with the true maxima, the drop side keeps $1$ to $3$ words (measured
 
 \begin{theorem}[The window]
 \label{thm:window}
-\termhere{window}Let $x$ be a class id of Order $n \ge 1$. A class id $c$ of Order $n$ with
-$\operatorname{drop}(c)/c > \operatorname{drop}(x)/x$ satisfies $c\,(2^L \operatorname{drop}(x) - 3^n x) < R(n)\,x$, that is, $c < W = \lceil R(n)\,x/(2^L \operatorname{drop}(x) - 3^n x) \rceil$, the window of $x$. For a prefix with $j$ ones, constant $\rho_j$ and
+\termhere{window}Let $g/h > 3^n/2^L$ be the drop ratio of some class id of Order $n \ge 1$. A class id $c$ of Order $n$ with
+$T^L(c)/c > g/h$ satisfies $c\,(2^L g - 3^n h) < R(n)\,h$, that is, $c < W = \lceil R(n)\,h/(2^L g - 3^n h) \rceil$, the window of that class id. For a prefix with $j$ ones, constant $\rho_j$ and
 residue $r$, every class id below it with a higher ratio satisfies
-$r\,(2^L \operatorname{drop}(x) - 3^n x) < \bigl(3^{n-j}\rho_j + \sum_{q>j} 3^{\,n-q} 2^{p_2(q-1)-1}\bigr)\,x$.
+$r\,(2^L g - 3^n h) < \bigl(3^{n-j}\rho_j + \sum_{q>j} 3^{\,n-q} 2^{p_2(q-1)-1}\bigr)\,h$.
 \end{theorem}
 \begin{proof}
-$2^L \operatorname{drop}(x) - 3^n x > 0$: it is the constant of $x$'s word. $\operatorname{drop}(c)/c > \operatorname{drop}(x)/x$ means $x\,2^L \operatorname{drop}(c) > \operatorname{drop}(x)\,2^L c$, that is $x(3^n c + \rho) > 2^L \operatorname{drop}(x)\,c$, that is
-$c\,(2^L \operatorname{drop}(x) - 3^n x) < \rho\,x$. Now $\rho \le R(n)$ by Theorem~\ref{thm:wall}; below a prefix,
+$T^L(c)/c > g/h$ means $h\,2^L T^L(c) > g\,2^L c$, that is $h(3^n c + \rho) > 2^L g\,c$, that is
+$c\,(2^L g - 3^n h) < \rho\,h$. Now $\rho \le R(n)$ by Theorem~\ref{thm:wall}; below a prefix,
 $\rho$ is at most the bound of Corollary~\ref{cor:tail}, and $c \ge r$ as $c \equiv r \pmod{2^\ell}$,
 $c > 0$, $0 < r < 2^\ell$.
 \end{proof}
@@ -1138,7 +1153,7 @@ $230$ to $347$ by the scan alone.
 \nopagebreak
 
 \begin{wordbox}
-\boxhere{window}window $W$\index{window@\termlink{window}{window $W$}|textbf} & the bound $c\,(2^L \operatorname{drop}(x) - 3^n x) < R(n)\,x$, or $c < W$, that a class id $c$ must meet to beat the drop ratio $\operatorname{drop}(x)/x$ of a class id $x$ (Theorem~\ref{thm:window}). \\ \hline
+\boxhere{window}window $W$\index{window@\termlink{window}{window $W$}|textbf} & the bound $c\,(2^L g - 3^n h) < R(n)\,h$, or $c < W$, that a class id must meet to beat the drop ratio $g/h$ of another (Theorem~\ref{thm:window}). \\ \hline
 \boxhere{bestfirst}best-first search\index{best-first search@\termlink{bestfirst}{best-first search}|textbf} & the prefixes popped by residue and pruned by the window (\texttt{boo.py}). \\ \hline
 \boxhere{scan}scan\index{scan@\termlink{scan}{scan}|textbf} & all starts in increasing order, up to the window of the best found (\texttt{boo\_scan.cpp}). \\ \hline
 \boxhere{seed}seed $s_0$\index{seed@\termlink{seed}{seed $s_0$}|textbf} & the smallest start of the Order (A122442), the first candidate of both searches.
@@ -1186,6 +1201,18 @@ for one Order each. Seven of the odd parts
 ($31$, $167$, $325$, $61$, $23$, $5$, $1$) lie on the trajectory of $27$, for $21$ Orders (\texttt{boo\_hubs.py}). The inverse trees of such hubs hold the bests only mildly
 more often than other starts (Appendix~\ref{app:failed}).
 \end{observation}
+
+\subsection*{Open questions}
+\begin{enumerate}\setlength{\itemsep}{0.2ex}
+\item Does the best of an Order ever have a tie (Remark~\ref{rem:ties}; none for Orders $1$ to $347$)?
+\item Is $\theta(s_0)/\theta(\text{best}) > 1/4$ for every Order, or bounded below at all?
+\item Is the smallest start the best for infinitely many Orders ($285$ of the first $347$)?
+\item Is the cycle point of the wall word below the ceiling $t_n$ for every $n$ (it is for $n \le 2000$)?
+\item Does $L/2 < k_0 < 4L/5$ hold beyond Order $21$ (Table~\ref{tab:k0})?
+\item At the true maxima, does the drop side of the meeting split keep a bounded number of words
+  ($1$ to $3$ measured)? A search on the split would then be a third, independent one.
+\item The width identity itself (Remark~\ref{rem:width}).
+\end{enumerate}
 
 
 \nopagebreak
