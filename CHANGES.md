@@ -3,7 +3,9 @@
 The changes to this repository since its first public release, newest
 first. Version names (R_65a, R_66, ...) are the authors' own labels.
 
-## After R_100 (14 November 2026)
+## R_101 (20 November 2026)
+
+- Paper 3, draft: "Draft: R_101" (28 pages).
 
 - A new paper beside the series, a draft: *Collatz, but stop at the
   drop: the start words with the highest drop ratio*. The best of the
@@ -17,6 +19,11 @@ first. Version names (R_65a, R_66, ...) are the authors' own labels.
   (`cert_rows`); `scripts/paper_numbers.py` recomputes the numbers of
   the paper against its text, and Appendix A's inverse-tree line is
   corrected by it (21 of the 106 bests, 20% against 28%: no excess).
+  Draft (39): the lower wall (Proposition 3.4) and where the best
+  lies (Corollary 6.2: s_0 <= c* <= s_0 R(n)/(3^n - 2^n), and
+  c* < n s_0/2 for n >= 3; Lean `window_seed`); Appendix A's numbers
+  rerun, two reworded, their scripts added;
+  `scripts/paper_numbers_slow.cpp` for the two slow checks.
 
 - Paper 3, a new Chapter 3, "The words as one tree": the admissible
   words of all Orders as the leaves of one binary tree (figure for
