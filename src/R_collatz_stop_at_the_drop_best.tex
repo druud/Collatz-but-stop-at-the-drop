@@ -25,6 +25,9 @@
 \newcommand{\keyterm}[2]{\hyperlink{box:#1}{\emph{#2}}}
 % A symbol that is a key term, where its meaning is given: the same link, no italics
 \newcommand{\keysym}[2]{\hyperlink{box:#1}{#2}}
+% A term used before its chapter (the Introduction): italic, linking to where it is introduced
+\newcommand{\fwdterm}[2]{\hyperlink{term:#1}{\emph{#2}}}
+\newcommand{\fwdsym}[2]{\hyperlink{term:#1}{#2}}
 \usepackage{booktabs}
 \usepackage{array}
 \usepackage{longtable}
@@ -600,32 +603,32 @@ question of the best of the Order and Theorems~A to~D are new.
 \label{sec:intro}
 \termhere{drop}Run the map $T(x) = x/2$ for even $x$, $T(x) = (3x+1)/2$ for odd $x$, from a start $x > 1$, and
 stop at the \keyterm{drop}{drop}: the first step at which the value falls below $x$. \termhere{admissible}\termhere{order}Even starts drop at once; an odd
-start rises first, and its parity word up to the drop is an \keyterm{admissible}{admissible} word: $n$ odd steps in
-$L = p_2(n)$ steps, $p_2(n)$ the bit length of $3^n$, with $3^j > 2^\ell$ after every earlier step.
+start rises first, and its parity \fwdterm{word}{word} up to the drop is an \keyterm{admissible}{admissible} word: $n$ odd steps in
+$L = p_2(n)$ steps, \fwdsym{p2}{$p_2(n)$} the bit length of $3^n$, with $3^j > 2^\ell$ after every earlier step.
 This $n$ is the \keyterm{order}{Order} of the drop. \termhere{classid}Each admissible word is the start of one residue class modulo
 $2^L$, and its least member above $1$, the \keyterm{classid}{class id} $c$, stands for the whole class
 (Chapter~\ref{sec:words}).
 
 \medskip
-\termhere{dropratio}All starts of a class are mapped by one affine map, $2^L T^L(x) = 3^n x + \rho$, so the \keyterm{dropratio}{drop ratio}
+\termhere{dropratio}All starts of a class are mapped by one affine map, $2^L T^L(x) = 3^n x + \rho$ (Lemma~\ref{lem:affine}), so the \keyterm{dropratio}{drop ratio}
 $T^L(x)/x = 3^n/2^L + \rho/(2^L x)$ is highest at the class id. Every start of Order $n$ falls at least
-to $3^n/2^L$ of itself; the constant $\rho$ is what holds it up. \termhere{best}This paper asks, per Order: which class
+to $3^n/2^L$ of itself; the \fwdterm{rho}{constant} $\rho$ is what holds it up. \termhere{best}This paper asks, per Order: which class
 id falls the least? We call it the \keyterm{best}{best of the Order}. \termhere{widthidentity}Its ratio is the one closest to $1$, so it
 is the hardest case of the statement that every class id drops at its word, Terras's coefficient
 stopping time conjecture, in the series called the \keyterm{widthidentity}{width identity}.
 
 \medskip
-The answer has a clean form (Theorem~\ref{thm:cycle}): each word has a rational cycle point
+The answer has a clean form (Theorem~\ref{thm:cycle}): each word has a rational \fwdterm{cyclepoint}{cycle point}
 $x^\ast = \rho/(2^L - 3^n)$, the strict minimum of its own rational cycle, and the best is the class id
-with the largest share $\theta = x^\ast/c$. Since $\rho$ is at most the constant $R(n)$ of the wall word
-(Chapter~\ref{sec:wall}), a start can only win inside a window (Theorem~\ref{thm:window}); this turns
-the question into two exact searches, a best-first search over the word tree and a scan over the starts
-in increasing order, both seeded with the smallest start of the Order (OEIS A122442\index{OEIS!A122442}).
+with the largest \fwdterm{share}{share} $\theta = x^\ast/c$. Since $\rho$ is at most the constant \fwdsym{R}{$R(n)$} of the \fwdterm{wallword}{wall word}
+(Chapter~\ref{sec:wall}), a start can only win inside a \fwdterm{window}{window} (Theorem~\ref{thm:window}); this turns
+the question into two exact searches, a \fwdterm{bestfirst}{best-first search} over the word tree and a \fwdterm{scan}{scan} over the starts
+in increasing order, both seeded with the \fwdterm{seed}{smallest start} of the Order (OEIS A122442\index{OEIS!A122442}).
 
 \medskip
 As a fractional program the
-question invites Dinkelbach's method; cutting a word after its $w$-th one splits $\rho - \lambda c$ into
-a start side and a drop side, tied only by one congruence modulo $3^w$, and the start sides are the
+question invites \fwdterm{lambdastar}{Dinkelbach's method}; cutting a word after its $w$-th one splits $\rho - \lambda c$ into
+a start side and a drop side (the \fwdterm{meetingsplit}{meeting split}), tied only by one congruence modulo $3^w$, and the \fwdterm{startpart}{start sides} are the
 words of Order $w$ (Chapter~\ref{sec:dinkelbach}).
 
 \medskip
