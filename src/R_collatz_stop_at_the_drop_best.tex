@@ -40,6 +40,8 @@
 \IfFileExists{imakeidx.sty}
   {\usepackage{imakeidx}\makeindex[intoc]}
   {\usepackage{makeidx}\makeindex}
+% keep an index item with its subitems (no column break between them)
+\makeatletter\renewcommand\subitem{\par\nobreak\hangindent 40\p@ \hspace*{20\p@}}\makeatother
 
 % Lean declaration
 \newcommand{\lean}[1]{\textsf{#1}}
@@ -610,7 +612,7 @@
   \Large The start words with the highest drop ratio}
 \author{\textbf{Ruud H.G. van Tol}}
 \date{\begin{tikzpicture}\dropturnfig\end{tikzpicture}\\[5ex]
-  \textbf{Draft (40)}\\[8ex]  % the number of commits of this .tex: one up with each committed change
+  \textbf{Draft (41)}\\[8ex]  % the number of commits of this .tex: one up with each committed change
   {\small\copyright\ 2026 Ruud H.G. van Tol. Licensed under \href{https://creativecommons.org/licenses/by/4.0/}{CC BY 4.0}.}
   % DOI line after the Zenodo upload
 }
@@ -1048,11 +1050,17 @@ $\rho_\ell/(2^\ell - 3^{w_\ell})$, is negative for every nonempty proper prefix.
 $\rho_\ell > 0$ and $2^\ell < 3^{w_\ell}$.
 \end{proof}
 
-\begin{observation}[A ceiling]
+\begin{proposition}[A ceiling]
+\label{prop:ceiling}
 \termhere{ceiling}Let \keysym{ceiling}{$t_n$} be the least integer $x \ge 1$ with $(3x+1)^n < 2^L x^n$: the constant start of a word whose
-odd steps all multiply by $3 + 1/x$. Then $x^\ast(\text{best}) \le x^\ast(\text{wall}) = R(n)/(2^L - 3^n)$,
-and $x^\ast(\text{wall}) < t_n$ for $n \le 2000$ (exact, \texttt{ceiling\_check.py}). $t_n$ depends on $L/n$ only.
-\end{observation}
+odd steps all multiply by $3 + 1/x$. Every word of Order $n \ge 1$ has $2^L \le (3 + 1/x^\ast)^n$, so
+$x^\ast < t_n$; in particular $x^\ast(\text{best}) \le x^\ast(\text{wall}) = R(n)/(2^L - 3^n) < t_n$. $t_n$ depends on $L/n$ only.
+\end{proposition}
+\begin{proof}
+An even letter halves $x^\ast_\ell$; an odd one takes it to $(3x^\ast_\ell + 1)/2 = x^\ast_\ell\,(3 + 1/x^\ast_\ell)/2$,
+at most $x^\ast_\ell\,(3 + 1/x^\ast)/2$ as $x^\ast_\ell \ge x^\ast > 0$ (Proposition~\ref{prop:cyclemin}). Around
+the cycle, $x^\ast = x^\ast_L \le x^\ast (3 + 1/x^\ast)^n/2^L$. As $(3 + 1/t_n)^n < 2^L$, $3 + 1/t_n < 3 + 1/x^\ast$.
+\end{proof}
 
 
 \nopagebreak
@@ -1060,7 +1068,7 @@ and $x^\ast(\text{wall}) < t_n$ for $n \le 2000$ (exact, \texttt{ceiling\_check.
 \begin{wordbox}
 \boxhere{cyclepoint}cycle point $x^\ast$\index{cycle point@\termlink{cyclepoint}{cycle point $x^\ast$}|textbf} & $\rho/(2^L - 3^n)$, the rational fixed point of the affine map of a word; the least point of its rational cycle. \\ \hline
 \boxhere{share}share $\theta$\index{share theta@\termlink{share}{share $\theta$}|textbf} & $x^\ast/c$; the best of the Order is the class id with the largest share. \\ \hline
-\boxhere{ceiling}ceiling $t_n$\index{ceiling@\termlink{ceiling}{ceiling $t_n$}|textbf} & the least $x \ge 1$ with $(3x+1)^n < 2^L x^n$; above the cycle point of the wall word for $n \le 2000$.
+\boxhere{ceiling}ceiling $t_n$\index{ceiling@\termlink{ceiling}{ceiling $t_n$}|textbf} & the least $x \ge 1$ with $(3x+1)^n < 2^L x^n$; above the cycle point of every word of Order $n$.
 \end{wordbox}
 
 %------------------------------------------------------------------------------------------------
@@ -1342,7 +1350,6 @@ more often than other starts (Appendix~\ref{app:failed}).
 \item Does the best of an Order ever have a tie (Remark~\ref{rem:ties}; none for Orders $1$ to $347$)?
 \item Is $\theta(s_0)/\theta(\text{best}) > 1/4$ for every Order, or bounded below at all?
 \item Is the smallest start the best for infinitely many Orders ($285$ of the first $347$)?
-\item Is the cycle point of the wall word below the ceiling $t_n$ for every $n$ (it is for $n \le 2000$)?
 \item Does $L/2 < k_0 < 4L/5$ hold beyond Order $21$ (Table~\ref{tab:k0})?
 \item At the true maxima, does the drop side of the meeting split keep a bounded number of words
   ($1$ to $3$ measured)? A search on the split would then be a third, independent one.
@@ -1382,6 +1389,7 @@ Corollary~\ref{cor:tail} & \lean{tail\_bound} \\
 Lemma~\ref{lem:startparts} & \lean{isKey\_of\_prefix}, \lean{exists\_of\_key} \\
 Theorem~\ref{thm:cycle} (A) & \lean{one\_sub\_ratio}, \lean{ratio\_lt\_ratio\_iff}, \lean{drops\_iff} \\
 Proposition~\ref{prop:cyclemin} & \lean{cyclePoint\_lt\_cyclePt}, \lean{cyclePt\_length} \\
+Proposition~\ref{prop:ceiling} & \lean{cyclePt\_le\_pow}, \lean{cyclePoint\_lt\_ceiling} \\
 Lemma~\ref{lem:split} & \lean{iterate\_eq\_split} \\
 Proposition~\ref{prop:prefixneg} & \lean{prefix\_cyclePoint\_neg} \\
 Lemma~\ref{lem:dinkelbach} & \lean{F\_strictAnti}, \lean{F\_lamStar}, \lean{eq\_lamStar\_of\_F\_eq\_zero}, \lean{step\_lt} \\
