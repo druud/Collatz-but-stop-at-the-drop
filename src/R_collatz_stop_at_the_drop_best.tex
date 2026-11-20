@@ -526,7 +526,7 @@
 \title{\textbf{Collatz, but stop at the drop}\\[0.5ex]
   \Large The start words with the highest drop ratio}
 \author{\textbf{Ruud H.G. van Tol}}
-\date{\textbf{Draft (32)}\\[8ex]  % the number of commits of this .tex: one up with each committed change
+\date{\textbf{Draft (33)}\\[8ex]  % the number of commits of this .tex: one up with each committed change
   {\small\copyright\ 2026 Ruud H.G. van Tol. Licensed under \href{https://creativecommons.org/licenses/by/4.0/}{CC BY 4.0}.}
   % DOI line after the Zenodo upload
 }
@@ -568,7 +568,7 @@ $c > x^\ast$, and $x^\ast$ is the strict minimum of its own cycle.
 \end{mainthm}
 
 \begin{mainthm}[The window; Chapter~\ref{sec:search}]
-If a class id of Order $n$ has $T^L(c)/c > b/a > 3^n/2^L$, then $c\,(2^L b - 3^n a) < R(n)\,a$, where
+If a class id of Order $n$ has $T^L(c)/c > g/h > 3^n/2^L$, then $c\,(2^L g - 3^n h) < R(n)\,h$, where
 $R(n) = \sum_{q=1}^{n} 3^{n-q} 2^{p_2(q-1)-1}$ is the largest $\rho$ of the Order. Seeded with any
 class id of Order $n$, a scan over the starts in increasing order is complete once it passes the
 window of the best found; so is a best-first search over the word tree.
@@ -1073,14 +1073,14 @@ is $\ge 0$; with the true maxima, the drop side keeps $1$ to $3$ words (measured
 
 \begin{theorem}[The window]
 \label{thm:window}
-\termhere{window}Let $b/a > 3^n/2^L$ be the ratio of some class id of Order $n$. A class id $c$ of Order $n$ with
-$T^L(c)/c > b/a$ satisfies $c\,(2^L b - 3^n a) < R(n)\,a$, that is, $c < W = \lceil R(n)\,a/(2^L b - 3^n a) \rceil$, the window of $b/a$. For a prefix with $j$ ones, constant $\rho_j$ and
+\termhere{window}Let $g/h > 3^n/2^L$ be the ratio of some class id of Order $n$. A class id $c$ of Order $n$ with
+$T^L(c)/c > g/h$ satisfies $c\,(2^L g - 3^n h) < R(n)\,h$, that is, $c < W = \lceil R(n)\,h/(2^L g - 3^n h) \rceil$, the window of $g/h$. For a prefix with $j$ ones, constant $\rho_j$ and
 residue $r$, every class id below it with a higher ratio satisfies
-$r\,(2^L b - 3^n a) < \bigl(3^{n-j}\rho_j + \sum_{q>j} 3^{\,n-q} 2^{p_2(q-1)-1}\bigr)\,a$.
+$r\,(2^L g - 3^n h) < \bigl(3^{n-j}\rho_j + \sum_{q>j} 3^{\,n-q} 2^{p_2(q-1)-1}\bigr)\,h$.
 \end{theorem}
 \begin{proof}
-$T^L(c)/c > b/a$ means $a\,2^L T^L(c) > b\,2^L c$, that is $a(3^n c + \rho) > 2^L b\,c$, that is
-$c\,(2^L b - 3^n a) < \rho\,a$. Now $\rho \le R(n)$ by Theorem~\ref{thm:wall}; below a prefix,
+$T^L(c)/c > g/h$ means $h\,2^L T^L(c) > g\,2^L c$, that is $h(3^n c + \rho) > 2^L g\,c$, that is
+$c\,(2^L g - 3^n h) < \rho\,h$. Now $\rho \le R(n)$ by Theorem~\ref{thm:wall}; below a prefix,
 $\rho$ is at most the bound of Corollary~\ref{cor:tail}, and $c \ge r$ as $c \equiv r \pmod{2^\ell}$,
 $c > 0$, $0 < r < 2^\ell$.
 \end{proof}
@@ -1137,7 +1137,7 @@ $230$ to $347$ by the scan alone.
 \nopagebreak
 
 \begin{wordbox}
-\boxhere{window}window $W$\index{window@\termlink{window}{window $W$}|textbf} & the bound $c\,(2^L b - 3^n a) < R(n)\,a$, or $c < W$, that a class id must meet to beat the ratio $b/a$ (Theorem~\ref{thm:window}). \\ \hline
+\boxhere{window}window $W$\index{window@\termlink{window}{window $W$}|textbf} & the bound $c\,(2^L g - 3^n h) < R(n)\,h$, or $c < W$, that a class id must meet to beat the ratio $g/h$ (Theorem~\ref{thm:window}). \\ \hline
 \boxhere{bestfirst}best-first search\index{best-first search@\termlink{bestfirst}{best-first search}|textbf} & the prefixes popped by residue and pruned by the window (\texttt{boo.py}). \\ \hline
 \boxhere{scan}scan\index{scan@\termlink{scan}{scan}|textbf} & all starts in increasing order, up to the window of the best found (\texttt{boo\_scan.cpp}). \\ \hline
 \boxhere{seed}seed $s_0$\index{seed@\termlink{seed}{seed $s_0$}|textbf} & the smallest start of the Order (A122442), the first candidate of both searches.
