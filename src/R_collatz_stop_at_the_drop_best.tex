@@ -606,6 +606,7 @@ This $n$ is the \keyterm{order}{Order} of the drop. \termhere{classid}Each admis
 $2^L$, and its least member above $1$, the \keyterm{classid}{class id} $c$, stands for the whole class
 (Chapter~\ref{sec:words}).
 
+\medskip
 \termhere{dropratio}All starts of a class are mapped by one affine map, $2^L T^L(x) = 3^n x + \rho$, so the \keyterm{dropratio}{drop ratio}
 $T^L(x)/x = 3^n/2^L + \rho/(2^L x)$ is highest at the class id. Every start of Order $n$ falls at least
 to $3^n/2^L$ of itself; the constant $\rho$ is what holds it up. \termhere{best}This paper asks, per Order: which class
@@ -613,19 +614,27 @@ id falls the least? We call it the \keyterm{best}{best of the Order}. \termhere{
 is the hardest case of the statement that every class id drops at its word, Terras's coefficient
 stopping time conjecture, in the series called the \keyterm{widthidentity}{width identity}.
 
+\medskip
 The answer has a clean form (Theorem~\ref{thm:cycle}): each word has a rational cycle point
 $x^\ast = \rho/(2^L - 3^n)$, the strict minimum of its own rational cycle, and the best is the class id
 with the largest share $\theta = x^\ast/c$. Since $\rho$ is at most the constant $R(n)$ of the wall word
 (Chapter~\ref{sec:wall}), a start can only win inside a window (Theorem~\ref{thm:window}); this turns
 the question into two exact searches, a best-first search over the word tree and a scan over the starts
-in increasing order, both seeded with the smallest start of the Order (OEIS A122442\index{OEIS!A122442}). As a fractional program the
+in increasing order, both seeded with the smallest start of the Order (OEIS A122442\index{OEIS!A122442}).
+
+\medskip
+As a fractional program the
 question invites Dinkelbach's method; cutting a word after its $w$-th one splits $\rho - \lambda c$ into
 a start side and a drop side, tied only by one congruence modulo $3^w$, and the start sides are the
-words of Order $w$ (Chapter~\ref{sec:dinkelbach}). Chapter~\ref{sec:search} gives the searches and their
+words of Order $w$ (Chapter~\ref{sec:dinkelbach}).
+
+\medskip
+Chapter~\ref{sec:search} gives the searches and their
 cost, Chapter~\ref{sec:observations} what the bests of Orders $1$ to $347$ show, and
 Chapter~\ref{sec:lean} the formalization in Lean. Appendix~\ref{app:failed} lists the ways to guess the
 best that did not work, and Appendix~\ref{app:table} the bests.
 
+\medskip
 The Lean package, the scripts and the data (the bests with their certificates) are at
 \url{https://github.com/druud/Collatz-but-stop-at-the-drop}, in \texttt{src/best\_of\_order/}.
 The paper, the Lean proofs and the scripts were made with Claude (Anthropic) as a working
