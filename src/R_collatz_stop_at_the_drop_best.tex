@@ -521,12 +521,13 @@
 \newtheorem{remark}[theorem]{Remark}
 \newtheorem{mainthm}{Theorem}
 \renewcommand{\themainthm}{\Alph{mainthm}}
+\newtheorem{maincomp}[mainthm]{Computation}  % a result of a search, not proved in the text or in Lean
 \emergencystretch=3em
 
 \title{\textbf{Collatz, but stop at the drop}\\[0.5ex]
   \Large The start words with the highest drop ratio}
 \author{\textbf{Ruud H.G. van Tol}}
-\date{\textbf{Draft (34)}\\[8ex]  % the number of commits of this .tex: one up with each committed change
+\date{\textbf{Draft (35)}\\[8ex]  % the number of commits of this .tex: one up with each committed change
   {\small\copyright\ 2026 Ruud H.G. van Tol. Licensed under \href{https://creativecommons.org/licenses/by/4.0/}{CC BY 4.0}.}
   % DOI line after the Zenodo upload
 }
@@ -585,11 +586,11 @@ tied only by $2^m y \equiv \rho_p \pmod{3^w}$, and the start parts are exactly t
 $w$ without their final $0$'s.
 \end{mainthm}
 
-\begin{mainthm}[The bests; Chapter~\ref{sec:search}, Appendix~\ref{app:table}]
+\begin{maincomp}[The bests; Chapter~\ref{sec:search}, Appendix~\ref{app:table}]
 The bests of Orders $1$ to $347$ are computed and certified (OEIS A402443~\cite{OEIS_A402443}). For $285$ of the Orders $1$ to
 $347$ the best is the smallest start of its Order (OEIS A122442); at the others the $\theta$ of the smallest start
 is more than $1/4$ of the best's (smallest at Order $272$).
-\end{mainthm}
+\end{maincomp}
 
 \subsection*{What was known}
 The formula for $T^L$, the residue classes of the parity words and the density of the starts that
@@ -602,7 +603,7 @@ fractional programs is Dinkelbach's~\cite{Dinkelbach1967}; accelerated versions 
 A122442~\cite{OEIS_A122442}. The admissible words, their tree and the names used here are those of
 the series this paper stands beside~\cite{Paper1,Paper2,Paper3}. As far as we know, the
 question of the best of the Order is new, and so are the share and the least point of the cycle in
-Theorem~A, and Theorems~B to~D.
+Theorem~A, Theorems~B and~C, and the table of Computation~D.
 
 \ifpaper\clearpage\fi
 \tableofcontents
