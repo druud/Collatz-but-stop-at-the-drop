@@ -30,6 +30,8 @@ svg text { fill:currentColor; }
     <select id="ang"><option value="earn">A 1 turns by its share of S (earn)</option><option value="nat">A 1 turns by log_2 of its factor, spiral (nat)</option><option value="eq">Equal steps (eq)</option></select></label>
   <label>Show
     <select id="show"><option value="marked">Marked only (marked)</option><option value="top">The 10 highest ratios (top)</option><option value="all">All words (all)</option></select></label>
+  <label>Looking glass
+    <select id="glass"><option value="1">Off (g1)</option><option value="4">&#215;4 (g4)</option><option value="16">&#215;16 (g16)</option><option value="64">&#215;64 (g64)</option><option value="256">&#215;256 (g256)</option><option value="1024">&#215;1024 (g1024)</option></select></label>
   <button id="save">Save SVG</button>
   <button id="link">Copy link</button>
   <span class="info" id="info"></span>
@@ -53,6 +55,8 @@ svg text { fill:currentColor; }
  | evenly along the turn (one full turn halves the radius z times), and the last 1 ends at (d/c, 0).
  | Each 1 carries its share of the 0's (C36): a 1 at value x multiplies the radius by (3 + 1/x)/2^(L/n), a 0 changes
  | nothing: the path starts at (1, 0), runs along the unit circle and ends at d/c.
+ | Looking glass: the whole picture magnified 4 to 1024 times about the end point of the best, which is moved to the
+ | middle; line widths and dots keep their size.
  | The unit circle is drawn as large as is feasible: the radial scale bends there (see the rings, at powers of 2).
  | Words and ratios are exact (BigInt); only the drawing coordinates are floating point.
  |*/
@@ -86,10 +90,10 @@ function wordsOf(n) {
 let cur = null, pinned = new Set(), wantPins = new Set();
 // The link: the page's state after '#', as short tokens joined by dots: the Order, then one token per list (scale: z, c, s,
 // f or u; radius: lin or log; angle: earn, nat or eq; show: marked, top or all), then the start value of every pinned
-// word. A token left out of a link means that list's default (z, lin, earn, marked).
+// word. A token left out of a link means that list's default (z, lin, earn, marked, g1). g4 .. g1024: the looking glass.
 // Example: drop_turn.html#11.z.log.earn.top.23547
-const OPTS = { u: ['scale', 'no'], s: ['scale', 'tail'], z: ['scale', 'all'], c: ['scale', 'core'], f: ['scale', 'fair'], lin: ['rad', 'lin'], log: ['rad', 'log'], earn: ['ang', 'earn'], nat: ['ang', 'nat'], eq: ['ang', 'eq'], all: ['show', 'all'], top: ['show', 'top'], marked: ['show', 'marked'] };
-const DEF = { scale: 'all', rad: 'lin', ang: 'earn', show: 'marked' };
+const OPTS = { u: ['scale', 'no'], s: ['scale', 'tail'], z: ['scale', 'all'], c: ['scale', 'core'], f: ['scale', 'fair'], lin: ['rad', 'lin'], log: ['rad', 'log'], earn: ['ang', 'earn'], nat: ['ang', 'nat'], eq: ['ang', 'eq'], all: ['show', 'all'], top: ['show', 'top'], marked: ['show', 'marked'], g1: ['glass', '1'], g4: ['glass', '4'], g16: ['glass', '16'], g64: ['glass', '64'], g256: ['glass', '256'], g1024: ['glass', '1024'] };
+const DEF = { scale: 'all', rad: 'lin', ang: 'earn', show: 'marked', glass: '1' };
 function fromHash() {
   const t = location.hash.slice(1).split('.').filter(x => x); if (!t.length || !/^\d+$/.test(t[0])) return;
   $('n').value = t[0]; for (const id in DEF) $(id).value = DEF[id];
@@ -103,7 +107,7 @@ function toHash(n) {
   if (location.hash !== h) try { history.replaceState(null, '', h); } catch (e) { location.hash = h; }
 }
 function draw() {
-  const n = Math.max(2, Math.min(14, +$('n').value || 6)), sc = $('scale').value, scaled = sc !== 'no', rad = $('rad').value, show = $('show').value, am = $('ang').value;
+  const n = Math.max(2, Math.min(14, +$('n').value || 6)), sc = $('scale').value, scaled = sc !== 'no', rad = $('rad').value, show = $('show').value, am = $('ang').value, zoom = +$('glass').value || 1;
   try { localStorage.setItem('dropTurn1', JSON.stringify({ n, rad, show, sc })); } catch (e) {}
   if (!cur || cur.n !== n) { cur = wordsOf(n); cur.n = n; pinned = new Set(cur.words.filter(o => wantPins.has(String(o.c)))); wantPins = new Set(); }
   const { L, words } = cur, best = words[0];
@@ -138,22 +142,25 @@ function draw() {
   if (cur.k !== k) { cur.k = k; for (const o of cur.words) o.ratio = cur.fmt(o, k); }
   let vmax = 1, vmin = 1;
   for (const o of drawn) for (let l = 0; l <= L; l++) { const v = val(o, l); if (v > vmax) vmax = v; if (v < vmin) vmin = v; }
-  const W = 820, H = 800, cx = W / 2, cy = H / 2 + 6, RR = 370;
+  const W = 820, H = 800, RR = 370; let cx = W / 2, cy = H / 2 + 6;
   // the unit circle as large as is feasible: it gets the radius the outside does not need. Outside it the
   // values 1..vmax share a band of at most 2/5 of the radius (less when little lies outside); inside it the
   // values share the disc. Each side is linear or by powers of 2, so the scale has a bend at the unit circle.
   const lmin = Math.floor(Math.log2(vmin)) - 1, lout = Math.log2(vmax);
   const R1 = RR * (1 - Math.min(0.4, lout / (lout - lmin)));
-  const f = v => v <= 1 ? (rad === 'lin' ? R1 * v : R1 * (Math.log2(v) - lmin) / -lmin)
+  const f0 = v => v <= 1 ? (rad === 'lin' ? R1 * v : R1 * (Math.log2(v) - lmin) / -lmin)
                         : R1 + (RR - R1) * (rad === 'lin' ? (v - 1) / (vmax - 1) : Math.log2(v) / lout);
+  // the looking glass: everything magnified zoom times about the end point of the best, which moves to the middle
+  const f = v => zoom * f0(v);
+  if (zoom > 1) { const rE = f(val(best, scaled ? best.K : L)), aE = 2 * Math.PI * angs(best)[best.K]; cx = W / 2 - rE * Math.cos(aE); cy = H / 2 + rE * Math.sin(aE); }
   const s = [];
   s.push(`<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" font-family="Helvetica, Arial, sans-serif" style="color:inherit">`);
-  s.push(`<text x="12" y="20" font-size="15">Order ${n}: ${words.length} words, L = ${L}${sc === 'tail' ? '; every radius divided by 2^(trailing 0\'s)' : sc === 'all' ? '; every radius divided by 2^(0\'s not yet used)' : sc === 'fair' ? '; each 1 carries its share of the 0\'s' : sc === 'core' ? '; every radius divided by 2^(inner 0\'s not yet used + trailing 0\'s x share of the turn)' : ''}</text>`);
+  s.push(`<text x="12" y="20" font-size="15">Order ${n}: ${words.length} words, L = ${L}${sc === 'tail' ? '; every radius divided by 2^(trailing 0\'s)' : sc === 'all' ? '; every radius divided by 2^(0\'s not yet used)' : sc === 'fair' ? '; each 1 carries its share of the 0\'s' : sc === 'core' ? '; every radius divided by 2^(inner 0\'s not yet used + trailing 0\'s x share of the turn)' : ''}${zoom > 1 ? '; looking glass &#215;' + zoom + ' at the end of the best' : ''}</text>`);
   for (let k = Math.ceil(Math.log2(vmin)); 2 ** k <= vmax; k++) if (k !== 0) {
     const r = f(2 ** k); if (r < 6) continue;
     s.push(`<circle cx="${cx}" cy="${cy}" r="${r.toFixed(1)}" fill="none" stroke="var(--ring, #e6e6e6)"/><text x="${(cx + r + 2).toFixed(1)}" y="${cy + 12}" font-size="10" fill="#999">${k > 0 ? 2 ** k : '1/' + 2 ** -k}</text>`);
   }
-  s.push(`<line x1="${cx}" y1="${cy}" x2="${cx + RR + 14}" y2="${cy}" stroke="var(--ring, #e6e6e6)"/>`);
+  s.push(`<line x1="${cx}" y1="${cy}" x2="${(cx + zoom * RR + 14).toFixed(1)}" y2="${cy.toFixed(1)}" stroke="var(--ring, #e6e6e6)"/>`);
   s.push(`<circle cx="${cx}" cy="${cy}" r="${f(1).toFixed(1)}" fill="var(--disc, #f4f4f4)" fill-opacity="0.6" stroke="#777" stroke-width="2.5"/><text x="${(cx + f(1) + 2).toFixed(1)}" y="${cy + 12}" font-size="10" fill="#777">1</text>`);
   const xy = (r, a) => `${(cx + r * Math.cos(2 * Math.PI * a)).toFixed(1)}" cy="${(cy - r * Math.sin(2 * Math.PI * a)).toFixed(1)}`;
   const path = (o, col, wd, op) => {
@@ -161,7 +168,7 @@ function draw() {
     // each letter one step: the angle and the drawn radius run evenly from its start to its end (no chord through the disc)
     for (let l = 0; l <= o.K; l++) {
       const r1 = f(val(o, l)), r0 = l ? f(val(o, l - 1)) : r1;
-      const a0 = l ? ang[l - 1] : 0, SUB = l ? Math.max(1, Math.ceil((ang[l] - a0) * (wd > 1 ? 48 : 12))) : 1;
+      const a0 = l ? ang[l - 1] : 0, SUB = l ? Math.max(1, Math.ceil((ang[l] - a0) * (wd > 1 ? 48 : 12) * Math.sqrt(zoom))) : 1;
       for (let k = l ? 1 : SUB; k <= SUB; k++) {
         const a = 2 * Math.PI * (a0 + (ang[l] - a0) * k / SUB), r = r0 + (r1 - r0) * k / SUB;
         pts.push(`${(cx + r * Math.cos(a)).toFixed(1)},${(cy - r * Math.sin(a)).toFixed(1)}`);
@@ -205,7 +212,7 @@ $('list').addEventListener('click', e => {
   const d = e.target.closest('div[data-i]'); if (!d) return;
   const o = cur.words[+d.dataset.i]; pinned.has(o) ? pinned.delete(o) : pinned.add(o); draw();
 });
-for (const id of ['n', 'scale', 'rad', 'ang', 'show']) $(id).addEventListener('input', draw);
+for (const id of ['n', 'scale', 'rad', 'ang', 'show', 'glass']) $(id).addEventListener('input', draw);
 $('save').onclick = () => {
   const a = document.createElement('a');
   const svg = $('wrap').innerHTML.replace(/var\(--ring, (#[0-9a-f]+)\)/g, '$1').replace(/var\(--disc, (#[0-9a-f]+)\)/g, '$1').replace(/var\(--grey, (#[0-9a-f]+)\)/g, '$1').replace(/var\(--bg, (#[0-9a-f]+)\)/g, '$1');
