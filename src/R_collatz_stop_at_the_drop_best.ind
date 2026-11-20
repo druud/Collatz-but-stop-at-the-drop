@@ -4,9 +4,9 @@
 
   \indexspace
 
-  \item \termlink{backward}{backward ranking $k_0$}, \textbf{12}
+  \item \termlink{backward}{backward ranking $k_0$}, \textbf{13}
   \item \termlink{best}{best of the Order}, \textbf{4}
-  \item \termlink{bestfirst}{best-first search}, \textbf{11}
+  \item \termlink{bestfirst}{best-first search}, \textbf{12}
 
   \indexspace
 
@@ -48,8 +48,8 @@
 
   \indexspace
 
-  \item \termlink{scan}{scan}, \textbf{11}
-  \item \termlink{seed}{seed $s_0$}, \textbf{11}
+  \item \termlink{scan}{scan}, \textbf{12}
+  \item \termlink{seed}{seed $s_0$}, \textbf{12}
   \item \termlink{share}{share $\theta$}, \textbf{8}
   \item \termlink{startpart}{start part}, \textbf{7}
 
@@ -63,7 +63,7 @@
   \item \termlink{walk}{walk $\delta_\ell$}, \textbf{10}
   \item \termlink{wallword}{wall word}, \textbf{7}
   \item \termlink{widthidentity}{width identity}, \textbf{4}
-  \item \termlink{window}{window $W$}, \textbf{11}
+  \item \termlink{window}{window $W$}, \textbf{12}
   \item \termlink{word}{word}, \textbf{6}
 
 \end{theindex}

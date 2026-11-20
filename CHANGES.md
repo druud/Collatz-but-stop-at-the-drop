@@ -13,6 +13,10 @@ first. Version names (R_65a, R_66, ...) are the authors' own labels.
   of Orders 1 to 347, each with a certificate. Lean package
   `src/best_of_order/` (on top of `lean_files/`), with its scripts
   and data; `src/best_of_order.zip`.
+  Draft (38): Lean checks all 347 certificate lines by the kernel
+  (`cert_rows`); `scripts/paper_numbers.py` recomputes the numbers of
+  the paper against its text, and Appendix A's inverse-tree line is
+  corrected by it (21 of the 106 bests, 20% against 28%: no excess).
 
 - Paper 3, a new Chapter 3, "The words as one tree": the admissible
   words of all Orders as the leaves of one binary tree (figure for

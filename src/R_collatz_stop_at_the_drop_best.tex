@@ -610,7 +610,7 @@
   \Large The start words with the highest drop ratio}
 \author{\textbf{Ruud H.G. van Tol}}
 \date{\begin{tikzpicture}\dropturnfig\end{tikzpicture}\\[5ex]
-  \textbf{Draft (37)}\\[8ex]  % the number of commits of this .tex: one up with each committed change
+  \textbf{Draft (38)}\\[8ex]  % the number of commits of this .tex: one up with each committed change
   {\small\copyright\ 2026 Ruud H.G. van Tol. Licensed under \href{https://creativecommons.org/licenses/by/4.0/}{CC BY 4.0}.}
   % DOI line after the Zenodo upload
 }
@@ -744,6 +744,8 @@ $2/3$ as far as the one before it, and each $0$ between them doubles that. A dot
 \medskip
 The Lean package, the scripts and the data (the bests with their certificates) are at
 \url{https://github.com/druud/Collatz-but-stop-at-the-drop}, in \texttt{src/best\_of\_order/}.
+The script \texttt{paper\_numbers.py} there recomputes the numbers of this paper and compares each
+with the text.
 The paper, the Lean proofs and the scripts were made with Claude (Anthropic) as a working
 partner; Chapter~\ref{sec:lean} tells how.
 
@@ -1210,7 +1212,9 @@ at least $r$, so a popped residue beyond the window of the best found bounds eve
 heap; a pruned node holds no class id with a higher ratio by Theorem~\ref{thm:window}; the window only
 shrinks as the best improves. The scan computes the first step at which $x$ falls below itself, and
 the ones before it; by the remark after Theorem~\ref{thm:cycle} that is the Order of $x$'s word for
-all Orders here. So every class id $c$ of Order $n$ is met as a start of Order $n$, and every other start of its class is larger with a lower ratio (Lemma~\ref{lem:member}); so once
+all Orders here. (\texttt{boo\_scan.cpp} now also counts the prefixes with $3^j < 2^\ell$ at which $x$ has
+not fallen below itself; a run with a count of $0$ does not rest on that remark. The runs of this
+paper were made before that count was added.) So every class id $c$ of Order $n$ is met as a start of Order $n$, and every other start of its class is larger with a lower ratio (Lemma~\ref{lem:member}); so once
 all $x$ below the window of the best found are scanned, Theorem~\ref{thm:window} leaves no class id that
 could beat it.
 \end{proof}
@@ -1236,7 +1240,8 @@ Order on the way, and its first start of each Order is checked against A122442.
 \label{rem:cert}
 The certificate of an Order is the line $n$, $c$, $T^L(c)$, $W$. Checking it shows that $c$ is a
 class id of Order $n$ with that drop value, and that every class id with a higher ratio is below
-$W$ (Theorem~\ref{thm:window}); that there is none is the search itself. Orders $1$ to $124$ were
+$W$ (Theorem~\ref{thm:window}); that there is none is the search itself. This check is done in Lean
+for all $347$ lines, by the kernel (\lean{cert\_rows}, Chapter~\ref{sec:lean}). Orders $1$ to $124$ were
 searched twice, by the best-first search and by the scan; Orders $125$ to $229$ by the scan and by a
 depth-first search of the words inside $W$ (\texttt{boo\_ties.cpp}: none better, none equal); Orders
 $230$ to $347$ by the scan alone.
@@ -1291,7 +1296,7 @@ The drop values $d = T^L(\text{best})$ of Orders $1$ to $347$ have $219$ odd par
 part for $10$ Orders, $12\,729\,682\,859$ for $9$, $619\,739$, $92\,485\,801$, $1\,064\,232\,949$ and
 $30\,643\,528\,277$ for $5$ each, $7$ more for $4$ each, $18$ for $3$ each, $38$ for $2$ each, and $150$
 for one Order each. Seven of the odd parts
-($31$, $167$, $325$, $61$, $23$, $5$, $1$) lie on the trajectory of $27$, for $21$ Orders (\texttt{boo\_hubs.py}). The inverse trees of such hubs hold the bests only mildly
+($31$, $167$, $325$, $61$, $23$, $5$, $1$) lie on the trajectory of $27$, for $21$ Orders (\texttt{boo\_hubs.py}). The inverse trees of such hubs do not hold the bests
 more often than other starts (Appendix~\ref{app:failed}).
 \end{observation}
 
@@ -1323,7 +1328,9 @@ odd step), the map $T$ (\lean{tStep}), the word of a start (\lean{tBits}), the c
 (\lean{rho}), the Order (\lean{order}), admissibility (\lean{Admissible}) and $R(n)$ (\lean{rhoMax}) come
 from the library of the series~\cite{Paper2} through one bridge file, \texttt{Bridge.lean}. Only exact
 statements are formalized; the table of bests (Appendix~\ref{app:table}) is script data, and so are
-the two searches and the observations. Table~\ref{tab:lean} lists the Lean names.
+the two searches and the observations. Of that table Lean checks what a certificate line says
+(Remark~\ref{rem:cert}): \lean{cert\_rows} proves it for each of the $347$ lines, the kernel doing the
+arithmetic (no \texttt{native\_decide}); that no start below $W$ has a higher ratio stays with the searches. Table~\ref{tab:lean} lists the Lean names.
 
 \begin{herefloat}{table}\small
 {\setlength{\extrarowheight}{1pt}\begin{tabular}{|l|l|}
@@ -1343,8 +1350,10 @@ Proposition~\ref{prop:prefixneg} & \lean{prefix\_cyclePoint\_neg} \\
 Lemma~\ref{lem:dinkelbach} & \lean{F\_strictAnti}, \lean{F\_lamStar}, \lean{eq\_lamStar\_of\_F\_eq\_zero}, \lean{step\_lt} \\
 Lemma~\ref{lem:walk} & \lean{rho\_eq\_sum}, \lean{walk} \\
 Theorem~\ref{thm:split} (C) & \lean{split\_identity}, \lean{mem\_split\_iff}, \lean{mem\_of\_meet}, \lean{exists\_start\_iff} \\
+ & \lean{admissible\_split\_iff}, \lean{prefix\_pow\_of\_admissible} \\
 Theorem~\ref{thm:window} (B) & \lean{window}, \lean{window\_prefix} \\
 Remark~\ref{rem:ties} & \lean{tie\_rho}, \lean{tie\_dvd} \\
+Remark~\ref{rem:cert} & \lean{cert\_rows} \\
 \hline
 \end{tabular}}
 \caption{The statements of this paper and their Lean names in \texttt{best\_of\_order/}.}
@@ -1381,9 +1390,9 @@ One line each, with the reason (measured; scripts in \texttt{src/best\_of\_order
 \item \emph{Ideal lines and curves (diagonal, ruler, $\log$-shaped):} they measure area only; the best
   ranks anywhere ($3$ to $1337$).
 \item \emph{Trailing $1$-bits of the start:} no relation with the best.
-\item \emph{Inverse trees:} the inverse tree of $91$ holds $16$ of the $106$ bests in $(91, 2^{22})$,
-  $15\%$, against $9\%$ of the odd starts in that range: a mild excess only (\texttt{inv\_hub.py},
-  \texttt{inv\_grow.py}).
+\item \emph{Inverse trees:} the inverse tree of $91$ holds $21$ of the $106$ bests of Orders $1$ to $124$ in
+  $(91, 2^{22})$, $20\%$, against $28\%$ of the odd starts in that range: no excess
+  (\texttt{paper\_numbers.py}; \texttt{inv\_hub.py}, \texttt{inv\_grow.py}).
 \item \emph{The backward branch and bound:} correct, but costs more nodes than forward (Order $22$:
   $96\,743$ primed against $1\,505$).
 \item \emph{A guessed $\theta$ from the previous Order:} exact with halving, about twice the nodes of the
