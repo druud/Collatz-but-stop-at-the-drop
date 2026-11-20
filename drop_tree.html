@@ -43,7 +43,8 @@ svg text { fill:currentColor; }
  | Leaf: 3^m < 2^L (a drop word); stub: more than N ones (Orders > N only).
  | Start value r1 = r (the class id), or r + 2^L when r = 1 (1 is bottom); its drop value c' = T^L(r1).
  |*/
-const COL = ['#c0392b','#d35400','#b7950b','#1e8449','#1f618d','#7d3c98','#16a085','#a04000','#2e4053','#b03a2e'];
+// Okabe-Ito, colour-blind safe (Okabe and Ito 2002, https://jfly.uni-koeln.de/color/), as tree_tikz.py
+const COL = ['#d55e00','#56b4e9','#e69f00','#0072b2','#009e73','#cc79a7','#7f7f7f','#f0e442','#666666','#999999'];
 const $ = id => document.getElementById(id);
 try { const s = JSON.parse(localStorage.getItem('dropTree2') || '{}');
   if (s.n) $('n').value = s.n; if (s.lay) $('lay').value = s.lay; if (s.best) $('best').value = s.best; if (s.shape) $('shape').value = s.shape; if (s.split) $('split').value = s.split; if ('hide' in s) $('hide').checked = !!s.hide; } catch (e) {}
