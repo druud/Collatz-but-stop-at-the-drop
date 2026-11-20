@@ -21,6 +21,10 @@
 // Progress: stderr, one line per round; the progress file gets a UTC-timestamped line about
 // every 10 minutes (scan bound, needed bound, per mille done, Orders final) and DONE or FAILED
 // at the end; FILE.state is overwritten with it (scan state and bests, for --resume).
+// Width identity: the scan follows each x0 to its drop and counts the prefixes with 3^j < 2^l
+// (j ones in l letters) at which the value is not below x0. With a count of 0 the drop of every
+// x0 scanned is at its first such prefix, so the Orders reported do not rest on the width
+// identity (a resumed run counts from the resume on). A count above 0 is reported as FAILED.
 // Integers only: u128 in the scan (overflow guard: an exact multiword slow path), exact
 // multiword integers for 3^n, R and the windows.
 
@@ -346,9 +350,11 @@ struct Drop {
     u64 d;   // drop value (< x0)
 };
 
+static std::atomic<u64> width_fail{0};   // prefixes with 3^o < 2^b at which the value is not below x0
+
 static Drop drop_slow(u64 x0) {
     std::vector<u64> v = {x0};
-    int              o = 0;
+    int              o = 0, b = 0;
     while (true) {
         if (v[0] & 1) {
             u128 carry = 1;                    // 3v+1
@@ -365,7 +371,9 @@ static Drop drop_slow(u64 x0) {
             if (i + 1 < v.size()) v[i] |= v[i + 1] << 63;
         }
         if (v.size() > 1 && v.back() == 0) v.pop_back();
+        b++;
         if (v.size() == 1 && v[0] < x0) return {o, v[0]};
+        if (o >= (int)p2tab.size() || !adm(o, b)) width_fail++;
     }
 }
 
@@ -384,6 +392,7 @@ static Drop drop_of(u64 x0, u64 a, const Surv &s, int W) {
             if (v & 1) { v = (3 * v + 1) / 2; o++; }
             else       { v /= 2; if (v < x0) return {o, (u64)v}; }
             b++;
+            if (!adm(o, b)) width_fail++;
             continue;
         }
         const Jump &e = jt[(uint32_t)v & ((1u << JK) - 1)];
@@ -404,6 +413,7 @@ static Drop drop_of(u64 x0, u64 a, const Surv &s, int W) {
             v /= 2;
             b++;
             if (v < x0) return {o, (u64)v};
+            width_fail++;                      // 3^o < 2^b, and no drop
         }
     }
 }
@@ -607,9 +617,11 @@ int main(int argc, char **argv) {
                 }
             }
     fails += mism;
+    if (width_fail.load()) fails++;
     std::ostringstream check;
     check << "check: " << (fails ? "FAILED" : "every best drops at its own Order with its own drop value")
-          << "; first x0 per Order = A122442: " << nchk - mism << " of " << nchk;
+          << "; first x0 per Order = A122442: " << nchk - mism << " of " << nchk
+          << "; prefixes with 3^j < 2^l and no drop: " << width_fail.load();
     std::cerr << check.str() << "\n";
     double wall = std::chrono::duration<double>(std::chrono::steady_clock::now() - t_start).count();
     std::cout << "# finished: " << utc_now() << ", wall time " << hms(wall) << " (" << (long)(wall + 0.5)

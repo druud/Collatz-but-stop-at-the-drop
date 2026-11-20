@@ -2,7 +2,7 @@
 import BestOfOrder.Bridge
 
 /-!
-  The start parts (paper, Lemma 3.4). A key is a word of some Order without its final 0's
+  The start parts (paper, Lemma 3.5). A key is a word of some Order without its final 0's
   (`IsKey`, `keyPV`, `core` of `AcceleratedCollatz`): [] or a persistent word followed by a one.
   The prefix of an admissible word that ends in one of its ones is a key (`isKey_of_prefix`),
   so it is a word of its own Order without its final 0's (`admissible_keyPV'`, `core_keyPV'`).
@@ -46,7 +46,7 @@ theorem persistent_append_replicate {q : List Bool} (hq : Persistent q) (i : ℕ
     rw [List.replicate_succ', ← List.append_assoc]
     exact persistent_append_true ih
 
-/-- Lemma 3.4, one way: a prefix of an admissible word ending in a one is a key. -/
+/-- Lemma 3.5, one way: a prefix of an admissible word ending in a one is a key. -/
 theorem isKey_of_prefix {s p r : List Bool} (hA : Admissible s) (hs : s = p ++ true :: r) :
     IsKey (p ++ [true]) := by
   refine Or.inr ⟨p, ?_, rfl⟩
@@ -65,7 +65,7 @@ theorem order_keyPV' (k : List Bool) : order (keyPV k) = order k := order_keyPV 
 /-- The word of a key, without its final 0's, is the key. -/
 theorem core_keyPV' {k : List Bool} (hk : IsKey k) : core (keyPV k) = k := core_keyPV hk
 
-/-- Lemma 3.4, the other way: a nonempty key of Order w < n starts an admissible word of
+/-- Lemma 3.5, the other way: a nonempty key of Order w < n starts an admissible word of
     Order n. -/
 theorem exists_of_key {p : List Bool} (hp : Persistent p) {n : ℕ}
     (hn : order (p ++ [true]) < n) :

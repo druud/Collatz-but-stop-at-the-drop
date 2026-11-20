@@ -14,7 +14,8 @@ import AcceleratedCollatz.TAttrs
   first L steps of x, `rho` the constant of a word and `rhoMax n` the constant of the wall word
   of Order n. Paper, Chapters 2 and 3: Terras's affine form (`affine`), the class of a word
   (`mem_class_iff`), the constant of a concatenation (`rho_append`), the wall
-  (`rho_le_wall`, `rho_eq_wall_iff`, `wall_eq_sum`) and admissibility in powers
+  (`rho_le_wall`, `rho_eq_wall_iff`, `wall_eq_sum`), the lower wall (`three_pow_le_rho_add'`,
+  `rho_eq_lower_iff`) and admissibility in powers
   (`admissible_iff_pow`).
 -/
 
@@ -73,6 +74,16 @@ theorem rho_le_wall {s : List Bool} (hA : Admissible s) : rho s ≤ rhoMax (orde
 theorem rho_eq_wall_iff {s : List Bool} (hA : Admissible s) :
     rho s = rhoMax (order s) ↔ s = firstWord (order s) :=
   rho_eq_rhoMax_iff hA
+
+/-- The lower wall: 3^n - 2^n ≤ rho, for any word with n ones. -/
+theorem three_pow_le_rho_add' (s : List Bool) : 3 ^ order s ≤ rho s + 2 ^ order s :=
+  three_pow_le_rho_add s
+
+/-- The lower wall, equality: exactly for the words with all their ones first. -/
+theorem rho_eq_lower_iff (s : List Bool) :
+    rho s + 2 ^ order s = 3 ^ order s ↔
+      ∃ k, s = List.replicate (order s) true ++ List.replicate k false :=
+  rho_add_eq_three_pow_iff s
 
 /-- R(n) = sum over m < n of 3^(n-1-m) 2^(p2(m)-1). -/
 theorem wall_eq_sum (n : ℕ) :

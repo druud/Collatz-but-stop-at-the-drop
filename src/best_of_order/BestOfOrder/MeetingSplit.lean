@@ -9,7 +9,8 @@ import BestOfOrder.Bridge
   x is in the class of p ++ t iff x is in the class of p and T^m(x) in that of t (`mem_split_iff`);
   conversely any y in the class of t with 3^w x + rho p = 2^m y gives a member x of p ++ t
   (`mem_of_meet`), and such an x exists iff 3^w divides 2^m y - rho p (`exists_start_iff`):
-  the two parts meet in one congruence modulo 3^w.
+  the two parts meet in one congruence modulo 3^w. Which p ++ v are words: `admissible_split_iff`,
+  with `prefix_pow_of_admissible` for its hypothesis on p.
 -/
 
 namespace BestOfOrder
@@ -81,5 +82,40 @@ theorem exists_start_iff (p : List Bool) (y : ℕ) (hy : rho p ≤ 2 ^ p.length 
     have h := Nat.sub_add_cancel hy
     rw [hx] at h
     exact h
+
+/-- A proper prefix p of an admissible word (so every start part) has 2^m < 3^(ones of its first
+    m letters) for each of its nonempty prefixes, itself included: the hypothesis of
+    `admissible_split_iff`. -/
+theorem prefix_pow_of_admissible {s : List Bool} (hA : Admissible s) {k : ℕ} (hk : k < s.length) :
+    ∀ m, 1 ≤ m → m ≤ (s.take k).length → 2 ^ m < 3 ^ order ((s.take k).take m) := by
+  intro m hm1 hm
+  rw [List.length_take] at hm
+  rw [List.take_take, Nat.min_eq_left (by omega)]
+  exact ((admissible_iff_pow s).mp hA).1 m (by omega) hm1
+
+/-- Theorem C, conversely, admissibility: with p as in `prefix_pow_of_admissible`, p ++ v is a
+    word (admissible) exactly when each nonempty proper prefix of v, with j ones in l letters, has
+    2^(m+l) < 3^(w+j), and 3^n < 2^(m+|v|). -/
+theorem admissible_split_iff (p v : List Bool)
+    (hp : ∀ m, 1 ≤ m → m ≤ p.length → 2 ^ m < 3 ^ order (p.take m)) :
+    Admissible (p ++ v) ↔
+      (∀ l, 1 ≤ l → l < v.length → 2 ^ (p.length + l) < 3 ^ (order p + order (v.take l))) ∧
+        3 ^ (order p + order v) < 2 ^ (p.length + v.length) := by
+  rw [admissible_iff_pow, List.length_append, order_append]
+  constructor
+  · rintro ⟨h1, h2⟩
+    refine ⟨fun l hl1 hl2 => ?_, h2⟩
+    have := h1 (p.length + l) (by omega) (by omega)
+    rwa [List.take_length_add_append, order_append] at this
+  · rintro ⟨h1, h2⟩
+    refine ⟨fun m hm hm1 => ?_, h2⟩
+    rcases Nat.le_total m p.length with h | h
+    · rw [List.take_append_of_le_length h]
+      exact hp m hm1 h
+    · obtain ⟨l, rfl⟩ := Nat.exists_eq_add_of_le h
+      rw [List.take_length_add_append, order_append]
+      rcases Nat.eq_zero_or_pos l with rfl | hl
+      · simpa [order] using hp p.length (by omega) le_rfl
+      · exact h1 l hl (by omega)
 
 end BestOfOrder

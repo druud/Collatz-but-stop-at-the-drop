@@ -7,6 +7,8 @@ import Mathlib.Tactic.LinearCombination
   of Order n has T^L(x)/x > b/a, then x (2^L b - 3^n a) < R(n) a, with R(n) = `rhoMax n` the
   constant of the wall word (`window`). The paper states it for the drop ratio drop(x)/x of a class id; here the ratio is b/a, stated as b x < a T^L(x), so a may be any
   natural number; with b/a the ratio of a class id of the Order, this is the window of the search.
+  With the lower wall rho ≥ 3^n - 2^n the window of a start y is at most R(n) y / (3^n - 2^n)
+  (`window_seed`).
 -/
 
 namespace BestOfOrder
@@ -29,6 +31,28 @@ theorem window {s : List Bool} (hA : Admissible s) {x a b : ℕ} (hx : tBits x s
     rw [← h']
     ring
   have h3 : (a : ℤ) * rho s ≤ a * rhoMax (order s) := mul_le_mul_of_nonneg_left hR (by positivity)
+  nlinarith
+
+/-- Corollary 6.2 (where the best lies): a member x of a class of Order n with a higher ratio than a
+    member y of a class of Order n has x (3^n - 2^n) < R(n) y. With y the smallest start s_0 of the
+    Order: the best is below s_0 R(n) / (3^n - 2^n). -/
+theorem window_seed {s t : List Bool} (hs : Admissible s) (ht : Admissible t)
+    (ho : order t = order s) {x y : ℕ} (hx : tBits x t.length = t) (hy : tBits y s.length = s)
+    (h : tStep^[s.length] y * x < y * tStep^[t.length] x) :
+    x * (3 ^ order s - 2 ^ order s) < rhoMax (order s) * y := by
+  have hw := window ht hx h
+  have hlen : t.length = s.length := by
+    rw [admissible_length' t ht, admissible_length' s hs, ho]
+  have ha := affine s.length y
+  rw [hy] at ha
+  have ha' : (2 : ℤ) ^ s.length * (tStep^[s.length] y : ℤ) = 3 ^ order s * y + rho s := by
+    exact_mod_cast ha
+  rw [hlen, ho] at hw
+  have hlow : (3 : ℤ) ^ order s ≤ rho s + 2 ^ order s := by
+    exact_mod_cast three_pow_le_rho_add' s
+  have h23 : 2 ^ order s ≤ 3 ^ order s := Nat.pow_le_pow_left (by norm_num) _
+  have hx0 : (0 : ℤ) ≤ x := by positivity
+  zify [h23]
   nlinarith
 
 /-- Remark 2.10 (ties): two starts with the same word length L and Order, x of word s and y of word t,
