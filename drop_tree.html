@@ -116,7 +116,7 @@ function draw() {
     const d = Math.min(SD, SR), q = qpos(k) - d, p = dpos(nd);
     return [XY(nd), land ? [q, p] : [p, q], XY(k)];
   };
-  const leafText = nd => `${nd.m}  ${nd.w}  ${nd.r} mod ${1n << BigInt(nd.w.length)}  &#8594; ${nd.a} i + ${nd.b}`;
+  const leafText = nd => `${nd.m}  ${nd.w}, ${nd.r} mod ${1n << BigInt(nd.w.length)}  &#8594; ${nd.a} i + ${nd.b}`;
   const lab = PD + D * SD + 10;
   // the best-of-class phrases in a column of their own, after the longest leaf label (about 6.4 px a character)
   const chars = Math.max(0, ...rows.filter(nd => nd.kind === 'leaf').map(nd => leafText(nd).replace(/&#8594;/g, '>').length));
