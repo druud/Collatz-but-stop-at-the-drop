@@ -93,8 +93,8 @@
 \newenvironment{wordbox}
   {\par\ifpaper\vspace*{\fill}\vspace{\bigskipamount}\else\medskip\fi
    \noindent\begin{lrbox}{\wordboxbin}%
-   \begin{minipage}{\dimexpr\linewidth-6pt-2\fboxrule\relax}\small
-   \begin{tabular}{@{}>{\bfseries\boldmath\raggedright\arraybackslash}p{0.24\linewidth}p{0.68\linewidth}@{}}}
+   \begin{minipage}{\dimexpr\linewidth-6pt-2\fboxrule\relax}\small\renewcommand{\arraystretch}{1.2}%
+   \begin{tabular}{@{}>{\bfseries\boldmath\raggedright\arraybackslash}p{0.24\linewidth}|p{\dimexpr0.76\linewidth-2\tabcolsep-\arrayrulewidth\relax}@{}}}
   {\end{tabular}\end{minipage}\end{lrbox}%
    \begingroup\setlength{\fboxsep}{0pt}%
    \fcolorbox{black!40}{black!5}{\begin{minipage}{\dimexpr\linewidth-2\fboxrule\relax}%
@@ -642,14 +642,14 @@ and the ratio $T^L(c)/c$ to four decimals.}
 \nopagebreak
 
 \begin{wordbox}
-\boxhere{drop}drop\index{drop@\termlink{drop}{drop}|textbf} & the first step at which the value falls below the start, and that value. \\
-\boxhere{admissible}admissible word\index{admissible word@\termlink{admissible}{admissible word}|textbf} & the parity word of a start up to its drop: $n$ odd steps in $L = p_2(n)$ letters, with $3^j > 2^\ell$ after every earlier letter. \\
-\boxhere{order}Order $n$\index{Order@\termlink{order}{Order $n$}|textbf} & the number of odd steps up to the drop. \\
-\boxhere{classid}class id $c$\index{class id@\termlink{classid}{class id $c$}|textbf} & the least member above $1$ of the residue class of an admissible word; it stands for the class. \\
-\boxhere{dropratio}drop ratio\index{drop ratio@\termlink{dropratio}{drop ratio}|textbf} & $T^L(x)/x$: how far a start falls at its drop; at least $3^n/2^L$. \\
-\boxhere{best}best of the Order\index{best of the Order@\termlink{best}{best of the Order}|textbf} & the class id of Order $n$ with the highest drop ratio: the one that falls the least. \\
-\boxhere{widthidentity}width identity\index{width identity@\termlink{widthidentity}{width identity}|textbf} & every class id $c > 1$ drops at the end of its word (Terras's coefficient stopping time conjecture); proved for Orders up to $10\,781\,273$. \\
-A122442\index{OEIS!A122442} & the smallest start of each Order. \\
+\boxhere{drop}drop\index{drop@\termlink{drop}{drop}|textbf} & the first step at which the value falls below the start, and that value. \\ \hline
+\boxhere{admissible}admissible word\index{admissible word@\termlink{admissible}{admissible word}|textbf} & the parity word of a start up to its drop: $n$ odd steps in $L = p_2(n)$ letters, with $3^j > 2^\ell$ after every earlier letter. \\ \hline
+\boxhere{order}Order $n$\index{Order@\termlink{order}{Order $n$}|textbf} & the number of odd steps up to the drop. \\ \hline
+\boxhere{classid}class id $c$\index{class id@\termlink{classid}{class id $c$}|textbf} & the least member above $1$ of the residue class of an admissible word; it stands for the class. \\ \hline
+\boxhere{dropratio}drop ratio\index{drop ratio@\termlink{dropratio}{drop ratio}|textbf} & $T^L(x)/x$: how far a start falls at its drop; at least $3^n/2^L$. \\ \hline
+\boxhere{best}best of the Order\index{best of the Order@\termlink{best}{best of the Order}|textbf} & the class id of Order $n$ with the highest drop ratio: the one that falls the least. \\ \hline
+\boxhere{widthidentity}width identity\index{width identity@\termlink{widthidentity}{width identity}|textbf} & every class id $c > 1$ drops at the end of its word (Terras's coefficient stopping time conjecture); proved for Orders up to $10\,781\,273$. \\ \hline
+A122442\index{OEIS!A122442} & the smallest start of each Order. \\ \hline
 A402443\index{OEIS!A402443} & the bests of the Orders (Appendix~\ref{app:table}).
 \end{wordbox}
 
@@ -779,11 +779,11 @@ depth-first search of the words with the window of the best finds none for Order
 \nopagebreak
 
 \begin{wordbox}
-\boxhere{word}word\index{word@\termlink{word}{word}|textbf} & the parity sequence $e_0 e_1 e_2\ldots$ of a start under $T$; $1$ for an odd step. \\
-\boxhere{p2}$p_2(n)$\index{p2@\termlink{p2}{$p_2(n)$}|textbf} & the bit length of $3^n$: the length $L$ of a word of Order $n$. \\
-\boxhere{rho}constant $\rho$\index{constant rho@\termlink{rho}{constant $\rho$}|textbf} & $\sum_q 3^{n-q}2^{k_q}$ over the ones of a word; $2^L T^L(x) = 3^n x + \rho$ on its class. \\
-\boxhere{dropvalue}drop value $d$\index{drop value@\termlink{dropvalue}{drop value $d$}|textbf} & $T^L(c)$, the value of the class id at its drop. \\
-\boxhere{tie}tie\index{tie@\termlink{tie}{tie}|textbf} & two class ids of one Order with the same drop ratio. \\
+\boxhere{word}word\index{word@\termlink{word}{word}|textbf} & the parity sequence $e_0 e_1 e_2\ldots$ of a start under $T$; $1$ for an odd step. \\ \hline
+\boxhere{p2}$p_2(n)$\index{p2@\termlink{p2}{$p_2(n)$}|textbf} & the bit length of $3^n$: the length $L$ of a word of Order $n$. \\ \hline
+\boxhere{rho}constant $\rho$\index{constant rho@\termlink{rho}{constant $\rho$}|textbf} & $\sum_q 3^{n-q}2^{k_q}$ over the ones of a word; $2^L T^L(x) = 3^n x + \rho$ on its class. \\ \hline
+\boxhere{dropvalue}drop value $d$\index{drop value@\termlink{dropvalue}{drop value $d$}|textbf} & $T^L(c)$, the value of the class id at its drop. \\ \hline
+\boxhere{tie}tie\index{tie@\termlink{tie}{tie}|textbf} & two class ids of one Order with the same drop ratio. \\ \hline
 A100982\index{OEIS!A100982} & the number of words of each Order.
 \end{wordbox}
 
@@ -843,9 +843,9 @@ is a word of Order $n$, and $p$ is its prefix ending in its $w$-th one. Cf.~\cit
 \nopagebreak
 
 \begin{wordbox}
-\boxhere{wallword}wall word\index{wall word@\termlink{wallword}{wall word}|textbf} & the word of Order $n$ with each one as late as admissibility allows: its $q$-th one at letter $p_2(q-1)-1$. \\
-\boxhere{R}$R(n)$\index{R@\termlink{R}{$R(n)$}|textbf} & the constant of the wall word, the largest $\rho$ of Order $n$. \\
-\boxhere{tailbound}tail bound\index{tail bound@\termlink{tailbound}{tail bound}|textbf} & the largest $\rho$ below a prefix: the prefix followed by the rest of the wall word (Corollary~\ref{cor:tail}). \\
+\boxhere{wallword}wall word\index{wall word@\termlink{wallword}{wall word}|textbf} & the word of Order $n$ with each one as late as admissibility allows: its $q$-th one at letter $p_2(q-1)-1$. \\ \hline
+\boxhere{R}$R(n)$\index{R@\termlink{R}{$R(n)$}|textbf} & the constant of the wall word, the largest $\rho$ of Order $n$. \\ \hline
+\boxhere{tailbound}tail bound\index{tail bound@\termlink{tailbound}{tail bound}|textbf} & the largest $\rho$ below a prefix: the prefix followed by the rest of the wall word (Corollary~\ref{cor:tail}). \\ \hline
 \boxhere{startpart}start part\index{start part@\termlink{startpart}{start part}|textbf} & the prefix of a word up to its $w$-th one: a word of Order $w$ without its final $0$'s.
 \end{wordbox}
 
@@ -920,8 +920,8 @@ and $x^\ast(\text{wall}) < t_n$ for $n \le 2000$ (exact, \texttt{ceiling\_check.
 \nopagebreak
 
 \begin{wordbox}
-\boxhere{cyclepoint}cycle point $x^\ast$\index{cycle point@\termlink{cyclepoint}{cycle point $x^\ast$}|textbf} & $\rho/(2^L - 3^n)$, the rational fixed point of the affine map of a word; the least point of its rational cycle. \\
-\boxhere{share}share $\theta$\index{share theta@\termlink{share}{share $\theta$}|textbf} & $x^\ast/c$; the best of the Order is the class id with the largest share. \\
+\boxhere{cyclepoint}cycle point $x^\ast$\index{cycle point@\termlink{cyclepoint}{cycle point $x^\ast$}|textbf} & $\rho/(2^L - 3^n)$, the rational fixed point of the affine map of a word; the least point of its rational cycle. \\ \hline
+\boxhere{share}share $\theta$\index{share theta@\termlink{share}{share $\theta$}|textbf} & $x^\ast/c$; the best of the Order is the class id with the largest share. \\ \hline
 \boxhere{ceiling}ceiling $t_n$\index{ceiling@\termlink{ceiling}{ceiling $t_n$}|textbf} & the least $x \ge 1$ with $(3x+1)^n < 2^L x^n$; above the cycle point of the wall word for $n \le 2000$.
 \end{wordbox}
 
@@ -963,25 +963,39 @@ Lemma~\ref{lem:affine}; $c < 2^L$ by Remark~\ref{rem:residue}.
 \label{thm:split}
 \termhere{meetingsplit}Cut a word of Order $n$ after its $w$-th one, after $m$ letters; let $\rho_p$ be the constant of the start
 part, $\sigma$ that of the drop part (its own letters counted from $0$) and $y = T^m(c)$. Then
-$\rho = 3^{n-w}\rho_p + 2^m\sigma$, $c = (2^m y - \rho_p)/3^w$, and
+\[
+\rho = 3^{n-w}\rho_p + 2^m\sigma, \qquad c = \frac{2^m y - \rho_p}{3^w},
+\]
+and
 \[
 \rho - \lambda c = \rho_p\Bigl(3^{n-w} + \frac{\lambda}{3^w}\Bigr) + 2^m\Bigl(\sigma - \frac{\lambda\,y}{3^w}\Bigr).
 \]
 Conversely, let $p$ be a start part (a word of Order $w$ without its final $0$'s,
 Lemma~\ref{lem:startparts}) and $v$ a drop part with $n - w$ ones. Then $pv$ is a word of Order $n$
 exactly when each nonempty proper prefix of $v$, with $j$ ones in $\ell$ letters, has
-$3^{w+j} > 2^{m+\ell}$ and $3^n < 2^{m+|v|}$. Its members $x > 0$ are then exactly the numbers
+\[
+3^{w+j} > 2^{m+\ell}, \qquad\text{and}\qquad 3^n < 2^{m+|v|}.
+\]
+Its members $x > 0$ are then exactly the numbers
 $(2^m y - \rho_p)/3^w$ with $y > \rho_p/2^m$ in the class of $v$ and $2^m y \equiv \rho_p \pmod{3^w}$;
 the class id is the least of them above $1$.
 \end{theorem}
 \begin{proof}
 The ones of $v$ sit at $k = m + k'$ and are the $(w+q')$-th of $pv$, so Lemma~\ref{lem:affine} gives
-$\rho = 3^{n-w}\rho_p + \sum_{q'} 3^{(n-w)-q'}2^{m+k'} = 3^{n-w}\rho_p + 2^m\sigma$, and for the start
+\[
+\rho = 3^{n-w}\rho_p + \sum_{q'} 3^{(n-w)-q'}2^{m+k'} = 3^{n-w}\rho_p + 2^m\sigma,
+\]
+and for the start
 part $2^m y = 3^w c + \rho_p$. Substituting $c$ gives the identity. Admissibility of $pv$: the nonempty
 prefixes of $pv$ inside $p$ are admissible as $p$ is a proper prefix of a word of Order $w$ with
-$3^w > 2^m$, and the longer ones are the condition on $s$. For the members: if $x$ has the word $pv$,
+$3^w > 2^m$, and the longer ones are the condition on $v$.
+
+For the members: if $x$ has the word $pv$,
 then $y = T^m(x)$ has the word $v$ and $3^w x = 2^m y - \rho_p$. Conversely, for such a $y$ the number
-$x = (2^m y - \rho_p)/3^w$ is a positive integer with $3^w x \equiv -\rho_p \pmod{2^m}$, so $x$ is in the
+\[
+x = \frac{2^m y - \rho_p}{3^w}
+\]
+is a positive integer with $3^w x \equiv -\rho_p \pmod{2^m}$, so $x$ is in the
 class of $p$ (Lemma~\ref{lem:congruence}, whose proof holds for any word), and
 $T^m(x) = (3^w x + \rho_p)/2^m = y$ has the word $v$. The congruence is the only tie between the two
 parts: $p$ alone fixes $\rho_p$, $m$, $w$; $v$ alone fixes $\sigma$ and the class of $y$.
@@ -999,8 +1013,8 @@ is $\ge 0$; with the true maxima, the drop side keeps $1$ to $3$ words (measured
 \nopagebreak
 
 \begin{wordbox}
-\boxhere{lambdastar}$\lambda^\ast$, $F(\lambda)$\index{lambda star@\termlink{lambdastar}{$\lambda^\ast$, $F(\lambda)$}|textbf} & the largest $\rho/c$ of Order $n$, and $F(\lambda) = \max(\rho - \lambda c)$, zero exactly at $\lambda^\ast$ (Dinkelbach). \\
-\boxhere{walk}walk $\delta_\ell$\index{walk@\termlink{walk}{walk $\delta_\ell$}|textbf} & $\rho - \lambda c$ letter by letter: $\delta_\ell = e_\ell 3^{n-w_\ell} - \lambda t_\ell$, with $t_\ell$ the bits of $c$. \\
+\boxhere{lambdastar}$\lambda^\ast$, $F(\lambda)$\index{lambda star@\termlink{lambdastar}{$\lambda^\ast$, $F(\lambda)$}|textbf} & the largest $\rho/c$ of Order $n$, and $F(\lambda) = \max(\rho - \lambda c)$, zero exactly at $\lambda^\ast$ (Dinkelbach). \\ \hline
+\boxhere{walk}walk $\delta_\ell$\index{walk@\termlink{walk}{walk $\delta_\ell$}|textbf} & $\rho - \lambda c$ letter by letter: $\delta_\ell = e_\ell 3^{n-w_\ell} - \lambda t_\ell$, with $t_\ell$ the bits of $c$. \\ \hline
 \boxhere{meetingsplit}meeting split\index{meeting split@\termlink{meetingsplit}{meeting split}|textbf} & a word cut after its $w$-th one into a start part and a drop part (constant $\sigma$), tied only by a congruence modulo $3^w$.
 \end{wordbox}
 
@@ -1063,9 +1077,9 @@ Order on the way, and its first start of each Order is checked against A122442.
 \nopagebreak
 
 \begin{wordbox}
-\boxhere{window}window\index{window@\termlink{window}{window}|textbf} & the bound $c\,(2^L b - 3^n a) < R(n)\,a$ that a class id must meet to beat the ratio $b/a$ (Theorem~\ref{thm:window}). \\
-\boxhere{bestfirst}best-first search\index{best-first search@\termlink{bestfirst}{best-first search}|textbf} & the prefixes popped by residue and pruned by the window (\texttt{boo.py}). \\
-\boxhere{scan}scan\index{scan@\termlink{scan}{scan}|textbf} & all starts in increasing order, up to the window of the best found (\texttt{boo\_scan.cpp}). \\
+\boxhere{window}window\index{window@\termlink{window}{window}|textbf} & the bound $c\,(2^L b - 3^n a) < R(n)\,a$ that a class id must meet to beat the ratio $b/a$ (Theorem~\ref{thm:window}). \\ \hline
+\boxhere{bestfirst}best-first search\index{best-first search@\termlink{bestfirst}{best-first search}|textbf} & the prefixes popped by residue and pruned by the window (\texttt{boo.py}). \\ \hline
+\boxhere{scan}scan\index{scan@\termlink{scan}{scan}|textbf} & all starts in increasing order, up to the window of the best found (\texttt{boo\_scan.cpp}). \\ \hline
 \boxhere{seed}seed $s_0$\index{seed@\termlink{seed}{seed $s_0$}|textbf} & the smallest start of the Order (A122442), the first candidate of both searches.
 \end{wordbox}
 
@@ -1089,10 +1103,14 @@ For Orders $15$ to $21$, $L/2 < k_0 < 4L/5$; Order $14$ needs $19$ of its $23$ l
 
 \begin{herefloat}{table}
 \[
-\begin{array}{r|rrrrrrrrrrrrrrrrrrrr}
+\setlength{\extrarowheight}{1pt}
+\begin{array}{|r||r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|}
+\hline
 n & 2&3&4&5&6&7&8&9&10&11&12&13&14&15&16&17&18&19&20&21\\
+\hline
 L & 4&5&7&8&10&12&13&15&16&18&20&21&23&24&26&27&29&31&32&34\\
-k_0 & 1&1&3&2&6&4&8&7&9&9&12&13&19&14&16&16&18&24&21&23
+k_0 & 1&1&3&2&6&4&8&7&9&9&12&13&19&14&16&16&18&24&21&23\\
+\hline
 \end{array}
 \]
 \caption{Backward ranking: the least $k_0$ from which the best leads the last $k$ letters of the walk.}
@@ -1127,10 +1145,10 @@ statements are formalized; the table of bests (Appendix~\ref{app:table}) is scri
 the two searches and the observations. Table~\ref{tab:lean} lists the Lean names.
 
 \begin{herefloat}{table}\small
-\begin{tabular}{@{}ll@{}}
-\toprule
+{\setlength{\extrarowheight}{1pt}\begin{tabular}{|l|l|}
+\hline
 Statement & Lean \\
-\midrule
+\hline
 Lemma~\ref{lem:affine} & \lean{affine}, \lean{mem\_class\_iff} \\
 Lemma~\ref{lem:congruence} & \lean{congruence} (as $-\rho\,3^{-n}$) \\
 Lemma~\ref{lem:member} & \lean{ratio\_lt\_of\_lt} \\
@@ -1146,8 +1164,8 @@ Lemma~\ref{lem:walk} & \lean{rho\_eq\_sum}, \lean{walk} \\
 Theorem~\ref{thm:split} (C) & \lean{split\_identity}, \lean{mem\_split\_iff}, \lean{mem\_of\_meet}, \lean{exists\_start\_iff} \\
 Theorem~\ref{thm:window} (B) & \lean{window}, \lean{window\_prefix} \\
 Remark~\ref{rem:ties} & \lean{tie\_rho}, \lean{tie\_dvd} \\
-\bottomrule
-\end{tabular}
+\hline
+\end{tabular}}
 \caption{The statements of this paper and their Lean names in \texttt{best\_of\_order/}.}
 \label{tab:lean}
 \end{herefloat}
