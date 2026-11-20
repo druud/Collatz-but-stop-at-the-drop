@@ -610,7 +610,7 @@
   \Large The start words with the highest drop ratio}
 \author{\textbf{Ruud H.G. van Tol}}
 \date{\begin{tikzpicture}\dropturnfig\end{tikzpicture}\\[5ex]
-  \textbf{Draft (38)}\\[8ex]  % the number of commits of this .tex: one up with each committed change
+  \textbf{Draft (39)}\\[8ex]  % the number of commits of this .tex: one up with each committed change
   {\small\copyright\ 2026 Ruud H.G. van Tol. Licensed under \href{https://creativecommons.org/licenses/by/4.0/}{CC BY 4.0}.}
   % DOI line after the Zenodo upload
 }
@@ -943,6 +943,19 @@ $\rho = 3^{n-j}\rho_j + \sum_{q>j} 3^{n-q}2^{k_q}$, and $k_q \le p_2(q-1)-1$ by 
 The terms $q \le j$ of $R(n)$ sum to $3^{n-j}R(j)$.
 \end{proof}
 
+\begin{proposition}[The lower wall]
+\label{prop:lowerwall}
+For every word with $n$ ones, $\rho \ge 3^n - 2^n$, with equality only for the words that have all
+their ones first; of Order $n$ that is the one word of $n$ ones and then $L - n$ zeros. For every
+Order $n \ge 1$, $R(n) \le n\,3^{n-1}$.
+\end{proposition}
+\begin{proof}
+The $q$-th one has $q - 1$ ones before it, so $k_q \ge q - 1$ and
+$\rho \ge \sum_{q=1}^{n} 3^{n-q}\,2^{q-1} = 3^n - 2^n$, with equality only if every $k_q = q - 1$. That
+word is admissible: $3^j > 2^j$ on the ones, and $3^n > 2^\ell$ for $\ell < L$. On the other side
+$2^{p_2(q-1)-1} \le 3^{q-1}$, so each term of $R(n)$ is at most $3^{n-1}$.
+\end{proof}
+
 \begin{lemma}[The start parts]
 \label{lem:startparts}
 \termhere{startpart}Let $1 \le w < n$. The prefixes of the words of Order $n$ that end in their $w$-th one are exactly the
@@ -1166,7 +1179,8 @@ the searches of Chapter~\ref{sec:search} do not use it yet.
 By Lemma~\ref{lem:startparts} the start side at cut $w$ is the set of words of Order $w$, the same
 for every $n > w$. The drop side grows backward from the last letter on residues $y \bmod 2^k$
 ($y' = 2y$ or $(2y-1)/3$). A word can be the best only if each part plus the other side's maximum
-is $\ge 0$; with the true maxima, the drop side keeps $1$ to $3$ words (measured, \texttt{mitm4.py}).
+is $\ge 0$; with the true maxima, $1$ to $3$ words pass both tests at each cut (Orders $4$ to $13$,
+measured, \texttt{mitm4.py}).
 \end{remark}
 
 
@@ -1195,6 +1209,28 @@ $c\,(2^L g - 3^n h) < \rho\,h$. Now $\rho \le R(n)$ by Theorem~\ref{thm:wall}; b
 $\rho$ is at most the bound of Corollary~\ref{cor:tail}, and $c \ge r$ as $c \equiv r \pmod{2^\ell}$,
 $c > 0$, $0 < r < 2^\ell$.
 \end{proof}
+
+\begin{corollary}[Where the best lies]
+\label{cor:bestrange}
+Let $s_0$ be the smallest class id above $1$ of Order $n$, with constant $\rho_0$, and $c^\ast$ the best. Then
+\[
+s_0 \;\le\; c^\ast \;\le\; \frac{R(n)}{\rho_0}\,s_0 \;\le\; \frac{R(n)}{3^n - 2^n}\,s_0 ,
+\qquad\text{and}\qquad c^\ast < \frac{n}{2}\,s_0 \quad (n \ge 3).
+\]
+\end{corollary}
+\begin{proof}
+If $c^\ast \ne s_0$, its ratio is above that of $s_0$ (a tie would make $s_0$ the best), and
+Theorem~\ref{thm:window} with $g/h$ the ratio of $s_0$ has $2^L g - 3^n h = \rho_0$, so
+$c^\ast \rho_0 < R(n)\,s_0$. Then $\rho_0 \ge 3^n - 2^n$ and $R(n) \le n\,3^{n-1}$ by
+Proposition~\ref{prop:lowerwall}, and $2\cdot 3^{n-1} \le 3^n - 2^n$ for $n \ge 3$.
+\end{proof}
+
+\begin{remark}[The size of that range]
+\label{rem:bestrange}
+The factor $R(n)/(3^n - 2^n)$ is below $31$ at Order $124$ and below $84$ at Order $347$. The bests
+found stay far inside: for Orders $1$ to $347$ the largest $c^\ast/s_0$ is $1\,097\,165/347\,477$, between
+$3$ and $16/5$, at Order $107$ (\texttt{paper\_numbers.py}).
+\end{remark}
 
 \begin{corollary}[Two exact searches]
 \begin{enumerate}
@@ -1352,6 +1388,7 @@ Lemma~\ref{lem:walk} & \lean{rho\_eq\_sum}, \lean{walk} \\
 Theorem~\ref{thm:split} (C) & \lean{split\_identity}, \lean{mem\_split\_iff}, \lean{mem\_of\_meet}, \lean{exists\_start\_iff} \\
  & \lean{admissible\_split\_iff}, \lean{prefix\_pow\_of\_admissible} \\
 Theorem~\ref{thm:window} (B) & \lean{window}, \lean{window\_prefix} \\
+Proposition~\ref{prop:lowerwall}, Corollary~\ref{cor:bestrange} & \lean{rho\_eq\_lower\_iff}, \lean{window\_seed} \\
 Remark~\ref{rem:ties} & \lean{tie\_rho}, \lean{tie\_dvd} \\
 Remark~\ref{rem:cert} & \lean{cert\_rows} \\
 \hline
@@ -1386,19 +1423,20 @@ scripts recompute the table of bests and its certificates.
 One line each, with the reason (measured; scripts in \texttt{src/best\_of\_order/scripts/}).
 \begin{itemize}\setlength{\itemsep}{0.2ex}
 \item \emph{The scaled wall word as an ideal staircase:} every word starts and ends below it; the best's
-  $2$ to $8$ crossings are not special.
+  $2$ to $8$ crossings (Orders $4$ to $14$) are not special, and by the area between the two it ranks
+  anywhere ($3$ to $1337$ at Orders $5$ to $13$) (\texttt{aim\_cross.py}, \texttt{aim\_area.py}).
 \item \emph{Ideal lines and curves (diagonal, ruler, $\log$-shaped):} they measure area only; the best
-  ranks anywhere ($3$ to $1337$).
+  ranks anywhere (by the diagonal: $2$ to $6425$ at Orders $5$ to $13$) (\texttt{ideal\_lines.py}).
 \item \emph{Trailing $1$-bits of the start:} no relation with the best.
 \item \emph{Inverse trees:} the inverse tree of $91$ holds $21$ of the $106$ bests of Orders $1$ to $124$ in
   $(91, 2^{22})$, $20\%$, against $28\%$ of the odd starts in that range: no excess
   (\texttt{paper\_numbers.py}; \texttt{inv\_hub.py}, \texttt{inv\_grow.py}).
 \item \emph{The backward branch and bound:} correct, but costs more nodes than forward (Order $22$:
-  $96\,743$ primed against $1\,505$).
+  $96\,743$ primed against $1\,505$; \texttt{mitm\_search.py}, \texttt{boo.py}).
 \item \emph{A guessed $\theta$ from the previous Order:} exact with halving, about twice the nodes of the
-  seed $s_0$.
+  seed $s_0$ (Orders $2$ to $75$: $8\,408\,907$ against $4\,317\,574$; \texttt{paper\_numbers\_slow.cpp}).
 \item \emph{Candidates from earlier Orders} (one $1$ inserted per Order step, beams of $8$): beat $s_0$ at
-  Orders $6$, $8$, $107$ only.
+  Orders $6$, $8$, $107$ only, of Orders $3$ to $124$ (\texttt{boo\_beam.py}).
 \end{itemize}
 
 %------------------------------------------------------------------------------------------------
