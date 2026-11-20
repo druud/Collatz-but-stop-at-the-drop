@@ -40,7 +40,7 @@ Copies of the scripts the paper cites (originals in the local `_keep/tree_01/`),
 | `scripts/boo_ties.cpp` | ties of the best by the tree (Remark 2.8, Orders to 229), and the recheck of one Order: `boo_ties n n` |
 | `scripts/boo_obs.py` | checks each best and writes the certificate file; the smallest-start observation |
 | `scripts/boo_hubs.py` | the odd parts of the drop values (merging trajectories) |
-| `scripts/boo_count.py` | the number of words of each Order (A100982), and the words of one Order with $\rho$, $c$, $d$ (Remarks Order 6, The number of words) |
+| `scripts/boo_count.py` | the number of words of each Order (A100982), the words of one Order with $\rho$, $c$, $d$, and Dinkelbach's steps over them (Remarks Order 6, The number of words, The steps) |
 | `scripts/ceiling_check.py` | the ceiling x*(wall) < t_n for n <= 2000 |
 | `scripts/dinkel_suffix.py` | the backward ranking k0 (Orders 2..21) |
 | `scripts/inv_grow.py`, `scripts/inv_hub.py`, `scripts/mitm.py`, `scripts/mitm4.py` | Appendix A (ways that did not work) |
