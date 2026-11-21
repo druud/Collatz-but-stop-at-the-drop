@@ -3,7 +3,7 @@
 % (Lean/best_of_order/, namespace BestOfOrder, one bridge file to AcceleratedCollatz; exact statements only,
 % the table of bests is script data), the failed detectors in Appendix A, one line each; no li/zeta analogy.
 % For Zenodo, then linked from the OEIS sequence of the bests per Order, A402443. Unnumbered in the series.
-% Draft (19 Nov 2026), Zenodo version 1: Orders 1..347 (B148); version 2 to 399 when boo_scan is DONE. \fillin marks values still to come (none now).
+% Draft (19 Nov 2026), Zenodo version 1: Orders 1..378 (B148; C60: the scan stopped at 378, 21 Nov 2026). \fillin marks values still to come (none now).
 % Scripts: _keep/tree_01/ (boo.py, bnb.py, boo_scan.cpp, run_boo_scan.sh) and _keep/tree_01/zeta/.
 \documentclass[10pt,a4paper,titlepage]{article}
 \usepackage[utf8]{inputenc}
@@ -613,7 +613,7 @@
   \Large The start words with the highest drop ratio}
 \author{\textbf{Ruud H.G. van Tol}}
 \date{\begin{tikzpicture}\dropturnfig\end{tikzpicture}\\[5ex]
-  \textbf{Draft (42)}\\[8ex]  % the number of commits of this .tex: one up with each committed change
+  \textbf{Draft (43)}\\[8ex]  % the number of commits of this .tex: one up with each committed change
   {\small\copyright\ 2026 Ruud H.G. van Tol. Licensed under \href{https://creativecommons.org/licenses/by/4.0/}{CC BY 4.0}.}
   % DOI line after the Zenodo upload
 }
@@ -630,7 +630,7 @@ falls the least: the start $c$ with the highest drop ratio $T^L(c)/c$, the \emph
 We show that the best is the word whose cycle point $x^\ast = \rho/(2^L - 3^n)$ lies
 closest to $c$, give a window outside which no start can win (below $n/2$ times the smallest start), split the search exactly into a
 start side and a drop side that meet in one congruence modulo $3^w$, and compute the bests of
-Orders $1$ to $347$, each with a certificate. The statements are formalized in Lean~4 with
+Orders $1$ to $378$, each with a certificate. The statements are formalized in Lean~4 with
 Mathlib, without \texttt{sorry}; the table of bests is script data.
 
 \medskip\noindent\textbf{MSC2020:} 11B83 (primary); 90C32, 68V15.\\
@@ -674,8 +674,8 @@ $w$ without their final $0$'s.
 \end{mainthm}
 
 \begin{maincomp}[The bests; Chapter~\ref{sec:search}, Appendix~\ref{app:table}]
-The bests of Orders $1$ to $347$ are computed and certified (OEIS A402443\oeisidx{A402443}~\cite{OEIS_A402443}). For $285$ of the Orders $1$ to
-$347$ the best is the smallest start of its Order (OEIS A122442\oeisidx{A122442}); at the others the $\theta$ of the smallest start
+The bests of Orders $1$ to $378$ are computed and certified (OEIS A402443\oeisidx{A402443}~\cite{OEIS_A402443}). For $307$ of the Orders $1$ to
+$378$ the best is the smallest start of its Order (OEIS A122442\oeisidx{A122442}); at the others the $\theta$ of the smallest start
 is more than $1/4$ of the best's (smallest at Order $272$).
 \end{maincomp}
 
@@ -731,7 +731,7 @@ words of Order $w$ (Chapter~\ref{sec:dinkelbach}).
 
 \medskip
 Chapter~\ref{sec:search} gives the searches and their
-cost, Chapter~\ref{sec:observations} what the bests of Orders $1$ to $347$ show, and
+cost, Chapter~\ref{sec:observations} what the bests of Orders $1$ to $378$ show, and
 Chapter~\ref{sec:lean} the formalization in Lean. Appendix~\ref{app:failed} lists the ways to guess the
 best that did not work, and Appendix~\ref{app:table} the bests.
 
@@ -882,7 +882,7 @@ OEIS A100982\oeisidx{A100982}~\cite{OEIS_A100982}:
 \[
 1,\ 1,\ 2,\ 3,\ 7,\ 12,\ 30,\ 85,\ 173,\ 476 \qquad (n = 1, \ldots, 10).
 \]
-Order $124$ has a number of words of $53$ digits, Order $347$ one of $154$ digits
+Order $124$ has a number of words of $53$ digits, Order $378$ one of $168$ digits
 (\texttt{boo\_count.py}, exact). So the searches of Chapter~\ref{sec:search} never list the words of an
 Order: they stop at a window on the class ids.
 \end{remark}
@@ -893,9 +893,9 @@ Order: they stop at a window on the class ids.
 $25691$ have the same $\rho/c$; Order $13$ has $16$ class ids with one ratio, and Order $16$ has
 $56$ sets of equal ratios. Within an Order the constant fixes the word~\cite[Cor.~2.1a]{Lagarias1990}, so a tie has two different constants. A class id $c$ ties $c^\ast$ only if $\rho c^\ast = \rho^\ast c$, so $c$ is a multiple of
 $u = c^\ast/\gcd(c^\ast, \rho^\ast)$; and a tie of the best lies in the window of
-Theorem~\ref{thm:window} (with $\le$ for $<$), so $c = ku$ with $k \le W/u$, $W$ the window of $c^\ast$. For Orders $1$ to $347$
-that leaves $6906$ candidates (at most $1063$, at Order $262$), and none is a tie
-(\texttt{boo\_tie\_mult.py}, exact): the best has no tie for Orders $1$ to $347$. Independently, a
+Theorem~\ref{thm:window} (with $\le$ for $<$), so $c = ku$ with $k \le W/u$, $W$ the window of $c^\ast$. For Orders $1$ to $378$
+that leaves $7582$ candidates (at most $1063$, at Order $262$), and none is a tie
+(\texttt{boo\_tie\_mult.py}, exact): the best has no tie for Orders $1$ to $378$. Independently, a
 depth-first search of the words with the window of the best finds none for Orders $1$ to $229$
 (\texttt{boo\_ties.cpp}). That it never has one is open. Where we say \emph{the} best, a tie would mean the smallest of them.
 \end{remark}
@@ -1013,7 +1013,7 @@ That every class id $c > 1$ of every Order satisfies $c > x^\ast$ is the width i
 (Terras's coefficient stopping time conjecture~\cite[Conj.~2.9]{Terras1976}):
 open in general, and the best of the Order is its hardest case. Terras proved it for the words of
 length up to $2592$~\cite[p.~252]{Terras1976}, which covers the Orders of this paper
-($p_2(347) = 550$); with a range check it holds for every Order up to
+($p_2(378) = 600$); with a range check it holds for every Order up to
 $10\,781\,273$~\cite{Paper2}. Before letter $L$ every start of the word
 rises: $T^\ell(x) = (3^{w_\ell}x + \rho_\ell)/2^\ell > x$ for $0 < \ell < L$. So each start $x > 1$ of an
 Order $n \le 10\,781\,273$ first falls below itself exactly at step $L = p_2(n)$.
@@ -1239,8 +1239,8 @@ $\theta(s_0)/\theta(c^\ast) = \rho_0\,c^\ast/(\rho^\ast s_0) \ge \rho_0/R(n) \ge
 
 \begin{remark}[The size of that range]
 \label{rem:bestrange}
-The factor $R(n)/(3^n - 2^n)$ is below $31$ at Order $124$ and below $84$ at Order $347$. The bests
-found stay far inside: for Orders $1$ to $347$ the largest $c^\ast/s_0$ is $1\,097\,165/347\,477$, between
+The factor $R(n)/(3^n - 2^n)$ is below $31$ at Order $124$ and below $92$ at Order $378$. The bests
+found stay far inside: for Orders $1$ to $378$ the largest $c^\ast/s_0$ is $1\,097\,165/347\,477$, between
 $3$ and $16/5$, at Order $107$ (\texttt{paper\_numbers.py}).
 \end{remark}
 
@@ -1270,7 +1270,7 @@ could beat it.
 \begin{remark}[Seeds]
 \label{rem:seeds}
 \termhere{seed}The smallest start of Order $n$, \keysym{seed}{$s_0$} $= a(n+1)$ of A122442\oeisidx{A122442}, is the best itself for $98$ of the Orders $1$
-to $124$ (and for $285$ of the Orders $1$ to $347$). A guess from the previous Order (its $\theta$, halved until a word beats it) is exact as
+to $124$ (and for $307$ of the Orders $1$ to $378$). A guess from the previous Order (its $\theta$, halved until a word beats it) is exact as
 well but costs about twice the nodes, and certified candidates built from the bests of earlier Orders
 beat $s_0$ only at Orders $6$, $8$ and $107$ (Appendix~\ref{app:failed}).
 \end{remark}
@@ -1278,9 +1278,9 @@ beat $s_0$ only at Orders $6$, $8$ and $107$ (Appendix~\ref{app:failed}).
 \begin{remark}[Cost]
 For Orders $1$ to $124$ the best-first search seeded with $s_0$ visits $164\,801\,730$ nodes in all
 (Order $124$: $15\,147\,961$); the scan finishes Orders $1$ to $124$ at $x < 2^{26}$. The scan for
-Orders $1$ to $347$ covers every start below $80\,887\,088\,311\,813$, the window of Order $346$ and the
+Orders $1$ to $378$ covers every start below $886\,522\,563\,681\,567$, the window of Order $378$ and the
 largest of these Orders (Theorem~\ref{thm:window}), on a wheel modulo $2^{28}$ that leaves $3\,524\,586$ residues; Orders
-$348$ to $399$ need it at most up to $17\,216\,187\,145\,311\,549$ (the windows of their seeds). Without a seed, the scan finds the smallest start of each
+$379$ to $399$ would need it up to $17\,216\,187\,145\,311\,549$ (the windows of their seeds; the scan was stopped at Order $378$). Without a seed, the scan finds the smallest start of each
 Order on the way, and its first start of each Order is checked against A122442.
 \end{remark}
 
@@ -1289,10 +1289,10 @@ Order on the way, and its first start of each Order is checked against A122442.
 The certificate of an Order is the line $n$, $c$, $T^L(c)$, $W$. Checking it shows that $c$ is a
 class id of Order $n$ with that drop value, and that every class id with a higher ratio is below
 $W$ (Theorem~\ref{thm:window}); that there is none is the search itself. This check is done in Lean
-for all $347$ lines, by the kernel (\lean{cert\_rows}, Chapter~\ref{sec:lean}). Orders $1$ to $124$ were
+for all $378$ lines, by the kernel (\lean{cert\_rows}, Chapter~\ref{sec:lean}). Orders $1$ to $124$ were
 searched twice, by the best-first search and by the scan; Orders $125$ to $229$ by the scan and by a
 depth-first search of the words inside $W$ (\texttt{boo\_ties.cpp}: none better, none equal); Orders
-$230$ to $347$ by the scan alone.
+$230$ to $378$ by the scan alone.
 \end{remark}
 
 
@@ -1311,8 +1311,8 @@ $230$ to $347$ by the scan alone.
 % Data only, measured; each with its script.
 
 \begin{observation}[The smallest start]
-$\theta(s_0)/\theta(\text{best}) > 1/4$ for all Orders $1$ to $347$, smallest at Order $272$ (between
-$25/100$ and $26/100$), then Orders $256$, $91$, $268$ and $221$; equality of $s_0$ and the best at $285$ of them
+$\theta(s_0)/\theta(\text{best}) > 1/4$ for all Orders $1$ to $378$, smallest at Order $272$ (between
+$25/100$ and $26/100$), then Orders $361$, $363$, $256$ and $91$; equality of $s_0$ and the best at $307$ of them
 (\texttt{boo\_obs.py}).
 \end{observation}
 
@@ -1345,9 +1345,9 @@ k_0 & 19&14&16&16&18&24&21&23&25&24&29&29\\
 \end{herefloat}
 
 \begin{observation}[Merging trajectories]
-The drop values $d = T^L(\text{best})$ of Orders $1$ to $347$ have $219$ odd parts: $61$ is the odd
+The drop values $d = T^L(\text{best})$ of Orders $1$ to $378$ have $240$ odd parts: $61$ is the odd
 part for $10$ Orders, $12\,729\,682\,859$ for $9$, $619\,739$, $92\,485\,801$, $1\,064\,232\,949$ and
-$30\,643\,528\,277$ for $5$ each, $7$ more for $4$ each, $18$ for $3$ each, $38$ for $2$ each, and $150$
+$30\,643\,528\,277$ for $5$ each, $8$ more for $4$ each, $18$ for $3$ each, $45$ for $2$ each, and $163$
 for one Order each. Seven of the odd parts
 ($31$, $167$, $325$, $61$, $23$, $5$, $1$) lie on the trajectory of $27$, for $21$ Orders (\texttt{boo\_hubs.py}). The inverse trees of such hubs do not hold the bests
 more often than other starts (Appendix~\ref{app:failed}).
@@ -1355,9 +1355,9 @@ more often than other starts (Appendix~\ref{app:failed}).
 
 \subsection*{Open questions}
 \begin{enumerate}\setlength{\itemsep}{0.2ex}
-\item Does the best of an Order ever have a tie (Remark~\ref{rem:ties}; none for Orders $1$ to $347$)?
+\item Does the best of an Order ever have a tie (Remark~\ref{rem:ties}; none for Orders $1$ to $378$)?
 \item Is $\theta(s_0)/\theta(\text{best}) > 1/4$ for every Order, or bounded below by a constant at all (it is at least $2/n$, Corollary~\ref{cor:bestrange})?
-\item Is the smallest start the best for infinitely many Orders ($285$ of the first $347$)?
+\item Is the smallest start the best for infinitely many Orders ($307$ of the first $378$)?
 \item Does $L/2 < k_0 < 4L/5$ hold beyond Order $25$ (Table~\ref{tab:k0})?
 \item At the true maxima, does the drop side of the meeting split keep a bounded number of words
   ($1$ to $3$ measured)? A search on the split would then be a third, independent one.
@@ -1381,7 +1381,7 @@ odd step), the map $T$ (\lean{tStep}), the word of a start (\lean{tBits}), the c
 from the library of the series~\cite{Paper2} through one bridge file, \texttt{Bridge.lean}. Only exact
 statements are formalized; the table of bests (Appendix~\ref{app:table}) is script data, and so are
 the two searches and the observations. Of that table Lean checks what a certificate line says
-(Remark~\ref{rem:cert}): \lean{cert\_rows} proves it for each of the $347$ lines, the kernel doing the
+(Remark~\ref{rem:cert}): \lean{cert\_rows} proves it for each of the $378$ lines, the kernel doing the
 arithmetic (no \texttt{native\_decide}); that no start below $W$ has a higher ratio stays with the searches. Table~\ref{tab:lean} lists the Lean names.
 
 \begin{herefloat}{table}\small
@@ -1462,8 +1462,8 @@ One line each, with the reason (measured; scripts in \texttt{src/best\_of\_order
 \label{app:table}
 The best $c$ of Order $n$ and its drop value $T^L(c)$; $\ast$: $c$ differs from the smallest start
 $a(n+1)$ of A122442\oeisidx{A122442}. The column $c$ is OEIS A402443\oeisidx{A402443}~\cite{OEIS_A402443} (with $a(0) = 2$ for Order $0$).
-Table~\ref{tab:bests} lists Orders $1$ to $96$; for Orders $97$ to $347$ only the rows marked $\ast$ are listed (Table~\ref{tab:bests2}); all bests are in the b-file of
-A402443 and in the repository (\texttt{src/best\_of\_order/data/}), with a certificate file (\texttt{best\_cert\_347.txt}: $n$, $c$, $T^L(c)$
+Table~\ref{tab:bests} lists Orders $1$ to $96$; for Orders $97$ to $378$ only the rows marked $\ast$ are listed (Table~\ref{tab:bests2}); all bests are in the b-file of
+A402443 and in the repository (\texttt{src/best\_of\_order/data/}), with a certificate file (\texttt{best\_cert\_378.txt}: $n$, $c$, $T^L(c)$
 and the window of Theorem~\ref{thm:window}).
 
 {\footnotesize\setlength{\extrarowheight}{1pt}
@@ -1532,7 +1532,7 @@ $n$ & $c$ & $T^L(c)$ & & $n$ & $c$ & $T^L(c)$ & \\
 \ifpaper\clearpage\fi
 {\footnotesize\setlength{\extrarowheight}{1pt}
 \begin{longtable}{|r|r|rc||r|r|rc|}
-\caption{Orders $97$ to $347$: the rows marked $\ast$.}\label{tab:bests2}\\
+\caption{Orders $97$ to $378$: the rows marked $\ast$.}\label{tab:bests2}\\
 \hline
 $n$ & $c$ & $T^L(c)$ & & $n$ & $c$ & $T^L(c)$ & \\
 \hline
@@ -1541,27 +1541,32 @@ $n$ & $c$ & $T^L(c)$ & & $n$ & $c$ & $T^L(c)$ & \\
 $n$ & $c$ & $T^L(c)$ & & $n$ & $c$ & $T^L(c)$ & \\
 \hline
 \endhead
-102 & 543515 & 431245 & $\ast$ & 203 & 2836010779 & 2380476962 & $\ast$ \\
-106 & 4937243 & 2478956 & $\ast$ & 208 & 1080905007 & 861211745 & $\ast$ \\
-107 & 3291495 & 2478956 & $\ast$ & 212 & 6893644607 & 3475732561 & $\ast$ \\
-112 & 1733791 & 1239478 & $\ast$ & 220 & 3119162651 & 2519100964 & $\ast$ \\
-116 & 1345383 & 1217288 & $\ast$ & 221 & 2136191463 & 1293924665 & $\ast$ \\
-121 & 6688623 & 5744467 & $\ast$ & 223 & 1483334895 & 1010789105 & $\ast$ \\
-130 & 30997755 & 15991322 & $\ast$ & 234 & 7032588283 & 6476798801 & $\ast$ \\
-132 & 39091199 & 22687444 & $\ast$ & 244 & 18023934831 & 14956412627 & $\ast$ \\
-136 & 27401343 & 20127209 & $\ast$ & 247 & 26690574503 & 18687428219 & $\ast$ \\
-148 & 66742363 & 49693357 & $\ast$ & 252 & 36068070847 & 23970706696 & $\ast$ \\
-153 & 43254511 & 30569932 & $\ast$ & 256 & 109571933119 & 92164207369 & $\ast$ \\
-161 & 354899823 & 200885648 & $\ast$ & 259 & 68821108463 & 48842559905 & $\ast$ \\
-167 & 151639911 & 122212106 & $\ast$ & 261 & 45880738975 & 36631919929 & $\ast$ \\
-168 & 93596391 & 56574545 & $\ast$ & 268 & 4167011775 & 3552816982 & $\ast$ \\
-174 & 182938751 & 157443683 & $\ast$ & 272 & 180760272511 & 97527287242 & $\ast$ \\
-175 & 620227615 & 400342673 & $\ast$ & 284 & 380685108059 & 208196864200 & $\ast$ \\
-177 & 183238907 & 133061072 & $\ast$ & 320 & 871451633243 & 496371686726 & $\ast$ \\
-183 & 306533191 & 158466836 & $\ast$ & 321 & 580967755495 & 496371686726 & $\ast$ \\
-186 & 998412031 & 870992600 & $\ast$ & 332 & 1764823531367 & 1018943581204 & $\ast$ \\
-187 & 1012039419 & 662160625 & $\ast$ & 333 & 1178426794975 & 1020569816743 & $\ast$ \\
-200 & 604499583 & 601365250 & $\ast$ & 338 & 1901445212927 & 1563112498897 & $\ast$ \\
+102 & 543515 & 431245 & $\ast$ & 223 & 1483334895 & 1010789105 & $\ast$ \\
+106 & 4937243 & 2478956 & $\ast$ & 234 & 7032588283 & 6476798801 & $\ast$ \\
+107 & 3291495 & 2478956 & $\ast$ & 244 & 18023934831 & 14956412627 & $\ast$ \\
+112 & 1733791 & 1239478 & $\ast$ & 247 & 26690574503 & 18687428219 & $\ast$ \\
+116 & 1345383 & 1217288 & $\ast$ & 252 & 36068070847 & 23970706696 & $\ast$ \\
+121 & 6688623 & 5744467 & $\ast$ & 256 & 109571933119 & 92164207369 & $\ast$ \\
+130 & 30997755 & 15991322 & $\ast$ & 259 & 68821108463 & 48842559905 & $\ast$ \\
+132 & 39091199 & 22687444 & $\ast$ & 261 & 45880738975 & 36631919929 & $\ast$ \\
+136 & 27401343 & 20127209 & $\ast$ & 268 & 4167011775 & 3552816982 & $\ast$ \\
+148 & 66742363 & 49693357 & $\ast$ & 272 & 180760272511 & 97527287242 & $\ast$ \\
+153 & 43254511 & 30569932 & $\ast$ & 284 & 380685108059 & 208196864200 & $\ast$ \\
+161 & 354899823 & 200885648 & $\ast$ & 320 & 871451633243 & 496371686726 & $\ast$ \\
+167 & 151639911 & 122212106 & $\ast$ & 321 & 580967755495 & 496371686726 & $\ast$ \\
+168 & 93596391 & 56574545 & $\ast$ & 332 & 1764823531367 & 1018943581204 & $\ast$ \\
+174 & 182938751 & 157443683 & $\ast$ & 333 & 1178426794975 & 1020569816743 & $\ast$ \\
+175 & 620227615 & 400342673 & $\ast$ & 338 & 1901445212927 & 1563112498897 & $\ast$ \\
+177 & 183238907 & 133061072 & $\ast$ & 349 & 11880525347559 & 6599878561517 & $\ast$ \\
+183 & 306533191 & 158466836 & $\ast$ & 352 & 33002596968063 & 30937997255275 & $\ast$ \\
+186 & 998412031 & 870992600 & $\ast$ & 361 & 31995574586139 & 18016704357124 & $\ast$ \\
+187 & 1012039419 & 662160625 & $\ast$ & 363 & 8779855801839 & 5561927762411 & $\ast$ \\
+200 & 604499583 & 601365250 & $\ast$ & 365 & 16443662260783 & 11718958906807 & $\ast$ \\
+203 & 2836010779 & 2380476962 & $\ast$ & 366 & 35022709434363 & 18719812205938 & $\ast$ \\
+208 & 1080905007 & 861211745 & $\ast$ & 368 & 63552404555879 & 38215210500644 & $\ast$ \\
+212 & 6893644607 & 3475732561 & $\ast$ & 374 & 34029080366207 & 29134800518302 & $\ast$ \\
+220 & 3119162651 & 2519100964 & $\ast$ & 378 & 45451163871559 & 24625320657779 & $\ast$ \\
+221 & 2136191463 & 1293924665 & $\ast$ &  &  &  &  \\
 \hline
 \end{longtable}
 }

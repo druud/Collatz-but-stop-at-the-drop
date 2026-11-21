@@ -5,6 +5,11 @@ first. Version names (R_65a, R_66, ...) are the authors' own labels.
 
 ## After R_101 (20 November 2026)
 
+- The best paper, Draft (43): the bests of Orders 1 to 378, each
+  with a certificate proved in Lean (`src/best_of_order/data/
+  best_cert_378.txt`); the smallest start is the best for 307 of
+  them, none has a tie.
+
 - The best paper, Draft (42): theta(s_0) >= 2 theta(c*)/n for
   n >= 3 (Corollary 6.2; Lean `share_ratio_ge`); Table 1 extended to
   Order 25 (`scripts/paper_numbers_slow --k0=25`), with
