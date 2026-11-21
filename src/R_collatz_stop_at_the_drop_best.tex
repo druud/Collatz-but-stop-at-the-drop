@@ -613,7 +613,7 @@
   \Large The start words with the highest drop ratio}
 \author{\textbf{Ruud H.G. van Tol}}
 \date{\begin{tikzpicture}\dropturnfig\end{tikzpicture}\\[5ex]
-  \textbf{Draft (43)}\\[8ex]  % the number of commits of this .tex: one up with each committed change
+  \textbf{Draft (44)}\\[8ex]  % the number of commits of this .tex: one up with each committed change
   {\small\copyright\ 2026 Ruud H.G. van Tol. Licensed under \href{https://creativecommons.org/licenses/by/4.0/}{CC BY 4.0}.}
   % DOI line after the Zenodo upload
 }
@@ -1189,8 +1189,8 @@ the searches of Chapter~\ref{sec:search} do not use it yet.
 By Lemma~\ref{lem:startparts} the start side at cut $w$ is the set of words of Order $w$, the same
 for every $n > w$. The drop side grows backward from the last letter on residues $y \bmod 2^k$
 ($y' = 2y$ or $(2y-1)/3$). A word can be the best only if each part plus the other side's maximum
-is $\ge 0$; with the true maxima, $1$ to $3$ words pass both tests at each cut (Orders $4$ to $13$,
-measured, \texttt{mitm4.py}).
+is $\ge 0$; with the true maxima, $1$ to $3$ words pass both tests at each cut for Orders $4$ to $13$
+(\texttt{mitm4.py}), and $1$ or $2$ for Orders $14$ to $26$ (all words, \texttt{both\_sides.cpp}).
 \end{remark}
 
 
@@ -1319,24 +1319,31 @@ $25/100$ and $26/100$), then Orders $361$, $363$, $256$ and $91$; equality of $s
 \begin{observation}[Backward ranking]
 At $\lambda = \lambda^\ast$ let $S_k = \sum_{\ell=L-k}^{L-1} 2^\ell \delta_\ell$ be the sum of the walk over the
 last $k$ letters. \termhere{backward}The best is the strict maximum of $S_k$ over all words of its Order for every
-$k \ge$ \keysym{backward}{$k_0$}, with $k_0$ in Table~\ref{tab:k0} (Orders $2$ to $21$, all words, \texttt{dinkel\_suffix.py}; $22$ to $25$, \texttt{paper\_numbers\_slow --k0=25}).
-For Orders $15$ to $25$, $L/2 < k_0 < 4L/5$; Order $14$ needs $19$ of its $23$ letters.
+$k \ge$ \keysym{backward}{$k_0$}, with $k_0$ in Table~\ref{tab:k0} (Orders $2$ to $21$, all words, \texttt{dinkel\_suffix.py}; $22$ to $28$, \texttt{paper\_numbers\_slow --k0=28}).
+For Orders $15$ to $28$, $L/2 < k_0 < 4L/5$; Order $14$ needs $19$ of its $23$ letters.
 \end{observation}
 
 \begin{herefloat}{table}
 \[
 \setlength{\extrarowheight}{1pt}
-\begin{array}{|r||r|r|r|r|r|r|r|r|r|r|r|r|}
+\begin{array}{|r||r|r|r|r|r|r|r|r|r|}
 \hline
-n & 2&3&4&5&6&7&8&9&10&11&12&13\\
+n & 2&3&4&5&6&7&8&9&10\\
 \hline
-L & 4&5&7&8&10&12&13&15&16&18&20&21\\
-k_0 & 1&1&3&2&6&4&8&7&9&9&12&13\\
-\hline\hline
-n & 14&15&16&17&18&19&20&21&22&23&24&25\\
+L & 4&5&7&8&10&12&13&15&16\\
+k_0 & 1&1&3&2&6&4&8&7&9\\
 \hline
-L & 23&24&26&27&29&31&32&34&35&37&39&40\\
-k_0 & 19&14&16&16&18&24&21&23&25&24&29&29\\
+\hline
+n & 11&12&13&14&15&16&17&18&19\\
+\hline
+L & 18&20&21&23&24&26&27&29&31\\
+k_0 & 9&12&13&19&14&16&16&18&24\\
+\hline
+\hline
+n & 20&21&22&23&24&25&26&27&28\\
+\hline
+L & 32&34&35&37&39&40&42&43&45\\
+k_0 & 21&23&25&24&29&29&30&31&32\\
 \hline
 \end{array}
 \]
@@ -1358,9 +1365,9 @@ more often than other starts (Appendix~\ref{app:failed}).
 \item Does the best of an Order ever have a tie (Remark~\ref{rem:ties}; none for Orders $1$ to $378$)?
 \item Is $\theta(s_0)/\theta(\text{best}) > 1/4$ for every Order, or bounded below by a constant at all (it is at least $2/n$, Corollary~\ref{cor:bestrange})?
 \item Is the smallest start the best for infinitely many Orders ($307$ of the first $378$)?
-\item Does $L/2 < k_0 < 4L/5$ hold beyond Order $25$ (Table~\ref{tab:k0})?
+\item Does $L/2 < k_0 < 4L/5$ hold beyond Order $28$ (Table~\ref{tab:k0})?
 \item At the true maxima, does the drop side of the meeting split keep a bounded number of words
-  ($1$ to $3$ measured)? A search on the split would then be a third, independent one.
+  ($1$ to $3$ measured, Orders $4$ to $26$)? A search on the split would then be a third, independent one.
 \item The width identity itself (Remark~\ref{rem:width}).
 \end{enumerate}
 

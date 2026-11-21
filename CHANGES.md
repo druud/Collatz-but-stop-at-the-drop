@@ -5,6 +5,12 @@ first. Version names (R_65a, R_66, ...) are the authors' own labels.
 
 ## After R_101 (20 November 2026)
 
+- The best paper, Draft (44): Table 1 extended to Order 28
+  (`scripts/paper_numbers_slow --k0=28`), with L/2 < k0 < 4L/5 for
+  Orders 15 to 28; the remark "Both sides in turns" measured over
+  all words to Order 26 (`scripts/both_sides.cpp`): 1 or 2 words
+  pass both tests at each cut from Order 14 on.
+
 - The best paper, Draft (43): the bests of Orders 1 to 378, each
   with a certificate proved in Lean (`src/best_of_order/data/
   best_cert_378.txt`); the smallest start is the best for 307 of
