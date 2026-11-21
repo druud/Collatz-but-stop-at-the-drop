@@ -1,12 +1,13 @@
 // The two slow checks of paper_numbers.py, exact, with the same OK / DIFF / SKIP lines:
 //   1. Table 1 of the paper "The best of the Order": k0 for Orders 2..21, over all words.
 //   2. Remark "Cost": the nodes of the best-first search seeded with the smallest start, Orders 1..124
-//      (as boo.py: nodes popped by residue), and its bests against data/best_cert_347.txt.
+//      (as boo.py: nodes popped by residue), and its bests against data/best_cert_378.txt.
 //   3. Appendix A: the same search with a first ratio guessed from the previous Order, Orders 2..75.
 // Compile: mkdir -p _tmp; g++ -O3 -std=c++17 scripts/paper_numbers_slow.cpp -o _tmp/paper_numbers_slow \
 //            -I/opt/homebrew/include -L/opt/homebrew/lib -lgmpxx -lgmp
 // Run from Lean/best_of_order:  _tmp/paper_numbers_slow [FILE]
-//   or _tmp/paper_numbers_slow --k0=N: Table 1 for Orders 22..N (N <= 25; about 5 minutes for 25), and nothing else.
+//   or _tmp/paper_numbers_slow --k0=N: k0 for Orders 22..N (N <= 32), against Table 1 up to 25 (about 5 minutes),
+//   beyond it new; about 3 times the time per Order (26: some 10 minutes, 28: some 1.5 hours), one thread.
 //   FILE: the b-file of A122442 (a(n+1) = the smallest start of Order n), data/b122442.txt by default;
 //   if it cannot be read, only Table 1 is checked. One thread, about 2 minutes; memory: the heap of the search, about 2.4 GB at its peak.
 // Integers only: Table 1 in u64 / i128 from exact tables (Orders to 21, checked), the search in GMP.
@@ -99,6 +100,11 @@ static int k0_of(int n) {
     N1 = n; L1 = p2(n);
     cb = rb = wb = 0; nwords = 0; last = 0;
     pass = 1; dfs(1, 1, 1, 2, 1, 1);
+    {   // |c_best S_k| < 2^L max(3^n c_best, rb) <= 2^L 3^n max(c_best, n), as rb <= R(n) <= n 3^(n-1)
+        mpz_class bound; mpz_ui_pow_ui(bound.get_mpz_t(), 3, n);
+        bound *= (unsigned long)std::max<u64>(cb, (u64)n); bound <<= L1;
+        if (mpz_sizeinbase(bound.get_mpz_t(), 2) > 126) return -1;     // the i128 sums could overflow
+    }
     sums(cb, wb, sb);
     pass = 2; dfs(1, 1, 1, 2, 1, 1);
     return last + 1;
@@ -177,9 +183,9 @@ int main(int argc, char **argv) {
 
     if (argc > 1 && std::string(argv[1]).rfind("--k0=", 0) == 0) {   // Table 1 beyond Order 21 (not in the default run: long)
         int N = std::atoi(argv[1] + 5);
-        if (N < 22 || N > 25) { std::cerr << "--k0=N needs 22 <= N <= 25 (i128 sums overflow above 25)\n"; return 2; }
+        if (N < 22 || N > 32) { std::cerr << "--k0=N needs 22 <= N <= 32 (u64 nodes; Order 32 would take days)\n"; return 2; }
         std::map<int, std::string> bf;
-        std::ifstream fb("data/b402443_347.txt");
+        std::ifstream fb("data/b402443_378.txt");
         for (std::string line; std::getline(fb, line);) {
             std::istringstream is(line); int k; std::string v;
             if (line.empty() || line[0] == '#') continue;
@@ -189,13 +195,14 @@ int main(int argc, char **argv) {
         std::cout << "--- Chapter 7: Table 1, k0 for Orders 22.." << N << " (and L/2 < k0 < 4L/5)" << std::endl;
         for (int n = 22; n <= N; n++) {
             int k = k0_of(n), L = p2(n);
+            if (k < 0) { std::cout << "SKIP Order " << n << " and up: the i128 sums could overflow (best " << cb << ")" << std::endl; nskip++; break; }
             std::cout << "     Order " << n << ": " << nwords << " words, best " << cb << ", L = " << L << ", k0 = " << k
                       << " (" << (long)secs() << " s)" << std::endl;
             check("Order " + std::to_string(n) + ": the best equals the b-file of A402443", std::to_string(cb), bf[n]);
-            check("Table 1: k0 for Order " + std::to_string(n), std::to_string(k), std::to_string(K0b[n - 22]));
+            if (n <= 25) check("Table 1: k0 for Order " + std::to_string(n), std::to_string(k), std::to_string(K0b[n - 22]));
             check("Order " + std::to_string(n) + ": L/2 < k0 < 4L/5", (L < 2 * k && 5 * k < 4 * L) ? "yes" : "no", "yes");
         }
-        std::cout << "--- " << nok << " OK, " << ndiff << " DIFF (" << (long)secs() << " s)" << std::endl;
+        std::cout << "--- " << nok << " OK, " << ndiff << " DIFF, " << nskip << " SKIP (" << (long)secs() << " s)" << std::endl;
         return ndiff ? 1 : 0;
     }
 
@@ -221,8 +228,8 @@ int main(int argc, char **argv) {
     } else {
         std::map<int, mpz_class> seed, cert;
         std::string line;
-        std::ifstream fc("data/best_cert_347.txt");
-        if (!fc) { std::cerr << "cannot read data/best_cert_347.txt\n"; return 2; }
+        std::ifstream fc("data/best_cert_378.txt");
+        if (!fc) { std::cerr << "cannot read data/best_cert_378.txt\n"; return 2; }
         while (std::getline(fs, line)) {
             if (line.empty() || line[0] == '#') continue;
             std::istringstream is(line);

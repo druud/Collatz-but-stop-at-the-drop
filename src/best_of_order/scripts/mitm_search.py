@@ -93,7 +93,7 @@ POPS = [0]
 SEEDC = 'seedc' in sys.argv
 WIN = 'win' in sys.argv
 PRUNE = len(sys.argv) <= 4 or sys.argv[4] != 'noprune'
-ref = {int(a): int(b) for a, b in (l.split() for l in open('data/b402443_347.txt') if l.strip() and l[0] != '#')}
+ref = {int(a): int(b) for a, b in (l.split() for l in open('data/b402443_378.txt') if l.strip() and l[0] != '#')}
 for n in range(N0, N1 + 1):
     t0 = time.time(); w = int(sys.argv[3]) if len(sys.argv) > 3 else n // 2
     (q, c), np_, cu, ke, pa, pr = run(n, w)

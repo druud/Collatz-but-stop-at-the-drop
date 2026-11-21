@@ -4,11 +4,11 @@ import BestOfOrder.CertData
 import Mathlib.Data.Nat.Log
 
 /-!
-  The certificate rows (paper, Remark 6.7; `data/best_cert_347.txt`). A row (n, c, d, W) says:
+  The certificate rows (paper, Remark 6.7; `data/best_cert_378.txt`). A row (n, c, d, W) says:
   the word of the first L = p2(n) steps of c is a word of Order n, c is the smallest member of
   its class that drops, d = T^L(c) < c, and every member x of a class of Order n with a higher
   ratio than d/c is below W (Theorem B with the ratio d/c). `cert_rows` proves this for every row
-  of `certRows` (Orders 1..347), by a check the kernel runs (`decide +kernel`): no
+  of `certRows` (Orders 1..378), by a check the kernel runs (`decide +kernel`): no
   `native_decide`, so no trust in the compiler.
 
   What the rows do not say: that no start below W has a higher ratio. That is the search
@@ -163,7 +163,7 @@ theorem cert_of_rowOk {n c d W : ℕ} (h : RowOk n c d W) : Cert n c d W := by
 theorem certRows_ok : ∀ r ∈ certRows, RowOk r.1 r.2.1 r.2.2.1 r.2.2.2 := by
   decide +kernel
 
-/-- Every row of the certificate file (Orders 1..347) is a certificate. -/
+/-- Every row of the certificate file (Orders 1..378) is a certificate. -/
 theorem cert_rows : ∀ r ∈ certRows, Cert r.1 r.2.1 r.2.2.1 r.2.2.2 :=
   fun r hr => cert_of_rowOk (certRows_ok r hr)
 

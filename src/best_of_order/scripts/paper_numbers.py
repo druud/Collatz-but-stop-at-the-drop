@@ -59,8 +59,8 @@ def trajectory(n, c):
     return (x, 2 ** L * x - 3 ** n * c) if j == n and 3 ** n < 2 ** L else None
 
 t00 = time.time()
-cert = [tuple(map(int, l.split())) for l in open('data/best_cert_347.txt') if l.strip() and l[0] != '#']
-bfile = {int(a): int(b) for a, b in (l.split() for l in open('data/b402443_347.txt') if l.strip() and l[0] != '#')}
+cert = [tuple(map(int, l.split())) for l in open('data/best_cert_378.txt') if l.strip() and l[0] != '#']
+bfile = {int(a): int(b) for a, b in (l.split() for l in open('data/b402443_378.txt') if l.strip() and l[0] != '#')}
 BEST = {n: c for n, c, d, W in cert}
 seed = None
 if SEEDS:
@@ -73,7 +73,7 @@ for n, c, d, W in cert:
     tr = trajectory(n, c)
     if tr is None or tr[0] != d or not d < c or W != -(-wall(n) * c // tr[1]) or bfile.get(n) != c: bad += 1
 check('certificate rows (word of Order n, drop value, window, b-file) that fail, of %d' % len(cert), bad, 0)
-check('Orders of the certificate file', (cert[0][0], cert[-1][0], len(cert)), (1, 347, 347))
+check('Orders of the certificate file', (cert[0][0], cert[-1][0], len(cert)), (1, 378, 378))
 
 print('--- Chapter 2: Order 6, the number of words, ties')
 WL = {n: words(n) for n in range(2, 17)}
@@ -94,7 +94,7 @@ def nwords(n):
     return cur.get(n, 0)
 check('number of words, Orders 1..10', [nwords(n) for n in range(1, 11)], [1, 1, 2, 3, 7, 12, 30, 85, 173, 476])
 check('the DP count equals the word list, Orders 2..16', all(nwords(n) == len(WL[n]) for n in WL), True)
-check('digits of the number of words, Orders 124 and 347', (len(str(nwords(124))), len(str(nwords(347)))), (53, 154))
+check('digits of the number of words, Orders 124 and 378', (len(str(nwords(124))), len(str(nwords(378)))), (53, 168))
 groups = {}
 for n in WL:
     g = defaultdict(list)
@@ -113,9 +113,9 @@ for n, c, d, W in cert:
         if x == c or x < 2: continue
         tr = trajectory(n, x)
         if tr is not None and tr[1] * c == rb * x: tied.append((n, x))
-check('tie candidates of the bests, Orders 1..347', tot, 6906)
+check('tie candidates of the bests, Orders 1..378', tot, 7582)
 check('most tie candidates (number, Order)', kmax, (1063, 262))
-check('ties of the best, Orders 1..347', tied, [])
+check('ties of the best, Orders 1..378', tied, [])
 
 print('--- Chapter 4: the ceiling')
 bad = []
@@ -160,20 +160,20 @@ for l in range(1, 29):
 check('residues left by the wheel modulo 2^28', sum(cur.values()), 3524586)
 Wn = {n: W for n, c, d, W in cert}
 check('largest window of Orders 1..124 is below 2^26', max(Wn[n] for n in range(1, 125)) < 2 ** 26, True)
-check('R(n)/(3^n - 2^n) below 31 at Order 124, below 84 at Order 347', (wall(124) < 31 * (3 ** 124 - 2 ** 124), wall(347) < 84 * (3 ** 347 - 2 ** 347)), (True, True))
+check('R(n)/(3^n - 2^n) below 31 at Order 124, below 92 at Order 378', (wall(124) < 31 * (3 ** 124 - 2 ** 124), wall(378) < 92 * (3 ** 378 - 2 ** 378)), (True, True))
 check('R(n) <= n 3^(n-1) and rho >= 3^n - 2^n on the word list', all(wall(n) <= n * 3 ** (n - 1) and min(r for c, r, d, w in WL[n]) == 3 ** n - 2 ** n for n in WL), True)
-check('largest window of Orders 1..347 (Order, W)', max((Wn[n], n) for n in Wn)[::-1], (346, 80887088311813))
+check('largest window of Orders 1..378 (Order, W)', max((Wn[n], n) for n in Wn)[::-1], (378, 886522563681567))
 if seed:
     check('the smallest starts of the word list (Orders 2..16) are the seeds', all(seed[n] == s0[n] for n in WL), True)
     eq = [n for n in BEST if seed[n] == BEST[n]]
     check('Orders 1..124 with the smallest start as the best', sum(1 for n in eq if n <= 124), 98)
-    check('Orders 1..347 with the smallest start as the best', len(eq), 285)
+    check('Orders 1..378 with the smallest start as the best', len(eq), 307)
     wmax = 0
-    for n in range(348, 400):
+    for n in range(379, 400):
         d, rho = trajectory(n, seed[n]); wmax = max(wmax, -(-wall(n) * seed[n] // rho))
-    check('largest window of the seeds, Orders 348..399', wmax, 17216187145311549)
-    check('s0 <= best <= s0 R(n)/(3^n - 2^n) for all Orders 1..347', all(seed[n] <= BEST[n] and BEST[n] * (3 ** n - 2 ** n) <= wall(n) * seed[n] for n in BEST), True)
-    check('best < n s0/2 for Orders 3..347', all(2 * BEST[n] < n * seed[n] for n in BEST if n >= 3), True)
+    check('largest window of the seeds, Orders 379..399', wmax, 17216187145311549)
+    check('s0 <= best <= s0 R(n)/(3^n - 2^n) for all Orders 1..378', all(seed[n] <= BEST[n] and BEST[n] * (3 ** n - 2 ** n) <= wall(n) * seed[n] for n in BEST), True)
+    check('best < n s0/2 for Orders 3..378', all(2 * BEST[n] < n * seed[n] for n in BEST if n >= 3), True)
     m = max((F(BEST[n], seed[n]), n) for n in BEST)
     check('largest best/s0 (value, Order), between 3 and 16/5', (str(m[0]), m[1], 3 < m[0] < F(16, 5)), ('1097165/347477', 107, True))
     print('--- Chapter 7: the smallest start')
@@ -182,8 +182,8 @@ if seed:
         if seed[n] != BEST[n]:
             th.append((F(trajectory(n, seed[n])[1] * BEST[n], trajectory(n, BEST[n])[1] * seed[n]), n))
     th.sort()
-    check('theta(s0)/theta(best) > 1/4 for all Orders 1..347', th[0][0] > F(1, 4), True)
-    check('the five Orders with the smallest theta(s0)/theta(best)', [n for r, n in th[:5]], [272, 256, 91, 268, 221])
+    check('theta(s0)/theta(best) > 1/4 for all Orders 1..378', th[0][0] > F(1, 4), True)
+    check('the five Orders with the smallest theta(s0)/theta(best)', [n for r, n in th[:5]], [272, 361, 363, 256, 91])
     check('the smallest lies between 25/100 and 26/100', F(25, 100) < th[0][0] < F(26, 100), True)
 else:
     skip('seeds as bests (98, 285), windows of Orders 348..399, theta(s0)/theta(best)', 'needs the b-file of A122442')
@@ -221,9 +221,9 @@ G = defaultdict(list)
 for n, c, d, W in cert: G[odd(d)].append(n)
 by = defaultdict(list)
 for o, ns in G.items(): by[len(ns)].append(o)
-check('odd parts of the drop values, Orders 1..347', len(G), 219)
+check('odd parts of the drop values, Orders 1..378', len(G), 240)
 check('odd parts shared by 10, 9 and 5 Orders', (by[10], by[9], sorted(by[5])), ([61], [12729682859], [619739, 92485801, 1064232949, 30643528277]))
-check('number of odd parts shared by 4, 3, 2 Orders and by one', (len(by[4]), len(by[3]), len(by[2]), len(by[1])), (7, 18, 38, 150))
+check('number of odd parts shared by 4, 3, 2 Orders and by one', (len(by[4]), len(by[3]), len(by[2]), len(by[1])), (8, 18, 45, 163))
 check('no odd part is shared by more Orders', sorted(by), [1, 2, 3, 4, 5, 9, 10])
 x = 27; tr27 = []
 while x != 1: tr27.append(x); x = T(x)
