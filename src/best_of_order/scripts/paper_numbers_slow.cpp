@@ -6,7 +6,7 @@
 // Compile: mkdir -p _tmp; g++ -O3 -std=c++17 scripts/paper_numbers_slow.cpp -o _tmp/paper_numbers_slow \
 //            -I/opt/homebrew/include -L/opt/homebrew/lib -lgmpxx -lgmp
 // Run from Lean/best_of_order:  _tmp/paper_numbers_slow [FILE]
-//   or _tmp/paper_numbers_slow --k0=N: k0 for Orders 22..N (N <= 32), against Table 1 up to 25 (about 5 minutes),
+//   or _tmp/paper_numbers_slow --k0=N: k0 for Orders 22..N (N <= 32), against Table 1 up to 28 (22..25 about 5 minutes),
 //   beyond it new; about 3 times the time per Order (26: some 10 minutes, 28: some 1.5 hours), one thread.
 //   FILE: the b-file of A122442 (a(n+1) = the smallest start of Order n), data/b122442.txt by default;
 //   if it cannot be read, only Table 1 is checked. One thread, about 2 minutes; memory: the heap of the search, about 2.4 GB at its peak.
@@ -191,7 +191,7 @@ int main(int argc, char **argv) {
             if (line.empty() || line[0] == '#') continue;
             if (is >> k >> v) bf[k] = v;
         }
-        const int K0b[4] = {25, 24, 29, 29};   // Table 1, Orders 22..25
+        const int K0b[7] = {25, 24, 29, 29, 30, 31, 32};   // Table 1, Orders 22..28
         std::cout << "--- Chapter 7: Table 1, k0 for Orders 22.." << N << " (and L/2 < k0 < 4L/5)" << std::endl;
         for (int n = 22; n <= N; n++) {
             int k = k0_of(n), L = p2(n);
@@ -199,7 +199,7 @@ int main(int argc, char **argv) {
             std::cout << "     Order " << n << ": " << nwords << " words, best " << cb << ", L = " << L << ", k0 = " << k
                       << " (" << (long)secs() << " s)" << std::endl;
             check("Order " + std::to_string(n) + ": the best equals the b-file of A402443", std::to_string(cb), bf[n]);
-            if (n <= 25) check("Table 1: k0 for Order " + std::to_string(n), std::to_string(k), std::to_string(K0b[n - 22]));
+            if (n <= 28) check("Table 1: k0 for Order " + std::to_string(n), std::to_string(k), std::to_string(K0b[n - 22]));
             check("Order " + std::to_string(n) + ": L/2 < k0 < 4L/5", (L < 2 * k && 5 * k < 4 * L) ? "yes" : "no", "yes");
         }
         std::cout << "--- " << nok << " OK, " << ndiff << " DIFF, " << nskip << " SKIP (" << (long)secs() << " s)" << std::endl;
