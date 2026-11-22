@@ -8,6 +8,8 @@ first. Version names (R_65a, R_66, ...) are the authors' own labels.
 - Paper 3 (draft), Chapter 2: cites Erdős and Lewin 1996 (d-complete
   sequences; only {2, 3}) and Erdős Problem 1110 (van Doorn: Theorem 2
   of Blecksmith, McCallum and Selfridge answers it).
+  Also Crandall 1978 (Math. Comp. 32), Theorem 7.1: the same staircase
+  sum and, read to 1, the link with 3x + 1 (29 pages).
 
 - The best paper, Draft (44): Table 1 extended to Order 28
   (`scripts/paper_numbers_slow --k0=28`), with L/2 < k0 < 4L/5 for
