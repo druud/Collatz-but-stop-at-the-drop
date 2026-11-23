@@ -52,4 +52,5 @@ Copies of the scripts the paper cites (originals in the local `_keep/tree_01/`),
 | `scripts/aim_cross.py`, `scripts/aim_area.py`, `scripts/ideal_lines.py`, `scripts/mitm_search.py`, `scripts/boo_beam.py`, `scripts/boo_cand.py` | Appendix A: crossings of and area against the scaled wall word, ideal lines, the backward search, candidates from earlier Orders (`data/boo_beam_3_8.out`: the output of `boo_beam.py 3 8`) |
 | `data/b122442.txt` | the smallest start of each Order: a(n+1) of OEIS A122442, n = 1..400 (the copy the searches used; the OEIS b-file is https://oeis.org/A122442/b122442.txt) |
 | `data/b402443_378.txt` | the bests, n = 0..378 (from the scan, `boo_scan`, stopped at Order 378; a(0) = 2) |
+| `data/boo_scan_378.out` | the output of the rerun of `boo_scan` to Order 378 with the width-identity count (C61, 21-23 Nov 2026, 46 h, 6 threads): count 0, every best, drop value and window as in the two files around it |
 | `data/best_cert_378.txt` | per Order n: c, d = T^L(c), the window W of Theorem B (6.1) |
