@@ -5,11 +5,16 @@ first. Version names (R_65a, R_66, ...) are the authors' own labels.
 
 ## After R_101 (20 November 2026)
 
+- Paper 2 and the best paper, Draft (45): cite Terras 1976,
+  Proposition 1.7, for the drop criterion (a member drops at the end
+  of its word if and only if it is larger than the cycle point).
+
 - Paper 3 (draft), Chapter 2: cites Erdős and Lewin 1996 (d-complete
   sequences; only {2, 3}) and Erdős Problem 1110 (van Doorn: Theorem 2
   of Blecksmith, McCallum and Selfridge answers it).
   Also Crandall 1978 (Math. Comp. 32), Theorem 7.1: the same staircase
-  sum and, read to 1, the link with 3x + 1 (29 pages).
+  sum and, read to 1, the link with 3x + 1 (29 pages). Older still:
+  Terras 1976, Theorem 1.1, has the sum term by term; named first.
 
 - The best paper, Draft (44): Table 1 extended to Order 28
   (`scripts/paper_numbers_slow --k0=28`), with L/2 < k0 < 4L/5 for
