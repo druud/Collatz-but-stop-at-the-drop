@@ -613,7 +613,7 @@
   \Large The start words with the highest drop ratio}
 \author{\textbf{Ruud H.G. van Tol}}
 \date{\begin{tikzpicture}\dropturnfig\end{tikzpicture}\\[5ex]
-  \textbf{Draft (45)}\\[8ex]  % the number of commits of this .tex: one up with each committed change
+  \textbf{Draft (46)}\\[8ex]  % the number of commits of this .tex: one up with each committed change
   {\small\copyright\ 2026 Ruud H.G. van Tol. Licensed under \href{https://creativecommons.org/licenses/by/4.0/}{CC BY 4.0}.}
   % DOI line after the Zenodo upload
 }
@@ -1261,8 +1261,10 @@ heap; a pruned node holds no class id with a higher ratio by Theorem~\ref{thm:wi
 shrinks as the best improves. The scan computes the first step at which $x$ falls below itself, and
 the ones before it; by the remark after Theorem~\ref{thm:cycle} that is the Order of $x$'s word for
 all Orders here. (\texttt{boo\_scan.cpp} now also counts the prefixes with $3^j < 2^\ell$ at which $x$ has
-not fallen below itself; a run with a count of $0$ does not rest on that remark. The runs of this
-paper were made before that count was added.) So every class id $c$ of Order $n$ is met as a start of Order $n$, and every other start of its class is larger with a lower ratio (Lemma~\ref{lem:member}); so once
+not fallen below itself; a run with a count of $0$ does not rest on that remark. The run to Order $378$
+was repeated with that count, 46~hours on 6~threads: the count is $0$, with the same best, drop value and
+window for every Order; its output is \texttt{data/boo\_scan\_378.out}. So the bests of this paper do not
+rest on the remark.) So every class id $c$ of Order $n$ is met as a start of Order $n$, and every other start of its class is larger with a lower ratio (Lemma~\ref{lem:member}); so once
 all $x$ below the window of the best found are scanned, Theorem~\ref{thm:window} leaves no class id that
 could beat it.
 \end{proof}
@@ -1422,7 +1424,7 @@ Remark~\ref{rem:cert} & \lean{cert\_rows} \\
 \label{tab:lean}
 \end{herefloat}
 
-The width identity, on which the scan rests (the remark after Theorem~\ref{thm:cycle}), is
+The width identity, on which the first runs of the scan rested (the remark after Theorem~\ref{thm:cycle}; the rerun with the count does not), is
 \lean{WidthIdentity} of that library; its range to Order $10\,781\,273$ uses a range check outside
 Lean~\cite{Paper2}; the Orders of this paper lie within Terras's own range (Remark~\ref{rem:width}).
 Lemma~\ref{lem:dinkelbach} is formalized for any finite family of ratios; that the steps end follows

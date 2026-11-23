@@ -5,6 +5,13 @@ first. Version names (R_65a, R_66, ...) are the authors' own labels.
 
 ## After R_101 (20 November 2026)
 
+- The best paper, Draft (46): the search to Order 378 was rerun with
+  the width-identity count (46 hours on 6 threads): the count is 0,
+  with the same best, drop value and window for every Order, so the
+  bests no longer rest on the width identity (Chapter 6 and the
+  section The Lean formalization). Its output is
+  `data/boo_scan_378.out` of the Lean package best_of_order.
+
 - Paper 2 and the best paper, Draft (45): cite Terras 1976,
   Proposition 1.7, for the drop criterion (a member drops at the end
   of its word if and only if it is larger than the cycle point).
