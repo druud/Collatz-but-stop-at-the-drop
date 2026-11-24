@@ -10,7 +10,8 @@ first. Version names (R_65a, R_66, ...) are the authors' own labels.
   the staircase) and with it the kappa law for N(n)/3^n; only the 1/70
   for the Orders 100 to 399 stays an observation. Draft (5): Figure 2,
   the floors 3^n/2^p2(n) of Orders 0 to 40 with the upper and lower
-  record Orders (`media/floors_tikz.py`).
+  record Orders (`media/floors_tikz.py`); the figures stay in their
+  section (placeins), 12 pages.
 - `media/`: the pictures `drop_tree.svg` (the drop tree of Orders 1 to
   6), `a400061_floors.svg` and `a400061_staircase.svg` (the Floors and
   Staircase pictures of OEIS A400061, with their scripts).
