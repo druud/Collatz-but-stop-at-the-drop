@@ -77,6 +77,7 @@ import AcceleratedCollatz.TFirstOrdersQ
 import AcceleratedCollatz.TFirstWord
 import AcceleratedCollatz.TFirstWordQ
 import AcceleratedCollatz.TFlip
+import AcceleratedCollatz.TFloorGaps
 import AcceleratedCollatz.TFloorSum
 import AcceleratedCollatz.TFold
 import AcceleratedCollatz.TGMap
@@ -122,6 +123,7 @@ import AcceleratedCollatz.TRLink
 import AcceleratedCollatz.TRulerCheck
 import AcceleratedCollatz.TRulerDeficit
 import AcceleratedCollatz.TRulerPair
+import AcceleratedCollatz.TRowLength
 import AcceleratedCollatz.TRulerRecord
 import AcceleratedCollatz.TRunCoord
 import AcceleratedCollatz.TSieve
