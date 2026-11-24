@@ -18,7 +18,7 @@ import AcceleratedCollatz.TDrop
     C(p2(n), n) = p2(n) a(n) + Σ_{m} a(m) C(p2(n - m), n - m)   (`choose_p2_eq_split`),
 
   the sum over the split Orders 1 ≤ m < n with p2(m) + p2(n - m) = p2(n), that is with
-  2^p2(m) 3^n < 2^p2(n) 3^m (`mem_splitOrders_iff`). The sum is A900013(n) (OEIS draft).
+  2^p2(m) 3^n < 2^p2(n) 3^m (`mem_splitOrders_iff`). The sum is A400061(n) (OEIS).
 -/
 
 namespace AcceleratedCollatz
