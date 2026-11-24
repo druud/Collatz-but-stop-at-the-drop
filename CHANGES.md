@@ -7,7 +7,8 @@ first. Version names (R_65a, R_66, ...) are the authors' own labels.
 
 - The drop zeta draft, Draft (2): the count of the words with no
   drop rotation, binomial(p2(n), n) - p2(n) A100982(n), is OEIS
-  A400061.
+  A400061. Draft (3): Observation 5.9 within 1/70 of the staircase
+  (was 1/40, measured against the staircase cut at Order 399).
 
 ## R_102 (24 November 2026)
 
