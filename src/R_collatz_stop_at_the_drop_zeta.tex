@@ -1,0 +1,729 @@
+% The zeta paper beside the series (C86, C89, 24 Nov 2026): "A separate paper, but the material of the separate
+% papers will mostly go into the series too." Research level, self-contained; papers 1-3 and the best paper cited.
+% Source: Project_kb/Collatz_zeta.md (the note of C79), its scripts and data in _keep/czeta/ (local). Public as a
+% draft since 24 Nov 2026 (Public/). \fillin marks values still to come.
+% The figure: media/octave_tikz.py writes it between the BEGIN/END lines below (do not edit there).
+% Draft (1), 24 Nov 2026.
+\documentclass[10pt,a4paper,titlepage]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[margin=1.25in]{geometry}
+\usepackage{hyperref}
+\hypersetup{colorlinks, allcolors=blue!50!black}
+\usepackage{booktabs}
+\usepackage{xcolor}
+\usepackage{tikz}
+\definecolor{arcblue}{HTML}{2062B4}
+\definecolor{floorred}{HTML}{CC0000}
+\definecolor{linedot}{HTML}{5A7F99}
+
+\newcommand{\lean}[1]{\textsf{#1}}
+\newcommand{\fillin}[1]{{\color{red!60!black}[#1]}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\lv}{\operatorname{lv}}
+\newcommand{\Lad}{\operatorname{Lad}}
+\newcommand{\Drop}{\operatorname{Drop}}
+\DeclareMathOperator{\Rea}{Re}
+\DeclareMathOperator{\Ima}{Im}
+
+\raggedbottom
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{computation}[theorem]{Computation}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{observation}[theorem]{Observation}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{mainthm}{Theorem}
+\renewcommand{\themainthm}{\Alph{mainthm}}
+\newtheorem{maincomp}[mainthm]{Computation}
+\emergencystretch=3em
+
+\title{\textbf{Collatz, but stop at the drop}\\[0.5ex]
+  \Large The drop zeta function}
+\author{\textbf{Ruud H.G. van Tol}}
+\date{\textbf{Draft (1)}\\[8ex]
+  {\small\copyright\ 2026 Ruud H.G. van Tol. Licensed under \href{https://creativecommons.org/licenses/by/4.0/}{CC BY 4.0}.}
+}
+
+\begin{document}
+\maketitle
+
+\begin{center}\textbf{Abstract}\end{center}
+\begin{quotation}\small\noindent
+Under the map $T(x) = x/2$ for even $x$ and $(3x+1)/2$ for odd $x$, a drop word of Order $n$ is the
+parity word of the first $L = p_2(n)$ steps of the starts that first fall below themselves after
+$n$ odd steps, $p_2(n)$ the bit length of $3^n$. Each word is a residue class modulo $2^L$ on which
+$T^L$ is affine with slope $3^n/2^L$. We study
+\[
+Z(s) = \frac{1}{1 - P(s)}, \qquad P(s) = \sum_{\text{drop words}} 2^{-Ls}\,3^{-n(1-s)},
+\]
+the dynamical zeta function of the drop map on the $2$-adic integers, with the drop words in
+the role of the primes. $P$ is entire and $Z$ is meromorphic without zeros; its pole at $s = 1$ is
+Terras's theorem that almost every start drops. In every horizontal band of height $2\pi/\ln 2$
+there is exactly one pole, none on or to the right of $\Rea s = 1$ but $s = 1$; the poles lie on
+one closed curve, sampled by the rotation by $\log_2 3$, and come as close to $\Rea s = 1$ as the
+square of the distance of $k\log_2 3$ to the nearest integer. On the way we prove an identity that
+gives the number of drop words of each Order (OEIS A100982) from binomial coefficients alone,
+formalized in Lean~4 with Mathlib.
+
+\medskip\noindent\textbf{MSC2020:} 11B83 (primary); 11M41, 37C30, 05A15.\\
+\textbf{Keywords:} Collatz problem, $3x+1$ problem, parity vectors, dynamical zeta function, cycle
+lemma, Lean~4.
+\end{quotation}
+
+\section*{Main results}
+\addcontentsline{toc}{section}{Main results}
+
+Drop words, their Order $n$ and length $L = p_2(n)$ are defined in Section~\ref{sec:words}. Write
+$N(n)$ for the number of drop words of Order $n$ (OEIS A100982~\cite{OEIS_A100982}), $m_n = N(n)/2^{p_2(n)}$
+for the mass of Order $n$ and $\theta_n = 3^n/2^{p_2(n)}$ for its floor, so that
+$P(s) = \sum_{n \ge 0} m_n \theta_n^{\,s-1}$, and $\alpha = \log_2 3$.
+
+\begin{mainthm}[The function; Sections~\ref{sec:zeta} and~\ref{sec:euler}]
+$P$ is entire, $P(1) = 1$, and $Z$ is meromorphic on $\C$ without zeros, with a simple pole at
+$s = 1$ of residue $1/\mu$, $\mu = \sum_n m_n \ln(2^{p_2(n)}/3^n)$. For $\Rea s > 1$,
+$Z(s) = \sum_{k \ge 0} P(s)^k = \prod_\gamma (1 - w_\gamma(s))^{-1}$, the product over the prime
+cycles $\gamma$ of the drop map on $\Z_2$.
+\end{mainthm}
+
+\begin{mainthm}[The poles; Section~\ref{sec:poles}]
+In each band $|\Ima s - 2\pi k/\ln 2| < \pi/\ln 2$, $k \in \Z$, $Z$ has exactly one pole $s_k$, and
+it is simple; $s_0 = 1$, and no other pole has $\Rea s \ge 1$. There is one continuous function $z$
+on $\mathbb{R}/\Z$ with $s_k = 2\pi i k/\ln 2 + z(k\alpha \bmod 1)$ and
+$\Rea z(\beta) = 1 - (2\pi^2 V/\mu)\,\beta^2 + O(\beta^4)$, $V > 0$; hence
+$c_1 \|k\alpha\|^2 \le 1 - \Rea s_k \le c_2 \|k\alpha\|^2$ for constants $c_2 \ge c_1 > 0$ and all
+$k \ne 0$, and the closure of $\{\Rea s_k : k \ge 1\}$ is $[\min \Rea z, 1]$.
+\end{mainthm}
+
+\begin{maincomp}[The fall; Section~\ref{sec:poles}]
+$\Rea z$ falls strictly on $[0, 1/2]$ (certified). So $\Rea s_j > \Rea s_k$ exactly when
+$\|j\alpha\| < \|k\alpha\|$, the poles nearest to $\Rea s = 1$ come at the convergent denominators
+$k = 1, 2, 5, 12, 41, 53, 306, 665, \dots$ of $\log_2 3$, and the real parts of the poles are dense in
+$[z(1/2), 1]$, $z(1/2) = [-1; 1, 1, 1, 2, 1, 7, 1, 5, 2, 2, 3, 27, \dots]$.
+\end{maincomp}
+
+\begin{mainthm}[The mass per Order; Section~\ref{sec:mass}]
+For every $n \ge 0$, with $L = p_2(n)$,
+\[
+\binom{L}{n} = L\,N(n) + \sum_{m} N(m) \binom{p_2(n-m)}{n-m},
+\]
+the sum over the $1 \le m < n$ with $p_2(m) + p_2(n-m) = p_2(n)$, that is with
+$2^{p_2(m)} 3^n < 2^{p_2(n)} 3^m$. In particular $L\,N(n) \le \binom{L}{n}$, with equality exactly
+when $p_2(n) - n\alpha$ is smaller than all $p_2(m) - m\alpha$, $1 \le m < n$. Formalized in Lean.
+\end{mainthm}
+
+\begin{mainthm}[The jumps; Section~\ref{sec:mass}]
+With $p = 1/\alpha$: $\sum_{m \ge 1} N(m)\, p^m (1-p)^{p_2(m) - m} = p$.
+\end{mainthm}
+
+\subsection*{What was known}
+The affine form of $T^L$ on a parity class, the density of the starts that drop and the fact that
+almost every start drops are due to Terras~\cite{Terras1976} and Everett~\cite{Everett1977}. The
+bound $L\,N(n) \le \binom{L}{n}$ with its equality case, and a lower bound by
+$\binom{L-1}{n}/(L-1)$, are Winkler's~\cite{Winkler2026}, by the cycle lemma; paper~1 of this
+series~\cite{Paper1} cites the upper one, and its equality Orders are the upper record Orders of
+paper~2~\cite{Paper2}. The prime zeta function and the shape of its zeros, which this paper follows,
+are in MathWorld~\cite{MathWorldPZ}; dynamical zeta functions go back to Artin and
+Mazur~\cite{ArtinMazur1965}. The cycle lemma and the cycle identity of Section~\ref{sec:mass} are
+classical (Feller~\cite{Feller2}). As far as we know, the function $Z$, Theorems~B and~E, the
+identity of Theorem~D with its restricted sum, and Computation~C are new.
+
+\clearpage
+\tableofcontents
+
+%------------------------------------------------------------------------------------------------
+\section{Words and Orders}
+\label{sec:words}
+
+Let $T(x) = (3x+1)/2$ for odd $x$ and $T(x) = x/2$ for even $x$. A \emph{word} is a finite
+$0/1$ word; its letters are the parities of successive values, $1$ for an odd step and $0$ for an
+even one. The \emph{level} of a word with $a$ ones among $j$ letters is $3^a/2^j$; for the word $v$
+we write $\lv(v, i)$ for the level of its first $i$ letters, so $\lv(v, 0) = 1$. Two prefixes of
+different lengths have different levels, as $3^a 2^{j'} \ne 3^{a'} 2^{j}$ unless $a = a'$ and $j = j'$.
+
+\begin{definition}
+A \emph{drop word} is a nonempty word whose proper nonempty prefixes all have level above $1$ and
+whose level is below $1$. Its number of ones is its \emph{Order}.
+\end{definition}
+
+The last letter of a drop word is a $0$ (else the prefix without it would have level below $1$),
+so a drop word of Order $n$ has $3^n > 2^{L-1}$ and $3^n < 2^L$: its length is $L = p_2(n)$, the bit
+length of $3^n$ ($p_2(0) = 1$; OEIS A020914). The only drop word of Order $0$ is $0$. No drop word
+is a proper prefix of another. Write $\Drop(n)$ for the drop words of Order $n$ and
+$N(n) = |\Drop(n)|$ (OEIS A100982~\cite{OEIS_A100982}: $1, 1, 2, 3, 7, 12, 30, \dots$ from $n = 1$; $N(0) = 1$, the word
+$0$); the word $1^n 0^{p_2(n)-n}$ shows $N(n) \ge 1$.
+
+For a word $w$ of Order $n$ and length $L$ and an integer, or $2$-adic integer, $x$ whose first $L$
+parities are $w$,
+\[
+2^L\, T^L(x) = 3^n x + \rho_w,
+\]
+with $\rho_w \ge 0$ an integer that depends on $w$ only (Terras~\cite{Terras1976}); these $x$ form
+one class $c + 2^L \Z_2$, $0 \le c < 2^L$. For a drop word, $T^L(x) < x$ for the positive integers
+$x$ of the class with $x > \rho_w/(2^L - 3^n)$ (Terras~\cite[Prop.~1.7]{Terras1976}), and
+$T^j(x) > x$ for $0 < j < L$ and every positive $x$ of the class.
+
+\begin{definition}
+The \emph{mass} of Order $n$ is $m_n = N(n)/2^{p_2(n)}$, the $2$-adic measure of the classes of its
+drop words; its \emph{floor} is $\theta_n = 3^n/2^{p_2(n)}$, the slope of $T^L$ on them.
+\end{definition}
+
+So $\theta_0 = 1/2$ and $1/2 < \theta_n < 1$ for $n \ge 1$; with $e_n = p_2(n) - n\alpha \in (0, 1]$,
+$\theta_n = 2^{-e_n}$. For a start $x$ of a class of Order $n$, $T^L(x)/x = \theta_n + \rho_w/(2^L x)$
+falls strictly towards $\theta_n$ along the class: the floor is the infimum of the drop ratios of
+the Order, never attained.
+
+\begin{lemma}[Terras]\label{lem:mass}
+$\sum_{n \ge 0} m_n = 1$.
+\end{lemma}
+
+\begin{proof}
+Read the parities of a $2$-adic integer chosen by the Haar measure: independent fair letters. The
+logarithm of the level is a random walk with mean step $\frac12 \log(3/4) < 0$, so it falls below
+$0$ almost surely (strong law of large numbers), and the word read up to the first time it does is a
+drop word. The events for different drop words are disjoint, of probability $2^{-L}$ each.
+\end{proof}
+
+%------------------------------------------------------------------------------------------------
+\section{The drop zeta}
+\label{sec:zeta}
+
+\begin{definition}
+For $s \in \C$,
+\[
+P(s) = \sum_{n \ge 0} N(n)\, 3^{n(s-1)} 2^{-p_2(n)s} = \sum_{n \ge 0} m_n \theta_n^{\,s-1},
+\qquad Z(s) = \frac{1}{1 - P(s)}.
+\]
+\end{definition}
+
+One term per drop word: the $2$-adic size $2^{-L}$ of its class times the slope of its branch to
+the power $s - 1$. The first terms are $2^{-s}$ (the word $0$) and $3^{s-1}4^{-s}$ (the word $10$).
+We call $P$ the drop prime function and $Z$ the drop zeta function, after the prime zeta function
+$P(s) = \sum_p p^{-s}$ and $\zeta(s)$; the analogy is made precise in Section~\ref{sec:euler}.
+
+\begin{proposition}\label{prop:entire}
+$P$ is entire, $P(1) = 1$, and $Z$ is meromorphic on $\C$ without zeros. At $s = 1$, $Z$ has a simple
+pole with residue $1/\mu$, $\mu = -P'(1) = \sum_n m_n \lambda_n > 0$, $\lambda_n = \ln(2^{p_2(n)}/3^n)$.
+\end{proposition}
+
+\begin{proof}
+With $\sigma = \Rea s$, $|m_n \theta_n^{\,s-1}| = m_n \theta_n^{\,\sigma-1} \le m_n 2^{\max(0, 1-\sigma)}$, as
+$1/2 \le \theta_n < 1$. By Lemma~\ref{lem:mass} the series converges absolutely and uniformly on
+compact sets, so $P$ is entire and $P(1) = 1$; $Z$ is the reciprocal of an entire function that is
+not identically $1$ ($P(s) \to 0$ as $\sigma \to \infty$), so it is meromorphic without zeros. Its
+poles are the zeros of $1 - P$. Near $s = 1$, $1 - P(s) = \mu(s-1) + O((s-1)^2)$ with
+$\mu = -\sum m_n \ln\theta_n = \sum m_n \lambda_n$, finite as $0 < \lambda_n \le \ln 2$, and positive.
+\end{proof}
+
+The prime zeta function, in contrast, has the natural boundary $\Rea s = 0$.
+
+\begin{remark}
+The value $P(0) = \sum_n N(n)/3^n$ is the mean number of starts per drop value: the residue at
+$s = 1$ of $\sum_{x} d(x)^{-s}$, $d(x)$ the drop value $T^L(x)$ of the start $x$.
+\end{remark}
+
+\begin{computation}\label{comp:values}
+The values at small integers, as certified continued fractions (exact rational arithmetic, the
+sum over the Orders up to $399$ exact and the tail bounded by $2^{\max(0, 1-s)}(1 - \sum_{n \le 399} m_n)$,
+which is below $10^{-12}$):
+
+\medskip
+\begin{center}\small
+\begin{tabular}{@{}rll@{}}
+\toprule
+$s$ & $P(s)$ & $Z(s)$\\
+\midrule
+$-2$ & $[5; 2, 2, 2, 1, 4, 7, 8, 1, 1, 9, 1, \dots]$ & $[-1; 1, 3, 2, 2, 2, 1, 4, 7, 8, 1, 1, 9, 1, \dots]$\\
+$-1$ & $[2; 1, 39, 1, 2, 1, 4, 6, \dots]$ & $[-1; 2, 39, 1, 2, 1, 4, 6, \dots]$\\
+$0$ & $[1; 1, 2, 4, 2, 1, 4, 4, 1, 2, 6, 3, 2, \dots]$ & $[-2; 1, 1, 4, 2, 1, 4, 4, 1, 2, 6, 3, 2, \dots]$\\
+$1$ & $1$ & pole, residue $1/\mu$\\
+$2$ & $[0; 1, 1, 1, 1, 1, 2, 2, 7, 2, 7, 1, 5, 1, 3, 1, \dots]$ & $[2; 1, 1, 1, 2, 2, 7, 2, 7, 1, 5, 1, 3, 1, \dots]$\\
+$3$ & $[0; 2, 2, 9, 3, 1, 4, 2, 1, 1, 7, \dots]$ & $[1; 1, 2, 9, 3, 1, 4, 2, 1, 1, 7, \dots]$\\
+\bottomrule
+\end{tabular}
+\end{center}
+\end{computation}
+
+%------------------------------------------------------------------------------------------------
+\section{The Euler product}
+\label{sec:euler}
+
+As no drop word is a proper prefix of another, a concatenation of drop words factors into drop
+words in only one way. For $\Rea s > 1$, $|P(s)| \le P(\Rea s) < 1$, and so
+\[
+Z(s) = \sum_{k \ge 0} P(s)^k = \exp\Bigl(\sum_{k \ge 1} \frac{P(s)^k}{k}\Bigr).
+\]
+The first sum runs over all concatenations of drop words, each weighted by the product of the terms
+of its factors: the drop words play the primes, in a free (not commutative) monoid, and
+$P = 1 - 1/Z$ takes the place of the M\"obius inversion that expresses the prime zeta function by
+$\log\zeta(ks)$, $k \ge 1$.
+
+The second sum is a dynamical zeta function. Let $D$ be the \emph{drop map}: on the class of a drop
+word $w$, $D(x) = T^L(x) = (3^n x + \rho_w)/2^L$. By Lemma~\ref{lem:mass} it is defined on a subset
+of $\Z_2$ of full measure, and it maps each class onto $\Z_2$, as $3^n$ is a $2$-adic unit. So $D$
+is a full shift on the drop words: for each sequence $w_1, \dots, w_k$ of drop words, $D^k$ maps
+the points that read them one after the other affinely onto $\Z_2$; the inverse branch is a
+$2$-adic contraction, so it has exactly one fixed point, a fixed point of $D^k$. Weighting a point
+by the term of its word,
+\[
+\sum_{x \in \mathrm{Fix}(D^k)} \prod_{j < k} t(D^j x) = P(s)^k, \qquad
+Z(s) = \prod_{\gamma} \bigl(1 - w_\gamma(s)\bigr)^{-1},
+\]
+the product over the prime cycles $\gamma$ of $D$, $w_\gamma$ the product of the terms of the words
+along $\gamma$ (after Artin and Mazur~\cite{ArtinMazur1965}, with weights).
+
+The periodic points of $D$ are the rationals $x = \rho/(2^M - 3^N) \ge 0$, $\rho$, $N$ and $M$
+those of the concatenated word, $2^M > 3^N$; so no negative integer is one ($-1$, a fixed point of
+$T$, never drops). Two integers are: $0$ (the word $0$, the factor $(1 - 2^{-s})^{-1}$, the Euler
+factor of $\zeta(s)$ at $2$) and $1$ (the word $10$, the factor $(1 - 3^{s-1}4^{-s})^{-1}$). A third
+integer cycle would be a cycle of $T$ through a positive integer $x > 1$ that does not drop at the
+end of its word: against the width identity of its Order (paper~2~\cite{Paper2}), which
+paper~3~\cite{Paper3} verifies for every Order up to $64\,497\,106$, given its range check. So the integer factors
+of the product are these two exactly when $T$ has no cycle on the positive integers besides
+$\{1, 2\}$.
+
+%------------------------------------------------------------------------------------------------
+\section{The poles}
+\label{sec:poles}
+
+\begin{theorem}\label{thm:band}
+In each band $B_k = \{s : |\Ima s - 2\pi k/\ln 2| < \pi/\ln 2\}$, $k \in \Z$, the function $1 - P$
+has exactly one zero $s_k$, and it is simple; $s_0 = 1$. The same holds with any $r_n$ in place of
+$\theta_n$, $r_0 = 1/2$ and $1/2 < r_n < 1$ for $n \ge 1$.
+\end{theorem}
+
+\begin{proof}
+Compare $f = 1 - P$ with $g(s) = 1 - 2^{-s}$, which has exactly one zero in $B_k$, the simple zero
+$2\pi i k/\ln 2$. Put $h = f - g = -\sum_{n \ge 1} m_n r_n^{\,s-1}$; then
+$|h(s)| \le H(\sigma) := \sum_{n \ge 1} m_n r_n^{\,\sigma-1}$, and $\sum_{n \ge 1} m_n = 1/2$. On the edges
+$\Ima s = (2k \pm 1)\pi/\ln 2$ of the band, $2^{-s} = -2^{-\sigma}$, so $|g| = 1 + 2^{-\sigma}$, while
+$H(\sigma) \le 1/2$ for $\sigma \ge 1$ and $H(\sigma) < \frac12 2^{1-\sigma} = 2^{-\sigma}$ for $\sigma < 1$
+(as $r_n > 1/2$). As $\sigma \to +\infty$, $H \to 0$ and $|g| \to 1$; as $\sigma \to -\infty$,
+$H(\sigma)/2^{-\sigma} = 2\sum_{n \ge 1} m_n (2r_n)^{\sigma - 1} \to 0$ by dominated convergence, while
+$|g| \ge 2^{-\sigma} - 1$. So $|h| < |g|$ on the boundary of the rectangle
+$\{|\Rea s| \le A\} \cap B_k$ for all large $A$, and by Rouch\'e's theorem $f$ and $g$ have the same
+number of zeros inside, counted with multiplicity: one.
+\end{proof}
+
+\begin{theorem}\label{thm:line}
+No zero of $1 - P$ but $s = 1$ has $\Rea s \ge 1$.
+\end{theorem}
+
+\begin{proof}
+For $\sigma \ge 1$, $|P(s)| \le \sum m_n \theta_n^{\,\sigma-1} \le 1$, with equality in the second
+step only if $\sigma = 1$, and then $P(s) = 1$ only if all terms $m_n \theta_n^{\,it}$, $s = 1 + it$,
+are positive. For $n = 0$ and $n = 1$ this says $t\ln 2 \in 2\pi\Z$ and $t \ln(4/3) \in 2\pi\Z$; as
+$\ln(4/3)/\ln 2 = 2 - \alpha$ is irrational, $t = 0$.
+\end{proof}
+
+This is the argument MathWorld~\cite{MathWorldPZ} gives for the boundary of the zero-free half-plane
+of the prime zeta function (two terms whose logarithms have an irrational ratio), here on the line
+$\Rea s = 1$ itself: the prime zeta function is zero-free for $\Rea s \ge \sigma_0$ with a bound
+$\sigma_0 > 1$~\cite{Belovas2025}, sharp~\cite{Caceres2026}; $Z$ has its pole at $s = 1$ and no other
+pole on the line.
+
+\subsection*{One curve}
+
+As $\theta_n^{\,2\pi i k/\ln 2} = e^{2\pi i k(n\alpha - p_2(n))} = e^{2\pi i n k \alpha}$,
+\[
+1 - P\Bigl(w + \frac{2\pi i k}{\ln 2}\Bigr) = F_\beta(w) := 1 - \sum_{n \ge 0} m_n \theta_n^{\,w-1} e^{2\pi i n \beta},
+\qquad \beta = k\alpha \bmod 1.
+\]
+The proof of Theorem~\ref{thm:band} applies to $F_\beta$ for every real $\beta$ (only the moduli of the
+coefficients enter): $F_\beta$ has exactly one zero $z(\beta)$ with $|\Ima z(\beta)| < \pi/\ln 2$, and it
+is simple. So $s_k = 2\pi i k/\ln 2 + z(k\alpha \bmod 1)$: the poles lie on one closed curve, sampled
+by the rotation by $\alpha$. By the implicit function theorem $z$ is real analytic on
+$\mathbb{R}/\Z$; $z(0) = 1$, $z(-\beta) = \overline{z(\beta)}$, so $z(1/2)$ is real.
+
+\begin{theorem}[The bend]\label{thm:bend}
+$\Rea z(\beta) = 1 - \dfrac{2\pi^2 V}{\mu}\,\beta^2 + O(\beta^4)$, with
+$V = \sum_n m_n \bigl(n - \tfrac{\nu}{\mu}\lambda_n\bigr)^2 > 0$ and $\nu = \sum_n n\, m_n$. For
+$\beta \not\equiv 0$, $\Rea z(\beta) < 1$. Hence there are constants $c_2 \ge c_1 > 0$ with
+$c_1\|k\alpha\|^2 \le 1 - \Rea s_k \le c_2\|k\alpha\|^2$ for all $k \ne 0$, and the closure of
+$\{\Rea s_k : k \ge 1\}$ is $[\min \Rea z, 1]$.
+\end{theorem}
+
+\begin{proof}
+The masses are a probability distribution on the Orders (Lemma~\ref{lem:mass}); write $E$ for its
+mean. With $X = -(z-1)\lambda_n + 2\pi i \beta n$, $z = z(\beta)$ solves $E[e^X] = 1$, that is
+$\log E[e^X] = 0$. Expand in cumulants with $z - 1 = a\beta + b\beta^2 + O(\beta^3)$: the first order
+gives $-a\mu + 2\pi i\nu = 0$, so $a = 2\pi i\nu/\mu$; the second gives
+$-b\mu + \frac12\mathrm{Var}(-a\lambda_n + 2\pi i n) = 0$, and $-a\lambda_n + 2\pi i n =
+2\pi i(n - \frac{\nu}{\mu}\lambda_n)$, a variable of mean $0$, so $b = -2\pi^2 V/\mu$. The third order
+terms are $O(\beta^3)$, and $\Rea z$ is even in $\beta$ as $z(-\beta) = \overline{z(\beta)}$. $V > 0$ as
+$n - \frac{\nu}{\mu}\lambda_n$ takes different values at the Orders $0$ and $1$ ($\lambda_1 < \lambda_0$,
+and $\nu, \mu > 0$). If $\Rea z(\beta) \ge 1$, the proof of Theorem~\ref{thm:line}
+applied to $F_\beta$ gives, from the Orders $0$ and $1$, $\Ima z(\beta) = 0$ and $e^{2\pi i\beta} = 1$.
+So $(1 - \Rea z(\beta))/\|\beta\|^2$ is continuous and positive on $\mathbb{R}/\Z$ minus $0$, with the
+positive limit $2\pi^2V/\mu$ at $0$: it lies between two positive constants. The closure statement
+follows as $k\alpha \bmod 1$ is dense and $\Rea z$ is continuous.
+\end{proof}
+
+By Rhin's bound~\cite{Rhin1987}, $|k\ln 3 - j\ln 2| \ge \max(j, k)^{-133/10}$ for large $\max(j,k)$, so
+$1 - \Rea s_k$ is at least a constant times $k^{-133/5}$; and it is of the order $1/q^2$ at the
+convergent denominators $q$ of $\alpha$.
+
+\begin{computation}[The fall]\label{comp:fall}
+$\Rea z$ falls strictly on $[0, 1/2]$. Certified by disc arithmetic over $2004$ middle cells of $\beta$ and two end cells: per
+cell a Rouch\'e disc holding $z(\beta)$ for the whole cell, then enclosures of the derivatives of
+$F_\beta(w)$ over disc and cell, with the Orders beyond $1000$ bounded by $m_n \le \binom{p_2(n)}{n}2^{-p_2(n)}$;
+$\Rea z' < 0$ on the middle cells, and $\Rea z'' < 0$ on $[0, 1/256]$, $\Rea z'' > 0$ on
+$[1/2 - 1/65536, 1/2]$, where $\Rea z' = 0$ at both ends by symmetry. Hence $\min\Rea z = z(1/2) = [-1; 1, 1, 1, 2, 1, 7, 1, 5, 2, 2, 3, 27, 2, 1, 1,
+6, 7, 2, 1, 86, 6, 1, \dots]$ (23 terms, certified by a sign change); $\Rea s_j > \Rea s_k$ exactly
+when $\|j\alpha\| < \|k\alpha\|$; and the poles nearest to $\Rea s = 1$ so far come at
+$k = 1, 2, 5, 12, 41, 53, 306, 665, 15601, \dots$, the convergent denominators of
+$\alpha$ (OEIS A005664), at which $\|k\alpha\|$ has its records. The first poles:
+
+\medskip
+\begin{center}\small
+\begin{tabular}{@{}rll@{}}
+\toprule
+$k$ & $\Rea s_k$ & $\Ima s_k$\\
+\midrule
+$1$ & $[-1; 1, 1, 1, 16, 1, 2, 6, \dots]$ & $[8; 1, 10, 1, 1, 2, 3, \dots]$\\
+$2$ & $[0; 15, 1, 2, 8, 1, 3, 4, \dots]$ & $[18; 1, 1, 1, 2, 1, 1, 2, \dots]$\\
+$3$ & $[-1; 1, 7, 79, 2, 1, 1, 2, \dots]$ & $[26; 1, 3, 2, 2, 6, 2, 6, \dots]$\\
+\bottomrule
+\end{tabular}
+\end{center}
+\end{computation}
+
+%------------------------------------------------------------------------------------------------
+\section{The mass per Order}
+\label{sec:mass}
+
+Fix $n \ge 0$ and $L = p_2(n)$, and let $W(n)$ be the $\binom{L}{n}$ words of length $L$ with $n$ ones.
+Every word of $W(n)$ has level $3^n/2^L < 1$. The \emph{rotation} of a word $u$ of length $L$ by
+$r \le L$ is $u_r = u_{[r, L)}\,u_{[0, r)}$.
+
+\begin{definition}
+A \emph{ladder word} is a word whose level is below the level of each of its proper prefixes (the
+empty one included). Let $\Lad(n) \subseteq W(n)$ be the ladder words in $W(n)$.
+\end{definition}
+
+A drop word is a ladder word, and $\Drop(n) \subseteq \Lad(n)$. The levels of a rotation are
+$\lv(u_r, t) = \lv(u, r+t)/\lv(u, r)$ for $t \le L - r$ and
+$\lv(u_r, t) = \lv(u, L)\lv(u, t - L + r)/\lv(u, r)$ for $t > L - r$.
+
+\begin{lemma}\label{lem:ladrot}
+(i) $u_r$ is a ladder word iff $\lv(u, r) < \lv(u, j)$ for all $j < r$ and
+$\lv(u, r)\lv(u, L) < \lv(u, s)$ for all $r \le s < L$.
+(ii) If $\lv(u, L) < 1$, the rotation at the lowest level, $r$ the $i < L$ with the least
+$\lv(u, i)$, is a ladder word.
+(iii) For a ladder word $v$ and $0 < r < L$, $v_r$ is a ladder word iff $\lv(v, r) < \lv(v, j)$ for all
+$j < r$.
+\end{lemma}
+
+\begin{proof}
+(i) is the formula for the levels of $u_r$. (ii): the levels are distinct, and
+$\lv(u, r)\lv(u, L) < \lv(u, r) \le \lv(u, s)$. (iii): the condition with $j = 0$ gives
+$\lv(v, r) < 1$, and then $\lv(v, r)\lv(v, L) < \lv(v, L) < \lv(v, s)$ for every $s < L$.
+\end{proof}
+
+For a ladder word $v$ of length $L$ let
+\[
+\tau(v) = \{\, r < L : v_s \text{ is not a ladder word for } L - r \le s < L \,\}.
+\]
+
+\begin{lemma}\label{lem:bij}
+Every $u \in W(n)$ is $v_{L-r}$ for exactly one pair $(v, r)$ with $v \in \Lad(n)$ and
+$r \in \tau(v)$. Hence $\binom{L}{n} = \sum_{v \in \Lad(n)} |\tau(v)|$.
+\end{lemma}
+
+\begin{proof}
+For $v$ ladder and $r \in \tau(v)$, $u = v_{L-r}$ has $u_r = v$, a ladder word, and $u_s = v_{L - r + s}$
+for $s < r$, not a ladder word: so $r$ is the first ladder rotation of $u$, and $v = u_r$. This
+gives uniqueness. Conversely, $u$ has a ladder rotation by Lemma~\ref{lem:ladrot}(ii); let $r$ be the
+first. Then $v = u_r \in \Lad(n)$, $u = v_{L-r}$, and for $L - r \le s < L$, $v_s = u_{r + s - L}$
+with $r + s - L < r$, not a ladder word; so $r \in \tau(v)$.
+\end{proof}
+
+\begin{lemma}\label{lem:split}
+(i) For $d \in \Drop(n)$, $\tau(d) = \{0, \dots, L - 1\}$.
+(ii) Let $1 \le m < n$ with $p_2(m) + p_2(n-m) = p_2(n)$. For $d \in \Drop(m)$ and $w \in \Lad(n-m)$,
+$d\,w \in \Lad(n) \setminus \Drop(n)$ and $\tau(dw) = \tau(w)$.
+(iii) Every $v \in \Lad(n) \setminus \Drop(n)$ is $d\,w$ as in (ii) for exactly one $m$, $d$, $w$.
+\end{lemma}
+
+\begin{proof}
+(i) By Lemma~\ref{lem:ladrot}(iii) with $j = 0$, $d_s$ ($0 < s < L$) would need $\lv(d, s) < 1$.
+
+(ii) The levels of $dw$ are $\lv(d, i) \ge 1$ for $i < |d|$ and $\lv(d, |d|)\lv(w, j)$ after that, and
+$\lv(dw, L) = \lv(d, |d|)\lv(w, |w|) < 1$: so $dw$ is a ladder word, in $W(n)$ by the lengths, and not
+a drop word, as its proper prefix $d$ has level below $1$. By Lemma~\ref{lem:ladrot}(iii), the rotation
+of $dw$ by $|d|$ is a ladder word, and for $0 < j < |w|$ the rotation by $|d| + j$ is one iff $w_j$
+is one (the levels before $|d|$ are at least $1$, above $\lv(d, |d|)\lv(w, j)$ when
+$\lv(w, j) < 1$). So for $r < L$, $r \in \tau(dw)$ iff $r < |w|$ and $r \in \tau(w)$.
+
+(iii) Let $g$ be the least $i \ge 1$ with $\lv(v, i) < 1$; $g < L$ as $v$ is not a drop word. The
+first $g$ letters form a drop word $d$, of some Order $m$ and length $g = p_2(m)$; the rest $w$ is a
+ladder word, as $\lv(v, g + j) = \lv(d, g)\lv(w, j)$. Its Order is $n - m$ and its length $L - g$, with
+$3^{n-m} < 2^{L-g}$ (as $\lv(w, L-g) < 1$) and $2^{L-1} < 3^n = 3^m 3^{n-m} < 2^g 3^{n-m}$: so
+$L - g = p_2(n - m)$. Then $m \ge 1$ (else $p_2(n) = 1 + p_2(n)$) and $m < n$ (else $g = L$). The
+split is unique, as no drop word is a proper prefix of another.
+\end{proof}
+
+\begin{theorem}\label{thm:mass}
+For every $n \ge 0$, with $L = p_2(n)$,
+\[
+\binom{L}{n} = L\,N(n) + \sum_{m \in S(n)} N(m)\binom{p_2(n-m)}{n-m},
+\]
+with $S(n) = \{1 \le m < n : p_2(m) + p_2(n-m) = p_2(n)\}$; and for $1 \le m < n$: $m \in S(n)$ iff $2^{p_2(m)}3^n < 2^{p_2(n)}3^m$ iff $e_m < e_n$.
+\end{theorem}
+
+\begin{proof}
+By Lemmas~\ref{lem:bij} and~\ref{lem:split}, $\binom{L}{n} = \sum_{d \in \Drop(n)} L
++ \sum_{m \in S(n)} \sum_{d \in \Drop(m)} \sum_{w \in \Lad(n-m)} |\tau(w)|$, and the inner sum is
+$\binom{p_2(n-m)}{n-m}$ by Lemma~\ref{lem:bij} at $n - m$. For the condition: put $a = p_2(m)$,
+$b = p_2(n-m)$. From $3^n = 3^m 3^{n-m} < 2^{a+b}$ and $2^{a-1}2^{b-1} \le 3^n$, $p_2(n)$ is $a + b$ or
+$a + b - 1$. Dividing by $3^m$, the inequality reads $2^a 3^{n-m} < 2^{p_2(n)}$, which holds for
+$p_2(n) = a + b$ and fails for $p_2(n) = a + b - 1$, as $2^{b-1} \le 3^{n-m}$. Taking $\log_2$ it is
+$e_m < e_n$.
+\end{proof}
+
+\begin{corollary}[Winkler~\cite{Winkler2026}]
+$L\,N(n) \le \binom{L}{n}$, with equality iff $S(n)$ is empty, that is iff $e_n < e_m$ for all
+$1 \le m < n$: $n = 1, 3, 5, 17, 29, 41, 94, 147, 200, 253, 306, 971, 1636, \dots$, the denominators
+of the upper semiconvergents of $\alpha$ (the upper record Orders of paper~2).
+\end{corollary}
+
+The difference $\binom{L}{n} - L\,N(n)$, the number of words of $W(n)$ none of whose rotations is a
+drop word, is $0, 2, 0, 14, 0, 90, 432, 182, 2410, 392, 14526, \dots$ from $n = 1$
+(OEIS \fillin{A-number}). Theorem~\ref{thm:mass} computes $N(1), N(2), \dots$ from binomial
+coefficients alone, in time quadratic in the Orders.
+
+\begin{remark}
+The identity can also be read off the cycle identity $\binom{L}{n} = L\sum_{k \ge 1} C_k(n)/k$, $C_k(n)$
+the number of sequences of $k$ drop words of total Order $n$ and length $L$: the rotations of a word
+at the records of its cyclic walk $W_i = i - a_i\alpha$ (Feller~\cite{Feller2}). The two sides of
+Theorem~\ref{thm:mass} do not count the same words: for $n = 2$ the words with no drop rotation are
+$1010$ and $0101$, those of the sum ($10$, then one $1$ in two letters) $1010$ and $1001$.
+\end{remark}
+
+\begin{theorem}\label{thm:jumps}
+With $p = 1/\alpha$, $\sum_{m \ge 1} N(m)\,p^m(1-p)^{p_2(m)-m} = p$.
+\end{theorem}
+
+\begin{proof}
+Read a word with independent letters, a one with probability $p$. Put $W_i = i - a_i\alpha$, $a_i$
+the ones among the first $i$ letters; a zero adds $1$, a one $1 - \alpha$, and the mean step is
+$(1 - p) + p(1 - \alpha) = 0$. A random walk with mean-zero steps that are not all $0$ has
+$\limsup W_i = +\infty$ almost surely (Feller~\cite{Feller2}), so it passes above $0$ almost surely,
+and the first time it does is the end of a drop word ($W_i > 0$ means level below $1$). These are
+disjoint events, of probability $N(m)p^m(1-p)^{p_2(m)-m}$ for the drop words of Order $m$. So the
+sum over $m \ge 0$ is $1$, and the word $0$ gives $1 - p$.
+\end{proof}
+
+\begin{observation}
+With $G(e) = 1 - \sum_{e_m < e} N(m)\,p^m(1-p)^{p_2(m)-m}$, a staircase from $1$ (as $e \to 0$) down to
+$1 - p$ (as $e \to 1$, by Theorem~\ref{thm:jumps}), the ratio $L\,N(n)/\binom{L}{n}$ stays within $1/40$
+of $G(e_n)$ for the Orders $100$ to $399$. By Stirling's formula this suggests
+$N(n)/3^n \sim G(e_n)\,(\alpha/(\alpha-1))^{e_n}\,\kappa^n/(\sqrt{2\pi\alpha(\alpha-1)}\,n^{3/2})$ with
+$\kappa = \alpha^\alpha/(3(\alpha-1)^{\alpha-1})$ ($3\kappa$ is Winkler's $B_3$~\cite{Winkler2026}).
+Not proved.
+\end{observation}
+
+%------------------------------------------------------------------------------------------------
+\section{The octave clock}
+\label{sec:octave}
+
+The ratios $T^L(x)/x$ of the starts $x$ of Order $n \ge 1$ lie in $(\theta_n, 1)$, inside one octave
+$[1/2, 1)$. Bend the octave into a circle, $1$ and $1/2$ the same point; Order $n$ on its own ring.
+On the logarithmic clock, $x$ at $\log_2 x + 1$ of a turn, the floor of Order $n$ sits at
+$\{n\alpha\}$: the circle of fifths. As $\log_2\theta_n = n\alpha - p_2(n)$ is linear in $n$ up to an
+integer, the floors of $n$ and $n + 12$ lie on one line (a spiral on the clock), turning by
+$\log_2(3^{12}/2^{19})$, the Pythagorean comma, per $12$ Orders, and those of $n$ and $n + 5$ on
+another, turning by $-\log_2(256/243)$, the limma, per $5$ Orders; at Order $0$ the $12$ lines start
+at the $12$ equal steps of the octave, the $5$ at its $5$ equal steps. The convergent denominators
+$12, 53, 665, \dots$ of $\alpha$ are the steps of the families of lines that reach $x = 1$ at the
+record Orders $5, 17, 29, 41$ (steps $12$), $94, 147, 200, 253, 306$ (steps $53$), $971, 1636$
+(steps $665$).
+
+On the linear clock (Figure~\ref{fig:octave}), $x$ at $2x - 1$ of a turn, the ratios of Order $n$
+spread over an arc from the floor (their infimum) to the largest ratio, which is at the first start
+of a class: the best of the Order~\cite{BestPaper} (OEIS A402443). Its length is $2\rho^\ast/(2^L c^\ast)$ of a turn,
+$c^\ast$ the best and $\rho^\ast$ its constant: short where $c^\ast$ is large.
+
+\begin{figure}[ht]
+\centering
+\begin{tikzpicture}
+% BEGIN octave_lin.tikz
+% octave_lin.tikz, written by octave_tikz.py (do not edit)
+\draw[black!15] (0,0) circle (0.550);
+\draw[black!15] (0,0) circle (0.720);
+\draw[black!15] (0,0) circle (0.890);
+\draw[black!15] (0,0) circle (1.060);
+\draw[black!15] (0,0) circle (1.230);
+\draw[black!15] (0,0) circle (1.400);
+\draw[black!15] (0,0) circle (1.570);
+\draw[black!15] (0,0) circle (1.740);
+\draw[black!15] (0,0) circle (1.910);
+\draw[black!15] (0,0) circle (2.080);
+\draw[black!15] (0,0) circle (2.250);
+\draw[black!15] (0,0) circle (2.420);
+\draw[black!15] (0,0) circle (2.590);
+\draw[black!15] (0,0) circle (2.760);
+\draw[black!15] (0,0) circle (2.930);
+\draw[black!15] (0,0) circle (3.100);
+\draw[black!15] (0,0) circle (3.270);
+\draw[black!15] (0,0) circle (3.440);
+\draw[black!15] (0,0) circle (3.610);
+\draw[black!15] (0,0) circle (3.780);
+\draw[black!15] (0,0) circle (3.950);
+\draw[black!8] (0.000,0.300) -- (0.000,4.135);
+\node[font=\scriptsize, text=black!65] at (0.000,4.485) {$1 = 1/2$};
+\draw[black!8] (0.300,0.000) -- (4.135,0.000);
+\node[font=\scriptsize, text=black!65] at (4.485,0.000) {$5/8$};
+\draw[black!8] (0.000,-0.300) -- (0.000,-4.135);
+\node[font=\scriptsize, text=black!65] at (0.000,-4.485) {$3/4$};
+\draw[black!8] (-0.300,-0.000) -- (-4.135,-0.000);
+\node[font=\scriptsize, text=black!65] at (-4.485,-0.000) {$7/8$};
+\draw[arcblue, line width=1.1pt] (0.000,-0.720) -- (-0.035,-0.719) -- (-0.069,-0.717) -- (-0.104,-0.712) -- (-0.138,-0.707) -- (-0.172,-0.699) -- (-0.206,-0.690) -- (-0.239,-0.679) -- (-0.272,-0.667) -- (-0.303,-0.653) -- (-0.335,-0.638) -- (-0.365,-0.621) -- (-0.395,-0.602) -- (-0.423,-0.582);
+\draw[arcblue, line width=1.1pt] (0.629,0.629) -- (0.661,0.596) -- (0.692,0.560) -- (0.720,0.523) -- (0.746,0.485) -- (0.771,0.445) -- (0.793,0.404) -- (0.813,0.362) -- (0.831,0.319) -- (0.846,0.275) -- (0.860,0.230) -- (0.871,0.185) -- (0.879,0.139) -- (0.885,0.093) -- (0.889,0.047) -- (0.890,0.000) -- (0.889,-0.047) -- (0.885,-0.093) -- (0.879,-0.139) -- (0.871,-0.185) -- (0.860,-0.230) -- (0.846,-0.275) -- (0.831,-0.319) -- (0.813,-0.362) -- (0.793,-0.404) -- (0.771,-0.445);
+\draw[arcblue, line width=1.1pt] (-0.979,-0.406) -- (-0.999,-0.355) -- (-1.016,-0.303) -- (-1.030,-0.251) -- (-1.041,-0.198) -- (-1.050,-0.144) -- (-1.056,-0.090) -- (-1.059,-0.035) -- (-1.060,0.019) -- (-1.057,0.073) -- (-1.052,0.127) -- (-1.044,0.181) -- (-1.034,0.235) -- (-1.020,0.287) -- (-1.004,0.339) -- (-0.986,0.390) -- (-0.964,0.440);
+\draw[arcblue, line width=1.1pt] (1.224,-0.121) -- (1.216,-0.183) -- (1.205,-0.245) -- (1.191,-0.306) -- (1.174,-0.367) -- (1.154,-0.427) -- (1.130,-0.485) -- (1.104,-0.542) -- (1.075,-0.598) -- (1.043,-0.652) -- (1.008,-0.705) -- (0.971,-0.755) -- (0.931,-0.804) -- (0.888,-0.851) -- (0.844,-0.895) -- (0.797,-0.937) -- (0.748,-0.977) -- (0.697,-1.014) -- (0.644,-1.048) -- (0.590,-1.079) -- (0.534,-1.108);
+\draw[arcblue, line width=1.1pt] (-0.834,1.124) -- (-0.782,1.161) -- (-0.729,1.195) -- (-0.675,1.227) -- (-0.619,1.256) -- (-0.561,1.283) -- (-0.503,1.307) -- (-0.443,1.328);
+\draw[arcblue, line width=1.1pt] (0.723,-1.394) -- (0.699,-1.406) -- (0.674,-1.418);
+\draw[arcblue, line width=1.1pt] (0.720,1.584) -- (0.748,1.571) -- (0.776,1.557);
+\draw[arcblue, line width=1.1pt] (-1.140,-1.532) -- (-1.196,-1.489) -- (-1.250,-1.444);
+\draw[arcblue, line width=1.1pt] (1.984,0.626) -- (2.004,0.555) -- (2.023,0.484);
+\draw[arcblue, line width=1.1pt] (-2.131,0.723) -- (-2.111,0.780) -- (-2.089,0.836);
+\draw[arcblue, line width=1.1pt] (1.944,-1.441) -- (1.932,-1.457) -- (1.920,-1.474);
+\draw[arcblue, line width=1.1pt] (0.222,2.580) -- (0.281,2.575) -- (0.339,2.568);
+\draw[arcblue, line width=1.1pt] (-0.354,-2.737) -- (-0.475,-2.719) -- (-0.595,-2.695);
+\draw[arcblue, line width=1.1pt] (2.262,1.863) -- (2.275,1.847) -- (2.288,1.831);
+\draw[arcblue, line width=1.1pt] (-3.005,-0.761) -- (-3.035,-0.630) -- (-3.060,-0.497);
+\draw[arcblue, line width=1.1pt] (3.200,-0.671) -- (3.195,-0.698) -- (3.189,-0.725);
+\draw[arcblue, line width=1.1pt] (-1.574,3.059) -- (-1.446,3.121) -- (-1.315,3.179) -- (-1.181,3.231);
+\draw[arcblue, line width=1.1pt] (1.260,-3.383) -- (1.133,-3.428) -- (1.004,-3.468) -- (0.874,-3.503);
+\draw[arcblue, line width=1.1pt] (1.872,3.284) -- (2.041,3.182) -- (2.204,3.071);
+\draw[arcblue, line width=1.1pt] (-2.769,-2.816) -- (-2.790,-2.796) -- (-2.810,-2.776);
+\draw[dashed, black!45] (0.000,0.550) -- (0.001,0.572) -- (0.001,0.594) -- (0.002,0.615) -- (0.002,0.637) -- (0.003,0.659) -- (0.004,0.681) -- (0.004,0.702) -- (0.005,0.724) -- (0.006,0.746) -- (0.007,0.768) -- (0.008,0.790) -- (0.009,0.811) -- (0.010,0.833) -- (0.011,0.855) -- (0.012,0.877) -- (0.013,0.898) -- (0.014,0.920) -- (0.015,0.942) -- (0.017,0.964) -- (0.018,0.985) -- (0.019,1.007) -- (0.021,1.029) -- (0.022,1.051) -- (0.023,1.072) -- (0.025,1.094) -- (0.026,1.116) -- (0.028,1.138) -- (0.030,1.159) -- (0.031,1.181) -- (0.033,1.203) -- (0.035,1.225) -- (0.036,1.246) -- (0.038,1.268) -- (0.040,1.290) -- (0.042,1.312) -- (0.044,1.333) -- (0.046,1.355) -- (0.048,1.377) -- (0.050,1.399) -- (0.052,1.420) -- (0.054,1.442) -- (0.056,1.464) -- (0.058,1.485) -- (0.061,1.507) -- (0.063,1.529) -- (0.065,1.551) -- (0.067,1.572) -- (0.070,1.594) -- (0.072,1.616) -- (0.075,1.637) -- (0.077,1.659) -- (0.080,1.681) -- (0.082,1.702) -- (0.085,1.724) -- (0.088,1.746) -- (0.090,1.767) -- (0.093,1.789) -- (0.096,1.811) -- (0.099,1.832) -- (0.102,1.854) -- (0.105,1.876) -- (0.108,1.897) -- (0.111,1.919) -- (0.114,1.941) -- (0.117,1.962) -- (0.120,1.984) -- (0.123,2.006) -- (0.126,2.027) -- (0.129,2.049) -- (0.133,2.070) -- (0.136,2.092) -- (0.139,2.114) -- (0.143,2.135) -- (0.146,2.157) -- (0.150,2.178) -- (0.153,2.200) -- (0.157,2.222) -- (0.160,2.243) -- (0.164,2.265) -- (0.168,2.286) -- (0.171,2.308) -- (0.175,2.329) -- (0.179,2.351) -- (0.183,2.373) -- (0.187,2.394) -- (0.190,2.416) -- (0.194,2.437) -- (0.198,2.459) -- (0.202,2.480) -- (0.206,2.502) -- (0.211,2.523) -- (0.215,2.545) -- (0.219,2.566) -- (0.223,2.588) -- (0.227,2.609) -- (0.232,2.631) -- (0.236,2.652) -- (0.241,2.674) -- (0.245,2.695) -- (0.249,2.717) -- (0.254,2.738) -- (0.259,2.760) -- (0.263,2.781) -- (0.268,2.802) -- (0.272,2.824) -- (0.277,2.845) -- (0.282,2.867) -- (0.287,2.888) -- (0.292,2.910) -- (0.296,2.931) -- (0.301,2.952) -- (0.306,2.974) -- (0.311,2.995) -- (0.316,3.017) -- (0.321,3.038) -- (0.327,3.059) -- (0.332,3.081) -- (0.337,3.102) -- (0.342,3.123) -- (0.347,3.145) -- (0.353,3.166) -- (0.358,3.187) -- (0.364,3.209) -- (0.369,3.230) -- (0.374,3.251) -- (0.380,3.272) -- (0.386,3.294) -- (0.391,3.315) -- (0.397,3.336) -- (0.402,3.358) -- (0.408,3.379) -- (0.414,3.400) -- (0.420,3.421) -- (0.426,3.442) -- (0.431,3.464) -- (0.437,3.485) -- (0.443,3.506) -- (0.449,3.527) -- (0.455,3.548) -- (0.461,3.570) -- (0.468,3.591) -- (0.474,3.612) -- (0.480,3.633) -- (0.486,3.654) -- (0.493,3.675) -- (0.499,3.697) -- (0.505,3.718) -- (0.512,3.739) -- (0.518,3.760) -- (0.525,3.781) -- (0.531,3.802) -- (0.538,3.823) -- (0.544,3.844) -- (0.551,3.865) -- (0.558,3.886) -- (0.564,3.907) -- (0.571,3.928) -- (0.578,3.949) -- (0.585,3.970) -- (0.592,3.991);
+\draw[dashed, black!45] (0.006,-0.550) -- (0.005,-0.572) -- (0.005,-0.594) -- (0.004,-0.615) -- (0.003,-0.637) -- (0.003,-0.659) -- (0.002,-0.681) -- (0.001,-0.702) -- (-0.000,-0.724) -- (-0.001,-0.746) -- (-0.002,-0.768) -- (-0.003,-0.790) -- (-0.005,-0.811) -- (-0.006,-0.833) -- (-0.007,-0.855) -- (-0.009,-0.877) -- (-0.010,-0.898) -- (-0.012,-0.920) -- (-0.013,-0.942) -- (-0.015,-0.964) -- (-0.016,-0.985) -- (-0.018,-1.007) -- (-0.020,-1.029) -- (-0.022,-1.051) -- (-0.024,-1.072) -- (-0.026,-1.094) -- (-0.028,-1.116) -- (-0.030,-1.138) -- (-0.032,-1.159) -- (-0.034,-1.181) -- (-0.036,-1.203) -- (-0.039,-1.225) -- (-0.041,-1.246) -- (-0.044,-1.268) -- (-0.046,-1.290) -- (-0.049,-1.311) -- (-0.051,-1.333) -- (-0.054,-1.355) -- (-0.057,-1.377) -- (-0.060,-1.398) -- (-0.063,-1.420) -- (-0.065,-1.442) -- (-0.068,-1.463) -- (-0.072,-1.485) -- (-0.075,-1.507) -- (-0.078,-1.528) -- (-0.081,-1.550) -- (-0.084,-1.571) -- (-0.088,-1.593) -- (-0.091,-1.615) -- (-0.095,-1.636) -- (-0.098,-1.658) -- (-0.102,-1.680) -- (-0.105,-1.701) -- (-0.109,-1.723) -- (-0.113,-1.744) -- (-0.117,-1.766) -- (-0.121,-1.787) -- (-0.124,-1.809) -- (-0.128,-1.831) -- (-0.133,-1.852) -- (-0.137,-1.874) -- (-0.141,-1.895) -- (-0.145,-1.917) -- (-0.149,-1.938) -- (-0.154,-1.960) -- (-0.158,-1.981) -- (-0.163,-2.003) -- (-0.167,-2.024) -- (-0.172,-2.046) -- (-0.177,-2.067) -- (-0.181,-2.089) -- (-0.186,-2.110) -- (-0.191,-2.131) -- (-0.196,-2.153) -- (-0.201,-2.174) -- (-0.206,-2.196) -- (-0.211,-2.217) -- (-0.216,-2.239) -- (-0.221,-2.260) -- (-0.227,-2.281) -- (-0.232,-2.303) -- (-0.237,-2.324) -- (-0.243,-2.345) -- (-0.248,-2.367) -- (-0.254,-2.388) -- (-0.259,-2.409) -- (-0.265,-2.431) -- (-0.271,-2.452) -- (-0.277,-2.473) -- (-0.282,-2.494) -- (-0.288,-2.516) -- (-0.294,-2.537) -- (-0.300,-2.558) -- (-0.306,-2.579) -- (-0.313,-2.600) -- (-0.319,-2.622) -- (-0.325,-2.643) -- (-0.331,-2.664) -- (-0.338,-2.685) -- (-0.344,-2.706) -- (-0.351,-2.727) -- (-0.357,-2.749) -- (-0.364,-2.770) -- (-0.371,-2.791) -- (-0.378,-2.812) -- (-0.384,-2.833) -- (-0.391,-2.854) -- (-0.398,-2.875) -- (-0.405,-2.896) -- (-0.412,-2.917) -- (-0.419,-2.938) -- (-0.427,-2.959) -- (-0.434,-2.980) -- (-0.441,-3.001) -- (-0.448,-3.022) -- (-0.456,-3.043) -- (-0.463,-3.064) -- (-0.471,-3.084) -- (-0.478,-3.105) -- (-0.486,-3.126) -- (-0.494,-3.147) -- (-0.502,-3.168) -- (-0.509,-3.189) -- (-0.517,-3.209) -- (-0.525,-3.230) -- (-0.533,-3.251) -- (-0.541,-3.272) -- (-0.549,-3.292) -- (-0.558,-3.313) -- (-0.566,-3.334) -- (-0.574,-3.355) -- (-0.582,-3.375) -- (-0.591,-3.396) -- (-0.599,-3.417) -- (-0.608,-3.437) -- (-0.616,-3.458) -- (-0.625,-3.478) -- (-0.634,-3.499) -- (-0.643,-3.519) -- (-0.651,-3.540) -- (-0.660,-3.560) -- (-0.669,-3.581) -- (-0.678,-3.601) -- (-0.687,-3.622) -- (-0.697,-3.642) -- (-0.706,-3.663) -- (-0.715,-3.683) -- (-0.724,-3.703) -- (-0.734,-3.724) -- (-0.743,-3.744) -- (-0.753,-3.764) -- (-0.762,-3.785) -- (-0.772,-3.805) -- (-0.781,-3.825) -- (-0.791,-3.846) -- (-0.801,-3.866) -- (-0.811,-3.886) -- (-0.821,-3.906) -- (-0.830,-3.926) -- (-0.841,-3.946);
+\draw[dashed, black!45] (0.383,0.395) -- (0.398,0.410) -- (0.414,0.426) -- (0.429,0.441) -- (0.445,0.456) -- (0.461,0.471) -- (0.477,0.486) -- (0.492,0.501) -- (0.508,0.516) -- (0.524,0.531) -- (0.540,0.546) -- (0.556,0.561) -- (0.572,0.576) -- (0.588,0.591) -- (0.604,0.606) -- (0.620,0.620) -- (0.636,0.635) -- (0.652,0.650) -- (0.668,0.665) -- (0.684,0.679) -- (0.700,0.694) -- (0.716,0.708) -- (0.732,0.723) -- (0.749,0.738) -- (0.765,0.752) -- (0.781,0.766) -- (0.798,0.781) -- (0.814,0.795) -- (0.830,0.810) -- (0.847,0.824) -- (0.863,0.838) -- (0.880,0.853) -- (0.896,0.867) -- (0.913,0.881) -- (0.930,0.895) -- (0.946,0.909) -- (0.963,0.923) -- (0.980,0.938) -- (0.996,0.952) -- (1.013,0.966) -- (1.030,0.980) -- (1.047,0.993) -- (1.063,1.007) -- (1.080,1.021) -- (1.097,1.035) -- (1.114,1.049) -- (1.131,1.063) -- (1.148,1.076) -- (1.165,1.090) -- (1.182,1.104) -- (1.199,1.117) -- (1.216,1.131) -- (1.233,1.145) -- (1.251,1.158) -- (1.268,1.172) -- (1.285,1.185) -- (1.302,1.198) -- (1.319,1.212) -- (1.337,1.225) -- (1.354,1.239) -- (1.371,1.252) -- (1.389,1.265) -- (1.406,1.278) -- (1.424,1.292) -- (1.441,1.305) -- (1.459,1.318) -- (1.476,1.331) -- (1.494,1.344) -- (1.511,1.357) -- (1.529,1.370) -- (1.547,1.383) -- (1.564,1.396) -- (1.582,1.409) -- (1.600,1.421) -- (1.618,1.434) -- (1.635,1.447) -- (1.653,1.460) -- (1.671,1.472) -- (1.689,1.485) -- (1.707,1.498) -- (1.725,1.510) -- (1.743,1.523) -- (1.761,1.535) -- (1.779,1.548) -- (1.797,1.560) -- (1.815,1.573) -- (1.833,1.585) -- (1.851,1.597) -- (1.869,1.610) -- (1.887,1.622) -- (1.906,1.634) -- (1.924,1.646) -- (1.942,1.659) -- (1.960,1.671) -- (1.979,1.683) -- (1.997,1.695) -- (2.015,1.707) -- (2.034,1.719) -- (2.052,1.731) -- (2.071,1.743) -- (2.089,1.755) -- (2.108,1.766) -- (2.126,1.778) -- (2.145,1.790) -- (2.163,1.802) -- (2.182,1.813) -- (2.201,1.825) -- (2.219,1.837) -- (2.238,1.848) -- (2.257,1.860) -- (2.275,1.871) -- (2.294,1.883) -- (2.313,1.894) -- (2.332,1.905) -- (2.351,1.917) -- (2.370,1.928) -- (2.388,1.939) -- (2.407,1.951) -- (2.426,1.962) -- (2.445,1.973) -- (2.464,1.984) -- (2.483,1.995) -- (2.502,2.006) -- (2.522,2.017) -- (2.541,2.028) -- (2.560,2.039) -- (2.579,2.050) -- (2.598,2.061) -- (2.617,2.072) -- (2.637,2.082) -- (2.656,2.093) -- (2.675,2.104) -- (2.695,2.114) -- (2.714,2.125) -- (2.733,2.136) -- (2.753,2.146) -- (2.772,2.157) -- (2.792,2.167) -- (2.811,2.178) -- (2.830,2.188) -- (2.850,2.198) -- (2.870,2.209) -- (2.889,2.219) -- (2.909,2.229) -- (2.928,2.239) -- (2.948,2.250) -- (2.968,2.260) -- (2.987,2.270) -- (3.007,2.280) -- (3.027,2.290) -- (3.047,2.300) -- (3.066,2.310) -- (3.086,2.320) -- (3.106,2.329) -- (3.126,2.339) -- (3.146,2.349) -- (3.166,2.359) -- (3.186,2.368) -- (3.206,2.378) -- (3.226,2.388) -- (3.246,2.397);
+\draw[dashed, black!45] (-0.500,-0.229) -- (-0.520,-0.237) -- (-0.541,-0.245) -- (-0.561,-0.253) -- (-0.581,-0.261) -- (-0.601,-0.269) -- (-0.622,-0.277) -- (-0.642,-0.285) -- (-0.662,-0.293) -- (-0.683,-0.301) -- (-0.703,-0.308) -- (-0.724,-0.316) -- (-0.744,-0.324) -- (-0.765,-0.331) -- (-0.785,-0.339) -- (-0.806,-0.346) -- (-0.826,-0.353) -- (-0.847,-0.361) -- (-0.867,-0.368) -- (-0.888,-0.375) -- (-0.909,-0.382) -- (-0.929,-0.389) -- (-0.950,-0.396) -- (-0.971,-0.403) -- (-0.991,-0.410) -- (-1.012,-0.416) -- (-1.033,-0.423) -- (-1.054,-0.430) -- (-1.075,-0.436) -- (-1.096,-0.443) -- (-1.116,-0.449) -- (-1.137,-0.456) -- (-1.158,-0.462) -- (-1.179,-0.468) -- (-1.200,-0.474) -- (-1.221,-0.481) -- (-1.242,-0.487) -- (-1.263,-0.493) -- (-1.284,-0.499) -- (-1.305,-0.504) -- (-1.326,-0.510) -- (-1.348,-0.516) -- (-1.369,-0.522) -- (-1.390,-0.527) -- (-1.411,-0.533) -- (-1.432,-0.538) -- (-1.454,-0.544) -- (-1.475,-0.549) -- (-1.496,-0.554) -- (-1.517,-0.560) -- (-1.539,-0.565) -- (-1.560,-0.570) -- (-1.581,-0.575) -- (-1.603,-0.580) -- (-1.624,-0.585) -- (-1.645,-0.590) -- (-1.667,-0.595) -- (-1.688,-0.599) -- (-1.710,-0.604) -- (-1.731,-0.608) -- (-1.753,-0.613) -- (-1.774,-0.617) -- (-1.796,-0.622) -- (-1.817,-0.626) -- (-1.839,-0.630) -- (-1.861,-0.635) -- (-1.882,-0.639) -- (-1.904,-0.643) -- (-1.925,-0.647) -- (-1.947,-0.651) -- (-1.969,-0.655) -- (-1.990,-0.658) -- (-2.012,-0.662) -- (-2.034,-0.666) -- (-2.056,-0.669) -- (-2.077,-0.673) -- (-2.099,-0.676) -- (-2.121,-0.680) -- (-2.143,-0.683) -- (-2.164,-0.686) -- (-2.186,-0.690) -- (-2.208,-0.693) -- (-2.230,-0.696) -- (-2.252,-0.699) -- (-2.274,-0.702) -- (-2.296,-0.705) -- (-2.318,-0.707) -- (-2.340,-0.710) -- (-2.362,-0.713) -- (-2.383,-0.715) -- (-2.405,-0.718) -- (-2.427,-0.720) -- (-2.449,-0.723) -- (-2.471,-0.725) -- (-2.493,-0.727) -- (-2.516,-0.730) -- (-2.538,-0.732) -- (-2.560,-0.734) -- (-2.582,-0.736) -- (-2.604,-0.738) -- (-2.626,-0.740) -- (-2.648,-0.741) -- (-2.670,-0.743) -- (-2.692,-0.745) -- (-2.714,-0.746) -- (-2.737,-0.748) -- (-2.759,-0.749) -- (-2.781,-0.751) -- (-2.803,-0.752) -- (-2.825,-0.753) -- (-2.848,-0.755) -- (-2.870,-0.756) -- (-2.892,-0.757) -- (-2.914,-0.758) -- (-2.937,-0.759) -- (-2.959,-0.760) -- (-2.981,-0.760) -- (-3.003,-0.761) -- (-3.026,-0.762) -- (-3.048,-0.762) -- (-3.070,-0.763) -- (-3.093,-0.763) -- (-3.115,-0.764) -- (-3.137,-0.764) -- (-3.160,-0.764) -- (-3.182,-0.764) -- (-3.205,-0.764) -- (-3.227,-0.764) -- (-3.249,-0.764) -- (-3.272,-0.764) -- (-3.294,-0.764) -- (-3.317,-0.764) -- (-3.339,-0.764) -- (-3.361,-0.763) -- (-3.384,-0.763) -- (-3.406,-0.762) -- (-3.429,-0.762) -- (-3.451,-0.761) -- (-3.474,-0.760) -- (-3.496,-0.759) -- (-3.519,-0.759) -- (-3.541,-0.758) -- (-3.564,-0.757) -- (-3.586,-0.756) -- (-3.608,-0.754) -- (-3.631,-0.753) -- (-3.653,-0.752) -- (-3.676,-0.751) -- (-3.699,-0.749) -- (-3.721,-0.748) -- (-3.744,-0.746) -- (-3.766,-0.744) -- (-3.789,-0.743) -- (-3.811,-0.741) -- (-3.834,-0.739) -- (-3.856,-0.737) -- (-3.879,-0.735) -- (-3.901,-0.733) -- (-3.924,-0.731) -- (-3.946,-0.729) -- (-3.969,-0.727);
+\draw[dashed, black!45] (0.549,-0.034) -- (0.571,-0.036) -- (0.592,-0.038) -- (0.614,-0.040) -- (0.636,-0.043) -- (0.657,-0.045) -- (0.679,-0.047) -- (0.701,-0.049) -- (0.722,-0.052) -- (0.744,-0.054) -- (0.766,-0.057) -- (0.787,-0.059) -- (0.809,-0.062) -- (0.831,-0.064) -- (0.852,-0.067) -- (0.874,-0.070) -- (0.896,-0.072) -- (0.917,-0.075) -- (0.939,-0.078) -- (0.960,-0.081) -- (0.982,-0.084) -- (1.004,-0.087) -- (1.025,-0.090) -- (1.047,-0.093) -- (1.068,-0.096) -- (1.090,-0.099) -- (1.112,-0.103) -- (1.133,-0.106) -- (1.155,-0.109) -- (1.176,-0.113) -- (1.198,-0.116) -- (1.219,-0.120) -- (1.241,-0.123) -- (1.262,-0.127) -- (1.284,-0.131) -- (1.305,-0.134) -- (1.327,-0.138) -- (1.348,-0.142) -- (1.370,-0.146) -- (1.391,-0.150) -- (1.413,-0.154) -- (1.434,-0.158) -- (1.456,-0.162) -- (1.477,-0.166) -- (1.499,-0.170) -- (1.520,-0.174) -- (1.542,-0.178) -- (1.563,-0.183) -- (1.584,-0.187) -- (1.606,-0.191) -- (1.627,-0.196) -- (1.649,-0.200) -- (1.670,-0.205) -- (1.691,-0.210) -- (1.713,-0.214) -- (1.734,-0.219) -- (1.756,-0.224) -- (1.777,-0.228) -- (1.798,-0.233) -- (1.820,-0.238) -- (1.841,-0.243) -- (1.862,-0.248) -- (1.883,-0.253) -- (1.905,-0.258) -- (1.926,-0.264) -- (1.947,-0.269) -- (1.969,-0.274) -- (1.990,-0.279) -- (2.011,-0.285) -- (2.032,-0.290) -- (2.054,-0.296) -- (2.075,-0.301) -- (2.096,-0.307) -- (2.117,-0.312) -- (2.138,-0.318) -- (2.159,-0.324) -- (2.181,-0.329) -- (2.202,-0.335) -- (2.223,-0.341) -- (2.244,-0.347) -- (2.265,-0.353) -- (2.286,-0.359) -- (2.307,-0.365) -- (2.328,-0.371) -- (2.350,-0.377) -- (2.371,-0.383) -- (2.392,-0.390) -- (2.413,-0.396) -- (2.434,-0.402) -- (2.455,-0.409) -- (2.476,-0.415) -- (2.497,-0.422) -- (2.518,-0.428) -- (2.539,-0.435) -- (2.560,-0.441) -- (2.581,-0.448) -- (2.602,-0.455) -- (2.622,-0.462) -- (2.643,-0.468) -- (2.664,-0.475) -- (2.685,-0.482) -- (2.706,-0.489) -- (2.727,-0.496) -- (2.748,-0.503) -- (2.769,-0.511) -- (2.789,-0.518) -- (2.810,-0.525) -- (2.831,-0.532) -- (2.852,-0.540) -- (2.873,-0.547) -- (2.893,-0.554) -- (2.914,-0.562) -- (2.935,-0.569) -- (2.955,-0.577) -- (2.976,-0.585) -- (2.997,-0.592) -- (3.018,-0.600) -- (3.038,-0.608) -- (3.059,-0.616) -- (3.079,-0.624) -- (3.100,-0.632) -- (3.121,-0.640) -- (3.141,-0.648) -- (3.162,-0.656) -- (3.182,-0.664) -- (3.203,-0.672) -- (3.223,-0.680) -- (3.244,-0.689) -- (3.264,-0.697) -- (3.285,-0.705) -- (3.305,-0.714) -- (3.326,-0.722) -- (3.346,-0.731) -- (3.367,-0.739) -- (3.387,-0.748) -- (3.407,-0.757) -- (3.428,-0.765) -- (3.448,-0.774) -- (3.469,-0.783) -- (3.489,-0.792) -- (3.509,-0.801) -- (3.529,-0.810) -- (3.550,-0.819) -- (3.570,-0.828) -- (3.590,-0.837) -- (3.610,-0.846) -- (3.631,-0.855) -- (3.651,-0.865) -- (3.671,-0.874) -- (3.691,-0.883) -- (3.711,-0.893) -- (3.731,-0.902) -- (3.752,-0.912) -- (3.772,-0.921) -- (3.792,-0.931) -- (3.812,-0.940) -- (3.832,-0.950) -- (3.852,-0.960) -- (3.872,-0.970) -- (3.892,-0.980) -- (3.912,-0.989);
+\draw[dashed, black!45] (-0.357,0.419) -- (-0.370,0.436) -- (-0.383,0.453) -- (-0.396,0.471) -- (-0.410,0.488) -- (-0.423,0.505) -- (-0.436,0.523) -- (-0.449,0.540) -- (-0.462,0.558) -- (-0.475,0.575) -- (-0.488,0.593) -- (-0.500,0.611) -- (-0.513,0.629) -- (-0.526,0.646) -- (-0.538,0.664) -- (-0.551,0.682) -- (-0.563,0.700) -- (-0.576,0.718) -- (-0.588,0.736) -- (-0.601,0.754) -- (-0.613,0.772) -- (-0.625,0.790) -- (-0.637,0.808) -- (-0.649,0.827) -- (-0.661,0.845) -- (-0.673,0.863) -- (-0.685,0.881) -- (-0.697,0.900) -- (-0.709,0.918) -- (-0.720,0.937) -- (-0.732,0.955) -- (-0.743,0.974) -- (-0.755,0.993) -- (-0.766,1.011) -- (-0.778,1.030) -- (-0.789,1.049) -- (-0.800,1.067) -- (-0.812,1.086) -- (-0.823,1.105) -- (-0.834,1.124) -- (-0.845,1.143) -- (-0.856,1.162) -- (-0.867,1.181) -- (-0.877,1.200) -- (-0.888,1.219) -- (-0.899,1.238) -- (-0.909,1.258) -- (-0.920,1.277) -- (-0.930,1.296) -- (-0.941,1.315) -- (-0.951,1.335) -- (-0.962,1.354) -- (-0.972,1.374) -- (-0.982,1.393) -- (-0.992,1.413) -- (-1.002,1.432) -- (-1.012,1.452) -- (-1.022,1.471) -- (-1.032,1.491) -- (-1.042,1.511) -- (-1.051,1.531) -- (-1.061,1.550) -- (-1.071,1.570) -- (-1.080,1.590) -- (-1.090,1.610) -- (-1.099,1.630) -- (-1.108,1.650) -- (-1.118,1.670) -- (-1.127,1.690) -- (-1.136,1.710) -- (-1.145,1.730) -- (-1.154,1.750) -- (-1.163,1.771) -- (-1.172,1.791) -- (-1.180,1.811) -- (-1.189,1.831) -- (-1.198,1.852) -- (-1.206,1.872) -- (-1.215,1.893) -- (-1.223,1.913) -- (-1.232,1.934) -- (-1.240,1.954) -- (-1.248,1.975) -- (-1.256,1.995) -- (-1.265,2.016) -- (-1.273,2.036) -- (-1.281,2.057) -- (-1.288,2.078) -- (-1.296,2.099) -- (-1.304,2.119) -- (-1.312,2.140) -- (-1.319,2.161) -- (-1.327,2.182) -- (-1.334,2.203) -- (-1.342,2.224) -- (-1.349,2.245) -- (-1.356,2.266) -- (-1.364,2.287) -- (-1.371,2.308) -- (-1.378,2.329) -- (-1.385,2.350) -- (-1.392,2.372) -- (-1.399,2.393) -- (-1.405,2.414) -- (-1.412,2.435) -- (-1.419,2.457) -- (-1.425,2.478) -- (-1.432,2.499) -- (-1.438,2.521) -- (-1.445,2.542) -- (-1.451,2.564) -- (-1.457,2.585) -- (-1.463,2.607) -- (-1.469,2.628) -- (-1.475,2.650) -- (-1.481,2.672) -- (-1.487,2.693) -- (-1.493,2.715) -- (-1.499,2.737) -- (-1.504,2.758) -- (-1.510,2.780) -- (-1.516,2.802) -- (-1.521,2.824) -- (-1.526,2.846) -- (-1.532,2.867) -- (-1.537,2.889) -- (-1.542,2.911) -- (-1.547,2.933) -- (-1.552,2.955) -- (-1.557,2.977) -- (-1.562,2.999) -- (-1.567,3.021) -- (-1.571,3.043) -- (-1.576,3.066) -- (-1.580,3.088) -- (-1.585,3.110) -- (-1.589,3.132) -- (-1.594,3.154) -- (-1.598,3.177) -- (-1.602,3.199) -- (-1.606,3.221) -- (-1.610,3.243) -- (-1.614,3.266) -- (-1.618,3.288) -- (-1.622,3.310) -- (-1.626,3.333) -- (-1.629,3.355) -- (-1.633,3.378) -- (-1.637,3.400) -- (-1.640,3.423) -- (-1.643,3.445) -- (-1.647,3.468) -- (-1.650,3.490) -- (-1.653,3.513) -- (-1.656,3.536) -- (-1.659,3.558) -- (-1.662,3.581) -- (-1.665,3.604) -- (-1.668,3.626) -- (-1.670,3.649) -- (-1.673,3.672);
+\draw[dashed, black!45] (0.282,-0.472) -- (0.293,-0.491) -- (0.303,-0.510) -- (0.314,-0.529) -- (0.324,-0.548) -- (0.335,-0.568) -- (0.345,-0.587) -- (0.355,-0.606) -- (0.365,-0.625) -- (0.375,-0.645) -- (0.386,-0.664) -- (0.396,-0.683) -- (0.406,-0.703) -- (0.416,-0.722) -- (0.426,-0.742) -- (0.435,-0.761) -- (0.445,-0.780) -- (0.455,-0.800) -- (0.465,-0.819) -- (0.474,-0.839) -- (0.484,-0.859) -- (0.494,-0.878) -- (0.503,-0.898) -- (0.513,-0.918) -- (0.522,-0.937) -- (0.531,-0.957) -- (0.541,-0.977) -- (0.550,-0.996) -- (0.559,-1.016) -- (0.568,-1.036) -- (0.577,-1.056) -- (0.586,-1.076) -- (0.595,-1.096) -- (0.604,-1.116) -- (0.613,-1.136) -- (0.622,-1.156) -- (0.631,-1.176) -- (0.640,-1.196) -- (0.648,-1.216) -- (0.657,-1.236) -- (0.666,-1.256) -- (0.674,-1.276) -- (0.683,-1.296) -- (0.691,-1.316) -- (0.700,-1.336) -- (0.708,-1.357) -- (0.716,-1.377) -- (0.724,-1.397) -- (0.733,-1.417) -- (0.741,-1.438) -- (0.749,-1.458) -- (0.757,-1.478) -- (0.765,-1.499) -- (0.773,-1.519) -- (0.781,-1.540) -- (0.789,-1.560) -- (0.796,-1.580) -- (0.804,-1.601) -- (0.812,-1.621) -- (0.819,-1.642) -- (0.827,-1.663) -- (0.834,-1.683) -- (0.842,-1.704) -- (0.849,-1.724) -- (0.857,-1.745) -- (0.864,-1.766) -- (0.871,-1.786) -- (0.878,-1.807) -- (0.886,-1.828) -- (0.893,-1.849) -- (0.900,-1.869) -- (0.907,-1.890) -- (0.914,-1.911) -- (0.921,-1.932) -- (0.927,-1.953) -- (0.934,-1.974) -- (0.941,-1.995) -- (0.948,-2.016) -- (0.954,-2.036) -- (0.961,-2.057) -- (0.967,-2.078) -- (0.974,-2.099) -- (0.980,-2.121) -- (0.986,-2.142) -- (0.993,-2.163) -- (0.999,-2.184) -- (1.005,-2.205) -- (1.011,-2.226) -- (1.017,-2.247) -- (1.023,-2.268) -- (1.029,-2.290) -- (1.035,-2.311) -- (1.041,-2.332) -- (1.047,-2.353) -- (1.053,-2.375) -- (1.059,-2.396) -- (1.064,-2.417) -- (1.070,-2.438) -- (1.075,-2.460) -- (1.081,-2.481) -- (1.086,-2.503) -- (1.092,-2.524) -- (1.097,-2.545) -- (1.102,-2.567) -- (1.107,-2.588) -- (1.113,-2.610) -- (1.118,-2.631) -- (1.123,-2.653) -- (1.128,-2.674) -- (1.133,-2.696) -- (1.138,-2.717) -- (1.142,-2.739) -- (1.147,-2.761) -- (1.152,-2.782) -- (1.157,-2.804) -- (1.161,-2.826) -- (1.166,-2.847) -- (1.170,-2.869) -- (1.175,-2.891) -- (1.179,-2.912) -- (1.183,-2.934) -- (1.188,-2.956) -- (1.192,-2.978) -- (1.196,-2.999) -- (1.200,-3.021) -- (1.204,-3.043) -- (1.208,-3.065) -- (1.212,-3.087) -- (1.216,-3.109) -- (1.220,-3.130) -- (1.224,-3.152) -- (1.227,-3.174) -- (1.231,-3.196) -- (1.235,-3.218) -- (1.238,-3.240) -- (1.242,-3.262) -- (1.245,-3.284) -- (1.249,-3.306) -- (1.252,-3.328) -- (1.255,-3.350) -- (1.258,-3.372) -- (1.262,-3.394) -- (1.265,-3.416) -- (1.268,-3.438) -- (1.271,-3.461) -- (1.274,-3.483) -- (1.277,-3.505) -- (1.279,-3.527) -- (1.282,-3.549) -- (1.285,-3.571) -- (1.288,-3.593) -- (1.290,-3.616) -- (1.293,-3.638) -- (1.295,-3.660) -- (1.298,-3.682) -- (1.300,-3.705) -- (1.302,-3.727) -- (1.305,-3.749) -- (1.307,-3.771) -- (1.309,-3.794) -- (1.311,-3.816);
+\draw[dashed, black!45] (0.201,0.512) -- (0.209,0.532) -- (0.218,0.552) -- (0.226,0.572) -- (0.235,0.592) -- (0.243,0.612) -- (0.252,0.632) -- (0.261,0.652) -- (0.270,0.672) -- (0.278,0.692) -- (0.287,0.712) -- (0.296,0.732) -- (0.305,0.752) -- (0.314,0.772) -- (0.323,0.792) -- (0.332,0.812) -- (0.341,0.831) -- (0.350,0.851) -- (0.359,0.871) -- (0.368,0.891) -- (0.377,0.911) -- (0.387,0.930) -- (0.396,0.950) -- (0.405,0.970) -- (0.415,0.989) -- (0.424,1.009) -- (0.433,1.029) -- (0.443,1.048) -- (0.452,1.068) -- (0.462,1.088) -- (0.471,1.107) -- (0.481,1.127) -- (0.491,1.146) -- (0.500,1.166) -- (0.510,1.185) -- (0.520,1.205) -- (0.530,1.224) -- (0.540,1.244) -- (0.550,1.263) -- (0.559,1.283) -- (0.569,1.302) -- (0.579,1.322) -- (0.590,1.341) -- (0.600,1.360) -- (0.610,1.380) -- (0.620,1.399) -- (0.630,1.418) -- (0.640,1.438) -- (0.651,1.457) -- (0.661,1.476) -- (0.671,1.495) -- (0.682,1.515) -- (0.692,1.534) -- (0.703,1.553) -- (0.713,1.572) -- (0.724,1.591) -- (0.734,1.610) -- (0.745,1.629) -- (0.755,1.648) -- (0.766,1.668) -- (0.777,1.687) -- (0.788,1.706) -- (0.798,1.725) -- (0.809,1.744) -- (0.820,1.763) -- (0.831,1.781) -- (0.842,1.800) -- (0.853,1.819) -- (0.864,1.838) -- (0.875,1.857) -- (0.886,1.876) -- (0.897,1.895) -- (0.909,1.913) -- (0.920,1.932) -- (0.931,1.951) -- (0.942,1.970) -- (0.954,1.988) -- (0.965,2.007) -- (0.977,2.026) -- (0.988,2.045) -- (0.999,2.063) -- (1.011,2.082) -- (1.023,2.100) -- (1.034,2.119) -- (1.046,2.138) -- (1.057,2.156) -- (1.069,2.175) -- (1.081,2.193) -- (1.093,2.212) -- (1.105,2.230) -- (1.116,2.248) -- (1.128,2.267) -- (1.140,2.285) -- (1.152,2.304) -- (1.164,2.322) -- (1.176,2.340) -- (1.188,2.359) -- (1.200,2.377) -- (1.213,2.395) -- (1.225,2.413) -- (1.237,2.432) -- (1.249,2.450) -- (1.262,2.468) -- (1.274,2.486) -- (1.286,2.504) -- (1.299,2.522) -- (1.311,2.540) -- (1.324,2.558) -- (1.336,2.576) -- (1.349,2.594) -- (1.361,2.612) -- (1.374,2.630) -- (1.387,2.648) -- (1.399,2.666) -- (1.412,2.684) -- (1.425,2.702) -- (1.438,2.720) -- (1.451,2.738) -- (1.464,2.756) -- (1.477,2.773) -- (1.490,2.791) -- (1.503,2.809) -- (1.516,2.827) -- (1.529,2.844) -- (1.542,2.862) -- (1.555,2.880) -- (1.568,2.897) -- (1.581,2.915) -- (1.595,2.932) -- (1.608,2.950) -- (1.621,2.968) -- (1.635,2.985) -- (1.648,3.003) -- (1.661,3.020) -- (1.675,3.037) -- (1.688,3.055) -- (1.702,3.072) -- (1.716,3.090) -- (1.729,3.107) -- (1.743,3.124) -- (1.757,3.142) -- (1.770,3.159) -- (1.784,3.176) -- (1.798,3.193) -- (1.812,3.211) -- (1.826,3.228) -- (1.840,3.245) -- (1.854,3.262) -- (1.868,3.279) -- (1.882,3.296) -- (1.896,3.313) -- (1.910,3.330) -- (1.924,3.347) -- (1.938,3.364) -- (1.952,3.381) -- (1.966,3.398) -- (1.981,3.415) -- (1.995,3.432) -- (2.009,3.449) -- (2.024,3.466) -- (2.038,3.482);
+\draw[dashed, black!45] (-0.287,-0.469) -- (-0.299,-0.487) -- (-0.311,-0.505) -- (-0.323,-0.523) -- (-0.336,-0.542) -- (-0.348,-0.560) -- (-0.360,-0.578) -- (-0.373,-0.595) -- (-0.385,-0.613) -- (-0.398,-0.631) -- (-0.410,-0.649) -- (-0.423,-0.667) -- (-0.435,-0.685) -- (-0.448,-0.702) -- (-0.461,-0.720) -- (-0.474,-0.738) -- (-0.487,-0.755) -- (-0.499,-0.773) -- (-0.512,-0.790) -- (-0.525,-0.808) -- (-0.539,-0.825) -- (-0.552,-0.843) -- (-0.565,-0.860) -- (-0.578,-0.878) -- (-0.591,-0.895) -- (-0.605,-0.912) -- (-0.618,-0.930) -- (-0.631,-0.947) -- (-0.645,-0.964) -- (-0.659,-0.981) -- (-0.672,-0.998) -- (-0.686,-1.015) -- (-0.699,-1.032) -- (-0.713,-1.049) -- (-0.727,-1.066) -- (-0.741,-1.083) -- (-0.755,-1.100) -- (-0.769,-1.117) -- (-0.783,-1.134) -- (-0.797,-1.151) -- (-0.811,-1.167) -- (-0.825,-1.184) -- (-0.839,-1.201) -- (-0.853,-1.217) -- (-0.868,-1.234) -- (-0.882,-1.250) -- (-0.896,-1.267) -- (-0.911,-1.283) -- (-0.925,-1.300) -- (-0.940,-1.316) -- (-0.954,-1.332) -- (-0.969,-1.349) -- (-0.984,-1.365) -- (-0.999,-1.381) -- (-1.013,-1.397) -- (-1.028,-1.414) -- (-1.043,-1.430) -- (-1.058,-1.446) -- (-1.073,-1.462) -- (-1.088,-1.478) -- (-1.103,-1.494) -- (-1.118,-1.510) -- (-1.133,-1.525) -- (-1.149,-1.541) -- (-1.164,-1.557) -- (-1.179,-1.573) -- (-1.195,-1.588) -- (-1.210,-1.604) -- (-1.226,-1.620) -- (-1.241,-1.635) -- (-1.257,-1.651) -- (-1.272,-1.666) -- (-1.288,-1.682) -- (-1.304,-1.697) -- (-1.319,-1.712) -- (-1.335,-1.728) -- (-1.351,-1.743) -- (-1.367,-1.758) -- (-1.383,-1.773) -- (-1.399,-1.789) -- (-1.415,-1.804) -- (-1.431,-1.819) -- (-1.447,-1.834) -- (-1.464,-1.849) -- (-1.480,-1.864) -- (-1.496,-1.878) -- (-1.512,-1.893) -- (-1.529,-1.908) -- (-1.545,-1.923) -- (-1.562,-1.937) -- (-1.578,-1.952) -- (-1.595,-1.967) -- (-1.611,-1.981) -- (-1.628,-1.996) -- (-1.645,-2.010) -- (-1.662,-2.025) -- (-1.678,-2.039) -- (-1.695,-2.053) -- (-1.712,-2.068) -- (-1.729,-2.082) -- (-1.746,-2.096) -- (-1.763,-2.110) -- (-1.780,-2.124) -- (-1.797,-2.139) -- (-1.814,-2.153) -- (-1.832,-2.167) -- (-1.849,-2.180) -- (-1.866,-2.194) -- (-1.884,-2.208) -- (-1.901,-2.222) -- (-1.918,-2.236) -- (-1.936,-2.249) -- (-1.953,-2.263) -- (-1.971,-2.277) -- (-1.989,-2.290) -- (-2.006,-2.304) -- (-2.024,-2.317) -- (-2.042,-2.331) -- (-2.060,-2.344) -- (-2.077,-2.357) -- (-2.095,-2.370) -- (-2.113,-2.384) -- (-2.131,-2.397) -- (-2.149,-2.410) -- (-2.167,-2.423) -- (-2.185,-2.436) -- (-2.203,-2.449) -- (-2.222,-2.462) -- (-2.240,-2.475) -- (-2.258,-2.488) -- (-2.276,-2.501) -- (-2.295,-2.513) -- (-2.313,-2.526) -- (-2.332,-2.539) -- (-2.350,-2.551) -- (-2.369,-2.564) -- (-2.387,-2.576) -- (-2.406,-2.589) -- (-2.425,-2.601) -- (-2.443,-2.613) -- (-2.462,-2.626) -- (-2.481,-2.638) -- (-2.500,-2.650) -- (-2.519,-2.662) -- (-2.537,-2.674) -- (-2.556,-2.686) -- (-2.575,-2.698) -- (-2.594,-2.710) -- (-2.613,-2.722) -- (-2.633,-2.734) -- (-2.652,-2.746) -- (-2.671,-2.757) -- (-2.690,-2.769) -- (-2.709,-2.781) -- (-2.729,-2.792) -- (-2.748,-2.804) -- (-2.768,-2.815) -- (-2.787,-2.827) -- (-2.807,-2.838) -- (-2.826,-2.849) -- (-2.846,-2.861);
+\draw[dashed, black!45] (0.510,0.205) -- (0.531,0.213) -- (0.551,0.220) -- (0.572,0.228) -- (0.592,0.235) -- (0.613,0.242) -- (0.633,0.250) -- (0.654,0.257) -- (0.674,0.264) -- (0.695,0.271) -- (0.716,0.278) -- (0.736,0.286) -- (0.757,0.293) -- (0.777,0.300) -- (0.798,0.307) -- (0.819,0.314) -- (0.839,0.320) -- (0.860,0.327) -- (0.881,0.334) -- (0.902,0.341) -- (0.922,0.348) -- (0.943,0.354) -- (0.964,0.361) -- (0.985,0.367) -- (1.005,0.374) -- (1.026,0.380) -- (1.047,0.387) -- (1.068,0.393) -- (1.089,0.400) -- (1.110,0.406) -- (1.131,0.412) -- (1.152,0.418) -- (1.173,0.424) -- (1.193,0.431) -- (1.214,0.437) -- (1.235,0.443) -- (1.256,0.449) -- (1.277,0.455) -- (1.298,0.460) -- (1.319,0.466) -- (1.341,0.472) -- (1.362,0.478) -- (1.383,0.484) -- (1.404,0.489) -- (1.425,0.495) -- (1.446,0.500) -- (1.467,0.506) -- (1.488,0.511) -- (1.509,0.517) -- (1.531,0.522) -- (1.552,0.528) -- (1.573,0.533) -- (1.594,0.538) -- (1.615,0.543) -- (1.637,0.549) -- (1.658,0.554) -- (1.679,0.559) -- (1.701,0.564) -- (1.722,0.569) -- (1.743,0.574) -- (1.764,0.579) -- (1.786,0.583) -- (1.807,0.588) -- (1.828,0.593) -- (1.850,0.598) -- (1.871,0.602) -- (1.893,0.607) -- (1.914,0.611) -- (1.935,0.616) -- (1.957,0.620) -- (1.978,0.625) -- (2.000,0.629) -- (2.021,0.634) -- (2.043,0.638) -- (2.064,0.642) -- (2.086,0.646) -- (2.107,0.650) -- (2.129,0.654) -- (2.150,0.659) -- (2.172,0.663) -- (2.193,0.666) -- (2.215,0.670) -- (2.237,0.674) -- (2.258,0.678) -- (2.280,0.682) -- (2.301,0.686) -- (2.323,0.689) -- (2.345,0.693) -- (2.366,0.696) -- (2.388,0.700) -- (2.410,0.703) -- (2.431,0.707) -- (2.453,0.710) -- (2.475,0.714) -- (2.497,0.717) -- (2.518,0.720) -- (2.540,0.723) -- (2.562,0.727) -- (2.583,0.730) -- (2.605,0.733) -- (2.627,0.736) -- (2.649,0.739) -- (2.671,0.742) -- (2.692,0.745) -- (2.714,0.747) -- (2.736,0.750) -- (2.758,0.753) -- (2.780,0.756) -- (2.802,0.758) -- (2.823,0.761) -- (2.845,0.763) -- (2.867,0.766) -- (2.889,0.768) -- (2.911,0.771) -- (2.933,0.773) -- (2.955,0.775) -- (2.977,0.778) -- (2.999,0.780) -- (3.021,0.782) -- (3.043,0.784) -- (3.065,0.786) -- (3.086,0.788) -- (3.108,0.790) -- (3.130,0.792) -- (3.152,0.794) -- (3.174,0.796) -- (3.196,0.798) -- (3.218,0.799) -- (3.240,0.801) -- (3.263,0.803) -- (3.285,0.804) -- (3.307,0.806) -- (3.329,0.807) -- (3.351,0.809) -- (3.373,0.810) -- (3.395,0.811) -- (3.417,0.813) -- (3.439,0.814) -- (3.461,0.815) -- (3.483,0.816) -- (3.505,0.817) -- (3.527,0.818) -- (3.550,0.819) -- (3.572,0.820) -- (3.594,0.821) -- (3.616,0.822) -- (3.638,0.823) -- (3.660,0.824) -- (3.682,0.824) -- (3.705,0.825) -- (3.727,0.826) -- (3.749,0.826) -- (3.771,0.827) -- (3.793,0.827) -- (3.816,0.828) -- (3.838,0.828) -- (3.860,0.828) -- (3.882,0.829) -- (3.904,0.829) -- (3.927,0.829) -- (3.949,0.829);
+\draw[dashed, black!45] (-0.539,0.109) -- (-0.560,0.114) -- (-0.581,0.120) -- (-0.603,0.125) -- (-0.624,0.130) -- (-0.645,0.136) -- (-0.666,0.142) -- (-0.687,0.147) -- (-0.708,0.153) -- (-0.729,0.159) -- (-0.750,0.165) -- (-0.771,0.170) -- (-0.792,0.176) -- (-0.813,0.183) -- (-0.834,0.189) -- (-0.855,0.195) -- (-0.876,0.201) -- (-0.897,0.207) -- (-0.917,0.214) -- (-0.938,0.220) -- (-0.959,0.227) -- (-0.980,0.233) -- (-1.001,0.240) -- (-1.022,0.247) -- (-1.042,0.254) -- (-1.063,0.261) -- (-1.084,0.268) -- (-1.104,0.275) -- (-1.125,0.282) -- (-1.146,0.289) -- (-1.166,0.296) -- (-1.187,0.303) -- (-1.208,0.311) -- (-1.228,0.318) -- (-1.249,0.326) -- (-1.269,0.333) -- (-1.290,0.341) -- (-1.310,0.348) -- (-1.331,0.356) -- (-1.351,0.364) -- (-1.372,0.372) -- (-1.392,0.380) -- (-1.413,0.388) -- (-1.433,0.396) -- (-1.453,0.404) -- (-1.474,0.412) -- (-1.494,0.421) -- (-1.514,0.429) -- (-1.534,0.438) -- (-1.555,0.446) -- (-1.575,0.455) -- (-1.595,0.463) -- (-1.615,0.472) -- (-1.635,0.481) -- (-1.655,0.490) -- (-1.675,0.499) -- (-1.695,0.508) -- (-1.715,0.517) -- (-1.735,0.526) -- (-1.755,0.535) -- (-1.775,0.544) -- (-1.795,0.553) -- (-1.815,0.563) -- (-1.835,0.572) -- (-1.855,0.582) -- (-1.875,0.591) -- (-1.895,0.601) -- (-1.914,0.611) -- (-1.934,0.621) -- (-1.954,0.630) -- (-1.973,0.640) -- (-1.993,0.650) -- (-2.013,0.660) -- (-2.032,0.670) -- (-2.052,0.681) -- (-2.071,0.691) -- (-2.091,0.701) -- (-2.110,0.712) -- (-2.130,0.722) -- (-2.149,0.733) -- (-2.169,0.743) -- (-2.188,0.754) -- (-2.207,0.765) -- (-2.227,0.775) -- (-2.246,0.786) -- (-2.265,0.797) -- (-2.285,0.808) -- (-2.304,0.819) -- (-2.323,0.830) -- (-2.342,0.841) -- (-2.361,0.853) -- (-2.380,0.864) -- (-2.399,0.875) -- (-2.418,0.887) -- (-2.437,0.898) -- (-2.456,0.910) -- (-2.475,0.921) -- (-2.494,0.933) -- (-2.513,0.945) -- (-2.532,0.957) -- (-2.550,0.969) -- (-2.569,0.981) -- (-2.588,0.993) -- (-2.607,1.005) -- (-2.625,1.017) -- (-2.644,1.029) -- (-2.662,1.041) -- (-2.681,1.054) -- (-2.700,1.066) -- (-2.718,1.079) -- (-2.736,1.091) -- (-2.755,1.104) -- (-2.773,1.116) -- (-2.792,1.129) -- (-2.810,1.142) -- (-2.828,1.155) -- (-2.846,1.168) -- (-2.865,1.181) -- (-2.883,1.194) -- (-2.901,1.207) -- (-2.919,1.220) -- (-2.937,1.233) -- (-2.955,1.247) -- (-2.973,1.260) -- (-2.991,1.273) -- (-3.009,1.287) -- (-3.027,1.300) -- (-3.045,1.314) -- (-3.063,1.328) -- (-3.080,1.341) -- (-3.098,1.355) -- (-3.116,1.369) -- (-3.133,1.383) -- (-3.151,1.397) -- (-3.169,1.411) -- (-3.186,1.425) -- (-3.204,1.439) -- (-3.221,1.454) -- (-3.239,1.468) -- (-3.256,1.482) -- (-3.273,1.497) -- (-3.291,1.511) -- (-3.308,1.526) -- (-3.325,1.540) -- (-3.342,1.555) -- (-3.360,1.570) -- (-3.377,1.585) -- (-3.394,1.600) -- (-3.411,1.615) -- (-3.428,1.630) -- (-3.445,1.645) -- (-3.462,1.660) -- (-3.479,1.675) -- (-3.495,1.690) -- (-3.512,1.705) -- (-3.529,1.721) -- (-3.546,1.736) -- (-3.562,1.752) -- (-3.579,1.767) -- (-3.595,1.783) -- (-3.612,1.798);
+\draw[dashed, black!45] (0.474,-0.279) -- (0.492,-0.291) -- (0.510,-0.303) -- (0.529,-0.315) -- (0.547,-0.326) -- (0.565,-0.338) -- (0.584,-0.350) -- (0.602,-0.362) -- (0.620,-0.374) -- (0.638,-0.386) -- (0.656,-0.398) -- (0.675,-0.410) -- (0.693,-0.422) -- (0.711,-0.435) -- (0.729,-0.447) -- (0.747,-0.459) -- (0.765,-0.472) -- (0.783,-0.484) -- (0.801,-0.496) -- (0.819,-0.509) -- (0.836,-0.521) -- (0.854,-0.534) -- (0.872,-0.547) -- (0.890,-0.559) -- (0.908,-0.572) -- (0.925,-0.585) -- (0.943,-0.597) -- (0.961,-0.610) -- (0.978,-0.623) -- (0.996,-0.636) -- (1.013,-0.649) -- (1.031,-0.662) -- (1.049,-0.675) -- (1.066,-0.688) -- (1.083,-0.701) -- (1.101,-0.714) -- (1.118,-0.728) -- (1.136,-0.741) -- (1.153,-0.754) -- (1.170,-0.768) -- (1.187,-0.781) -- (1.205,-0.794) -- (1.222,-0.808) -- (1.239,-0.821) -- (1.256,-0.835) -- (1.273,-0.849) -- (1.290,-0.862) -- (1.307,-0.876) -- (1.324,-0.890) -- (1.341,-0.903) -- (1.358,-0.917) -- (1.375,-0.931) -- (1.392,-0.945) -- (1.409,-0.959) -- (1.426,-0.973) -- (1.443,-0.987) -- (1.459,-1.001) -- (1.476,-1.015) -- (1.493,-1.029) -- (1.509,-1.044) -- (1.526,-1.058) -- (1.543,-1.072) -- (1.559,-1.087) -- (1.576,-1.101) -- (1.592,-1.115) -- (1.609,-1.130) -- (1.625,-1.144) -- (1.641,-1.159) -- (1.658,-1.174) -- (1.674,-1.188) -- (1.690,-1.203) -- (1.707,-1.218) -- (1.723,-1.232) -- (1.739,-1.247) -- (1.755,-1.262) -- (1.771,-1.277) -- (1.787,-1.292) -- (1.803,-1.307) -- (1.820,-1.322) -- (1.835,-1.337) -- (1.851,-1.352) -- (1.867,-1.367) -- (1.883,-1.382) -- (1.899,-1.397) -- (1.915,-1.413) -- (1.931,-1.428) -- (1.946,-1.443) -- (1.962,-1.459) -- (1.978,-1.474) -- (1.993,-1.490) -- (2.009,-1.505) -- (2.025,-1.521) -- (2.040,-1.536) -- (2.056,-1.552) -- (2.071,-1.568) -- (2.086,-1.583) -- (2.102,-1.599) -- (2.117,-1.615) -- (2.133,-1.631) -- (2.148,-1.647) -- (2.163,-1.663) -- (2.178,-1.678) -- (2.193,-1.694) -- (2.209,-1.710) -- (2.224,-1.727) -- (2.239,-1.743) -- (2.254,-1.759) -- (2.269,-1.775) -- (2.284,-1.791) -- (2.299,-1.808) -- (2.313,-1.824) -- (2.328,-1.840) -- (2.343,-1.857) -- (2.358,-1.873) -- (2.373,-1.890) -- (2.387,-1.906) -- (2.402,-1.923) -- (2.417,-1.939) -- (2.431,-1.956) -- (2.446,-1.973) -- (2.460,-1.989) -- (2.475,-2.006) -- (2.489,-2.023) -- (2.503,-2.040) -- (2.518,-2.056) -- (2.532,-2.073) -- (2.546,-2.090) -- (2.561,-2.107) -- (2.575,-2.124) -- (2.589,-2.141) -- (2.603,-2.159) -- (2.617,-2.176) -- (2.631,-2.193) -- (2.645,-2.210) -- (2.659,-2.227) -- (2.673,-2.245) -- (2.687,-2.262) -- (2.701,-2.279) -- (2.715,-2.297) -- (2.728,-2.314) -- (2.742,-2.332) -- (2.756,-2.349) -- (2.769,-2.367) -- (2.783,-2.384) -- (2.797,-2.402) -- (2.810,-2.420) -- (2.824,-2.437) -- (2.837,-2.455) -- (2.850,-2.473) -- (2.864,-2.491) -- (2.877,-2.509) -- (2.890,-2.526) -- (2.904,-2.544) -- (2.917,-2.562) -- (2.930,-2.580) -- (2.943,-2.598) -- (2.956,-2.617) -- (2.969,-2.635) -- (2.982,-2.653) -- (2.995,-2.671) -- (3.008,-2.689);
+\draw[dotted, thick, linedot] (0.000,0.550) -- (-0.010,0.572) -- (-0.020,0.593) -- (-0.031,0.615) -- (-0.043,0.636) -- (-0.055,0.657) -- (-0.068,0.677) -- (-0.082,0.698) -- (-0.096,0.718) -- (-0.112,0.738) -- (-0.127,0.757) -- (-0.144,0.776) -- (-0.161,0.795) -- (-0.179,0.814) -- (-0.197,0.832) -- (-0.216,0.850) -- (-0.236,0.867) -- (-0.256,0.884) -- (-0.277,0.900) -- (-0.298,0.916) -- (-0.321,0.932) -- (-0.343,0.947) -- (-0.366,0.962) -- (-0.390,0.976) -- (-0.414,0.990) -- (-0.439,1.003) -- (-0.464,1.015) -- (-0.490,1.027) -- (-0.516,1.039) -- (-0.543,1.050) -- (-0.570,1.060) -- (-0.598,1.070) -- (-0.626,1.079) -- (-0.654,1.087) -- (-0.683,1.095) -- (-0.712,1.102) -- (-0.742,1.109) -- (-0.772,1.115) -- (-0.803,1.120) -- (-0.833,1.124) -- (-0.864,1.128) -- (-0.896,1.131) -- (-0.927,1.134) -- (-0.959,1.136) -- (-0.991,1.137) -- (-1.024,1.137) -- (-1.056,1.137) -- (-1.089,1.136) -- (-1.122,1.134) -- (-1.156,1.131) -- (-1.189,1.128) -- (-1.223,1.124) -- (-1.256,1.119) -- (-1.290,1.114) -- (-1.324,1.107) -- (-1.358,1.100) -- (-1.392,1.092) -- (-1.427,1.084) -- (-1.461,1.074) -- (-1.495,1.064) -- (-1.529,1.053) -- (-1.563,1.042) -- (-1.598,1.029) -- (-1.632,1.016) -- (-1.666,1.002) -- (-1.700,0.987) -- (-1.734,0.971) -- (-1.768,0.955) -- (-1.802,0.938) -- (-1.835,0.920) -- (-1.869,0.901) -- (-1.902,0.882) -- (-1.935,0.861) -- (-1.968,0.840) -- (-2.001,0.819) -- (-2.033,0.796) -- (-2.066,0.773) -- (-2.098,0.749) -- (-2.129,0.724) -- (-2.161,0.698) -- (-2.192,0.672) -- (-2.223,0.645) -- (-2.253,0.617) -- (-2.283,0.589) -- (-2.313,0.559) -- (-2.342,0.529) -- (-2.371,0.499) -- (-2.400,0.467) -- (-2.428,0.435) -- (-2.456,0.403) -- (-2.483,0.369) -- (-2.510,0.335) -- (-2.536,0.300) -- (-2.562,0.265) -- (-2.587,0.229) -- (-2.612,0.192) -- (-2.636,0.155) -- (-2.660,0.117) -- (-2.683,0.078) -- (-2.706,0.039) -- (-2.728,-0.000) -- (-2.750,-0.041) -- (-2.770,-0.082) -- (-2.791,-0.123) -- (-2.810,-0.165) -- (-2.829,-0.208) -- (-2.848,-0.251) -- (-2.865,-0.295) -- (-2.883,-0.339) -- (-2.899,-0.384) -- (-2.915,-0.429) -- (-2.930,-0.474) -- (-2.944,-0.520) -- (-2.957,-0.567) -- (-2.970,-0.614) -- (-2.982,-0.661) -- (-2.994,-0.709) -- (-3.004,-0.758) -- (-3.014,-0.806) -- (-3.023,-0.855) -- (-3.032,-0.905) -- (-3.039,-0.954) -- (-3.046,-1.004) -- (-3.052,-1.055) -- (-3.057,-1.106) -- (-3.061,-1.157) -- (-3.065,-1.208) -- (-3.068,-1.260) -- (-3.070,-1.311) -- (-3.071,-1.363) -- (-3.071,-1.416) -- (-3.070,-1.468) -- (-3.069,-1.521) -- (-3.067,-1.574) -- (-3.063,-1.627) -- (-3.059,-1.680) -- (-3.054,-1.734) -- (-3.049,-1.787) -- (-3.042,-1.841) -- (-3.035,-1.895) -- (-3.026,-1.949) -- (-3.017,-2.003) -- (-3.007,-2.057) -- (-2.996,-2.111) -- (-2.984,-2.165) -- (-2.971,-2.219) -- (-2.957,-2.273) -- (-2.943,-2.327) -- (-2.927,-2.381) -- (-2.911,-2.435) -- (-2.894,-2.489) -- (-2.876,-2.543) -- (-2.857,-2.597) -- (-2.837,-2.651) -- (-2.816,-2.704) -- (-2.794,-2.758) -- (-2.772,-2.811) -- (-2.748,-2.864) -- (-2.724,-2.918) -- (-2.699,-2.970) -- (-2.673,-3.023);
+\draw[dotted, thick, linedot] (-0.054,-0.547) -- (-0.049,-0.570) -- (-0.043,-0.592) -- (-0.037,-0.614) -- (-0.031,-0.636) -- (-0.023,-0.658) -- (-0.015,-0.681) -- (-0.007,-0.702) -- (0.002,-0.724) -- (0.011,-0.746) -- (0.021,-0.768) -- (0.032,-0.789) -- (0.043,-0.810) -- (0.054,-0.831) -- (0.066,-0.852) -- (0.079,-0.873) -- (0.092,-0.894) -- (0.106,-0.914) -- (0.120,-0.934) -- (0.134,-0.954) -- (0.149,-0.974) -- (0.165,-0.994) -- (0.181,-1.013) -- (0.198,-1.032) -- (0.215,-1.051) -- (0.232,-1.070) -- (0.250,-1.088) -- (0.269,-1.106) -- (0.288,-1.124) -- (0.307,-1.141) -- (0.327,-1.158) -- (0.347,-1.175) -- (0.368,-1.191) -- (0.389,-1.208) -- (0.411,-1.223) -- (0.433,-1.239) -- (0.455,-1.254) -- (0.478,-1.269) -- (0.501,-1.283) -- (0.525,-1.297) -- (0.549,-1.311) -- (0.573,-1.324) -- (0.598,-1.337) -- (0.623,-1.350) -- (0.649,-1.362) -- (0.675,-1.373) -- (0.701,-1.385) -- (0.728,-1.395) -- (0.755,-1.406) -- (0.782,-1.416) -- (0.809,-1.425) -- (0.837,-1.434) -- (0.865,-1.443) -- (0.894,-1.451) -- (0.923,-1.459) -- (0.952,-1.466) -- (0.981,-1.473) -- (1.011,-1.479) -- (1.040,-1.485) -- (1.070,-1.491) -- (1.101,-1.495) -- (1.131,-1.500) -- (1.162,-1.504) -- (1.193,-1.507) -- (1.225,-1.510) -- (1.256,-1.512) -- (1.288,-1.514) -- (1.319,-1.515) -- (1.351,-1.516) -- (1.384,-1.517) -- (1.416,-1.516) -- (1.449,-1.516) -- (1.481,-1.514) -- (1.514,-1.513) -- (1.547,-1.510) -- (1.580,-1.507) -- (1.613,-1.504) -- (1.646,-1.500) -- (1.680,-1.495) -- (1.713,-1.490) -- (1.747,-1.485) -- (1.780,-1.479) -- (1.814,-1.472) -- (1.848,-1.465) -- (1.881,-1.457) -- (1.915,-1.449) -- (1.949,-1.440) -- (1.983,-1.430) -- (2.017,-1.420) -- (2.051,-1.410) -- (2.085,-1.399) -- (2.118,-1.387) -- (2.152,-1.375) -- (2.186,-1.362) -- (2.220,-1.349) -- (2.253,-1.335) -- (2.287,-1.321) -- (2.321,-1.306) -- (2.354,-1.290) -- (2.388,-1.274) -- (2.421,-1.257) -- (2.454,-1.240) -- (2.488,-1.222) -- (2.521,-1.204) -- (2.554,-1.185) -- (2.586,-1.166) -- (2.619,-1.146) -- (2.652,-1.126) -- (2.684,-1.105) -- (2.716,-1.083) -- (2.748,-1.061) -- (2.780,-1.038) -- (2.812,-1.015) -- (2.843,-0.992) -- (2.875,-0.967) -- (2.906,-0.943) -- (2.937,-0.917) -- (2.967,-0.892) -- (2.998,-0.865) -- (3.028,-0.839) -- (3.058,-0.811) -- (3.088,-0.784) -- (3.117,-0.755) -- (3.146,-0.726) -- (3.175,-0.697) -- (3.204,-0.667) -- (3.232,-0.637) -- (3.260,-0.606) -- (3.288,-0.575) -- (3.316,-0.543) -- (3.343,-0.511) -- (3.370,-0.478) -- (3.396,-0.445) -- (3.422,-0.412) -- (3.448,-0.378) -- (3.474,-0.343) -- (3.499,-0.308) -- (3.523,-0.273) -- (3.548,-0.237) -- (3.572,-0.201) -- (3.596,-0.164) -- (3.619,-0.127) -- (3.642,-0.089) -- (3.664,-0.051) -- (3.686,-0.013) -- (3.708,0.026) -- (3.729,0.065) -- (3.750,0.105) -- (3.771,0.145) -- (3.791,0.185) -- (3.810,0.226) -- (3.830,0.267) -- (3.848,0.309) -- (3.867,0.351) -- (3.884,0.393) -- (3.902,0.435) -- (3.919,0.478) -- (3.935,0.522) -- (3.951,0.565) -- (3.967,0.609) -- (3.982,0.654);
+\draw[dotted, thick, linedot] (0.442,0.327) -- (0.457,0.344) -- (0.470,0.362) -- (0.484,0.380) -- (0.497,0.398) -- (0.510,0.417) -- (0.523,0.435) -- (0.536,0.455) -- (0.548,0.474) -- (0.560,0.493) -- (0.571,0.513) -- (0.582,0.533) -- (0.593,0.554) -- (0.603,0.574) -- (0.614,0.595) -- (0.623,0.616) -- (0.633,0.638) -- (0.642,0.659) -- (0.651,0.681) -- (0.659,0.703) -- (0.668,0.725) -- (0.675,0.748) -- (0.683,0.770) -- (0.690,0.793) -- (0.697,0.816) -- (0.703,0.839) -- (0.709,0.862) -- (0.714,0.886) -- (0.720,0.910) -- (0.725,0.933) -- (0.729,0.957) -- (0.733,0.982) -- (0.737,1.006) -- (0.740,1.030) -- (0.743,1.055) -- (0.746,1.080) -- (0.748,1.104) -- (0.750,1.129) -- (0.752,1.155) -- (0.753,1.180) -- (0.754,1.205) -- (0.754,1.230) -- (0.754,1.256) -- (0.753,1.282) -- (0.753,1.307) -- (0.751,1.333) -- (0.750,1.359) -- (0.748,1.385) -- (0.745,1.411) -- (0.743,1.437) -- (0.740,1.463) -- (0.736,1.489) -- (0.732,1.515) -- (0.728,1.541) -- (0.723,1.568) -- (0.718,1.594) -- (0.712,1.620) -- (0.706,1.646) -- (0.700,1.673) -- (0.693,1.699) -- (0.686,1.725) -- (0.679,1.752) -- (0.671,1.778) -- (0.663,1.804) -- (0.654,1.831) -- (0.645,1.857) -- (0.635,1.883) -- (0.625,1.910) -- (0.615,1.936) -- (0.605,1.962) -- (0.594,1.988) -- (0.582,2.014) -- (0.570,2.040) -- (0.558,2.066) -- (0.546,2.092) -- (0.533,2.118) -- (0.519,2.143) -- (0.506,2.169) -- (0.491,2.195) -- (0.477,2.220) -- (0.462,2.245) -- (0.447,2.271) -- (0.431,2.296) -- (0.415,2.321) -- (0.399,2.346) -- (0.382,2.371) -- (0.365,2.396) -- (0.347,2.420) -- (0.330,2.445) -- (0.311,2.469) -- (0.293,2.493) -- (0.274,2.517) -- (0.255,2.541) -- (0.235,2.565) -- (0.215,2.589) -- (0.194,2.612) -- (0.174,2.635) -- (0.153,2.658) -- (0.131,2.681) -- (0.109,2.704) -- (0.087,2.727) -- (0.065,2.749) -- (0.042,2.771) -- (0.019,2.793) -- (-0.009,2.815) -- (-0.057,2.836) -- (-0.105,2.857) -- (-0.154,2.876) -- (-0.204,2.895) -- (-0.254,2.913) -- (-0.304,2.930) -- (-0.356,2.946) -- (-0.408,2.962) -- (-0.460,2.976) -- (-0.513,2.989) -- (-0.566,3.002) -- (-0.620,3.013) -- (-0.675,3.024) -- (-0.729,3.034) -- (-0.785,3.042) -- (-0.840,3.050) -- (-0.896,3.057) -- (-0.953,3.062) -- (-1.010,3.067) -- (-1.067,3.071) -- (-1.124,3.073) -- (-1.182,3.075) -- (-1.240,3.076) -- (-1.298,3.075) -- (-1.357,3.074) -- (-1.416,3.071) -- (-1.475,3.067) -- (-1.534,3.062) -- (-1.593,3.057) -- (-1.653,3.050) -- (-1.712,3.042) -- (-1.772,3.032) -- (-1.832,3.022) -- (-1.892,3.011) -- (-1.952,2.998) -- (-2.011,2.985) -- (-2.071,2.970) -- (-2.131,2.954) -- (-2.191,2.938) -- (-2.251,2.920) -- (-2.310,2.901) -- (-2.370,2.880) -- (-2.430,2.859) -- (-2.489,2.837) -- (-2.548,2.813) -- (-2.607,2.788) -- (-2.666,2.763) -- (-2.724,2.736) -- (-2.783,2.708) -- (-2.841,2.679) -- (-2.898,2.648) -- (-2.956,2.617) -- (-3.013,2.585) -- (-3.070,2.551) -- (-3.126,2.517) -- (-3.182,2.481);
+\draw[dotted, thick, linedot] (-0.549,-0.031) -- (-0.570,-0.040) -- (-0.591,-0.050) -- (-0.612,-0.061) -- (-0.633,-0.073) -- (-0.653,-0.085) -- (-0.674,-0.097) -- (-0.694,-0.110) -- (-0.714,-0.124) -- (-0.733,-0.138) -- (-0.752,-0.153) -- (-0.771,-0.169) -- (-0.790,-0.185) -- (-0.808,-0.201) -- (-0.827,-0.219) -- (-0.844,-0.236) -- (-0.862,-0.255) -- (-0.879,-0.273) -- (-0.895,-0.293) -- (-0.912,-0.312) -- (-0.928,-0.333) -- (-0.943,-0.353) -- (-0.959,-0.375) -- (-0.973,-0.396) -- (-0.988,-0.419) -- (-1.002,-0.441) -- (-1.015,-0.465) -- (-1.028,-0.488) -- (-1.041,-0.512) -- (-1.053,-0.537) -- (-1.064,-0.562) -- (-1.075,-0.587) -- (-1.086,-0.613) -- (-1.096,-0.639) -- (-1.106,-0.665) -- (-1.115,-0.692) -- (-1.124,-0.719) -- (-1.132,-0.747) -- (-1.139,-0.775) -- (-1.146,-0.803) -- (-1.153,-0.832) -- (-1.158,-0.860) -- (-1.164,-0.890) -- (-1.169,-0.919) -- (-1.173,-0.949) -- (-1.176,-0.979) -- (-1.179,-1.009) -- (-1.182,-1.039) -- (-1.183,-1.070) -- (-1.185,-1.101) -- (-1.185,-1.132) -- (-1.185,-1.164) -- (-1.185,-1.195) -- (-1.183,-1.227) -- (-1.181,-1.259) -- (-1.179,-1.291) -- (-1.176,-1.323) -- (-1.172,-1.355) -- (-1.167,-1.387) -- (-1.162,-1.420) -- (-1.157,-1.453) -- (-1.150,-1.485) -- (-1.143,-1.518) -- (-1.136,-1.551) -- (-1.127,-1.584) -- (-1.119,-1.617) -- (-1.109,-1.649) -- (-1.099,-1.682) -- (-1.088,-1.715) -- (-1.076,-1.748) -- (-1.064,-1.781) -- (-1.051,-1.814) -- (-1.038,-1.847) -- (-1.024,-1.879) -- (-1.009,-1.912) -- (-0.993,-1.945) -- (-0.977,-1.977) -- (-0.960,-2.009) -- (-0.943,-2.042) -- (-0.925,-2.074) -- (-0.906,-2.106) -- (-0.887,-2.138) -- (-0.867,-2.169) -- (-0.846,-2.201) -- (-0.825,-2.232) -- (-0.803,-2.263) -- (-0.780,-2.294) -- (-0.757,-2.325) -- (-0.733,-2.355) -- (-0.709,-2.385) -- (-0.684,-2.415) -- (-0.658,-2.445) -- (-0.632,-2.474) -- (-0.605,-2.504) -- (-0.578,-2.532) -- (-0.550,-2.561) -- (-0.521,-2.589) -- (-0.492,-2.617) -- (-0.462,-2.645) -- (-0.431,-2.672) -- (-0.400,-2.699) -- (-0.369,-2.725) -- (-0.337,-2.751) -- (-0.304,-2.777) -- (-0.271,-2.802) -- (-0.237,-2.827) -- (-0.202,-2.852) -- (-0.168,-2.876) -- (-0.132,-2.899) -- (-0.096,-2.923) -- (-0.060,-2.945) -- (-0.023,-2.968) -- (0.015,-2.989) -- (0.053,-3.011) -- (0.091,-3.032) -- (0.130,-3.052) -- (0.169,-3.072) -- (0.209,-3.091) -- (0.250,-3.110) -- (0.290,-3.129) -- (0.332,-3.146) -- (0.373,-3.164) -- (0.415,-3.180) -- (0.458,-3.196) -- (0.501,-3.212) -- (0.544,-3.227) -- (0.588,-3.242) -- (0.632,-3.255) -- (0.676,-3.269) -- (0.721,-3.281) -- (0.766,-3.294) -- (0.812,-3.305) -- (0.858,-3.316) -- (0.904,-3.326) -- (0.951,-3.336) -- (0.998,-3.345) -- (1.045,-3.353) -- (1.092,-3.361) -- (1.140,-3.368) -- (1.188,-3.375) -- (1.236,-3.380) -- (1.285,-3.386) -- (1.334,-3.390) -- (1.383,-3.394) -- (1.432,-3.397) -- (1.482,-3.399) -- (1.531,-3.401) -- (1.581,-3.402) -- (1.631,-3.403) -- (1.682,-3.402) -- (1.732,-3.402) -- (1.783,-3.400) -- (1.834,-3.398) -- (1.885,-3.394) -- (1.936,-3.391) -- (1.987,-3.386) -- (2.038,-3.381) -- (2.090,-3.375) -- (2.141,-3.369) -- (2.193,-3.361) -- (2.244,-3.353);
+\draw[dotted, thick, linedot] (0.498,-0.233) -- (0.521,-0.236) -- (0.543,-0.239) -- (0.566,-0.242) -- (0.589,-0.244) -- (0.612,-0.245) -- (0.634,-0.247) -- (0.658,-0.247) -- (0.681,-0.247) -- (0.704,-0.247) -- (0.727,-0.246) -- (0.751,-0.245) -- (0.774,-0.244) -- (0.797,-0.241) -- (0.821,-0.239) -- (0.844,-0.236) -- (0.868,-0.232) -- (0.892,-0.228) -- (0.915,-0.224) -- (0.939,-0.219) -- (0.962,-0.213) -- (0.986,-0.207) -- (1.009,-0.201) -- (1.033,-0.194) -- (1.056,-0.187) -- (1.080,-0.179) -- (1.103,-0.171) -- (1.126,-0.162) -- (1.150,-0.153) -- (1.173,-0.144) -- (1.196,-0.133) -- (1.219,-0.123) -- (1.242,-0.112) -- (1.265,-0.100) -- (1.288,-0.089) -- (1.310,-0.076) -- (1.333,-0.063) -- (1.355,-0.050) -- (1.377,-0.036) -- (1.399,-0.022) -- (1.421,-0.008) -- (1.443,0.007) -- (1.465,0.023) -- (1.486,0.039) -- (1.507,0.055) -- (1.528,0.072) -- (1.549,0.089) -- (1.570,0.106) -- (1.591,0.124) -- (1.611,0.143) -- (1.631,0.162) -- (1.651,0.181) -- (1.671,0.201) -- (1.690,0.221) -- (1.709,0.241) -- (1.728,0.262) -- (1.747,0.283) -- (1.765,0.305) -- (1.784,0.327) -- (1.802,0.349) -- (1.819,0.372) -- (1.837,0.395) -- (1.854,0.419) -- (1.871,0.442) -- (1.887,0.467) -- (1.903,0.491) -- (1.919,0.516) -- (1.935,0.542) -- (1.950,0.567) -- (1.965,0.593) -- (1.980,0.619) -- (1.994,0.646) -- (2.008,0.673) -- (2.022,0.700) -- (2.036,0.728) -- (2.049,0.756) -- (2.061,0.784) -- (2.074,0.813) -- (2.086,0.841) -- (2.097,0.870) -- (2.109,0.900) -- (2.119,0.929) -- (2.130,0.959) -- (2.140,0.990) -- (2.150,1.020) -- (2.159,1.051) -- (2.168,1.082) -- (2.177,1.113) -- (2.185,1.145) -- (2.193,1.176) -- (2.200,1.208) -- (2.207,1.241) -- (2.214,1.273) -- (2.220,1.306) -- (2.226,1.338) -- (2.231,1.372) -- (2.236,1.405) -- (2.241,1.438) -- (2.245,1.472) -- (2.249,1.506) -- (2.252,1.540) -- (2.255,1.574) -- (2.257,1.608) -- (2.259,1.643) -- (2.261,1.678) -- (2.262,1.712) -- (2.263,1.747) -- (2.263,1.783) -- (2.263,1.818) -- (2.262,1.853) -- (2.261,1.889) -- (2.259,1.924) -- (2.257,1.960) -- (2.255,1.996) -- (2.252,2.032) -- (2.248,2.068) -- (2.245,2.104) -- (2.240,2.140) -- (2.236,2.177) -- (2.230,2.213) -- (2.225,2.249) -- (2.219,2.286) -- (2.212,2.322) -- (2.205,2.359) -- (2.197,2.396) -- (2.189,2.432) -- (2.181,2.469) -- (2.172,2.506) -- (2.163,2.543) -- (2.153,2.579) -- (2.143,2.616) -- (2.132,2.653) -- (2.120,2.690) -- (2.109,2.727) -- (2.097,2.763) -- (2.084,2.800) -- (2.071,2.837) -- (2.057,2.874) -- (2.043,2.910) -- (2.029,2.947) -- (2.014,2.983) -- (1.998,3.020) -- (1.982,3.056) -- (1.966,3.093) -- (1.949,3.129) -- (1.932,3.165) -- (1.914,3.202) -- (1.896,3.238) -- (1.877,3.274) -- (1.858,3.310) -- (1.838,3.345) -- (1.818,3.381) -- (1.798,3.417) -- (1.777,3.452) -- (1.755,3.487) -- (1.734,3.523) -- (1.711,3.558) -- (1.689,3.593) -- (1.665,3.627) -- (1.642,3.662) -- (1.618,3.697);
+\draw[floorred, line width=0.6pt] (0.000,0.550) circle (0.055);
+\node[font=\tiny, text=floorred!80!black] at (0.000,0.710) {0};
+\draw[floorred, line width=0.6pt] (-0.000,-0.720) circle (0.055);
+\node[font=\tiny, text=floorred!80!black] at (-0.000,-0.880) {1};
+\draw[floorred, line width=0.6pt] (0.629,0.629) circle (0.055);
+\node[font=\tiny, text=floorred!80!black] at (0.742,0.742) {2};
+\draw[floorred, line width=0.6pt] (-0.979,-0.406) circle (0.055);
+\node[font=\tiny, text=floorred!80!black] at (-1.127,-0.467) {3};
+\draw[floorred, line width=0.6pt] (1.224,-0.121) circle (0.055);
+\node[font=\tiny, text=floorred!80!black] at (1.383,-0.136) {4};
+\draw[floorred, line width=0.6pt] (-0.834,1.124) circle (0.055);
+\node[font=\tiny, text=floorred!80!black] at (-0.929,1.253) {5};
+\draw[floorred, line width=0.6pt] (0.723,-1.394) circle (0.055);
+\node[font=\tiny, text=floorred!80!black] at (0.797,-1.536) {6};
+\draw[floorred, line width=0.6pt] (0.720,1.584) circle (0.055);
+\node[font=\tiny, text=floorred!80!black] at (0.786,1.730) {7};
+\draw[floorred, line width=0.6pt] (-1.140,-1.532) circle (0.055);
+\node[font=\tiny, text=floorred!80!black] at (-1.236,-1.661) {8};
+\draw[floorred, line width=0.6pt] (1.984,0.626) circle (0.055);
+\node[font=\tiny, text=floorred!80!black] at (2.136,0.674) {9};
+\draw[floorred, line width=0.6pt] (-2.131,0.723) circle (0.055);
+\node[font=\tiny, text=floorred!80!black] at (-2.282,0.774) {10};
+\draw[floorred, line width=0.6pt] (1.944,-1.441) circle (0.055);
+\node[font=\tiny, text=floorred!80!black] at (2.073,-1.536) {11};
+\draw[floorred, line width=0.6pt] (0.222,2.580) circle (0.055);
+\node[font=\tiny, text=floorred!80!black] at (0.235,2.740) {12};
+\draw[floorred, line width=0.6pt] (-0.354,-2.737) circle (0.055);
+\node[font=\tiny, text=floorred!80!black] at (-0.374,-2.896) {13};
+\draw[floorred, line width=0.6pt] (2.262,1.863) circle (0.055);
+\node[font=\tiny, text=floorred!80!black] at (2.385,1.964) {14};
+\draw[floorred, line width=0.6pt] (-3.005,-0.761) circle (0.055);
+\node[font=\tiny, text=floorred!80!black] at (-3.160,-0.800) {15};
+\draw[floorred, line width=0.6pt] (3.200,-0.671) circle (0.055);
+\node[font=\tiny, text=floorred!80!black] at (3.357,-0.704) {16};
+\draw[floorred, line width=0.6pt] (-1.574,3.059) circle (0.055);
+\node[font=\tiny, text=floorred!80!black] at (-1.648,3.201) {17};
+\draw[floorred, line width=0.6pt] (1.260,-3.383) circle (0.055);
+\node[font=\tiny, text=floorred!80!black] at (1.316,-3.533) {18};
+\draw[floorred, line width=0.6pt] (1.872,3.284) circle (0.055);
+\node[font=\tiny, text=floorred!80!black] at (1.951,3.423) {19};
+\draw[floorred, line width=0.6pt] (-2.769,-2.816) circle (0.055);
+\node[font=\tiny, text=floorred!80!black] at (-2.882,-2.931) {20};
+% END octave_lin.tikz
+\end{tikzpicture}
+\caption{The linear octave clock, Orders $0$ to $20$ (Order $n$ on the $n$-th ring from the
+centre), $1 = 1/2$ at the top, clockwise. Red rings: the floors $3^n/2^{p_2(n)}$. Blue: the ratios
+$T^L(x)/x$ of the starts of Order $n$, from the floor to the best. Dashed: the lines of the comma
+($n$, $n + 12$), dotted: of the limma ($n$, $n + 5$).}
+\label{fig:octave}
+\end{figure}
+
+On the $2$-adic clock, a start $x = \sum b_j 2^j$ at $\sum b_j 2^{-j-1}$ of a turn (its bits read from
+the lowest), the class of a drop word is an arc of length $2^{-L}$; the arcs of all Orders are
+disjoint and fill the circle up to measure $0$: Lemma~\ref{lem:mass}, $P(1) = 1$.
+
+%------------------------------------------------------------------------------------------------
+\section{The Lean formalization}
+\label{sec:lean}
+
+Theorem~\ref{thm:mass} is formalized in Lean~4 with Mathlib, without \texttt{sorry}, in the module
+\lean{TCycleCount} of the library of this series~\cite{GitHub}: \lean{choose\_p2\_eq\_split} (the identity,
+for every $n$, with \lean{admSet n} for $\Drop(n)$ and \lean{splitOrders n} for $S(n)$) and
+\lean{mem\_splitOrders\_iff} (the test by powers). The proof is the one of Section~\ref{sec:mass}:
+\lean{card\_wordSet\_eq\_sum\_tset} (Lemma~\ref{lem:bij}), \lean{tset\_of\_admissible},
+\lean{tset\_append} and \lean{exists\_ladder\_split} (Lemma~\ref{lem:split}). The analytic results of
+Sections~\ref{sec:zeta} to~\ref{sec:poles} are not formalized; the computations are scripts.
+
+%------------------------------------------------------------------------------------------------
+\begin{thebibliography}{99}
+\bibitem{ArtinMazur1965} M.~Artin and B.~Mazur, \emph{On periodic points}, Ann.\ of Math.\ 81 (1965),
+  82--99. % from memory, not at hand
+\bibitem{Belovas2025} I.~Belovas, R.~\v{C}epaityt\.{e} and M.~Sabaliauskas, \emph{On the zero-free region
+  and the distribution of zeros of the prime zeta function}, An.\ \c{S}t.\ Univ.\ Ovidius Constan\c{t}a
+  33 (2025), 27--43. % as cited by MathWorld
+\bibitem{Caceres2026} P.~Caceres, \emph{Cross-energy of Dirichlet partial sums, Part 9}, preprint,
+  2026. % as cited by MathWorld
+\bibitem{Everett1977} C.~J. Everett, \emph{Iteration of the number-theoretic function $f(2n) = n$,
+  $f(2n+1) = 3n+2$}, Adv.\ Math.\ 25 (1977), 42--45.
+\bibitem{Feller2} W.~Feller, \emph{An Introduction to Probability Theory and Its Applications}, Vol.~II,
+  2nd ed., Wiley, New York, 1971, Ch.~XII. % from memory: the chapter, not the section
+\bibitem{GitHub} Ruud H.G. van Tol, \emph{Collatz, but stop at the drop} (papers, Lean~4 sources),
+  \url{https://github.com/druud/Collatz-but-stop-at-the-drop}.
+\bibitem{MathWorldPZ} E.~W. Weisstein, \emph{Prime Zeta Function}, MathWorld,
+  \url{https://mathworld.wolfram.com/PrimeZetaFunction.html}.
+\bibitem{OEIS_A100982} OEIS Foundation Inc., \emph{Sequence A100982}, The On-Line Encyclopedia of
+  Integer Sequences, \url{https://oeis.org/A100982}.
+\bibitem{Rhin1987} G.~Rhin, \emph{Approximants de Pad\'e et mesures effectives d'irrationalit\'e},
+  S\'eminaire de Th\'eorie des Nombres, Paris 1985--86, Progr.\ Math.\ 71, Birkh\"auser, Boston, 1987,
+  155--164.
+\bibitem{Terras1976} R.~Terras, \emph{A stopping time problem on the positive integers}, Acta Arith.\
+  30 (1976), 241--252.
+\bibitem{Winkler2026} M.~Winkler, \emph{Admissible $qx+1$ sequences, semiconvergents, and rational
+  Catalan numbers}, arXiv:2609.22303 [math.NT], 2026.
+\bibitem{Paper1} Ruud H.G. van Tol, \emph{Collatz, but stop at the drop; Now with less
+  noise} (2026), \url{https://doi.org/10.5281/zenodo.23631044}.
+\bibitem{Paper2} Ruud H.G. van Tol and Mike Winkler, \emph{Collatz, but stop at the drop;
+  A game with two letters: the proofs} (2026), \url{https://doi.org/10.5281/zenodo.23631547}.
+\bibitem{Paper3} Ruud H.G. van Tol, \emph{Collatz, but stop at the drop; The game on the grid of
+  $2^i 3^j$}, draft (2026).
+\bibitem{BestPaper} Ruud H.G. van Tol, \emph{Collatz, but stop at the drop; The start words with the
+  highest drop ratio}, draft (2026). % \fillin: the Zenodo DOI when it is there
+\end{thebibliography}
+
+\end{document}

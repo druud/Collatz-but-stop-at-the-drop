@@ -3,7 +3,22 @@
 The changes to this repository since its first public release, newest
 first. Version names (R_65a, R_66, ...) are the authors' own labels.
 
-## After R_101 (20 November 2026)
+## R_102 (24 November 2026)
+
+- New draft beside the series, *The drop zeta function* (Draft (1),
+  10 pages; `R_collatz_stop_at_the_drop_zeta.pdf`, source in `src/`):
+  Z = 1/(1 - P), P the sum over the drop words; P is entire and Z
+  meromorphic without zeros, with its pole at s = 1 (Terras); one
+  pole per horizontal band, none with Re s >= 1 but s = 1, all on one
+  curve sampled by the rotation by log2 3; the identity
+  C(p2(n), n) = p2(n) a(n) + sum of a(m) C(p2(n - m), n - m) of the
+  Lean module `TCycleCount`; the jumps sum p = 1/log2 3; the octave
+  clock (figure).
+
+- Lean, new module `TCycleCount`: C(p2(n), n) = p2(n) a(n) + the sum
+  of a(m) C(p2(n - m), n - m) over the m with 1 <= m < n and
+  p2(m) + p2(n - m) = p2(n), a = A100982 (`choose_p2_eq_split`);
+  that condition is 2^p2(m) 3^n < 2^p2(n) 3^m (`mem_splitOrders_iff`).
 
 - The pages `building.html`, `drop_tree.html` and `drop_turn.html`
   moved into the folder `media/`; `building.html` now opens at
