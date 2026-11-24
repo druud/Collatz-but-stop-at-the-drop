@@ -3,6 +3,32 @@
 The changes to this repository since its first public release, newest
 first. Version names (R_65a, R_66, ...) are the authors' own labels.
 
+## After R_104 (24 November 2026)
+
+- Lean: `TMassShareQ`, the shares behind the rate of zeta Theorem 5.10
+  (M. Winkler), for odd q >= 3 and any p in a field: with
+  P_n(m) = N(m) binom(L - p2(m), n - m)/binom(L, n),
+  w(m) = N(m) p^m (1 - p)^(p2(m) - m) and
+  Q(j) = binom(p2(j), j) p^j (1 - p)^(p2(j) - j):
+  1 - L N(n)/binom(L, n) is the sum of P_n(m) over the split Orders
+  (`one_sub_mass_eq_sum_shareQ`); P_n(m) = w(m) Q(n - m)/Q(n) for every
+  split Order m and p != 0, 1 (`shareQ_eq`); p2(m) w(m) <= Q(m) for
+  0 <= p <= 1 (`p2Q_mul_wQ_le`).
+- Lean: `TCycleCountQ`, the identity of `TCycleCount` for every odd
+  q >= 3 (M. Winkler's question): with L = p2Q q n the least L with
+  q^n < 2^L and N_q(n) the drop words of Order n,
+  binom(L, n) = L N_q(n) + sum over 1 <= m < n with
+  p2Q q m + p2Q q (n - m) = p2Q q n of N_q(m) binom(p2Q q (n - m), n - m)
+  (`choose_p2Q_eq_split`); the condition iff
+  2^p2Q q m q^n < 2^p2Q q n q^m (`mem_splitOrdersQ_iff`). The proof
+  for q = 3 uses only that 3 is odd: distinct prefixes have distinct
+  levels (`lvQ_inj`, from q^a 2^x != q^b 2^y for a < b).
+- The drop zeta draft: a new page for Main results, each section and
+  the References (16 pages); Figure 1 in Section 5, the mass per Order
+  L N(n)/binom(L, n) against e_n for the Orders 1 to 399 with the
+  staircase G (its jumps to Order 5000) and the upper record Orders
+  (`media/mass_tikz.py`).
+
 ## R_104 (24 November 2026)
 
 - Lean: `TRowLength`, the row lengths of the triangle by records (draft
