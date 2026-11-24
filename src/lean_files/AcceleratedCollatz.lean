@@ -58,6 +58,7 @@ import AcceleratedCollatz.TCovering
 import AcceleratedCollatz.TTerras
 import AcceleratedCollatz.TCutSweepQ
 import AcceleratedCollatz.TCycle
+import AcceleratedCollatz.TCycleCount
 import AcceleratedCollatz.TDrop
 import AcceleratedCollatz.TDropPeriod
 import AcceleratedCollatz.TA398772
