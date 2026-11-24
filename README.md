@@ -22,6 +22,7 @@ their PDFs are here as the `_zenodo.pdf` files.
 | `R_collatz_stop_at_the_drop_3.pdf` | Paper 3, a **draft** (marked with its version, e.g. "Draft: R_81"): what lies around the drop, in the language of the 3-smooth numbers; not archived, it may change (Ruud H.G. van Tol) |
 | `R_collatz_stop_at_the_drop_best.pdf` | *The start words with the highest drop ratio*, a **draft** beside the series: the best of the Order, the class id whose drop falls the least (OEIS A402443), with the bests of Orders 1 to 378 and their certificates (Ruud H.G. van Tol); to be archived on Zenodo as an active document |
 | `R_collatz_stop_at_the_drop_zeta.pdf` | *The drop zeta function*, a **draft** beside the series: the dynamical zeta function of the drop map, with the drop words in the role of the primes; its poles, and an identity for the number of drop words of each Order (OEIS A100982) from binomial coefficients alone (Ruud H.G. van Tol); not archived, it may change |
+| `R_collatz_stop_at_the_drop_floors.pdf` | *The floors*, a **draft** beside the series: the floors 3^n/2^L of the Orders, L = A020914(n); neighbouring floors of the Orders 0 to N differ by at most three ratios (the intervals of Pythagorean tuning), the floors decide the counts of the words with no drop rotation (OEIS A400061), and their share tends to a staircase; the three gaps and the counts proved in Lean 4 (Ruud H.G. van Tol); not archived, it may change |
 | `media/building.html` | the game of paper 1 in a browser: a building with stairs and poles, a rider to its drop; open it at [druud.github.io/Collatz-but-stop-at-the-drop/media/building.html](https://druud.github.io/Collatz-but-stop-at-the-drop/media/building.html) |
 | `media/drop_tree.html` | the admissible words of Orders 1 to N as one tree (paper 3, Chapter 3), with the best class id of each Order drawn bold; options for the max Order, the best, the order at a split, shape and layout; open it from disk in a browser |
 | `media/drop_turn.html` | the words of one Order (2 to 14) as turns around the unit circle, with the best, the smallest start, the word with its ones first and the wall word marked (the picture on the title page of the paper beside the series is its view `#6.s.lin.earn.marked`); options for the scaling, radius, angle and what is shown; the link carries the state; open it from disk in a browser |
@@ -35,7 +36,7 @@ their PDFs are here as the `_zenodo.pdf` files.
 ## Building the papers
 
 In `src/`, run `pdflatex R_collatz_stop_at_the_drop_1.tex` three times, then the
-same for `_2.tex`, then for `_3.tex` (and `_best.tex` and `_zeta.tex`, each on its own): paper 2 links into paper 1 through `xr-hyper` and
+same for `_2.tex`, then for `_3.tex` (and `_best.tex`, `_zeta.tex` and `_floors.tex`, each on its own): paper 2 links into paper 1 through `xr-hyper` and
 reads its `.aux`; paper 3 links into both.
 
 ## Licence

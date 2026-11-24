@@ -5,6 +5,12 @@ first. Version names (R_65a, R_66, ...) are the authors' own labels.
 
 ## After R_104 (24 November 2026)
 
+- The floors draft, Draft (9), now public (`R_collatz_stop_at_the_drop_floors.pdf`,
+  its source in `src/`): the floors 3^n/2^L of the Orders; the three
+  gaps (the intervals of Pythagorean tuning), the counts of OEIS A400061
+  by the floors, and the staircase with M. Winkler's rate; in Lean
+  `TFloorGaps` and `TRowLength`. Each numbered section and the
+  References start on a new page (12 pages).
 - Lean: `TMassShareQ`, the shares behind the rate of zeta Theorem 5.10
   (M. Winkler), for odd q >= 3 and any p in a field: with
   P_n(m) = N(m) binom(L - p2(m), n - m)/binom(L, n),
