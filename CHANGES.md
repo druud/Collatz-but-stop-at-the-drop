@@ -3,7 +3,7 @@
 The changes to this repository since its first public release, newest
 first. Version names (R_65a, R_66, ...) are the authors' own labels.
 
-## After R_102 (24 November 2026)
+## R_103 (24 November 2026)
 
 - The drop zeta draft, Draft (2): the count of the words with no
   drop rotation, binomial(p2(n), n) - p2(n) A100982(n), is OEIS
