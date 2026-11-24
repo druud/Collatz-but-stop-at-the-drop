@@ -59,6 +59,7 @@ import AcceleratedCollatz.TTerras
 import AcceleratedCollatz.TCutSweepQ
 import AcceleratedCollatz.TCycle
 import AcceleratedCollatz.TCycleCount
+import AcceleratedCollatz.TCycleCountQ
 import AcceleratedCollatz.TDrop
 import AcceleratedCollatz.TDropPeriod
 import AcceleratedCollatz.TA398772
@@ -90,6 +91,7 @@ import AcceleratedCollatz.TLex
 import AcceleratedCollatz.TMarkerPoint
 import AcceleratedCollatz.TMarkerPointHigh
 import AcceleratedCollatz.TMarkerTree
+import AcceleratedCollatz.TMassShareQ
 import AcceleratedCollatz.TMersenne
 import AcceleratedCollatz.TMerge
 import AcceleratedCollatz.TMod4
