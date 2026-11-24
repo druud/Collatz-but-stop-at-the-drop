@@ -5,13 +5,30 @@ first. Version names (R_65a, R_66, ...) are the authors' own labels.
 
 ## After R_103 (24 November 2026)
 
+- Lean: `TRowLength`, the row lengths of the triangle by records (draft
+  A900014): the largest number of parts m_1 + ... + m_k = n with
+  p2(m_1) + ... + p2(m_k) = p2(n) is min over d >= 1 of
+  d p2(n) - n (p2(d) - 1) (`rowLength_eq_min`); the bound by
+  2^(d p2(m)) > 3^(dm) >= 2^(m (p2(d) - 1)), the split that reaches it
+  along the record walk of `TFloorGaps`.
+- Lean: `TFloorGaps`, the three gaps of the floors 3^n/2^p2(n) in
+  exact rationals: with the lowest and highest floor of Orders 1 to N
+  at a and b, the next floor above that of Order m is that of m + a,
+  m - b or m + a - b, at the end ratios 2 theta_a, 1/theta_b and their
+  product (`gap_up`, `gap_down`, `gap_mid`), and a + b >= N + 1; each
+  case from the product rule theta_(x+y) in {theta_x theta_y,
+  2 theta_x theta_y} (`blockFactor_add`) and the two extremes. Also
+  a + b is the next record Order (`next_record`, `extremes_until`).
 - The drop zeta draft, Draft (4): Theorem 5.9, the limit L N(n)/binom(L, n) - G(e_n) -> 0
   (the share of the words with no drop rotation, OEIS A400061, tends to
   the staircase) and with it the kappa law for N(n)/3^n; only the 1/70
   for the Orders 100 to 399 stays an observation. Draft (5): Figure 2,
   the floors 3^n/2^p2(n) of Orders 0 to 40 with the upper and lower
   record Orders (`media/floors_tikz.py`); the figures stay in their
-  section (placeins), 12 pages.
+  section (placeins), 12 pages. Draft (6): Theorem 5.10 (M. Winkler,
+  private communication), the rate O(n^-1/2) of Theorem 5.9, with
+  liminf 0 and limsup p of the share; the line "No rate of convergence
+  is proved" gone.
 - `media/`: the pictures `drop_tree.svg` (the drop tree of Orders 1 to
   6), `a400061_floors.svg` and `a400061_staircase.svg` (the Floors and
   Staircase pictures of OEIS A400061, with their scripts).
