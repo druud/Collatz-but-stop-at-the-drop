@@ -3,7 +3,7 @@
 % Source: Project_kb/Collatz_zeta.md (the note of C79), its scripts and data in _keep/czeta/ (local). Public as a
 % draft since 24 Nov 2026 (Public/). \fillin marks values still to come.
 % The figure: media/octave_tikz.py writes it between the BEGIN/END lines below (do not edit there).
-% Draft (3), 24 Nov 2026 (Drafts (1) and (2) the same day).
+% Draft (4), 24 Nov 2026 (Drafts (1) to (3) the same day).
 \documentclass[10pt,a4paper,titlepage]{article}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
@@ -49,7 +49,7 @@
 \title{\textbf{Collatz, but stop at the drop}\\[0.5ex]
   \Large The drop zeta function}
 \author{\textbf{Ruud H.G. van Tol}}
-\date{\textbf{Draft (3)}\\[8ex]
+\date{\textbf{Draft (4)}\\[8ex]
   {\small\copyright\ 2026 Ruud H.G. van Tol. Licensed under \href{https://creativecommons.org/licenses/by/4.0/}{CC BY 4.0}.}
 }
 
@@ -522,14 +522,38 @@ disjoint events, of probability $N(m)p^m(1-p)^{p_2(m)-m}$ for the drop words of 
 sum over $m \ge 0$ is $1$, and the word $0$ gives $1 - p$.
 \end{proof}
 
-\begin{observation}
-With $G(e) = 1 - \sum_{e_m < e} N(m)\,p^m(1-p)^{p_2(m)-m}$, a staircase from $1$ (as $e \to 0$) down to
-$1 - p$ (as $e \to 1$, by Theorem~\ref{thm:jumps}), the ratio $L\,N(n)/\binom{L}{n}$ stays within $1/70$
-of $G(e_n)$ for the Orders $100$ to $399$ (the jumps of the Orders up to $5000$ computed, the rest bounded
-by Theorem~\ref{thm:jumps}). By Stirling's formula this suggests
+Let $G(e) = 1 - \sum_{m \ge 1,\, e_m < e} N(m)\,p^m(1-p)^{p_2(m)-m}$, a staircase from $1$ (as $e \to 0$)
+down to $1 - p$ (as $e \to 1$, by Theorem~\ref{thm:jumps}).
+
+\begin{theorem}\label{thm:limit}
+As $n \to \infty$, with $L = p_2(n)$, $L\,N(n)/\binom{L}{n} - G(e_n) \to 0$. Hence
 $N(n)/3^n \sim G(e_n)\,(\alpha/(\alpha-1))^{e_n}\,\kappa^n/(\sqrt{2\pi\alpha(\alpha-1)}\,n^{3/2})$ with
 $\kappa = \alpha^\alpha/(3(\alpha-1)^{\alpha-1})$ ($3\kappa$ is Winkler's $B_3$~\cite{Winkler2026}).
-Not proved.
+\end{theorem}
+
+\begin{proof}
+Read the words of $W(n)$ with equal weights. As $W_0 = 0$ and $W_L = e_n > 0$, every word passes above
+$0$, and the first time it does is the end of a drop word, of some Order $m \le n$ and length
+$p_2(m)$ (the word $0$ for $m = 0$). So $P_n(m) = N(m)\binom{L - p_2(m)}{n - m}/\binom{L}{n}$, $0 \le m \le n$,
+add up to $1$. For fixed $m$, $P_n(m)$ is a product of $p_2(m)$ factors $(n - i)/(L - j)$ and
+$(L - n - i)/(L - j)$, so $P_n(m) \to P(m) = N(m)p^m(1-p)^{p_2(m)-m}$ as $n/L \to p$; and $\sum_{m \ge 0}
+P(m) = 1$ by Theorem~\ref{thm:jumps}. Then $\sum_m |P_n(m) - P(m)| = 2\sum_m (P(m) - P_n(m))^+ \to 0$
+by dominated convergence, as $(P(m) - P_n(m))^+ \le P(m)$ (Scheff\'e's argument). By
+Theorem~\ref{thm:mass}, $1 - L\,N(n)/\binom{L}{n} = \sum_{m \in S(n)} P_n(m)$, the sum over the
+$1 \le m < n$ with $e_m < e_n$, while $1 - G(e_n)$ is the sum of $P(m)$ over all $m \ge 1$ with $e_m < e_n$;
+their difference is at most $\sum_m |P_n(m) - P(m)|$. For the second part, Stirling's formula with
+$L = \alpha n + e_n$ gives $\binom{L}{n}/L \sim (3\kappa)^n(\alpha/(\alpha-1))^{e_n}/(\sqrt{2\pi\alpha(\alpha-1)}\,n^{3/2})$,
+uniformly as $0 < e_n < 1$, and $G(e_n) \ge 1 - p > 0$.
+\end{proof}
+
+So $1 - L\,N(n)/\binom{L}{n}$, the share of the words with no drop rotation (OEIS A400061 over
+$\binom{L}{n}$), is the chance that the first drop of a word of $W(n)$ has an Order $m$ with
+$e_m < e_n$, and $1 - G(e_n)$ the same chance for a word with independent letters.
+
+\begin{observation}
+The difference in Theorem~\ref{thm:limit} stays below $1/70$ for the Orders $100$ to $399$ (the jumps of
+the Orders up to $5000$ computed, the rest bounded by Theorem~\ref{thm:jumps}; floating point). No rate
+of convergence is proved.
 \end{observation}
 
 %------------------------------------------------------------------------------------------------

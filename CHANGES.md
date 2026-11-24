@@ -3,6 +3,13 @@
 The changes to this repository since its first public release, newest
 first. Version names (R_65a, R_66, ...) are the authors' own labels.
 
+## After R_103 (24 November 2026)
+
+- The drop zeta draft, Draft (4): Theorem 5.9, the limit L N(n)/binom(L, n) - G(e_n) -> 0
+  (the share of the words with no drop rotation, OEIS A400061, tends to
+  the staircase) and with it the kappa law for N(n)/3^n; only the 1/70
+  for the Orders 100 to 399 stays an observation.
+
 ## R_103 (24 November 2026)
 
 - The drop zeta draft, Draft (2): the count of the words with no
