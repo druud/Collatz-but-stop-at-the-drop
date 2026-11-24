@@ -3,7 +3,7 @@
 % Source: Project_kb/Collatz_zeta.md (the note of C79), its scripts and data in _keep/czeta/ (local). Public as a
 % draft since 24 Nov 2026 (Public/). \fillin marks values still to come.
 % The figure: media/octave_tikz.py writes it between the BEGIN/END lines below (do not edit there).
-% Draft (5), 24 Nov 2026 (Drafts (1) to (4) the same day); placeins added the same day (the figures stay in Section 6; 12 pages).
+% Draft (6), 24 Nov 2026 (Drafts (1) to (5) the same day; (6): Theorem 5.10, Winkler's rate, C105); placeins added the same day (the figures stay in Section 6; 12 pages).
 \documentclass[10pt,a4paper,titlepage]{article}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
@@ -50,7 +50,7 @@
 \title{\textbf{Collatz, but stop at the drop}\\[0.5ex]
   \Large The drop zeta function}
 \author{\textbf{Ruud H.G. van Tol}}
-\date{\textbf{Draft (5)}\\[8ex]
+\date{\textbf{Draft (6)}\\[8ex]
   {\small\copyright\ 2026 Ruud H.G. van Tol. Licensed under \href{https://creativecommons.org/licenses/by/4.0/}{CC BY 4.0}.}
 }
 
@@ -551,10 +551,28 @@ So $1 - L\,N(n)/\binom{L}{n}$, the share of the words with no drop rotation (OEI
 $\binom{L}{n}$), is the chance that the first drop of a word of $W(n)$ has an Order $m$ with
 $e_m < e_n$, and $1 - G(e_n)$ the same chance for a word with independent letters.
 
+\begin{theorem}[Winkler, private communication]\label{thm:rate}
+$L\,N(n)/\binom{L}{n} - G(e_n) = O(n^{-1/2})$, with $L = p_2(n)$.
+\end{theorem}
+
+\begin{proof}
+Put $w(m) = N(m)p^m(1-p)^{p_2(m)-m}$ and $Q(j) = \binom{p_2(j)}{j}p^j(1-p)^{p_2(j)-j}$. For
+$m \in S(n)$, $L - p_2(m) = p_2(n - m)$, and the powers of $p$ and $1 - p$ cancel:
+$P_n(m) = w(m)\,Q(n-m)/Q(n)$. So, by the proof of Theorem~\ref{thm:limit},
+$G(e_n) - L\,N(n)/\binom{L}{n} = \sum_{m \in S(n)} w(m)\,(Q(n-m)/Q(n) - 1) - \sum_{m \ge n,\, e_m < e_n} w(m)$.
+As $p\,p_2(j) - j = p\,e_j$ is bounded, Stirling's formula gives $Q(j) = (2\pi(1-p)j)^{-1/2}(1 + O(1/j))$,
+and Winkler's bound $N(m) \le \binom{p_2(m)}{m}/p_2(m)$~\cite{Winkler2026} gives
+$w(m) \le Q(m)/p_2(m) = O(m^{-3/2})$. For $m \le n/2$, $Q(n-m)/Q(n) = 1 + O(m/n)$, and these terms add
+up to $O(n^{-1}\sum_{m \le n/2} m^{-1/2}) = O(n^{-1/2})$. For $n/2 < m < n$, $w(m)\,Q(n-m)/Q(n) =
+O(n^{-1}(n-m)^{-1/2})$, again $O(n^{-1/2})$ in all; and $\sum_{m > n/2} w(m) = O(n^{-1/2})$.
+\end{proof}
+
+As $e_n$ is dense in $(0, 1)$ and $G$ runs from $1$ down to $1 - p$, the share of the words with no
+drop rotation has $\liminf 0$ and $\limsup p$; it is $0$ exactly at the upper record Orders.
+
 \begin{observation}
 The difference in Theorem~\ref{thm:limit} stays below $1/70$ for the Orders $100$ to $399$ (the jumps of
-the Orders up to $5000$ computed, the rest bounded by Theorem~\ref{thm:jumps}; floating point). No rate
-of convergence is proved.
+the Orders up to $5000$ computed, the rest bounded by Theorem~\ref{thm:jumps}; floating point).
 \end{observation}
 
 %------------------------------------------------------------------------------------------------
