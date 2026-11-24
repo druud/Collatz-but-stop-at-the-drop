@@ -44,7 +44,7 @@ odd q >= 3 (the q-family of Winkler 2026). Rhin's (1987) lower bound on
 | `AcceleratedCollatz/PowDiffFarLow1.lean` .. `PowDiffFarLow4.lean` | the lower walk to 10^200 in four stretches (`lowStretch_200_1` .. `_4`); `PowDiffFarLow1` imports `PowDiffFarRhin4` |
 | `AcceleratedCollatz/PowDiffFarCheck.lean` | the stretches joined (`walkedTo_start`, `walkedTo_next`): `rhinBoundUpTo_one_two_200`, `lowAt_upTo_200` and min(2^i, 3^j) <= p2(j)^2 \|2^i - 3^j\| for 1 <= j <= 10^200 (`min_le_of_walk_200`) |
 | `pv.py` | virtual cache of admissible words: counts, ranks, class ids, chains, excess/gap, record Orders, first words, sweeps, bracket words, the 3-smooth numbers in order; `./pv.py test` runs the self-test |
-| `building.html` | the game of paper 1 in a browser: a building with stairs and poles, a rider to its drop |
+| `media/building.html` | the game of paper 1 in a browser: a building with stairs and poles, a rider to its drop |
 | `R_collatz_stop_at_the_drop_1.tex`, `_2.tex` | the two papers (`pdflatex`; build paper 1 first, paper 2 links to it) |
 
 ## Build

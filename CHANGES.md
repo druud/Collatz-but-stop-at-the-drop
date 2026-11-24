@@ -5,6 +5,10 @@ first. Version names (R_65a, R_66, ...) are the authors' own labels.
 
 ## After R_101 (20 November 2026)
 
+- The pages `building.html`, `drop_tree.html` and `drop_turn.html`
+  moved into the folder `media/`; `building.html` now opens at
+  druud.github.io/Collatz-but-stop-at-the-drop/media/building.html.
+
 - The best paper, Draft (46): the search to Order 378 was rerun with
   the width-identity count (46 hours on 6 threads): the count is 0,
   with the same best, drop value and window for every Order, so the
