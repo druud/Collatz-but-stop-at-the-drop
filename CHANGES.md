@@ -3,7 +3,7 @@
 The changes to this repository since its first public release, newest
 first. Version names (R_65a, R_66, ...) are the authors' own labels.
 
-## After R_103 (24 November 2026)
+## R_104 (24 November 2026)
 
 - Lean: `TRowLength`, the row lengths of the triangle by records (draft
   A900014): the largest number of parts m_1 + ... + m_k = n with
