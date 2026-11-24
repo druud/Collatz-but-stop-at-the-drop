@@ -7,7 +7,8 @@ import Mathlib.Tactic.LinearCombination
 
   A split of n is a list of Orders m ≥ 1 with sum n and Σ p2(m) = p2(n) (`RowSplit`); the row
   length R(n) is the largest length of a split. For d ≥ 1 let f_d(m) = d p2(m) - m (p2(d) - 1)
-  (`fd`). Then f_d(m) ≥ 1 for every m ≥ 1 (`one_le_fd`: 2^(d p2(m)) > 3^(dm) ≥ 2^(m (p2(d) - 1)); also for m = 0),
+  (`fd`). Then f_d(m) ≥ 1 for every m ≥ 1 (`one_le_fd`:
+  2^(d p2(m)) > 3^(dm) ≥ 2^(m (p2(d) - 1)); also for m = 0),
   and f_d adds up over a split, so every split of n has at most f_d(n) parts (`length_le_fd`).
   The bound is reached (`exists_split_eq_fd`): for every n ≥ 1 there are d ≥ 1 and a split of n
   into parts m with f_d(m) = 1. So R(n) = min_{d ≥ 1} f_d(n).
