@@ -11,6 +11,7 @@
 % (11): Proposition prop:tilt (C117), the staircase as a corollary in floor terms (C119).
 % (12): Theorem thm:nodrop, the dimension of the starts with no drop word (C121); its rate,
 %       Corollary cor:norate (C125); other multipliers, Remark rem:nodropq (C126).
+% (13): the exact count of S(k) in Lean (TNoDropCount: noDropCount_add_sum, p2_of_firstDrop; C135).
 \documentclass[10pt,a4paper,titlepage]{article}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
@@ -633,7 +634,7 @@
   \Large The drop zeta function}
 \author{\textbf{Ruud H.G. van Tol}}
 \date{\begin{tikzpicture}\dropturnfig\end{tikzpicture}\\[5ex]
-  \textbf{Draft (12)}\\[8ex]
+  \textbf{Draft (13)}\\[8ex]
   {\small\copyright\ 2026 Ruud H.G. van Tol. Licensed under \href{https://creativecommons.org/licenses/by/4.0/}{CC BY 4.0}.}
 }
 
@@ -3310,8 +3311,12 @@ Theorem~\ref{thm:counts}, is the least of $d\,p_2(n) - n\,(p_2(d) - 1)$ over $d 
 Corollary~\ref{thm:stair} is not formalized; the computations are scripts. For Theorem~\ref{thm:nodrop} the
 module \lean{TNoDropCount} has the count in integers: for $a \ge b \ge 1$ with $3^a \le 2^{a+b}$ (a share
 $a/(a+b) \le p$) and $k = (a+b)m$, $S(k)\,a^{am}b^{bm} \le (a+b)^{k}$ (\lean{noDropCount\_mul\_le}); as
-$a/(a+b)$ rises to $p$ this gives $S(k) \le 2^{k(H(p)+\varepsilon)}$; the isometry and the dimensions are
-not formalized.
+$a/(a+b)$ rises to $p$ this gives $S(k) \le 2^{k(H(p)+\varepsilon)}$. The exact count before
+Corollary~\ref{cor:norate} is there too: the words of length $k+1$ that never drop and those that drop
+first at their end are together $2S(k)$ (\lean{noDropCount\_succ}); summed, $S(k)$ plus these first
+drops at the lengths $j \le k$, each times $2^{k-j}$, is $2^k$ (\lean{noDropCount\_add\_sum}); and a
+first drop at length $j$ with $o$ ones has $j = p_2(o)$ (\lean{p2\_of\_firstDrop}), so their counts
+are the $N(m)$ at the lengths $p_2(m)$. The isometry and the dimensions are not formalized.
 
 \subsection*{The best of the Order}
 The modules \texttt{AcceleratedCollatz/Zeta/Best/} (namespace \lean{AcceleratedCollatz.Best})
