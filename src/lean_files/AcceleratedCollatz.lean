@@ -93,6 +93,7 @@ import AcceleratedCollatz.TMarkerPoint
 import AcceleratedCollatz.TMarkerPointHigh
 import AcceleratedCollatz.TMarkerTree
 import AcceleratedCollatz.Zeta.TMassShareQ
+import AcceleratedCollatz.Zeta.TNoDropCount
 import AcceleratedCollatz.TMersenne
 import AcceleratedCollatz.TMerge
 import AcceleratedCollatz.TMod4
