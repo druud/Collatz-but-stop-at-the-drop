@@ -9,6 +9,7 @@
 % Drafts: zeta (1) to (9), 24-25 Nov 2026 ((8): Section Compared with zeta; (9): Proposition prop:primes,
 % the primes F = 3/4 and its powers, C113.1); (10): the best and the floors merged in (C116, 25 Nov 2026);
 % (11): Proposition prop:tilt (C117), the staircase as a corollary in floor terms (C119).
+% (12): Theorem thm:nodrop, the dimension of the starts with no drop word (C121).
 \documentclass[10pt,a4paper,titlepage]{article}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
@@ -631,7 +632,7 @@
   \Large The drop zeta function}
 \author{\textbf{Ruud H.G. van Tol}}
 \date{\begin{tikzpicture}\dropturnfig\end{tikzpicture}\\[5ex]
-  \textbf{Draft (11)}\\[8ex]
+  \textbf{Draft (12)}\\[8ex]
   {\small\copyright\ 2026 Ruud H.G. van Tol. Licensed under \href{https://creativecommons.org/licenses/by/4.0/}{CC BY 4.0}.}
 }
 
@@ -783,6 +784,13 @@ U_1(u) = \frac{u^2/2 + c_1 u + c_2}{\mu} + \lim_{K \to \infty}\sum_{0 < |k| \le 
 with constants $c_1$, $c_2$ from the moments of the $\lambda_n$. $P$ has no zeros with $\Rea s \le 1$.
 \end{mainthm}
 
+\begin{mainthm}[No drop at all; Section~\ref{sec:nodrop}]
+The $2$-adic starts whose parity word has no drop word as a prefix form a closed set of measure $0$
+and of Hausdorff and box dimension $\log_3(3\kappa) = \log_3(\alpha^\alpha/(\alpha-1)^{\alpha-1})$,
+the entropy of a letter that is a one with chance $1/\alpha$. Covering asks that it hold no integer
+$x \ge 0$; it holds $-1$, $-5$ and $-17$.
+\end{mainthm}
+
 \subsection*{What was known}
 The affine form of $T^L$ on a parity class, the residue classes of the parity words, the density of
 the starts that drop and the fact that almost every start drops are due to Terras~\cite{Terras1976}
@@ -822,7 +830,7 @@ ratios as Pythagorean intervals, counted by the last lower and upper record Orde
 of the best of the Order, the share and the least point of the cycle in Theorem~B, Theorems~C and~D,
 and the table of Computation~E; the function $Z$, Theorems~G, J and~L (the main term of~L is the
 renewal theorem~\cite{Feller2}), the identity of Theorem~I with its restricted sum and its reading on
-the floors, Theorem~K, and Computation~H.
+the floors, Theorem~K, Theorem~M (its sets $X_q$ are Eggleston's~\cite{Eggleston1949}), and Computation~H.
 
 \clearpage
 \tableofcontents
@@ -2991,6 +2999,63 @@ the top of the octave down to $p$ at its bottom. The difference stays below $1/7
 $399$ (Observation~\ref{obs:massdiff} and Figure~\ref{fig:mass}). As the floors fill the octave, the share has
 $\liminf 0$ (at the upper record Orders it is $0$) and $\limsup p$.
 
+\subsection*{No drop at all}
+\label{sec:nodrop}
+
+Let $E \subset \Z_2$ be the starts whose parity word has no drop word as a prefix: every nonempty
+prefix has level above $1$. Its complement is the union of the classes of the drop words, open sets of
+total measure $\sum_n m_n = 1$ (Lemma~\ref{lem:mass}), so $E$ is closed and of measure $0$. Covering
+(paper~2~\cite{Paper2}) is the statement that $E$ holds no integer $x \ge 0$; it holds the negative
+cycles $-1$ (word $\bw{1}^\infty$), $-5, -7, -10$ (word $(\bw{110})^\infty$) and the cycle of $-17$.
+The size of $E$ is set by $\kappa$, the constant of the masses.
+
+\begin{theorem}\label{thm:nodrop}
+With $p = 1/\alpha$ and $H(p) = -p\log_2 p - (1-p)\log_2(1-p)$, the set $E$ has Hausdorff dimension and box
+dimension
+\[
+\dim E = H(p) = \log_3(3\kappa) = \log_3\frac{\alpha^\alpha}{(\alpha-1)^{\alpha-1}},
+\]
+in the $2$-adic metric. The number $S(k)$ of words of length $k$ whose nonempty prefixes all have level
+above $1$ satisfies $S(k) \le 2^{kH(p)}$ for every $k \ge 0$.
+\end{theorem}
+
+\begin{proof}
+\emph{The parity map is an isometry.} Read the parity word of $x \in \Z_2$ as the $2$-adic integer
+$Q(x) = \sum_{i \ge 0} v_i 2^i$, $v_i = T^i(x) \bmod 2$. Its first $k$ letters depend only on
+$x \bmod 2^k$, and they are distinct for the $2^k$ residues (Terras~\cite{Terras1976}; the classes of
+Section~\ref{sec:words}). So $x \equiv y \pmod{2^k}$ iff $Q(x) \equiv Q(y) \pmod{2^k}$, and $Q$ is an
+isometry of $\Z_2$; it is onto, as each level is a bijection and $\Z_2$ is compact. Isometries keep both
+dimensions, so it suffices to take $Q(E)$: the infinite words whose nonempty prefixes all have level
+above $1$, in the metric $2^{-k}$, $k$ the first letter where two words differ.
+
+\emph{Upper bound.} A word of length $k$ with $a$ ones has level above $1$ iff $a > kp$. As $p > 1/2$,
+$p^a(1-p)^{k-a}$ grows with $a$, so
+$1 = \sum_a \binom{k}{a} p^a(1-p)^{k-a} \ge S(k)\,p^{pk}(1-p)^{(1-p)k} = S(k)\,2^{-kH(p)}$.
+The $S(k)$ classes of these words, each of diameter $2^{-k}$, cover $Q(E)$, so its upper box dimension
+is at most $H(p)$.
+
+\emph{Lower bound.} Fix $p < q < 1$ and let $X_q$ be the infinite words whose share of ones among the
+first $k$ letters tends to $q$; $\dim_H X_q = H(q)$ (Eggleston~\cite{Eggleston1949}; see
+Billingsley~\cite{Billingsley1965}). For $v \in X_q$ with $a_k$ ones among its first $k$ letters,
+$a_k - kp \to \infty$, so $b(v) = \inf_k (a_k - kp)$ is finite, and $X_q$ is the union over $m \ge 0$ of
+the sets $X_{q,m} = \{v : b(v) > -m(1-p)\}$. By countable stability some $X_{q,m}$ has dimension $H(q)$.
+The map $v \mapsto \bw{1}^m v$ multiplies all distances by $2^{-m}$, and it maps $X_{q,m}$ into $Q(E)$: a
+prefix of length $j \le m$ has $j > jp$ ones, one of length $m + j$ has
+$m + a_j > m + jp - m(1-p) = (m + j)p$. So $\dim_H Q(E) \ge H(q)$ for every $q > p$, hence
+$\ge H(p)$, and the Hausdorff dimension is at most the lower box dimension.
+
+\emph{The value.} $2^{\alpha H(p)} = p^{-1}(1-p)^{-(\alpha-1)} = 3\kappa$ by the proof of
+Proposition~\ref{prop:tilt}, so $H(p) = \log_2(3\kappa)/\alpha = \log_3(3\kappa)$.
+\end{proof}
+
+So the same $3\kappa$ meets three times: $N(n)$ grows like $(3\kappa)^n n^{-3/2}$ (Theorem~\ref{thm:limit}),
+$D(c, y)$ stops converging at $c = 1/(3\kappa)$, and the words that never drop number at most
+$(3\kappa)^{k/\alpha}$ at length $k$. A start with no drop has, at every length, a share of ones above
+$p$; such words are few, a set of dimension $\log_3(3\kappa) < 1$ and measure $0$, and Covering asks that
+it miss the integers $x \ge 0$. Dimension alone cannot settle that: a set of dimension below $1$ may hold
+integers, as $E$ holds $-1$. The bound $S(k) \le 2^{kH(p)}$ is formalized in integers
+(Section~\ref{sec:lean}).
+
 %------------------------------------------------------------------------------------------------
 \clearpage
 \section{Compared with \texorpdfstring{$\zeta$}{zeta}}
@@ -3196,7 +3261,11 @@ $a\,p_2(b) - b\,(p_2(a) - 1) = 1$ (Remark~\ref{rem:unimod}; \lean{FloorWalk} in 
 \lean{TRowLength}), and with it \lean{rowLength\_eq\_min}: the largest number of parts
 $m_1 + \dots + m_k = n$ with $p_2(m_1) + \dots + p_2(m_k) = p_2(n)$, the splits behind the sum of
 Theorem~\ref{thm:counts}, is the least of $d\,p_2(n) - n\,(p_2(d) - 1)$ over $d \ge 1$.
-Corollary~\ref{thm:stair} is not formalized; the computations are scripts.
+Corollary~\ref{thm:stair} is not formalized; the computations are scripts. For Theorem~\ref{thm:nodrop} the
+module \lean{TNoDropCount} has the count in integers: for $a \ge b \ge 1$ with $3^a \le 2^{a+b}$ (a share
+$a/(a+b) \le p$) and $k = (a+b)m$, $S(k)\,a^{am}b^{bm} \le (a+b)^{k}$ (\lean{noDropCount\_mul\_le}); as
+$a/(a+b)$ rises to $p$ this gives $S(k) \le 2^{k(H(p)+\varepsilon)}$; the isometry and the dimensions are
+not formalized.
 
 \subsection*{The best of the Order}
 The modules \texttt{AcceleratedCollatz/Zeta/Best/} (namespace \lean{AcceleratedCollatz.Best})
@@ -3405,6 +3474,7 @@ $n$ & $c$ & $T^L(c)$ & & $n$ & $c$ & $T^L(c)$ & \\
 \bibitem{Belovas2025} I.~Belovas, R.~\v{C}epaityt\.{e} and M.~Sabaliauskas, \emph{On the zero-free region
   and the distribution of zeros of the prime zeta function}, An.\ \c{S}t.\ Univ.\ Ovidius Constan\c{t}a
   33 (2025), 27--43. % as cited by MathWorld
+\bibitem{Billingsley1965} P.~Billingsley, \emph{Ergodic Theory and Information}, Wiley, New York, 1965.
 \bibitem{BohmSontacchi1978} C.~Böhm and G.~Sontacchi, \emph{On the existence of cycles of given
   length in integer sequences like $x_{n+1} = x_n/2$ if $x_n$ even, and $x_{n+1} = 3x_n + 1$
   otherwise}, Atti Accad.\ Naz.\ Lincei Rend.\ Cl.\ Sci.\ Fis.\ Mat.\ Natur.\ (8) \textbf{64} (1978),
@@ -3424,6 +3494,8 @@ Spectrum 11 (1989), 187--206.
   arXiv:2004.08634.
 \bibitem{Dinkelbach1967} W.~Dinkelbach, \emph{On nonlinear fractional programming}, Management Sci.\
   \textbf{13} (1967), 492--498.
+\bibitem{Eggleston1949} H.~G. Eggleston, \emph{The fractional dimension of a set defined by decimal
+  properties}, Quart.\ J. Math.\ Oxford Ser.\ 20 (1949), 31--36.
 \bibitem{Everett1977} C.~J. Everett, \emph{Iteration of the number-theoretic function
   $f(2n) = n$, $f(2n+1) = 3n+2$}, Adv.\ Math.\ \textbf{25} (1977), 42--45.
 \bibitem{Feller2} W.~Feller, \emph{An Introduction to Probability Theory and Its Applications}, Vol.~II,
