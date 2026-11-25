@@ -5,6 +5,11 @@ first. Version names (R_65a, R_66, ...) are the authors' own labels.
 
 ## After R_104 (24 November 2026)
 
+- The drop zeta draft, Draft (10), 41 pages, with index: the best of the Order and the floors
+  merged into it; the floors bound the drop ratios from below, the best from above, and both
+  now come before the zeta function. The separate best and floors drafts are withdrawn. In Lean,
+  the best of the Order moved into `AcceleratedCollatz/Zeta/Best/` (the floors into
+  `Zeta/Floor/`), its scripts and data into `zeta/`; `best_of_order/` is gone.
 - The drop zeta draft, Draft (9): Proposition 7.5, the primes: the floors are the powers of F = 3/4.
 - The drop zeta draft, Draft (8): Section 7, "Compared with zeta".
   Theorem 7.1 (main Theorem F), the explicit formula: the integrated
