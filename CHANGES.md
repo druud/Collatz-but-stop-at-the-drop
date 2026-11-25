@@ -5,6 +5,17 @@ first. Version names (R_65a, R_66, ...) are the authors' own labels.
 
 ## After R_104 (24 November 2026)
 
+- Lean: `TCycleZeroQ`, the zeros for odd q >= 3: with L = p2Q q n,
+  L N_q(n) = binom(L, n), that is every word of length L with n ones
+  is a rotation of a drop word, iff n is an upper record Order
+  (`p2Q_mul_card_eq_choose_iff`); every Order has a drop word, and
+  m < n is a split Order iff its floor lies below that of n (never
+  equal, q odd).
+- The drop zeta draft, Draft (7): Corollary 5.12, the mass of Order n,
+  m_n = G(e_n) (alpha/(2(alpha - 1)))^(e_n) kappa^n/(sqrt(2 pi alpha
+  (alpha - 1)) n^(3/2)) (1 + O(n^-1/2)), from Theorems 5.9 and 5.10: in
+  a log2 plot the masses follow n log2 kappa - (3/2) log2 n, shifted by
+  a function of e_n with a total height of 1.
 - The floors draft, Draft (9), now public (`R_collatz_stop_at_the_drop_floors.pdf`,
   its source in `src/`): the floors 3^n/2^L of the Orders; the three
   gaps (the intervals of Pythagorean tuning), the counts of OEIS A400061
