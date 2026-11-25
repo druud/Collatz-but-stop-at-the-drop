@@ -3,7 +3,7 @@
 % Source: Project_kb/Collatz_zeta.md (the note of C79), its scripts and data in _keep/czeta/ (local). Public as a
 % draft since 24 Nov 2026 (Public/). \fillin marks values still to come.
 % The figure: media/octave_tikz.py writes it between the BEGIN/END lines below (do not edit there).
-% Draft (6), 24 Nov 2026 (Drafts (1) to (5) the same day; (6): Theorem 5.10, Winkler's rate, C105); placeins added the same day (the figures stay in Section 6); a new page for Main results, each section and the References (user, 24 Nov 2026); (7): Corollary 5.12, the mass m_n with the rate (C109, 25 Nov 2026).
+% Draft (6), 24 Nov 2026 (Drafts (1) to (5) the same day; (6): Theorem 5.10, Winkler's rate, C105); placeins added the same day (the figures stay in Section 6); a new page for Main results, each section and the References (user, 24 Nov 2026); (7): Corollary 5.12, the mass m_n with the rate (C109, 25 Nov 2026); (8): Section 7, Compared with zeta: the explicit formula (Theorem 7.1), the zeros of P (C111, 25 Nov 2026).
 \documentclass[10pt,a4paper,titlepage]{article}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
@@ -51,7 +51,7 @@
 \title{\textbf{Collatz, but stop at the drop}\\[0.5ex]
   \Large The drop zeta function}
 \author{\textbf{Ruud H.G. van Tol}}
-\date{\textbf{Draft (7)}\\[8ex]
+\date{\textbf{Draft (8)}\\[8ex]
   {\small\copyright\ 2026 Ruud H.G. van Tol. Licensed under \href{https://creativecommons.org/licenses/by/4.0/}{CC BY 4.0}.}
 }
 
@@ -72,7 +72,9 @@ the role of the primes. $P$ is entire and $Z$ is meromorphic without zeros; its 
 Terras's theorem that almost every start drops. In every horizontal band of height $2\pi/\ln 2$
 there is exactly one pole, none on or to the right of $\Rea s = 1$ but $s = 1$; the poles lie on
 one closed curve, sampled by the rotation by $\log_2 3$, and come as close to $\Rea s = 1$ as the
-square of the distance of $k\log_2 3$ to the nearest integer. On the way we prove an identity that
+square of the distance of $k\log_2 3$ to the nearest integer. An explicit formula, as Riemann's
+for the primes, writes the renewal count of the drop map as a parabola plus one harmonic per pole;
+and unlike the prime zeta function, $P$ has no zeros left of $\Rea s = 1$. On the way we prove an identity that
 gives the number of drop words of each Order (OEIS A100982) from binomial coefficients alone,
 formalized in Lean~4 with Mathlib.
 
@@ -127,6 +129,15 @@ when $p_2(n) - n\alpha$ is smaller than all $p_2(m) - m\alpha$, $1 \le m < n$. F
 With $p = 1/\alpha$: $\sum_{m \ge 1} N(m)\, p^m (1-p)^{p_2(m) - m} = p$.
 \end{mainthm}
 
+\begin{mainthm}[The explicit formula; Section~\ref{sec:compare}]
+With $U(u)$ the mean number of drops whose slopes multiply to at least $e^{-u}$, $U_1(u) = \int_0^u U$,
+\[
+U_1(u) = \frac{u^2/2 + c_1 u + c_2}{\mu} + \lim_{K \to \infty}\sum_{0 < |k| \le K}
+\frac{e^{(s_k-1)u}}{-P'(s_k)(s_k-1)^2} \qquad (u \ge 0),
+\]
+with constants $c_1$, $c_2$ from the moments of the $\lambda_n$. $P$ has no zeros with $\Rea s \le 1$.
+\end{mainthm}
+
 \subsection*{What was known}
 The affine form of $T^L$ on a parity class, the density of the starts that drop and the fact that
 almost every start drops are due to Terras~\cite{Terras1976} and Everett~\cite{Everett1977}. The
@@ -136,8 +147,8 @@ series~\cite{Paper1} cites the upper one, and its equality Orders are the upper 
 paper~2~\cite{Paper2}. The prime zeta function and the shape of its zeros, which this paper follows,
 are in MathWorld~\cite{MathWorldPZ}; dynamical zeta functions go back to Artin and
 Mazur~\cite{ArtinMazur1965}. The cycle lemma and the cycle identity of Section~\ref{sec:mass} are
-classical (Feller~\cite{Feller2}). As far as we know, the function $Z$, Theorems~B and~E, the
-identity of Theorem~D with its restricted sum, and Computation~C are new.
+classical (Feller~\cite{Feller2}). As far as we know, the function $Z$, Theorems~B, E and~F (the main term of~F is the renewal
+theorem~\cite{Feller2}), the identity of Theorem~D with its restricted sum, and Computation~C are new.
 
 \clearpage
 \tableofcontents
@@ -1394,6 +1405,128 @@ disjoint and fill the circle up to measure $0$: Lemma~\ref{lem:mass}, $P(1) = 1$
 
 %------------------------------------------------------------------------------------------------
 \clearpage
+\section{Compared with \texorpdfstring{$\zeta$}{zeta}}
+\label{sec:compare}
+
+\subsection*{The explicit formula}
+
+Riemann's explicit formula turns the zeros of $\zeta$ into the harmonics of the prime count. Here
+the poles of $Z$ play the zeros, and the count is the renewal count of the drop map. For a
+$2$-adic start read by the Haar measure, let $S_k$ be the sum of the $\lambda_n = -\ln\theta_n$
+of its first $k$ drop words, and
+\[
+U(u) = \sum_{k \ge 0} \Pr(S_k \le u) = \sum_{a\ln 2 - b\ln 3 \le u} C(a, b)\, 2^{-a},
+\]
+$C(a, b)$ the number of concatenations of drop words with $a$ letters, $b$ of them ones (including
+the empty one). So $U(u)$ is the mean number of drops whose slopes multiply to at least $e^{-u}$, and
+$\int_{[0,\infty)} e^{-tu}\,dU(u) = \sum_k P(1+t)^k = Z(1+t)$ for $\Rea t > 0$. $U$ jumps at a dense
+set of points; its integral $U_1(u) = \int_0^u U(v)\,dv$ is continuous, and has an explicit formula.
+With $M_j = \sum_n m_n \lambda_n^{\,j}$ (so $M_1 = \mu$), $c_1 = M_2/(2\mu)$ and
+$c_2 = c_1^2 - M_3/(6\mu)$:
+
+\begin{theorem}[The explicit formula]\label{thm:explicit}
+For $u \ge 0$,
+\[
+U_1(u) = \frac{u^2/2 + c_1 u + c_2}{\mu} \;+\; \lim_{K \to \infty} \sum_{0 < |k| \le K}
+\frac{e^{(s_k - 1)u}}{-P'(s_k)\,(s_k - 1)^2}.
+\]
+\end{theorem}
+
+\begin{proof}
+$U_1$ is continuous with $\int_0^\infty e^{-tu}U_1(u)\,du = Z(1+t)/t^2$, and on $\Rea s = c > 1$,
+$|Z(s)| \le 1/(1 - P(c))$, so the inversion integral
+$U_1(u) = \frac{1}{2\pi i}\int_{c - i\infty}^{c + i\infty} Z(s)\, e^{(s-1)u} (s-1)^{-2}\, ds$ converges
+absolutely. Close it by the rectangle with left edge $\Rea s = -A$ and horizontal edges
+$\Ima s = \pm(2K+1)\pi/\ln 2$. On the horizontal edges, by the estimates in the proof of
+Theorem~\ref{thm:band}, $|1 - P(s)| \ge 1 + 2^{-\sigma} - H(\sigma) \ge 1/2$, so $|Z| \le 2$ and these
+edges contribute $O(K^{-2})$ for $u \ge 0$. On the left edge, $|1 - P(s)| \ge 2^{A} - 1 - H(-A)$ and
+$H(-A)/2^{A} \to 0$, so $|Z(s)\,e^{(s-1)u}| = O(2^{-A})$ and that edge vanishes as $A \to \infty$. Inside
+lie the poles $s = 1$ and $s_k$, $0 < |k| \le K$ (Theorem~\ref{thm:band}). At $s_k$, a simple zero of
+$1 - P$, the residue is $e^{(s_k-1)u}/(-P'(s_k)(s_k-1)^2)$. At $s = 1$, write $t = s - 1$:
+$1 - P(1 + t) = \mu t - \frac{M_2}{2}t^2 + \frac{M_3}{6}t^3 - \dots$, so
+$Z(1+t) = (1 + c_1 t + c_2 t^2 + \dots)/(\mu t)$, and the residue of $Z(1+t)e^{tu}/t^2$ is
+$(u^2/2 + c_1 u + c_2)/\mu$.
+\end{proof}
+
+So $U_1$ is a parabola plus one harmonic per pole: the $k$-th oscillates with frequency
+$\Ima s_k/(2\pi)$ and dies like $e^{-(1 - \Rea s_k)u}$, and by Theorem~\ref{thm:bend} the slowest ones
+are those at the convergent denominators $k$ of $\alpha$. At $u = j\ln 2$ the frequency $k/\ln 2$
+of the band is invisible ($e^{2\pi i k j} = 1$), and only $\Ima z(k\alpha \bmod 1)$ is seen. (The
+renewal theorem, $U(u) = u/\mu + M_2/(2\mu^2) + o(1)$~\cite{Feller2}, is the main term.)
+
+\begin{computation}\label{comp:explicit}
+The words counted by $C(a, b)$, read backwards, are the words whose nonempty prefixes all have level
+below $1$ (a concatenation of drop words ends strictly below all its earlier levels), so
+$C(a, b)$ follows from the ballot recursion $C(a, b) = C(a-1, b) + C(a-1, b-1)$ restricted to
+$3^b < 2^a$. With $C$ exact for $a \le 1600$ and the poles $s_k$, $|k| \le 3000$, the two sides of
+Theorem~\ref{thm:explicit} at $u = j\ln 2$, $0 \le j \le 40$, agree to within $2^{-16}$ at $j = 0$
+(the poles beyond $3000$) and to within $2^{-40}$ from $j = 20$ on. The remainder after the parabola
+changes sign between $j = 5$ and $6$, $21$ and $22$, $36$ and $37$: the harmonic of $s_{12}$, the
+pole nearest to $\Rea s = 1$ for $|k| < 41$, beats with period about $30$ in $j$; with
+$s_{41}$ and $s_{53}$ it carries most of the remainder at $j = 40$.
+\end{computation}
+
+\subsection*{The zeros of $P$}
+
+The prime zeta function has its zeros to the left of a zero-free half-plane $\Rea s \ge \sigma_0 > 1$
+(MathWorld~\cite{MathWorldPZ}). The drop prime function $P$ has them on the other side.
+
+\begin{theorem}\label{thm:pzeros}
+$P$ has no zeros with $\Rea s \le 1$.
+\end{theorem}
+
+\begin{proof}
+The term of Order $0$ is $2^{-s}$, of modulus $2^{-\sigma}$, and the other terms have moduli summing
+to $H(\sigma) = \sum_{n \ge 1} m_n \theta_n^{\,\sigma-1}$. For $\sigma < 1$, $H(\sigma) < 2^{-\sigma}$
+(proof of Theorem~\ref{thm:band}), so $P(s) \ne 0$. For $\sigma = 1$, $H(1) = 1/2 = 2^{-1}$, and
+$P(1 + it) = 0$ forces all terms of Order $n \ge 1$ to have one argument, opposite to that of
+$2^{-1-it}$. Orders $1$ and $2$ ($\theta_2 = \theta_1^2$) give $t\ln\theta_1 \in 2\pi\Z$, and Order $3$
+($\theta_3 = 2\theta_1\theta_2$) then gives $t\ln 2 \in 2\pi\Z$; so the terms of Orders $0$ and $1$ are
+both positive, not opposite.
+\end{proof}
+
+To the right, the terms trade places: as $\sigma$ grows, the term with the largest modulus
+$m_n\theta_n^{\,\sigma-1}$ moves to Orders with $\theta_n$ closer to $1$, from Order $0$ to Order $1$ at
+$\sigma = \ln 3/\ln(3/2)$, and from Order $1$ to Order $5$ at $\sigma = 1 + \ln(64/7)/\ln(81/64)$ and from Order $5$ to Order $41$ at $\sigma = 1 + \ln(m_5/m_{41})/\ln(\theta_{41}/\theta_5)$, between
+$126$ and $127$ (the tops among the Orders up to $200$). Near such a crossing two terms of equal size can cancel.
+
+\begin{observation}\label{obs:pzeros}
+Newton's method from a grid in $1 \le \Rea s \le 14$, $0 \le \Ima s \le 40$ finds five zeros of $P$,
+three near the first crossing and two near the second; the search may miss some. So the zeros of $P$
+seem to lie in vertical strips around the crossings, which go on to the right as the upper record
+Orders take over (their floors are the ones closest to $1$): the strips of the Newton polygon of the
+points $(\lambda_n, \ln m_n)$, as for exponential polynomials.
+\end{observation}
+
+\subsection*{Side by side}
+
+\medskip
+\begin{center}\small
+\begin{tabular}{@{}p{0.27\linewidth}p{0.31\linewidth}p{0.33\linewidth}@{}}
+\toprule
+ & $\zeta$ & $Z$\\
+\midrule
+primes & the primes $p$, commuting & the drop words, a free monoid (Section~\ref{sec:euler})\\
+M\"obius & $1/\zeta = \sum \mu(k)k^{-s}$ & $1/Z = 1 - P$: $-1$ on each drop word, $0$ beyond\\
+Euler product & over $p$ & over the prime cycles of $D$, with the integer cycles $0$ and $1$\\
+pole & $s = 1$, residue $1$ & $s = 1$, residue $1/\mu$ (Terras)\\
+zeros & trivial ones and the critical strip & none ($1 - P$ entire)\\
+on $\Rea s = 1$ & no zeros & no other pole (Theorem~\ref{thm:line})\\
+near $\Rea s = 1$ & zero-free region in $\log t$ & $1 - \Rea s_k \asymp \|k\alpha\|^2$ (Theorem~\ref{thm:bend})\\
+functional equation & $s \leftrightarrow 1 - s$ & none; no symmetry line\\
+real parts & all $1/2$ (RH) & dense in $[z(1/2), 1]$ (Computation~\ref{comp:fall})\\
+count to height $T$ & $\frac{T}{2\pi}\log\frac{T}{2\pi e}$ & $T\ln 2/(2\pi) + O(1)$, one per band\\
+spacing & GUE statistics (conjectured) & deterministic: one curve $z$, rotation by $\alpha$\\
+explicit formula & $\psi(x) = x - \sum_\rho x^\rho/\rho - \dots$ & Theorem~\ref{thm:explicit}\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+The shape is that of the prime zeta function rather than of $\zeta$: an entire (here) or
+logarithmically singular (there) $P$, and the poles of $1/(1 - P)$ where $\zeta$ has zeros.
+
+%------------------------------------------------------------------------------------------------
+\clearpage
 \section{The Lean formalization}
 \label{sec:lean}
 
@@ -1403,7 +1536,7 @@ for every $n$, with \lean{admSet n} for $\Drop(n)$ and \lean{splitOrders n} for 
 \lean{mem\_splitOrders\_iff} (the test by powers). The proof is the one of Section~\ref{sec:mass}:
 \lean{card\_wordSet\_eq\_sum\_tset} (Lemma~\ref{lem:bij}), \lean{tset\_of\_admissible},
 \lean{tset\_append} and \lean{exists\_ladder\_split} (Lemma~\ref{lem:split}). The analytic results of
-Sections~\ref{sec:zeta} to~\ref{sec:poles} are not formalized; the computations are scripts.
+Sections~\ref{sec:zeta} to~\ref{sec:poles} and~\ref{sec:compare} are not formalized; the computations are scripts.
 
 %------------------------------------------------------------------------------------------------
 \clearpage

@@ -5,6 +5,14 @@ first. Version names (R_65a, R_66, ...) are the authors' own labels.
 
 ## After R_104 (24 November 2026)
 
+- The drop zeta draft, Draft (8): Section 7, "Compared with zeta".
+  Theorem 7.1 (main Theorem F), the explicit formula: the integrated
+  renewal count U_1 of the drop map is (u^2/2 + c_1 u + c_2)/mu plus
+  one harmonic e^((s_k - 1)u)/(-P'(s_k)(s_k - 1)^2) per pole,
+  checked against exact chain counts (Computation 7.2). Theorem 7.3:
+  P has no zeros with Re s <= 1 (the prime zeta function has its
+  zeros on the other side); Observation 7.4 on the zeros to the
+  right; a table of zeta beside Z (18 pages).
 - Lean: `TCycleZeroQ`, the zeros for odd q >= 3: with L = p2Q q n,
   L N_q(n) = binom(L, n), that is every word of length L with n ones
   is a rotation of a drop word, iff n is an upper record Order
