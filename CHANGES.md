@@ -3,7 +3,7 @@
 The changes to this repository since its first public release, newest
 first. Version names (R_65a, R_66, ...) are the authors' own labels.
 
-## After R_104 (24 November 2026)
+## R_105 (25 November 2026)
 
 - The drop zeta draft, Draft (12), 44 pages: Theorem M (Theorem 14.16), the 2-adic starts with
   no drop word as a prefix form a closed null set of Hausdorff and box dimension log_3(3 kappa),
