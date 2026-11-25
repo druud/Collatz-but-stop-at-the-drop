@@ -8,7 +8,11 @@ first. Version names (R_65a, R_66, ...) are the authors' own labels.
 - The drop zeta draft, Draft (12), 44 pages: Theorem M (Theorem 14.16), the 2-adic starts with
   no drop word as a prefix form a closed null set of Hausdorff and box dimension log_3(3 kappa),
   the entropy of a letter that is a one with chance 1/log2 3; Covering asks that it hold no integer
-  x >= 0. Lean: `TNoDropCount` (`noDropCount_mul_le`), the count of the words that never drop.
+  x >= 0; Corollary 14.17, the words of length k that never drop number 2^(k log_3(3 kappa))
+  k^(-3/2) times a staircase in the floors, up to 1 + O(k^(-1/2)); Remark 14.18, the same
+  dimension for every irrational alpha in (1, 2), and for qx+1 with q >= 5 a positive share of
+  the 2-adic starts never drops. Lean: `TNoDropCount` (`noDropCount_mul_le`), the count of the
+  words that never drop.
 - The drop zeta draft, Draft (11): Proposition 14.13, the masses are exactly the
   first-drop chances of the letters with chance 1/log2 3, weighed again with chance 1/2
   per letter; the staircase is now Corollary 14.15, read on the floors.

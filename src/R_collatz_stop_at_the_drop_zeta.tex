@@ -9,7 +9,8 @@
 % Drafts: zeta (1) to (9), 24-25 Nov 2026 ((8): Section Compared with zeta; (9): Proposition prop:primes,
 % the primes F = 3/4 and its powers, C113.1); (10): the best and the floors merged in (C116, 25 Nov 2026);
 % (11): Proposition prop:tilt (C117), the staircase as a corollary in floor terms (C119).
-% (12): Theorem thm:nodrop, the dimension of the starts with no drop word (C121).
+% (12): Theorem thm:nodrop, the dimension of the starts with no drop word (C121); its rate,
+%       Corollary cor:norate (C125); other multipliers, Remark rem:nodropq (C126).
 \documentclass[10pt,a4paper,titlepage]{article}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
@@ -787,7 +788,8 @@ with constants $c_1$, $c_2$ from the moments of the $\lambda_n$. $P$ has no zero
 \begin{mainthm}[No drop at all; Section~\ref{sec:nodrop}]
 The $2$-adic starts whose parity word has no drop word as a prefix form a closed set of measure $0$
 and of Hausdorff and box dimension $\log_3(3\kappa) = \log_3(\alpha^\alpha/(\alpha-1)^{\alpha-1})$,
-the entropy of a letter that is a one with chance $1/\alpha$. Covering asks that it hold no integer
+the entropy of a letter that is a one with chance $1/\alpha$; the words of length $k$ that never drop
+number $2^{k\log_3(3\kappa)}k^{-3/2}$ times a staircase in the floors, up to $1 + O(k^{-1/2})$. Covering asks that it hold no integer
 $x \ge 0$; it holds $-1$, $-5$ and $-17$.
 \end{mainthm}
 
@@ -3055,6 +3057,50 @@ $p$; such words are few, a set of dimension $\log_3(3\kappa) < 1$ and measure $0
 it miss the integers $x \ge 0$. Dimension alone cannot settle that: a set of dimension below $1$ may hold
 integers, as $E$ holds $-1$. The bound $S(k) \le 2^{kH(p)}$ is formalized in integers
 (Section~\ref{sec:lean}).
+
+The words that never drop are counted by the masses. A word of length $k$ either never drops or has
+exactly one drop word as a prefix, of an Order $m$ with $p_2(m) \le k$; so
+\[
+S(k) = 2^k - \sum_{m:\, p_2(m) \le k} N(m)\,2^{k - p_2(m)} = 2^k \sum_{m \ge n_0} m_m,
+\qquad n_0 = \lceil k/\alpha \rceil,
+\]
+by Lemma~\ref{lem:mass}, as $p_2(m) > k$ exactly when $m\alpha > k$. With Corollary~\ref{cor:massrate}
+this gives the rate, again a staircase read on the floors.
+
+\begin{corollary}\label{cor:norate}
+For $k \ge 1$, with $u = \lceil k/\alpha \rceil - k/\alpha \in (0, 1)$ and, for $j \ge 0$,
+$e(u, j) = \lceil (u+j)\alpha \rceil - (u+j)\alpha$ (so $\theta = 2^{-e(u,j)}$ is the floor of Order
+$\lceil k/\alpha \rceil + j$),
+\[
+S(k) = 2^{kH(p)} \Bigl(\frac{\alpha}{k}\Bigr)^{3/2} \Psi(u)\,\bigl(1 + O(k^{-1/2})\bigr),
+\]
+\[
+\Psi(u) = \frac{1}{\sqrt{2\pi\alpha(\alpha-1)}} \sum_{j \ge 0} \kappa^{u+j}\,
+G\bigl(e(u, j)\bigr)\Bigl(\frac{\alpha}{2(\alpha-1)}\Bigr)^{e(u, j)}.
+\]
+So $S(k)\,2^{-kH(p)} k^{3/2}$ stays between two positive constants, and its values follow the single
+function $\Psi$ of the position $u$.
+\end{corollary}
+
+\begin{proof}
+Put $n_0 = \lceil k/\alpha \rceil$, so $n_0\alpha = k + u\alpha$ and
+$e_{n_0+j} = e(u, j)$. By $2^{H(p)} = (3\kappa)^{1/\alpha} = 2\kappa^{1/\alpha}$,
+$2^k\kappa^{n_0+j} = 2^{kH(p)}\kappa^{u+j}$. Corollary~\ref{cor:massrate} for each $m_{n_0+j}$, with
+$(n_0+j)^{-3/2} = (k/\alpha)^{-3/2}\bigl(1 + O((j+1)/k)\bigr)$, the factor $\kappa^j$ to sum the errors,
+and $1 - p \le G \le 1$, give the claim.
+\end{proof}
+
+\begin{remark}[Other multipliers]\label{rem:nodropq}
+Nothing in the proof of Theorem~\ref{thm:nodrop} uses $\alpha = \log_2 3$ beyond $1 < \alpha < 2$: for
+the levels $2^{\alpha a - j}$ of a word of length $j$ with $a$ ones, the starts with no drop prefix form a
+set of dimension $H(1/\alpha)$ whenever $1 < \alpha < 2$ is irrational. For the $qx+1$ maps
+(Winkler~\cite{Winkler2026}), $\alpha = \log_2 q$, so $q = 3$ is the only odd $q \ge 3$ in that range. For
+$q \ge 5$ the share of ones $1/2$ of a typical word lies above $p = 1/\log_2 q$: by the strong law of large
+numbers $a_k - kp \to \infty$ for almost every word, so for some $m$ the words $\bw{1}^m v$ with
+$b(v) > -m(1-p)$ have positive measure, and the starts with no drop prefix have positive measure and
+dimension $1$. So only for $q = 3$ is there a dimension to compute; for $q \ge 5$ a positive share of
+the $2$-adic starts never drops.
+\end{remark}
 
 %------------------------------------------------------------------------------------------------
 \clearpage
