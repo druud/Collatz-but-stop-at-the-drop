@@ -3,7 +3,7 @@
 % Source: Project_kb/Collatz_zeta.md (the note of C79), its scripts and data in _keep/czeta/ (local). Public as a
 % draft since 24 Nov 2026 (Public/). \fillin marks values still to come.
 % The figure: media/octave_tikz.py writes it between the BEGIN/END lines below (do not edit there).
-% Draft (6), 24 Nov 2026 (Drafts (1) to (5) the same day; (6): Theorem 5.10, Winkler's rate, C105); placeins added the same day (the figures stay in Section 6); a new page for Main results, each section and the References (user, 24 Nov 2026).
+% Draft (6), 24 Nov 2026 (Drafts (1) to (5) the same day; (6): Theorem 5.10, Winkler's rate, C105); placeins added the same day (the figures stay in Section 6); a new page for Main results, each section and the References (user, 24 Nov 2026); (7): Corollary 5.12, the mass m_n with the rate (C109, 25 Nov 2026).
 \documentclass[10pt,a4paper,titlepage]{article}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
@@ -51,7 +51,7 @@
 \title{\textbf{Collatz, but stop at the drop}\\[0.5ex]
   \Large The drop zeta function}
 \author{\textbf{Ruud H.G. van Tol}}
-\date{\textbf{Draft (6)}\\[8ex]
+\date{\textbf{Draft (7)}\\[8ex]
   {\small\copyright\ 2026 Ruud H.G. van Tol. Licensed under \href{https://creativecommons.org/licenses/by/4.0/}{CC BY 4.0}.}
 }
 
@@ -581,6 +581,30 @@ drop rotation has $\liminf 0$ and $\limsup p$; it is $0$ exactly at the upper re
 The difference in Theorem~\ref{thm:limit} (Figure~\ref{fig:mass}) stays below $1/70$ for the Orders $100$ to $399$ (the jumps of
 the Orders up to $5000$ computed, the rest bounded by Theorem~\ref{thm:jumps}; floating point).
 \end{observation}
+
+\begin{corollary}\label{cor:massrate}
+With $\kappa$ as in Theorem~\ref{thm:limit}, the mass of Order $n$ is
+\[
+m_n = G(e_n)\Bigl(\frac{\alpha}{2(\alpha-1)}\Bigr)^{e_n}
+\frac{\kappa^n}{\sqrt{2\pi\alpha(\alpha-1)}\,n^{3/2}}\bigl(1 + O(n^{-1/2})\bigr).
+\]
+So $\log_2 m_n = n\log_2\kappa - \frac32\log_2 n + F(e_n) + O(n^{-1/2})$, with
+$F(e) = \log_2 G(e) + e\log_2\frac{\alpha}{2(\alpha-1)} - \log_2\sqrt{2\pi\alpha(\alpha-1)}$, and
+$F(1^-) = F(0^+) - 1$.
+\end{corollary}
+
+\begin{proof}
+$m_n = \theta_n N(n)/3^n$ with $\theta_n = 2^{-e_n}$. By Theorem~\ref{thm:rate} and $G(e_n) \ge 1 - p > 0$,
+$L\,N(n)/\binom{L}{n} = G(e_n)(1 + O(n^{-1/2}))$, and Stirling's formula in the proof of
+Theorem~\ref{thm:limit} holds with a factor $1 + O(1/n)$, uniformly as $0 < e_n < 1$. For the last
+part: $G(0^+) = 1$, $G(1^-) = 1 - p$ (Theorem~\ref{thm:jumps}) and $\alpha/(\alpha - 1) = 1/(1 - p)$.
+\end{proof}
+
+In a $\log_2$ plot of the masses against the Order, they follow the curve
+$n\log_2\kappa - \frac32\log_2 n$, which bends upward (so no straight line is a tight bound),
+shifted by $F(e_n)$: the staircase $\log_2 G$ tilted by a linear term in $e_n$, over a total
+height of $1$ from $e_n$ near $0$ to $e_n$ near $1$. The band $N(n)/(2\cdot 3^n) < m_n < N(n)/3^n$,
+by contrast, is just $1/2 < \theta_n < 1$.
 
 \begin{figure}[ht]
 \centering
