@@ -37,10 +37,10 @@
   \indexspace
 
   \item OEIS
-    \subitem \hyperlink {cite.OEIS_A100982}{A100982}, 2, 10, 11, 38
+    \subitem \hyperlink {cite.OEIS_A100982}{A100982}, 2, 10, 11, 39
     \subitem \hyperlink {cite.OEIS_A122442}{A122442}, 2, 3, 5, 6, 10, 
-		18, 36, 38
-    \subitem \hyperlink {cite.OEIS_A402443}{A402443}, 2, 6, 36, 38
+		18, 37, 39
+    \subitem \hyperlink {cite.OEIS_A402443}{A402443}, 2, 6, 37, 39
   \item \termlink{order}{Order $n$}, \textbf{6}
 
   \indexspace

@@ -7,7 +7,8 @@
 % Figures: media/octave_tikz.py and media/floors_tikz.py write between their BEGIN/END lines below (do not edit
 % there); media/turn_tikz.py and media/tree_tikz.py make \dropturnfig and \droptreefig.
 % Drafts: zeta (1) to (9), 24-25 Nov 2026 ((8): Section Compared with zeta; (9): Proposition prop:primes,
-% the primes F = 3/4 and its powers, C113.1); (10): the best and the floors merged in (C116, 25 Nov 2026).
+% the primes F = 3/4 and its powers, C113.1); (10): the best and the floors merged in (C116, 25 Nov 2026);
+% (11): Proposition prop:tilt (C117), the staircase as a corollary in floor terms (C119).
 \documentclass[10pt,a4paper,titlepage]{article}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
@@ -630,7 +631,7 @@
   \Large The drop zeta function}
 \author{\textbf{Ruud H.G. van Tol}}
 \date{\begin{tikzpicture}\dropturnfig\end{tikzpicture}\\[5ex]
-  \textbf{Draft (10)}\\[8ex]
+  \textbf{Draft (11)}\\[8ex]
   {\small\copyright\ 2026 Ruud H.G. van Tol. Licensed under \href{https://creativecommons.org/licenses/by/4.0/}{CC BY 4.0}.}
 }
 
@@ -767,7 +768,10 @@ With $p = 1/\alpha$: $\sum_{m \ge 1} N(m)\, p^m (1-p)^{p_2(m) - m} = p$.
 
 \begin{mainthm}[The staircase; Section~\ref{sec:mass}]
 With $p = 1/\alpha$ and $G(e) = 1 - \sum_{m \ge 1,\, e_m < e} N(m)\,p^m(1-p)^{p_2(m)-m}$:
-$L\,N(n)/\binom{L}{n} - G(e_n) = O(n^{-1/2})$ as $n \to \infty$.
+$L\,N(n)/\binom{L}{n} - G(e_n) = O(n^{-1/2})$ as $n \to \infty$. So the share of the words with no drop
+rotation is, up to $O(n^{-1/2})$, the chance $1 - G(e_n)$ that the first drop of a word with independent
+letters, a one with chance $p$, has its floor above $\theta_n$; and the mass is
+$m_n = \kappa^n(\alpha/(2(\alpha-1)))^{e_n}\,w(n)$ exactly, $w(n)$ the chance of a first drop at Order $n$.
 \end{mainthm}
 
 \begin{mainthm}[The explicit formula; Section~\ref{sec:compare}]
@@ -2437,6 +2441,33 @@ Theorem~\ref{thm:limit} holds with a factor $1 + O(1/n)$, uniformly as $0 < e_n 
 part: $G(0^+) = 1$, $G(1^-) = 1 - p$ (Theorem~\ref{thm:jumps}) and $\alpha/(\alpha - 1) = 1/(1 - p)$.
 \end{proof}
 
+The tilt in $F$ is exact. Let $w(n) = N(n)\,p^n(1-p)^{p_2(n)-n}$, the jump of $G$ at $e_n$: the chance that
+a word with independent letters, a one with chance $p$, has its first drop at Order $n$. Then
+$1 - G(e)$ is the chance that this first drop has its floor above $2^{-e}$ (Corollary~\ref{thm:stair}).
+
+\begin{proposition}\label{prop:tilt}
+For $n \ge 1$, with $L = p_2(n)$,
+\[
+w(n) = \frac{N(n)\,(1-p)^{e_n}}{(3\kappa)^n}, \qquad
+m_n = \Bigl(\frac{1}{2p}\Bigr)^{n}\Bigl(\frac{1}{2(1-p)}\Bigr)^{L-n} w(n)
+    = \kappa^n\Bigl(\frac{\alpha}{2(\alpha-1)}\Bigr)^{e_n} w(n).
+\]
+\end{proposition}
+
+\begin{proof}
+$m_n = N(n)/2^L$ and $w(n) = N(n)p^n(1-p)^{L-n}$ give the middle form. With $L = \alpha n + e_n$,
+$p^n(1-p)^{L-n} = \bigl(p\,(1-p)^{\alpha-1}\bigr)^n(1-p)^{e_n}$, and
+$p\,(1-p)^{\alpha-1} = (\alpha-1)^{\alpha-1}/\alpha^\alpha = 1/(3\kappa)$. Then
+$m_n = N(n)\,3^{-n}2^{-e_n}$ (as $2^L = 3^n 2^{e_n}$), and $1/(2(1-p)) = \alpha/(2(\alpha-1))$.
+\end{proof}
+
+So the masses are the first-drop chances of the letters with chance $p$, weighed again with chance
+$1/2$ per letter; the factor $(\alpha/(2(\alpha-1)))^{e_n}$ of Corollary~\ref{cor:massrate} is that
+change of weights, and the corollary is Theorem~\ref{thm:rate} read as
+$w(n) = G(e_n)\binom{L}{n}p^n(1-p)^{L-n}/L\,\bigl(1 + O(n^{-1/2})\bigr)$. In the series
+$D(c, y) = \sum_n N(n)\,c^n y^{e_n}$, the drop zeta $P(s)$ lies on $c = 1/3$ ($y = 2^{-s}$), the
+first-drop chances on $c = 1/(3\kappa)$, where the series stops converging.
+
 In a $\log_2$ plot of the masses against the Order, they follow the curve
 $n\log_2\kappa - \frac32\log_2 n$, which bends upward (so no straight line is a tight bound),
 shifted by $F(e_n)$: the staircase $\log_2 G$ tilted by a linear term in $e_n$, over a total
@@ -2944,20 +2975,14 @@ the chance that the first drop of a word of $W(n)$ has its floor above $\theta_n
 independent letters, a one with probability $p = 1/\alpha$, the first drop is at Order $m$ with chance
 $N(m)p^m(1-p)^{p_2(m)-m}$, and these add up to $1$ (Theorem~\ref{thm:jumps}).
 
-\begin{theorem}\label{thm:stair}
-With $G(e) = 1 - \sum_{m \ge 1,\, e_m < e} N(m)\,p^m(1-p)^{p_2(m)-m}$,
-$L\,N(n)/\binom{L}{n} - G(e_n) = O(n^{-1/2})$ as $n \to \infty$.
-\end{theorem}
+\begin{corollary}\label{thm:stair}
+With $G(e) = 1 - \sum_{m \ge 1,\, e_m < e} N(m)\,p^m(1-p)^{p_2(m)-m}$, the share of the words of $W(n)$
+with no drop rotation is $1 - G(e_n) + O(n^{-1/2})$: up to $O(n^{-1/2})$, the chance that the first drop
+of a word with independent letters has its floor above $\theta_n$.
+\end{corollary}
 
 \begin{proof}
-The limit is Theorem~\ref{thm:limit}: $P_n(m) \to N(m)p^m(1-p)^{p_2(m)-m}$ for each
-$m$, the limits add up to $1$, so the two distributions converge in total variation (Scheff\'e's
-argument), and $1 - G(e_n)$ is the same sum as above with the limits in place of $P_n(m)$, over all
-$m \ge 1$ with $\theta_m > \theta_n$ ($e_m < e_n$). The rate is Winkler's (Theorem~\ref{thm:rate}):
-for $\theta_m > \theta_n$, $P_n(m) = w(m)\,Q(n-m)/Q(n)$ with $w(m) = N(m)p^m(1-p)^{p_2(m)-m}$ and
-$Q(j) = \binom{p_2(j)}{j}p^j(1-p)^{p_2(j)-j}$, of size $j^{-1/2}$; with $w(m) = O(m^{-3/2})$ from
-$L\,N(n) \le \binom{L}{n}$, the terms with $m \le n/2$, those with $n/2 < m < n$, and the tail of $G$
-each add $O(n^{-1/2})$.
+Theorems~\ref{thm:limit} and~\ref{thm:rate}, as $e_m < e_n$ exactly when $\theta_m > \theta_n$.
 \end{proof}
 
 So the share of the words with no drop rotation is, in the limit, a staircase in the position of the
@@ -3171,7 +3196,7 @@ $a\,p_2(b) - b\,(p_2(a) - 1) = 1$ (Remark~\ref{rem:unimod}; \lean{FloorWalk} in 
 \lean{TRowLength}), and with it \lean{rowLength\_eq\_min}: the largest number of parts
 $m_1 + \dots + m_k = n$ with $p_2(m_1) + \dots + p_2(m_k) = p_2(n)$, the splits behind the sum of
 Theorem~\ref{thm:counts}, is the least of $d\,p_2(n) - n\,(p_2(d) - 1)$ over $d \ge 1$.
-Theorem~\ref{thm:stair} is not formalized; the computations are scripts.
+Corollary~\ref{thm:stair} is not formalized; the computations are scripts.
 
 \subsection*{The best of the Order}
 The modules \texttt{AcceleratedCollatz/Zeta/Best/} (namespace \lean{AcceleratedCollatz.Best})

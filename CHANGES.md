@@ -5,6 +5,9 @@ first. Version names (R_65a, R_66, ...) are the authors' own labels.
 
 ## After R_104 (24 November 2026)
 
+- The drop zeta draft, Draft (11): Proposition 14.13, the masses are exactly the
+  first-drop chances of the letters with chance 1/log2 3, weighed again with chance 1/2
+  per letter; the staircase is now Corollary 14.15, read on the floors.
 - The drop zeta draft, Draft (10), 41 pages, with index: the best of the Order and the floors
   merged into it; the floors bound the drop ratios from below, the best from above, and both
   now come before the zeta function. The separate best and floors drafts are withdrawn. In Lean,
