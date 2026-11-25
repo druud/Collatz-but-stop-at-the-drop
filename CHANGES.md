@@ -3,6 +3,14 @@
 The changes to this repository since its first public release, newest
 first. Version names (R_65a, R_66, ...) are the authors' own labels.
 
+## After R_105 (25 November 2026)
+
+- The drop zeta draft, Draft (13): its Lean section states the exact count of the words that
+  never drop. Lean: `TNoDropCount` gains `noDropCount_succ` (the never-dropping words of length
+  k+1 and those that drop first at their end are together 2 S(k)), `noDropCount_add_sum`
+  (S(k) plus the first drops at the lengths j <= k, each times 2^(k-j), is 2^k) and
+  `p2_of_firstDrop` (a first drop at length j with o ones has j = p2(o)).
+
 ## R_105 (25 November 2026)
 
 - The drop zeta draft, Draft (12), 44 pages: Theorem M (Theorem 14.16), the 2-adic starts with
