@@ -1,5 +1,5 @@
 -- SPDX-License-Identifier: MIT
-import AcceleratedCollatz.TFloorGaps
+import AcceleratedCollatz.Zeta.Floor.TFloorGaps
 import Mathlib.Tactic.LinearCombination
 
 /-!

@@ -1,5 +1,5 @@
 -- SPDX-License-Identifier: MIT
-import AcceleratedCollatz.TMassShareQ
+import AcceleratedCollatz.Zeta.TMassShareQ
 import AcceleratedCollatz.TBlockRecordQ
 import AcceleratedCollatz.TFirstWordQ
 

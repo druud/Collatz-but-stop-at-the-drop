@@ -58,9 +58,9 @@ import AcceleratedCollatz.TCovering
 import AcceleratedCollatz.TTerras
 import AcceleratedCollatz.TCutSweepQ
 import AcceleratedCollatz.TCycle
-import AcceleratedCollatz.TCycleCount
-import AcceleratedCollatz.TCycleCountQ
-import AcceleratedCollatz.TCycleZeroQ
+import AcceleratedCollatz.Zeta.TCycleCount
+import AcceleratedCollatz.Zeta.TCycleCountQ
+import AcceleratedCollatz.Zeta.TCycleZeroQ
 import AcceleratedCollatz.TDrop
 import AcceleratedCollatz.TDropPeriod
 import AcceleratedCollatz.TA398772
@@ -79,7 +79,7 @@ import AcceleratedCollatz.TFirstOrdersQ
 import AcceleratedCollatz.TFirstWord
 import AcceleratedCollatz.TFirstWordQ
 import AcceleratedCollatz.TFlip
-import AcceleratedCollatz.TFloorGaps
+import AcceleratedCollatz.Zeta.Floor.TFloorGaps
 import AcceleratedCollatz.TFloorSum
 import AcceleratedCollatz.TFold
 import AcceleratedCollatz.TGMap
@@ -92,7 +92,7 @@ import AcceleratedCollatz.TLex
 import AcceleratedCollatz.TMarkerPoint
 import AcceleratedCollatz.TMarkerPointHigh
 import AcceleratedCollatz.TMarkerTree
-import AcceleratedCollatz.TMassShareQ
+import AcceleratedCollatz.Zeta.TMassShareQ
 import AcceleratedCollatz.TMersenne
 import AcceleratedCollatz.TMerge
 import AcceleratedCollatz.TMod4
@@ -126,7 +126,7 @@ import AcceleratedCollatz.TRLink
 import AcceleratedCollatz.TRulerCheck
 import AcceleratedCollatz.TRulerDeficit
 import AcceleratedCollatz.TRulerPair
-import AcceleratedCollatz.TRowLength
+import AcceleratedCollatz.Zeta.Floor.TRowLength
 import AcceleratedCollatz.TRulerRecord
 import AcceleratedCollatz.TRunCoord
 import AcceleratedCollatz.TSieve
@@ -179,3 +179,12 @@ import AcceleratedCollatz.TWidthBound
 import AcceleratedCollatz.TWidthRecord
 import AcceleratedCollatz.TWordPoint
 import AcceleratedCollatz.TWordQ
+import AcceleratedCollatz.Zeta.Best.Base
+import AcceleratedCollatz.Zeta.Best.CyclePoint
+import AcceleratedCollatz.Zeta.Best.Window
+import AcceleratedCollatz.Zeta.Best.MeetingSplit
+import AcceleratedCollatz.Zeta.Best.Dinkelbach
+import AcceleratedCollatz.Zeta.Best.StartParts
+import AcceleratedCollatz.Zeta.Best.Walk
+import AcceleratedCollatz.Zeta.Best.CertData
+import AcceleratedCollatz.Zeta.Best.Certificates

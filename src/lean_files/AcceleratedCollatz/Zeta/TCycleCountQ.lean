@@ -1,5 +1,5 @@
 -- SPDX-License-Identifier: MIT
-import AcceleratedCollatz.TCycleCount
+import AcceleratedCollatz.Zeta.TCycleCount
 import AcceleratedCollatz.TSplitQ
 
 /-!

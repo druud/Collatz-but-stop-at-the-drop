@@ -1,5 +1,5 @@
 -- SPDX-License-Identifier: MIT
-import AcceleratedCollatz.TCycleCountQ
+import AcceleratedCollatz.Zeta.TCycleCountQ
 
 /-!
   The shares of the mass identity (C107 (d)), for odd q ≥ 3 and any p in a field: the algebra
