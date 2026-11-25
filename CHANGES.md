@@ -5,6 +5,7 @@ first. Version names (R_65a, R_66, ...) are the authors' own labels.
 
 ## After R_104 (24 November 2026)
 
+- The drop zeta draft, Draft (9): Proposition 7.5, the primes: the floors are the powers of F = 3/4.
 - The drop zeta draft, Draft (8): Section 7, "Compared with zeta".
   Theorem 7.1 (main Theorem F), the explicit formula: the integrated
   renewal count U_1 of the drop map is (u^2/2 + c_1 u + c_2)/mu plus
