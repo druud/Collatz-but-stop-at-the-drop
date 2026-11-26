@@ -11,6 +11,7 @@
 % (11): Proposition prop:tilt (C117), the staircase as a corollary in floor terms (C119).
 % (12): Theorem thm:nodrop, the dimension of the starts with no drop word (C121); its rate,
 %       Corollary cor:norate (C125); other multipliers, Remark rem:nodropq (C126).
+% (14): Theorem thm:logz, the binomials as the coefficients of log Z (C161); Remark rem:digits (C159), in Lean TCyclePointDigits (C163).
 % (13): the exact count of S(k) in Lean (TNoDropCount: noDropCount_add_sum, p2_of_firstDrop; C135).
 \documentclass[10pt,a4paper,titlepage]{article}
 \usepackage[utf8]{inputenc}
@@ -634,7 +635,7 @@
   \Large The drop zeta function}
 \author{\textbf{Ruud H.G. van Tol}}
 \date{\begin{tikzpicture}\dropturnfig\end{tikzpicture}\\[5ex]
-  \textbf{Draft (13)}\\[8ex]
+  \textbf{Draft (14)}\\[8ex]
   {\small\copyright\ 2026 Ruud H.G. van Tol. Licensed under \href{https://creativecommons.org/licenses/by/4.0/}{CC BY 4.0}.}
 }
 
@@ -1531,6 +1532,22 @@ length up to $2592$~\cite[p.~252]{Terras1976}, which covers the Orders of this p
 $10\,781\,273$~\cite{Paper2}. Before letter $L$ every start of the word
 rises: $T^\ell(x) = (3^{w_\ell}x + \rho_\ell)/2^\ell > x$ for $0 < \ell < L$. So each start $x > 1$ of an
 Order $n \le 10\,781\,273$ first falls below itself exactly at step $L = p_2(n)$.
+\end{remark}
+
+\begin{remark}[The digits of the cycle point]
+\label{rem:digits}
+The cycle point is a $2$-adic integer, and its first $L$ binary digits are the class id: $x^\ast \equiv c
+\pmod{2^L}$, as the first $L$ parities fix the residue. With $x^\ast = c + 2^L y$,
+$y = (T^L(c) - c)/(2^L - 3^n)$, and $y > -1$. A rational with odd denominator has a purely periodic binary
+expansion exactly when it lies in $[-1, 0]$. So $c > x^\ast$, the drop at the end of the word, holds
+exactly when the binary expansion of $x^\ast$ is purely periodic after its first $L$ digits and
+$x^\ast \ne c$ (equality only at the bottom, $x^\ast = c = 1$); in Lean as
+\lean{tail\_periodic\_iff}, by the state map of the digits (\lean{periodic\_iff}). For
+\bw{11010}, $x^\ast = 23/5$, $c = 11$, and the tail after five digits is that of $-1/5$. The width
+identity reads: for every word, the binary expansion of its cycle point turns periodic within its
+length. The expansion turns periodic far earlier, at the least $m$ at which the residue of $x^\ast$
+modulo $2^m$ exceeds $x^\ast$ (for $n = 12$, $L = 20$: after $2$ digits for $2651$ of the $2652$ words and after $4$ for
+the other, measured); this is a restatement, not a proof.
 \end{remark}
 
 \begin{proposition}[The cycle]
@@ -2969,6 +2986,63 @@ lemma. The terms do not count the words with no drop rotation one by one: for $n
 $1010$ and $0101$, while the term of $m = 1$ counts $10$ followed by a word of $W(1)$, $1010$ and
 $1001$ (Remark~\ref{rem:massex}).
 
+All lengths at once: the binomials are the coefficients of $\log Z$.
+
+\begin{theorem}\label{thm:logz}
+With $P(x, y) = \sum_{m \ge 0} N(m)\, x^{p_2(m)} y^m$, as formal power series,
+\[
+-\log\bigl(1 - P(x, y)\bigr) = \sum_{L \ge 1}\ \sum_{\substack{0 \le n \le L\\ 3^n < 2^L}}
+  \frac{1}{L}\binom{L}{n}\, x^L y^n .
+\]
+So $P(x, y) = 1 - \exp\bigl(-\sum_{3^n < 2^L} \binom{L}{n} x^L y^n/L\bigr)$ fixes every $N(m)$ by
+binomials, and at $x = 2^{-s}$, $y = 3^{s-1}$, where $P(x, y) = P(s)$: for $\Rea s > 1$,
+\[
+\log Z(s) = \sum_{3^n < 2^L} \frac{1}{L}\binom{L}{n}\, 3^{n(s-1)}\, 2^{-Ls}.
+\]
+\end{theorem}
+
+\begin{proof}
+Fix $L \ge 1$ and $n$ with $3^n < 2^L$, and let $W_L(n)$ be the $\binom{L}{n}$ words of length $L$ with
+$n$ ones; Lemma~\ref{lem:ladrot} holds for them as stated (it uses only $\lv(u, L) < 1$).
+
+(a) A ladder word $v$ of length $L$ is $d_1 \cdots d_r$, $r \ge 1$, for exactly one sequence of drop words:
+as in Lemma~\ref{lem:split}\,(iii), its first factor ends at the least $i \ge 1$ with $\lv(v, i) < 1$ and
+the rest is a ladder word. Let $0 = b_0 < b_1 < \dots < b_r = L$ be the ends of the factors. Inside a
+factor the levels stay above the level at its start, as the proper prefixes of a drop word have level
+at least $1$ (and the levels are distinct). So $\lv(v, b_k) < \lv(v, j)$ for all $j < b_k$, and no
+$i$ with $b_{k-1} < i < b_k$ has $\lv(v, i) < \lv(v, j)$ for all $j < i$ (take $j = b_{k-1}$). By
+Lemma~\ref{lem:ladrot}\,(iii) the ladder rotations of $v$ are therefore the rotations by
+$b_0, \dots, b_{r-1}$: exactly $r$ of them.
+
+(b) Every $u \in W_L(n)$ has a ladder rotation (Lemma~\ref{lem:ladrot}\,(ii)). If $u_s = v$ is one, the
+ladder rotations of $u$ are its rotations by $s + t$ (modulo $L$) with $v_t$ a ladder word; so $u$ has exactly
+$r(u)$ of them, $r(u)$ the number of factors of any one.
+
+(c) For each ladder word $v \in W_L(n)$ and each $s < L$ exactly one $u$ has $u_s = v$. Counting the
+pairs $(u, s)$ with $u_s$ a ladder word, each with weight $1/r(u)$,
+\[
+\binom{L}{n} = \sum_{u \in W_L(n)} \sum_{s:\ u_s \text{ ladder}} \frac{1}{r(u)}
+  = \sum_{v} \frac{L}{r(v)},
+\]
+the last sum over the ladder words $v \in W_L(n)$. By (a) those with $r$ factors are the sequences of $r$ drop
+words with lengths adding up to $L$ and Orders to $n$, counted by $[x^L y^n]\,P(x, y)^r$. So
+$\binom{L}{n}/L = \sum_{r} [x^L y^n]\,P(x, y)^r/r = [x^L y^n]\bigl(-\log(1 - P(x, y))\bigr)$. For $3^n > 2^L$ the
+coefficient is $0$, as every concatenation of drop words has level below $1$; and $3^n = 2^L$ only
+for $n = L = 0$. For $\Rea s > 1$, $|P(s)| < 1$ and $Z = \exp(\sum_k P^k/k)$ (Section~\ref{sec:euler}).
+\end{proof}
+
+At $L = p_2(n)$ the term $r = 1$ is $L\,N(n)$, and the rest is the sum of Theorem~\ref{thm:counts}
+grouped by the number of factors; below the wall the identity fails ($3^n > 2^L$ gives $0$, not
+$\binom{L}{n}/L$). It also reads as a dynamical zeta function of $T$ itself: each word of length $L$ is
+the parity word of exactly one $2$-adic fixed point of $T^L$, $x = \rho/(2^L - 3^n)$, and $x \ge 0$ exactly
+when $3^n < 2^L$. So
+\[
+\log Z(s) = \sum_{L \ge 1} \frac{1}{L} \sum_{\substack{x \in \mathrm{Fix}(T^L)\\ x \ge 0}} 3^{n(s-1)}\, 2^{-Ls},
+\]
+$n$ the number of ones among the first $L$ parities of $x$: $Z$ is the Artin--Mazur zeta function of
+$T$ on its periodic points $x \ge 0$, with weights~\cite{ArtinMazur1965}, and the cycles of the drop
+map $D$ of Section~\ref{sec:euler} are exactly these. Checked exactly for every $L \le 34$.
+
 \subsection*{The staircase}
 \label{sec:stair}
 
@@ -3316,7 +3390,7 @@ Corollary~\ref{cor:norate} is there too: the words of length $k+1$ that never dr
 first at their end are together $2S(k)$ (\lean{noDropCount\_succ}); summed, $S(k)$ plus these first
 drops at the lengths $j \le k$, each times $2^{k-j}$, is $2^k$ (\lean{noDropCount\_add\_sum}); and a
 first drop at length $j$ with $o$ ones has $j = p_2(o)$ (\lean{p2\_of\_firstDrop}), so their counts
-are the $N(m)$ at the lengths $p_2(m)$. The isometry and the dimensions are not formalized.
+are the $N(m)$ at the lengths $p_2(m)$. The isometry and the dimensions are not formalized. Remark~\ref{rem:digits} is \lean{TCyclePointDigits}: for an odd $d > 0$ the digit states of $a/d$ return to $a$ iff $-d \le a \le 0$ (\lean{periodic\_iff}), and after $L$ digits of $x^\ast$ the state is $T^L(c) - c$ (\lean{iterate\_eq\_sub}), so the tail is periodic iff $T^L(c) \le c$ (\lean{tail\_periodic\_iff}). Theorem~\ref{thm:logz} is not formalized.
 
 \subsection*{The best of the Order}
 The modules \texttt{AcceleratedCollatz/Zeta/Best/} (namespace \lean{AcceleratedCollatz.Best})

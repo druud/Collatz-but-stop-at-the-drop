@@ -3,8 +3,15 @@
 The changes to this repository since its first public release, newest
 first. Version names (R_65a, R_66, ...) are the authors' own labels.
 
-## After R_105 (25 November 2026)
+## R_106 (26 November 2026)
 
+- The drop zeta draft, Draft (14), 46 pages: Theorem thm:logz, the binomials as the
+  coefficients of log Z: with P(x, y) = sum_m N(m) x^p2(m) y^m, -log(1 - P(x, y)) is the sum of
+  binom(L, n)/L x^L y^n over all L >= 1 and 3^n < 2^L (a cycle-lemma proof on the ladder words);
+  so the drop zeta is the Artin-Mazur zeta function of T on its periodic points x >= 0, with
+  weights. Remark rem:digits: the drop at the end of a word holds iff the binary expansion of its
+  cycle point x* is purely periodic after its first L digits. Lean: `TCyclePointDigits`
+  (`periodic_iff`, `iterate_eq_sub`, `tail_periodic_iff`).
 - The drop zeta draft, Draft (13): its Lean section states the exact count of the words that
   never drop. Lean: `TNoDropCount` gains `noDropCount_succ` (the never-dropping words of length
   k+1 and those that drop first at their end are together 2 S(k)), `noDropCount_add_sum`
