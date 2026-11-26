@@ -1,67 +1,80 @@
 \begin{theindex}
 
   \item \termlink{bestorder}{best of the Order}, \textbf{7}
-  \item \termlink{splitbound}{bound of a split}, \textbf{17}
+  \item \termlink{splitbound}{bound of a split}, \textbf{19}
 
   \indexspace
 
-  \item \termlink{letterword}{letter word}, \textbf{22}
+  \item \termlink{ceiling}{ceiling $t_n$}, \textbf{13}
+  \item \termlink{cyclepoint}{cycle point $x^\ast$}, \textbf{13}
 
   \indexspace
 
-  \item \termlink{M}{$M$}, \textbf{22}
+  \item \termlink{lambdastar}{$\lambda^\ast$, $F(\lambda)$}, 
+		\textbf{19}
+  \item \termlink{letterword}{letter word}, \textbf{24}
+
+  \indexspace
+
+  \item \termlink{M}{$M$}, \textbf{24}
   \item \termlink{measured}{measured}, \textbf{3}
-  \item \termlink{merge}{merge}, \textbf{22}
+  \item \termlink{meetingsplit}{meeting split}, \textbf{19}
+  \item \termlink{merge}{merge}, \textbf{24}
 
   \indexspace
 
-  \item \termlink{oddpartdrop}{odd part at the drop}, \textbf{17}
+  \item \termlink{oddpartdrop}{odd part at the drop}, \textbf{19}
   \item OEIS
-    \subitem A003586, 18, 19
-    \subitem A007310, 16
-    \subitem A067745, 16
-    \subitem A100982, 10, 21, 22
-    \subitem A122442, 20
-    \subitem A122790, 16
-    \subitem A324245, 21, 22
+    \subitem A003586, 20, 21
+    \subitem A007310, 17
+    \subitem A067745, 17
+    \subitem A100982, 10, 23, 24
+    \subitem A122442, 22
+    \subitem A122790, 17
+    \subitem A324245, 23, 24
     \subitem A389685, 6
-    \subitem A398772, 14
+    \subitem A398772, 15
+    \subitem A402443, 12
 
   \indexspace
 
-  \item \termlink{ruler}{plain ruler}, \textbf{23}
+  \item \termlink{ruler}{plain ruler}, \textbf{25}
   \item \termlink{proved}{proved}, \textbf{3}
 
   \indexspace
 
-  \item \termlink{recordfrac}{record fraction}, \textbf{19}
-  \item \termlink{rhomax}{$\rho_{\max}(n)$}, \textbf{12}
-  \item \termlink{rulergap}{ruler gap}, \textbf{23}
+  \item \termlink{recordfrac}{record fraction}, \textbf{21}
+  \item \termlink{rhomax}{$\rho_{\max}(n)$}, \textbf{13}
+  \item \termlink{rulergap}{ruler gap}, \textbf{25}
 
   \indexspace
 
-  \item \termlink{S}{$S(k)$}, \textbf{19}
-  \item \termlink{scan}{scan}, \textbf{20}
-  \item \termlink{slack}{slack}, \textbf{12}
+  \item \termlink{S}{$S(k)$}, \textbf{21}
+  \item \termlink{scan}{scan}, \textbf{22}
+  \item \termlink{share}{share $\theta$}, \textbf{13}
+  \item \termlink{slack}{slack}, \textbf{13}
   \item \termlink{slanted}{slanted grid}, \textbf{6}
   \item \termlink{staircase}{staircase}, \textbf{6}
-  \item \termlink{stop}{stop}, \textbf{22}
+  \item \termlink{stop}{stop}, \textbf{24}
 
   \indexspace
 
+  \item \termlink{tie}{tie}, \textbf{13}
   \item \termlink{tree}{tree of the words}, \textbf{7}
 
   \indexspace
 
-  \item \termlink{letters}{U, D, S}, \textbf{22}
+  \item \termlink{letters}{U, D, S}, \textbf{24}
 
   \indexspace
 
-  \item \termlink{W}{$W(n)$}, \textbf{12}
+  \item \termlink{W}{$W(n)$}, \textbf{13}
+  \item \termlink{walk}{walk $\delta_\ell$}, \textbf{19}
   \item \termlink{wall}{wall}, \textbf{6}
+  \item \termlink{window}{window}, \textbf{13}
 
   \indexspace
 
-  \item \termlink{zeroskept}{zeros kept}, \textbf{17}
+  \item \termlink{zeroskept}{zeros kept}, \textbf{19}
 
 \end{theindex}

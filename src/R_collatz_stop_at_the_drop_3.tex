@@ -599,7 +599,8 @@ and admissibility is a wall. New here, as far as we know:
 \item \emph{The largest $\rho$.} Of each Order it is a sum of $3$-smooth numbers, reached by
   the first word only, and it shortens the finite reduction of the width identity (both
   Terras's, 1976); its records are proved to lie exactly at the upper record Orders. With a range check it gives the width identity up to
-  Order $64\,497\,106$.
+  Order $64\,497\,106$. It also bounds where the best of an Order lies, and with two exact
+  searches gives the bests of Orders $1$ to $378$ (OEIS A402443).
 \item \emph{Powers of $2$ and $3$.} Lean's kernel checks
   $\min(2^i, 3^j) \le p_2(j)^2\,|2^i - 3^j|$ for every $j$ up to $10^{200}$, by a certified
   walk towards $\log_2 3$ that forms no large power of $3$.
@@ -637,7 +638,10 @@ $d_{23}(n)\,c \le \rho_{\max}(n)$ drops (\lean{classDrops\_iff\_small\_rhoMax});
 $W(n) = \lfloor \rho_{\max}(n)/d_{23}(n) \rfloor$ gives it (\lean{classDropsAt\_of\_widthMax}), and $W(n)$, Terras's bound~\cite[Thm.~2.10]{Terras1976}, sets a new record exactly at the upper
 record Orders (\lean{upperRecord\_iff\_widthBoundMax}). With a range check of every
 $1 < x \le 294\,401\,822\,513\,350$, entered as a hypothesis, the width identity holds at
-every Order up to $64\,497\,106$ (\lean{classDropsAt\_le\_64497106}).
+every Order up to $64\,497\,106$ (\lean{classDropsAt\_le\_64497106}). The same bound gives the
+window of the best of the Order: a class id $c$ of Order $n$ with $T^L(c)/c > g/h > 3^n/2^L$ has
+$c\,(2^L g - 3^n h) < \rho_{\max}(n)\,h$ (\lean{window}), and the best lies below $n\,s_0/2$ for
+$n \ge 3$, $s_0$ the smallest class id above $1$ (\lean{window\_seed\_half}).
 \end{mainthm}
 
 \begin{mainthm}[Powers of $2$ and $3$; Chapter~\ref{sec:rhomax}]
@@ -676,7 +680,9 @@ words are those of Berstel, Lauve, Reutenauer and Saliola~\cite{BerstelLRS2008},
 bound on $2^{p_2(n)} - 3^n$ is Rhin's~\cite{Rhin1987}, and Belaga~\cite{Belaga2003}
 bounds the cycles of $3x + d$. The largest $\rho$, its unique word and the bound $W(n)$ of
 Theorem~A are Terras's~\cite[Thm.~2.6, Thm.~2.10]{Terras1976}, who tabulated where the bound
-jumps; the estimate $T^{L}(x) < 3^n x/2^L + n/3$ is Garner's~\cite{Garner1981}. Shanks~\cite{Shanks1954} and Jackson and
+jumps; the estimate $T^{L}(x) < 3^n x/2^L + n/3$ is Garner's~\cite{Garner1981}. The cycle point of a
+word is B\"ohm and Sontacchi's and Lagarias's~\cite{BohmSontacchi1978,Lagarias1990}, and the
+step towards the largest ratio is Dinkelbach's~\cite{Dinkelbach1967}. Shanks~\cite{Shanks1954} and Jackson and
 Matthews~\cite{JacksonMatthews2002} computed the continued fraction of a logarithm; the
 author's PARI program for the $n$-th $3$-smooth number is in OEIS
 A003586~\cite{OEIS_A003586}. Monks~\cite{Monks2025} carried $T$ over to the power series
@@ -1077,6 +1083,105 @@ Orders (computed exactly).}
 \label{tab:rhomax}
 \end{table}
 
+\subsection*{The best of the Order: the cycle point}
+% C167 (26 Nov 2026): moved here from the zeta paper (its sections on the cycle point and the
+% search, Appendices A and B), in the terms of this paper. Lean names of this subsection and the
+% next two: namespace AcceleratedCollatz.Best (Appendix A).
+
+The largest $\rho$ also bounds where the best of an Order (Chapter~\ref{sec:tree}) can lie. For
+a word of Order $n$ and length $L$ with constant $\rho$ and class id $c$, \termhere{cyclepoint}let
+\keysym{cyclepoint}{$x^\ast$} $= \rho/d_{23}(n)$ be its \keyterm{cyclepoint}{cycle point}, the rational
+fixed point of $x \mapsto (3^n x + \rho)/2^L$~\cite[Prop.~5]{BohmSontacchi1978},
+\cite[Thm.~2.1]{Lagarias1990}, and \termhere{share}$\theta = x^\ast/c$ its
+\keyterm{share}{share}. Then
+\[
+1 - \frac{T^L(c)}{c} = \Bigl(1 - \frac{3^n}{2^L}\Bigr)(1 - \theta)
+\]
+(\lean{one\_sub\_ratio}): the best is the class id with the largest share, and $c$ drops at the end of
+its word exactly when $c > x^\ast$ (\lean{ratio\_lt\_ratio\_iff}, \lean{drops\_iff}). Every other start
+$x > c$ of the class has the lower ratio $T^L(x)/x = 3^n/2^L + \rho/(2^L x)$
+(\lean{ratio\_lt\_of\_lt}), so the best is also the start $x > 1$ of Order $n$ with the largest ratio.
+In Order $6$ ($L = 10$, twelve words) the best is $347$, with the word \bw{1101110100}, $\rho = 989$
+and drop value $248$. The first word \bw{1101101100} has the largest constant,
+$\rho_{\max}(6) = 1085$, at $c = 507$; the word \bw{1111101000} has the smallest class id, $287$,
+with $\rho = 697$. Neither wins: $989/347 > 697/287 > 1085/507$, and these three lead the Order
+(measured).
+
+Let $w_\ell$ and $\rho_\ell$ be the odd steps and the constant of the first $\ell$ letters, and
+$x^\ast_\ell = (3^{w_\ell}x^\ast + \rho_\ell)/2^\ell$ the points of the rational cycle of the word. For
+$0 < \ell < L$,
+\[
+x^\ast_\ell - x^\ast = \bigl((3^{w_\ell} - 2^\ell)\,x^\ast + \rho_\ell\bigr)/2^\ell > 0,
+\]
+as $3^{w_\ell} > 2^\ell$ on the nonempty proper prefixes: the cycle point is the strict minimum of
+its cycle (\lean{cyclePoint\_lt\_cyclePt}, \lean{cyclePt\_length}). The path of the class id splits
+along it, $T^\ell(c) = x^\ast_\ell + (c - x^\ast)\,3^{w_\ell}/2^\ell$ for $0 \le \ell \le L$
+(\lean{iterate\_eq\_split}), and the cycle point of a proper prefix as a word of its own,
+$\rho_\ell/(2^\ell - 3^{w_\ell})$, is negative (\lean{prefix\_cyclePoint\_neg}). Around the cycle an
+odd step multiplies by $(3 + 1/x^\ast_\ell)/2 \le (3 + 1/x^\ast)/2$, so $2^L \le (3 + 1/x^\ast)^n$:
+Belaga's bound of the introduction, at $d = 1$, for the rational cycle of every word. \termhere{ceiling}So
+$x^\ast$ lies below the \keyterm{ceiling}{ceiling} \keysym{ceiling}{$t_n$}, the least integer
+$x \ge 1$ with $(3x + 1)^n < 2^L x^n$ (\lean{cyclePt\_le\_pow}, \lean{cyclePoint\_lt\_ceiling}).
+
+\subsection*{The window and the two searches}
+
+\termhere{window}Let $g/h > 3^n/2^L$ be the drop ratio of some class id of Order $n \ge 1$. A class id $c$ of Order
+$n$ with $T^L(c)/c > g/h$ has $h\,(3^n c + \rho) > 2^L g\,c$, so
+\[
+c\,(2^L g - 3^n h) < \rho\,h \le \rho_{\max}(n)\,h
+\]
+(\lean{window}): $c$ lies below the \keyterm{window}{window}
+$\lceil \rho_{\max}(n)\,h/(2^L g - 3^n h) \rceil$ of that ratio. At $g/h = 1$, with $\le$ for $<$, this
+is $W(n)$: the window carries the finite reduction from the class ids that do not drop to those
+that beat a given ratio. Below a prefix with $j$ odd steps, constant $\rho_j$ and residue $r$, the later
+odd steps stand at most at their latest positions, so $\rho \le 3^{n-j}\rho_j + \rho_{\max}(n) -
+3^{n-j}\rho_{\max}(j)$ (\lean{tail\_bound}), and the same bound holds with $r \le c$ for $c$
+(\lean{window\_prefix}).
+
+Let $s_0$ be the smallest class id above $1$ of Order $n$ (the terms of A122442 of
+Chapter~\ref{sec:minimal}), with constant $\rho_0$. With $g = T^L(s_0)$ and $h = s_0$,
+$2^L g - 3^n h = \rho_0$, so the best $c^\ast$ has $s_0 \le c^\ast < \rho_{\max}(n)\,s_0/\rho_0$. Every
+word has $\rho \ge 3^n - 2^n$, with equality only when its odd steps come first
+(\lean{rho\_eq\_lower\_iff}), and $\rho_{\max}(n) \le n\,3^{n-1}$ (\lean{rhoMax\_le\_mul}); so
+$c^\ast < n\,s_0/2$ and $\theta(s_0) \ge 2\,\theta(c^\ast)/n$ for $n \ge 3$ (\lean{window\_seed},
+\lean{window\_seed\_half}, \lean{share\_ratio\_ge}). For Orders $1$ to $378$ the largest
+$c^\ast/s_0$ is $1\,097\,165/347\,477$, at Order $107$ (measured).
+
+The number of words grows too fast to list them (A100982 at Order $378$ has $168$ digits), so
+the bests come from two exact searches, each seeded with $s_0$, which only sets the first
+window. \emph{Best-first}: pop the prefixes of the tree of Chapter~\ref{sec:tree} by residue, prune them
+by the window, and stop at the first residue beyond the window of the best found; a prefix of
+residue $r$ has only descendants and class ids of residue at least $r$. \emph{The scan} of
+Chapter~\ref{sec:minimal}: run over the starts $x$ in increasing order and keep per Order the highest
+$T^L(x)/x$; an Order is final once every $x$ below the window of its best is scanned. The scan counts
+the prefixes with $3^j < 2^\ell$ at which $x$ has not yet fallen below itself; its run to Order $378$
+($46$ hours on $6$ threads, every start below $886\,522\,563\,681\,567$, the window of Order $378$)
+counts $0$, so it does not rest on the width identity. The seed is the best itself at $307$ of the
+Orders $1$ to $378$; at the others $\theta(s_0)$ is more than $1/4$ of the best's, least at Order $272$
+(measured). Orders $1$ to $124$ were searched both ways, Orders $125$ to $229$ by the scan and a
+depth-first search of the words inside the window, Orders $230$ to $378$ by the scan alone. The bests are
+OEIS A402443\index{OEIS!A402443}~\cite{OEIS_A402443}, with the certificate lines $n$, $c$, $T^L(c)$
+and the window, in the repository (\texttt{src/lean\_files/zeta/data/}); Lean's kernel checks all
+$378$ lines (\lean{cert\_rows}): each $c$ is a class id of Order $n$ with that drop value, and every
+class id with a higher ratio lies below the window. That there is none is the search.
+
+\termhere{tie}Two class ids of one Order can share their ratio, a \keyterm{tie}{tie}: first at Order $9$, where
+$21\,223$ and $25\,691$ have the same $\rho/c$. Within an Order the constant fixes the
+word~\cite[Cor.~2.1a]{Lagarias1990}, so a class id $c$ ties the best $c^\ast$ only if
+$\rho\,c^\ast = \rho^\ast c$ (\lean{tie\_rho}), that is, $c$ is a multiple of
+$c^\ast/\gcd(c^\ast, \rho^\ast)$ (\lean{tie\_dvd}) inside the window of $c^\ast$. For Orders $1$ to
+$378$ that leaves $7582$ candidates, and none is a tie (measured): the best has no tie there.
+Whether it ever has one is open.
+
+Measured, and not used: at the walk $\rho - \lambda^\ast c = \sum_\ell 2^\ell \delta_\ell$ of the next
+chapter, the best leads the sum over the last $k$ letters for every $k \ge k_0$, with
+$L/2 < k_0 < 4L/5$ for Orders $15$ to $28$; the drop values of the bests of Orders $1$ to $378$ have
+$240$ odd parts, seven of them ($31$, $167$, $325$, $61$, $23$, $5$, $1$, for $21$ Orders) on the path
+of $27$. Detectors that fail: the first word or a straight line as an ideal staircase (the best
+ranks anywhere by its area against them), the trailing $1$-bits of the start, the inverse tree of
+$91$ (no excess of bests), and candidates built from the bests of earlier Orders (they beat $s_0$
+only at Orders $6$, $8$ and $107$).
+
 \subsection*{The bound from Rhin, checked to Order \texorpdfstring{$10^{60}$}{10\^{}60}}
 
 Paper~2 cites Rhin's~\cite{Rhin1987} lower bound for $2^{p_2(n)} - 3^n$ as a hypothesis
@@ -1153,7 +1258,12 @@ the number. The cases $i < 8$ or $j < 3$ are checked directly.
 \begin{wordbox}
 \boxhere{rhomax}$\rho_{\max}(n)$\index{rho max@\termlink{rhomax}{$\rho_{\max}(n)$}|textbf} & the largest $\rho$ of an admissible word of Order $n$, reached by the first word only. \\
 \boxhere{slack}slack\index{slack@\termlink{slack}{slack}|textbf} & $n\,3^{n-1} - \rho_{\max}(n)$, half a sum of lower deficits. \\
-\boxhere{W}$W(n)$\index{W(n)@\termlink{W}{$W(n)$}|textbf} & $\lfloor \rho_{\max}(n)/d_{23}(n) \rfloor$: the class ids of Order $n$ up to it decide the width identity there.
+\boxhere{W}$W(n)$\index{W(n)@\termlink{W}{$W(n)$}|textbf} & $\lfloor \rho_{\max}(n)/d_{23}(n) \rfloor$: the class ids of Order $n$ up to it decide the width identity there. \\
+\boxhere{cyclepoint}cycle point $x^\ast$\index{cycle point@\termlink{cyclepoint}{cycle point $x^\ast$}|textbf} & $\rho/d_{23}(n)$, the rational fixed point of the affine map of a word, the least point of its rational cycle; the class id drops exactly when it lies above it. \\
+\boxhere{share}share $\theta$\index{share theta@\termlink{share}{share $\theta$}|textbf} & $x^\ast/c$; the best of the Order is the class id with the largest share. \\
+\boxhere{ceiling}ceiling $t_n$\index{ceiling@\termlink{ceiling}{ceiling $t_n$}|textbf} & the least $x \ge 1$ with $(3x+1)^n < 2^L x^n$; above the cycle point of every word of Order $n$. \\
+\boxhere{window}window\index{window@\termlink{window}{window}|textbf} & $c\,(2^L g - 3^n h) < \rho_{\max}(n)\,h$: the bound a class id must meet to beat the drop ratio $g/h$; at $g/h = 1$ it is $W(n)$. \\
+\boxhere{tie}tie\index{tie@\termlink{tie}{tie}|textbf} & two class ids of one Order with the same drop ratio; the best has none for Orders $1$ to $378$.
 \end{wordbox}
 
 \section{The drop as a congruence}
@@ -1466,12 +1576,62 @@ drops at step $2$ and both paths reach $9a + 2$ at step $5$ (\lean{merge\_thirty
 Not beyond: $x = 2244603$ meets $x + 1$ at step $55$, $2$ steps after its drop, and
 $x = 100335611$ meets it at step $39$, before it drops ($164$ such odd $x$ below $2^{31}$).\par}
 
+\subsection*{The best as a fractional program, and the meeting split}
+% C167 (26 Nov 2026): moved here from the zeta paper (its section on Dinkelbach and the meeting
+% split); Lean names in the namespace AcceleratedCollatz.Best.
+
+By the cycle point (Chapter~\ref{sec:rhomax}) the best of Order $n$ maximizes $\rho/c$ over the words
+of the Order: a fractional program over a finite set. \termhere{lambdastar}Let
+\keysym{lambdastar}{$\lambda^\ast$} be that maximum and $F(\lambda) = \max\,(\rho - \lambda c)$ over
+the same words. Then $F$ is strictly decreasing, $F(\lambda^\ast) = 0$, and from any class id the
+step $\lambda \mapsto \rho/c$ of an argmax of $\rho - \lambda c$ reaches $\lambda^\ast$ in finitely
+many steps (Dinkelbach~\cite{Dinkelbach1967}; \lean{F\_strictAnti}, \lean{F\_lamStar},
+\lean{eq\_lamStar\_of\_F\_eq\_zero}, \lean{step\_lt}, for any finite family of ratios). In Order $6$
+one step suffices from either end: from the smallest class id, $F(697/287) = 1024/7$ at the argmax
+$347$, and $F(989/347) = 0$. Order $13$ ($8045$ words) takes four steps from its first word,
+$941\,051 \to 40\,699 \to 6\,427 \to 319 \to 159$, and none from its smallest class id $159$, the best
+(measured).
+
+\termhere{walk}With $c = \sum_\ell t_\ell 2^\ell$ (the bits of $c < 2^L$) and the letters $e_\ell$, the
+\keyterm{walk}{walk} of $\rho - \lambda c$ is
+\[
+\rho - \lambda c = \sum_{\ell=0}^{L-1} 2^\ell \delta_\ell,\qquad
+\delta_\ell = e_\ell\,3^{\,n-q_\ell} - \lambda\,t_\ell,
+\]
+$q_\ell$ the odd steps among the letters $0$ to $\ell$ (\lean{rho\_eq\_sum}, \lean{walk}).
+
+\termhere{meetingsplit}Cut a word $w = uv$ of Order $n$ right after its $n_u$-th odd step, $1 \le n_u < n$,
+the \keyterm{meetingsplit}{meeting split}, and let $y = T^{L_u}(c)$. With $\rho(w) = 3^{n_v}\rho(u)
++ 2^{L_u}\rho(v)$ and $3^{n_u} c = 2^{L_u} y - \rho(u)$,
+\[
+\rho - \lambda c = \rho(u)\Bigl(3^{n_v} + \frac{\lambda}{3^{n_u}}\Bigr)
+  + 2^{L_u}\Bigl(\rho(v) - \frac{\lambda\,y}{3^{n_u}}\Bigr)
+\]
+(\lean{split\_identity}). The start parts $u$ are exactly the words of Order $n_u$ without their
+final $0$'s, the same for every $n > n_u$ (\lean{isKey\_of\_prefix}, \lean{exists\_of\_key}); $uv$ is
+a word of Order $n$ exactly when each nonempty proper prefix of $v$, with $j$ odd steps in $\ell$
+letters, has $3^{n_u + j} > 2^{L_u + \ell}$, and $3^n < 2^{L_u + L_v}$
+(\lean{admissible\_split\_iff}, \lean{prefix\_pow\_of\_admissible}). Its members $x > 0$ are then
+exactly the numbers $(2^{L_u} y - \rho(u))/3^{n_u}$ with $y > \rho(u)/2^{L_u}$ in the class of $v$ and
+$2^{L_u} y \equiv \rho(u) \pmod{3^{n_u}}$ (\lean{mem\_split\_iff}, \lean{mem\_of\_meet},
+\lean{exists\_start\_iff}): $u$ alone fixes $\rho(u)$, $L_u$ and $n_u$, $v$ alone fixes $\rho(v)$
+and the class of $y$, and the two parts meet only in that congruence modulo $3^{n_u}$; with
+$y = c_v$ it is the bound of a split above. For the best of Order $6$, $347$, cut after its third odd
+step: $u = \bw{1101}$, $v = \bw{110100}$, $\rho(u) = \rho(v) = 23$, $y = T^4(347) = 587$, and
+$\rho = 27 \cdot 23 + 16 \cdot 23 = 989$, $c = (16 \cdot 587 - 23)/27 = 347$. A word can be the best only
+if each part plus the largest value of the other side is $\ge 0$; at the true maxima $1$ to $3$ words
+pass both tests at each cut for Orders $4$ to $26$ (measured). Whether that stays bounded, which
+would give a third, independent search, is open.
+
 \nopagebreak
 
 \begin{wordbox}
 \boxhere{splitbound}bound of a split\index{bound of a split@\termlink{splitbound}{bound of a split}|textbf} & $X_u = (2^{L_u} c_v - \rho(u))/3^{n_u}$ for $w = uv$: the class id $c$ of $w$ is at least $X_u$. \\
 \boxhere{zeroskept}zeros kept\index{zeros kept@\termlink{zeroskept}{zeros kept}|textbf} & the odd step as $Z \mapsto 3Z + 2^{\nu(Z)}$, the trailing $0$-bits kept: $Z_n = 3^n c + \rho$, and $c$ drops at Order $n$ when the odd part of $Z_n$ is below $c$. \\
-\boxhere{oddpartdrop}odd part at the drop\index{odd part at the drop@\termlink{oddpartdrop}{odd part at the drop}|textbf} & the drop value without its trailing zeros: the end of the path. Each class reaches every odd number coprime to $6$.
+\boxhere{oddpartdrop}odd part at the drop\index{odd part at the drop@\termlink{oddpartdrop}{odd part at the drop}|textbf} & the drop value without its trailing zeros: the end of the path. Each class reaches every odd number coprime to $6$. \\
+\boxhere{lambdastar}$\lambda^\ast$, $F(\lambda)$\index{lambda star@\termlink{lambdastar}{$\lambda^\ast$, $F(\lambda)$}|textbf} & the largest $\rho/c$ of Order $n$, and $F(\lambda) = \max(\rho - \lambda c)$, zero exactly at $\lambda^\ast$ (Dinkelbach). \\
+\boxhere{walk}walk $\delta_\ell$\index{walk@\termlink{walk}{walk $\delta_\ell$}|textbf} & $\rho - \lambda c$ letter by letter: $\delta_\ell = e_\ell 3^{n-q_\ell} - \lambda t_\ell$. \\
+\boxhere{meetingsplit}meeting split\index{meeting split@\termlink{meetingsplit}{meeting split}|textbf} & a word cut after an odd step into a start part (a word of lower Order without its final $0$'s) and a drop part, tied only by a congruence modulo $3^{n_u}$.
 \end{wordbox}
 
 \section{The \texorpdfstring{$n$}{n}-th 3-smooth number, without the list}
@@ -1814,7 +1974,7 @@ statements and theorems taken from the literature enter as named hypotheses
 (\lean{ClassDrops}, \lean{RulerGap}, \lean{RhinBound}, \lean{RhinInt}), and the range check of
 Chapter~\ref{sec:rhomax} as a hypothesis of the theorems that use it. Table~\ref{tab:lean3} lists the
 lean-files by chapter; the names of the \lean{PowDiff} files are in the namespace \lean{PowDiff},
-those of the two \lean{A349414} files, self-contained extracts, in namespaces of their file names. Chapter~\ref{sec:minimal} is computed, not formalized.
+those of the two \lean{A349414} files, self-contained extracts, in namespaces of their file names. The \lean{Best} files, in \texttt{AcceleratedCollatz/Zeta/Best/}, are in the namespace \lean{AcceleratedCollatz.Best}; their words are lists of Booleans, a one for an odd step, and the bests themselves are script data, of which Lean checks the certificates. Chapter~\ref{sec:minimal} is computed, not formalized.
 
 \begin{table}[htbp]
 \centering
@@ -1827,27 +1987,29 @@ Ch. & lean-file & content \\
   \lean{TStaircase}, \lean{TWidth}, \lean{TMonksQ}
   & staircases, the bounds on $\rho$, the $3$-smooth numbers in order and between $3^n$
   and $2^{p_2(n)}$, the width identity, $\rho$ over the power series in $q$ \\
-3 & \lean{TChristoffel}, \lean{TRhin$\{$Bound,Check$\}$}, \lean{TRho$\{$Max,Slack$\}$},
+4 & \lean{TChristoffel}, \lean{TRhin$\{$Bound,Check$\}$}, \lean{TRho$\{$Max,Slack$\}$},
   \lean{TRhoMax$\{$Bound,Check,Record$\}$}, \lean{TFiniteCheckNext}
   & the largest $\rho$, the first word as a Christoffel word, its slack, the finite
   reduction and its records, the Rhin check, the width identity up to Order $64\,497\,106$ given the range check \\
-3 & \lean{PowDiff$\{$,Far,Rhin,Walk$\}$},
+4 & \lean{PowDiff$\{$,Far,Rhin,Walk$\}$},
   \lean{PowDiffFar$\{$Bracket,Check,Nodes$\}$},
   \lean{PowDiffFar$\{$Low,Rhin$\}\{$1..4$\}$}
   & the lower side to $10^{60}$ and both sides to $10^{200}$, the differences $\lvert 2^i - 3^j \rvert$ (A014121, A363999) \\
-4 & \lean{TCongruenceSplit}, \lean{TPrefixBlockFail}, \lean{TGap$\{$Ratio,Record$\}$},
+4, 5 & \lean{Best/$\{$Base,CyclePoint,\allowbreak Window,Walk,StartParts,\allowbreak Dinkelbach,MeetingSplit,\allowbreak Certificates,CertData$\}$}
+  & the best of the Order: the cycle point and its cycle, the ceiling, the window and the seed, ties, the certificates of Orders $1$ to $378$, Dinkelbach, the walk, the meeting split \\
+5 & \lean{TCongruenceSplit}, \lean{TPrefixBlockFail}, \lean{TGap$\{$Ratio,Record$\}$},
   \lean{TUpperRecord}, \lean{TA398772}, \lean{TEvenDrop}, \lean{TRhinSplit}, \lean{TGersonides}, \lean{TAffine}, \lean{TMersenne}, \lean{TMerge}
   & $\rho$ of a concatenation, the bound of a split, the failure of the block statement, the gap ratio and its
   records, the sieve of the record search, the upper record Orders, the even case, $3c + 1 \le 2^L$ under Rhin's bound, the powers of $2$ and $3$ that differ by $1$, the shift of a class, $2^k - 1$, merging paths \\
-5 & \lean{TBisect}, \lean{TFloorSum}, \lean{TRecord$\{$Floor,Walk$\}$},
+6 & \lean{TBisect}, \lean{TFloorSum}, \lean{TRecord$\{$Floor,Walk$\}$},
   \lean{TSmooth$\{$Program,ProgramConv,Rank$\}$}, \lean{TSternBrocotCert}
   & the A003586 program \\
-7 & \lean{TUds$\{$,Count,Drop$\}$}, \lean{A349414$\{$Count,Run$\}$}
+8 & \lean{TUds$\{$,Count,Drop$\}$}, \lean{A349414$\{$Count,Run$\}$}
   & the three letters: the stop and the drop, the stop for large $k$, the classes, the count;
   the stop for every $k$ and the Collatz conjecture, the density \\
-8 & \lean{SmoothRuler}, \lean{TRuler$\{$Check,Deficit,Pair,Record$\}$}
+9 & \lean{SmoothRuler}, \lean{TRuler$\{$Check,Deficit,Pair,Record$\}$}
   & the ruler gap, its reductions and the finite check \\
-9 & \lean{TBracketCountQ}, \lean{TChainParseQ}, \lean{TBracketDropQ}
+10 & \lean{TBracketCountQ}, \lean{TChainParseQ}, \lean{TBracketDropQ}
   & every odd $q$: the bracket words, the parse, the brackets and the map $qx + 1$ \\
 \bottomrule
 \end{tabular}
@@ -1866,10 +2028,16 @@ numbers of $(3x+d)$-cycles of a given oddlength}, Acta Arith.\ 106 (2003), 197--
 representations of integers}, Amer.\ Math.\ Monthly 105 (1998), 529--543.
 \bibitem{Bloom1110} T.~F. Bloom, \emph{Erd\H{o}s Problem \#1110}, \url{https://www.erdosproblems.com/1110},
   and its discussion thread (W.~van Doorn, 10 March 2026); accessed 22 November 2026.
+\bibitem{BohmSontacchi1978} C.~B\"ohm and G.~Sontacchi, \emph{On the existence of cycles of given
+  length in integer sequences like $x_{n+1} = x_n/2$ if $x_n$ even, and $x_{n+1} = 3x_n + 1$
+  otherwise}, Atti Accad.\ Naz.\ Lincei Rend.\ Cl.\ Sci.\ Fis.\ Mat.\ Natur.\ (8) \textbf{64} (1978),
+  260--264.
 \bibitem{Carlebach1910} J.~Carlebach, \emph{Lewi ben Gerson als Mathematiker}, J.~Lamm, Berlin,
 1910 (Inaugural-Dissertation, Heidelberg, 1908).
 \bibitem{Crandall1978} R.~E. Crandall, \emph{On the ``$3x + 1$'' problem}, Math.\ Comp.\ 32 (1978),
   1281--1292.
+\bibitem{Dinkelbach1967} W.~Dinkelbach, \emph{On nonlinear fractional programming}, Management Sci.\
+  \textbf{13} (1967), 492--498.
 \bibitem{ErdosLewin1996} P.~Erd\H{o}s and M.~Lewin, \emph{$d$-complete sequences of integers},
   Math.\ Comp.\ 65 (1996), 837--840.
 \bibitem{Everett1977} C.~J. Everett, \emph{Iteration of the number-theoretic function
@@ -1882,6 +2050,8 @@ representations of integers}, Amer.\ Math.\ Monthly 105 (1998), 529--543.
   Article 02.2.7.
 \bibitem{Kaneda2010} M.~Kaneda, \emph{Two remarks on the Collatz cycle conjecture},
 arXiv:1010.6206.
+\bibitem{Lagarias1990} J.~C. Lagarias, \emph{The set of rational cycles for the $3x+1$ problem},
+  Acta Arith.\ \textbf{56} (1990), 33--53.
 \bibitem{Mahaney1982} S.~R. Mahaney, \emph{Sparse complete sets for NP: solution of a
   conjecture of Berman and Hartmanis}, J.\ Comput.\ System Sci.\ \textbf{25} (1982),
   130--143.
@@ -1914,6 +2084,8 @@ arXiv:1010.6206.
   \url{https://oeis.org/A389685}.
 \bibitem{OEIS_A398772} OEIS Foundation Inc., \emph{Sequence A398772},
   \url{https://oeis.org/A398772}.
+\bibitem{OEIS_A402443} OEIS Foundation Inc., \emph{Sequence A402443},
+  \url{https://oeis.org/A402443}.
 \bibitem{OkabeIto2002} M.~Okabe and K.~Ito, \emph{Color Universal Design (CUD): how to make figures and
   presentations that are friendly to colorblind people}, 2002, \url{https://jfly.uni-koeln.de/color/}.
 \bibitem{Rhin1987} G.~Rhin, \emph{Approximants de Pad\'e et mesures effectives

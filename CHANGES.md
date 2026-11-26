@@ -3,6 +3,22 @@
 The changes to this repository since its first public release, newest
 first. Version names (R_65a, R_66, ...) are the authors' own labels.
 
+## After R_106
+
+- The best of the Order moved from the drop zeta draft to paper 3 (C167). Paper 3, Chapter 4
+  (the largest rho and the finite reduction) gains the cycle point x* = rho/d_23(n), the share,
+  the cycle with x* as its strict minimum, the ceiling, the window c (2^L g - 3^n h) <
+  rho_max(n) h (at g/h = 1 it is W(n)), the bound c* < n s_0/2, the two exact searches, the
+  certificates of Orders 1 to 378 (OEIS A402443) and the ties; Chapter 5 (the drop as a
+  congruence) gains Dinkelbach's method, the walk and the meeting split; Theorem A and the
+  abstract mention the window; Appendix A names the `Best/` modules (and its chapter numbers are
+  corrected); 31 pages. The drop zeta draft, Draft (15), 38 pages, keeps Theorem B (the cycle
+  point, the drop iff c > x*) and points to paper 3; its theorems C to M became C to J; the
+  appendices on the detectors and the table of bests are gone; the new Appendix A, the floors:
+  the floors of Orders 0 to 45 in their order on the octave with N(n) and the end ratios (the
+  three values 3^12/2^19, 2^65/3^41, 2^46/3^29), and the record fractions of the record Orders
+  up to 20000, all exact (`zeta/scripts/floors_appendix.py`).
+
 ## R_106 (26 November 2026)
 
 - The drop zeta draft, Draft (14), 46 pages: Theorem thm:logz, the binomials as the

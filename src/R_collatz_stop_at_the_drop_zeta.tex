@@ -12,6 +12,8 @@
 % (12): Theorem thm:nodrop, the dimension of the starts with no drop word (C121); its rate,
 %       Corollary cor:norate (C125); other multipliers, Remark rem:nodropq (C126).
 % (14): Theorem thm:logz, the binomials as the coefficients of log Z (C161); Remark rem:digits (C159), in Lean TCyclePointDigits (C163).
+% (15): the best material moved to paper 3, Ch. 4 and 5 (C167): the window, the searches, Dinkelbach, the meeting
+%       split, the observations, Appendices A and B; Theorem thm:cycle stays; Appendix A is now the floors.
 % (13): the exact count of S(k) in Lean (TNoDropCount: noDropCount_add_sum, p2_of_firstDrop; C135).
 \documentclass[10pt,a4paper,titlepage]{article}
 \usepackage[utf8]{inputenc}
@@ -635,7 +637,7 @@
   \Large The drop zeta function}
 \author{\textbf{Ruud H.G. van Tol}}
 \date{\begin{tikzpicture}\dropturnfig\end{tikzpicture}\\[5ex]
-  \textbf{Draft (14)}\\[8ex]
+  \textbf{Draft (15)}\\[8ex]
   {\small\copyright\ 2026 Ruud H.G. van Tol. Licensed under \href{https://creativecommons.org/licenses/by/4.0/}{CC BY 4.0}.}
 }
 
@@ -650,11 +652,10 @@ $n$ odd steps, $p_2(n)$ the bit length of $3^n$. Each word is a residue class mo
 $T^L$ is affine with slope $\theta_n = 3^n/2^L$, the floor of Order $n$, so the drop ratios
 $T^L(x)/x$ of an Order lie between two bounds. From below, the floor: the floors lie in the octave
 $[1/2, 1)$, and neighbouring floors of the Orders $0$ to $N$ differ by at most three ratios $3^k/2^l$
-or $2^l/3^k$, the intervals of Pythagorean tuning. From above, the best of the Order, the class id with
-the highest drop ratio: it is the one whose cycle point $x^\ast = \rho/(2^L - 3^n)$ lies closest to
-it, it lies below $n/2$ times the smallest start, the search for it splits exactly into a start side
-and a drop side that meet in one congruence modulo $3^w$, and the bests of Orders $1$ to $378$ are
-computed, each with a certificate. With the floors as its primes, all powers of $F = 3/4$, we study
+or $2^l/3^k$, the intervals of Pythagorean tuning. From above, the cycle point $x^\ast = \rho/(2^L - 3^n)$ of a word: a
+class id drops exactly when it lies above it, exactly when the binary expansion of $x^\ast$ is purely
+periodic after its first $L$ digits, and the best of the Order, the class id with the highest drop
+ratio, is the one with the largest share $x^\ast/c$ (paper~3 of the series finds it). With the floors as its primes, all powers of $F = 3/4$, we study
 \[
 Z(s) = \frac{1}{1 - P(s)}, \qquad P(s) = \sum_{\text{drop words}} 2^{-Ls}\,3^{-n(1-s)},
 \]
@@ -666,12 +667,11 @@ come as close to $\Rea s = 1$ as the square of the distance of $k\log_2 3$ to th
 explicit formula, as Riemann's for the primes, writes the renewal count of the drop map as a parabola
 plus one harmonic per pole. An identity gives the number of drop words of each Order (OEIS A100982)
 from binomial coefficients alone, counted by the Orders whose floors lie higher. The identities, the
-three gaps and the statements on the best are formalized in Lean~4 with Mathlib, without
-\texttt{sorry}; the table of bests is script data.
+three gaps and the cycle point are formalized in Lean~4 with Mathlib, without \texttt{sorry}.
 
-\medskip\noindent\textbf{MSC2020:} 11B83 (primary); 11M41, 37C30, 11J71, 05A15, 90C32, 68V15.\\
+\medskip\noindent\textbf{MSC2020:} 11B83 (primary); 11M41, 37C30, 11J71, 05A15, 68V15.\\
 \textbf{Keywords:} Collatz problem, $3x+1$ problem, parity vectors, dynamical zeta function,
-three-distance theorem, Pythagorean tuning, fractional programming, Dinkelbach method, cycle lemma, Lean~4.
+three-distance theorem, Pythagorean tuning, cycle lemma, Lean~4.
 \end{quotation}
 
 \clearpage
@@ -693,41 +693,18 @@ $a$ and $b$ the last lower and upper record Orders up to $N$, and their product.
 exactly when $N + 1$ is a record Order.
 \end{mainthm}
 
-\subsection*{The best: the upper bound}
+\subsection*{The cycle point: the upper bound}
 
 \begin{mainthm}[The cycle point; Section~\ref{sec:cycle}]
 For a class id $c$ of Order $n$, with $x^\ast = \rho/(2^L - 3^n)$,
 \[
 1 - \frac{T^L(c)}{c} = \Bigl(1 - \frac{3^n}{2^L}\Bigr)\Bigl(1 - \frac{x^\ast}{c}\Bigr),
 \]
-so the best of the Order is the class id with the largest $\theta = x^\ast/c$; $c$ drops exactly when
-$c > x^\ast$, and $x^\ast$ is the strict minimum of its own cycle.
+so $c$ drops exactly when $c > x^\ast$, and the best of the Order is the class id with the largest
+$\theta = x^\ast/c$. Where the best lies, the two exact searches for it, Dinkelbach's method and the
+meeting split are in paper~3~\cite[Ch.~4, 5]{Paper3}; the bests of Orders $1$ to $378$ are OEIS
+A402443\oeisidx{A402443}~\cite{OEIS_A402443}.
 \end{mainthm}
-
-\begin{mainthm}[The window; Section~\ref{sec:search}]
-If a class id of Order $n$ has $T^L(c)/c > g/h > 3^n/2^L$, then $c\,(2^L g - 3^n h) < R(n)\,h$, where
-$R(n) = \sum_{q=1}^{n} 3^{n-q} 2^{p_2(q-1)-1}$ is the largest $\rho$ of the Order. Seeded with any
-class id of Order $n$, a scan over the starts in increasing order is complete once it passes the
-window of the best found; so is a best-first search over the word tree. The best $c^\ast$ lies
-below $n\,s_0/2$ for $n \ge 3$, $s_0$ the smallest start of the Order (Corollary~\ref{cor:bestrange}).
-\end{mainthm}
-
-\begin{mainthm}[The meeting split; Section~\ref{sec:dinkelbach}]
-Cut a word of Order $n$ right after its $w$-th odd step, after $m$ letters, and let
-$y = T^m(c)$. Then for every $\lambda$
-\[
-\rho - \lambda c = \rho_p\Bigl(3^{n-w} + \frac{\lambda}{3^w}\Bigr) + 2^m\Bigl(\sigma - \frac{\lambda\,y}{3^w}\Bigr),
-\]
-with $\rho_p$ the constant of the start part and $\sigma$ that of the drop part. The two parts are
-tied only by $2^m y \equiv \rho_p \pmod{3^w}$, and the start parts are exactly the words of Order
-$w$ without their final $0$'s.
-\end{mainthm}
-
-\begin{maincomp}[The bests; Section~\ref{sec:search}, Appendix~\ref{app:table}]
-The bests of Orders $1$ to $378$ are computed and certified (OEIS A402443\oeisidx{A402443}~\cite{OEIS_A402443}). For $307$ of the Orders $1$ to
-$378$ the best is the smallest start of its Order (OEIS A122442\oeisidx{A122442}); at the others the $\theta$ of the smallest start
-is more than $1/4$ of the best's (smallest at Order $272$).
-\end{maincomp}
 
 \subsection*{The drop zeta function}
 
@@ -812,18 +789,16 @@ fifths well formed, and show that it is so exactly when $B$ is a convergent or s
 denominator of $\log_2 3$ (their Characterization Theorem), which is the case of Theorem~A without the
 product: $B$ a record Order.
 
-\emph{The best.} The cycle point of a parity word, $\rho/(2^L - 3^n)$, is Böhm and
+\emph{The cycle point.} The cycle point of a parity word, $\rho/(2^L - 3^n)$, is Böhm and
 Sontacchi's~\cite[Prop.~5]{BohmSontacchi1978} and, for every word and over the rationals with odd
-denominator, Lagarias's~\cite[Thm.~2.1]{Lagarias1990}. The parametric method for fractional programs
-is Dinkelbach's~\cite{Dinkelbach1967}; accelerated versions are in \cite{DadushKNV2021}
-and~\cite{ChenZhengXia2025}. The smallest start of each Order is OEIS
-A122442\oeisidx{A122442}~\cite{OEIS_A122442}. The admissible words, their tree and the names used here
-are those of the series this paper stands beside~\cite{Paper1,Paper2,Paper3}.
+denominator, Lagarias's~\cite[Thm.~2.1]{Lagarias1990}. The smallest start of each Order is OEIS
+A122442\oeisidx{A122442}~\cite{OEIS_A122442}. The admissible words, their tree, the best of the Order
+and the names used here are those of the series this paper stands beside~\cite{Paper1,Paper2,Paper3}.
 
 \emph{The zeta function.} The bound $L\,N(n) \le \binom{L}{n}$ with its equality case, and a lower
 bound by $\binom{L-1}{n}/(L-1)$, are Winkler's~\cite{Winkler2026}, by the cycle lemma; paper~1 of this
 series~\cite{Paper1} cites the upper one, and its equality Orders are the upper record Orders of
-paper~2~\cite{Paper2}; the rate $O(n^{-1/2})$ in Theorem~K is Winkler's too (Theorem~\ref{thm:rate}).
+paper~2~\cite{Paper2}; the rate $O(n^{-1/2})$ in Theorem~H is Winkler's too (Theorem~\ref{thm:rate}).
 The prime zeta function and the shape of its zeros, which this paper follows, are in
 MathWorld~\cite{MathWorldPZ}; dynamical zeta functions go back to Artin and
 Mazur~\cite{ArtinMazur1965}. The cycle lemma and the cycle identity of Section~\ref{sec:mass} are
@@ -831,10 +806,10 @@ classical (Feller~\cite{Feller2}).
 
 As far as we know, the following are new: the reading of the three gaps on the floors (the end
 ratios as Pythagorean intervals, counted by the last lower and upper record Orders); the question
-of the best of the Order, the share and the least point of the cycle in Theorem~B, Theorems~C and~D,
-and the table of Computation~E; the function $Z$, Theorems~G, J and~L (the main term of~L is the
-renewal theorem~\cite{Feller2}), the identity of Theorem~I with its restricted sum and its reading on
-the floors, Theorem~K, Theorem~M (its sets $X_q$ are Eggleston's~\cite{Eggleston1949}), and Computation~H.
+of the best of the Order by the share in Theorem~B, and the cycle point read on its binary digits;
+the function $Z$, Theorems~D, G and~I (the main term of~I is the
+renewal theorem~\cite{Feller2}), the identity of Theorem~F with its restricted sum and its reading on
+the floors, Theorem~H, Theorem~J (its sets $X_q$ are Eggleston's~\cite{Eggleston1949}), and Computation~E.
 
 \clearpage
 \tableofcontents
@@ -843,8 +818,8 @@ the floors, Theorem~K, Theorem~M (its sets $X_q$ are Eggleston's~\cite{Eggleston
 \section{Introduction}
 \label{sec:intro}
 This paper looks at the drop of a start from three sides. The \emph{floors} (Sections~\ref{sec:picture}
-and~\ref{sec:gaps}) bound the drop ratios of each Order from below; the \emph{best of the Order}
-(Sections~\ref{sec:wall} to~\ref{sec:observations}) bounds them from above; the octave clock
+and~\ref{sec:gaps}) bound the drop ratios of each Order from below; the \emph{cycle point}
+(Sections~\ref{sec:wall} and~\ref{sec:cycle}) bounds them from above, through the best of the Order; the octave clock
 (Section~\ref{sec:octave}) shows both bounds of every Order on one picture, each Order as a short arc
 from its floor to its best; and the drop zeta function (Sections~\ref{sec:zeta} to~\ref{sec:compare})
 counts the drops with the drop words as its primes, among which the floors are the powers of
@@ -872,22 +847,12 @@ stopping time conjecture, in the series called the \keyterm{widthidentity}{width
 \medskip
 The answer has a clean form (Theorem~\ref{thm:cycle}): each word has a rational \fwdterm{cyclepoint}{cycle point}
 $x^\ast = \rho/(2^L - 3^n)$, the strict minimum of its own rational cycle, and the best is the class id
-with the largest \fwdterm{share}{share} $\theta = x^\ast/c$. Since $\rho$ is at most the constant \fwdsym{R}{$R(n)$} of the \fwdterm{wallword}{wall word}
-(Section~\ref{sec:wall}), a start can only win inside a \fwdterm{window}{window} (Theorem~\ref{thm:window}); this turns
-the question into two exact searches, a \fwdterm{bestfirst}{best-first search} over the word tree and a \fwdterm{scan}{scan} over the starts
-in increasing order, both seeded with the \fwdterm{seed}{smallest start} of the Order (OEIS A122442\oeisidx{A122442}).
-
-\medskip
-As a fractional program the
-question invites \fwdterm{lambdastar}{Dinkelbach's method}; cutting a word after its $w$-th one splits $\rho - \lambda c$ into
-a start side and a drop side (the \fwdterm{meetingsplit}{meeting split}), tied only by one congruence modulo $3^w$, and the \fwdterm{startpart}{start sides} are the
-words of Order $w$ (Section~\ref{sec:dinkelbach}).
-
-\medskip
-Section~\ref{sec:search} gives the searches and their
-cost, Section~\ref{sec:observations} what the bests of Orders $1$ to $378$ show, and
-Section~\ref{sec:lean} the formalization in Lean. Appendix~\ref{app:failed} lists the ways to guess the
-best that did not work, and Appendix~\ref{app:table} the bests.
+with the largest \fwdterm{share}{share} $\theta = x^\ast/c$. Where the best lies, and how it is found, is in paper~3~\cite[Ch.~4, 5]{Paper3}: the
+largest $\rho$, the constant \fwdsym{R}{$R(n)$} of the \fwdterm{wallword}{wall word}
+(Section~\ref{sec:wall}), bounds it in a window, and two exact searches give the bests of Orders $1$
+to $378$ (OEIS A402443\oeisidx{A402443}). Here the cycle point serves the drop itself
+(Remark~\ref{rem:digits}). Section~\ref{sec:lean} gives the formalization in Lean, and
+Appendix~\ref{app:floors} the floors of Orders $0$ to $45$ and the record Orders.
 
 \medskip
 The picture on the title page shows four words of Order $6$ (Remark~\ref{rem:order6}) as turns: the best, the
@@ -929,7 +894,7 @@ kinds of colour blindness; each Order is also written as a number.}
 \boxhere{best}best of the Order\index{best of the Order@\termlink{best}{best of the Order}|textbf} & the class id of Order $n$ with the highest drop ratio: the one that falls the least. \\ \hline
 \boxhere{widthidentity}width identity\index{width identity@\termlink{widthidentity}{width identity}|textbf} & every class id $c > 1$ drops at the end of its word (Terras's coefficient stopping time conjecture); it holds for Orders up to $10\,781\,273$~\cite{Paper2}. \\ \hline
 A122442\oeisidx{A122442} & the smallest start of each Order. \\ \hline
-A402443\oeisidx{A402443} & the bests of the Orders (Appendix~\ref{app:table}).
+A402443\oeisidx{A402443} & the bests of the Orders~\cite[Ch.~4]{Paper3}.
 \end{wordbox}
 
 %------------------------------------------------------------------------------------------------
@@ -969,7 +934,7 @@ size comes in.
 The floors also count words. Write a family as its odd and even steps, \texttt{1} and \texttt{0}: the
 family $4i + 1$ is \texttt{10}, and $16i + 3$ is \texttt{1100}. For the red Orders, and only for them,
 every arrangement of $n$ ones and $L - n$ zeros, read around a circle, can be started at a point where
-it reads as a family (Theorem~I).
+it reads as a family (Theorem~F).
 
 \begin{figure}[ht]
 \centering
@@ -1256,21 +1221,8 @@ OEIS A100982\oeisidx{A100982}~\cite{OEIS_A100982}:
 1,\ 1,\ 2,\ 3,\ 7,\ 12,\ 30,\ 85,\ 173,\ 476 \qquad (n = 1, \ldots, 10).
 \]
 Order $124$ has a number of words of $53$ digits, Order $378$ one of $168$ digits
-(\texttt{boo\_count.py}, exact). So the searches of Section~\ref{sec:search} never list the words of an
+(\texttt{boo\_count.py}, exact). So the searches for the best~\cite[Ch.~4]{Paper3} never list the words of an
 Order: they stop at a window on the class ids.
-\end{remark}
-
-\begin{remark}[Ties]
-\label{rem:ties}
-\termhere{tie}Two class ids of one Order can share their drop ratio, a \keyterm{tie}{tie}: the first case is Order $9$, where $21223$ and
-$25691$ have the same $\rho/c$; Order $13$ has $16$ class ids with one ratio, and Order $16$ has
-$56$ sets of equal ratios. Within an Order the constant fixes the word~\cite[Cor.~2.1a]{Lagarias1990}, so a tie has two different constants. A class id $c$ ties $c^\ast$ only if $\rho c^\ast = \rho^\ast c$, so $c$ is a multiple of
-$u = c^\ast/\gcd(c^\ast, \rho^\ast)$; and a tie of the best lies in the window of
-Theorem~\ref{thm:window} (with $\le$ for $<$), so $c = ku$ with $k \le W/u$, $W$ the window of $c^\ast$. For Orders $1$ to $378$
-that leaves $7582$ candidates (at most $1063$, at Order $262$), and none is a tie
-(\texttt{boo\_tie\_mult.py}, exact): the best has no tie for Orders $1$ to $378$. Independently, a
-depth-first search of the words with the window of the best finds none for Orders $1$ to $229$
-(\texttt{boo\_ties.cpp}). That it never has one is open. Where we say \emph{the} best, a tie would mean the smallest of them.
 \end{remark}
 
 \subsection*{Drop words, floors and masses}
@@ -1338,7 +1290,6 @@ $3^{n-m} < 2^b$; for $p_2(n) = a + b - 1$ it fails, as $3^{n-m} > 2^{b-1}$.
 \boxhere{p2}$p_2(n)$\index{p2@\termlink{p2}{$p_2(n)$}|textbf} & the bit length of $3^n$: the length $L$ of a word of Order $n$. \\ \hline
 \boxhere{rho}constant $\rho$\index{constant rho@\termlink{rho}{constant $\rho$}|textbf} & $\sum_q 3^{n-q}2^{k_q}$ over the ones of a word; $2^L T^L(x) = 3^n x + \rho$ on its class. \\ \hline
 \boxhere{dropvalue}drop value $d$\index{drop value@\termlink{dropvalue}{drop value $d$}|textbf} & $T^L(c)$, the value of the class id at its drop. \\ \hline
-\boxhere{tie}tie\index{tie@\termlink{tie}{tie}|textbf} & two class ids of one Order with the same drop ratio. \\ \hline
 \boxhere{floor}floor $\theta_n$\index{floor@\termlink{floor}{floor $\theta_n$}|textbf} & $3^n/2^{p_2(n)}$: the slope of $T^L$ on the classes of Order $n$, the infimum of their drop ratios. \\ \hline
 \boxhere{record}record Order\index{record Order@\termlink{record}{record Order}|textbf} & an Order whose floor is above (upper) or below (lower) all earlier ones. \\ \hline
 A100982\oeisidx{A100982} & the number of words of each Order.
@@ -1453,52 +1404,14 @@ ones has $\ell \le p_2(j) - 1$ (the next one, at $p_2(j)-1$, is not in it; for $
 so $2^\ell \le 2^{p_2(j)-1} < 3^j$. \cite[Thm.~2.6]{Terras1976}; \cite[Thm.~A]{Paper3}.
 \end{proof}
 
-\begin{corollary}[The tail bound]
-\label{cor:tail}
-\termhere{tailbound}If a word of Order $n$ starts with a prefix that has $j$ ones and constant $\rho_j$, then
-$\rho \le 3^{n-j}\rho_j + \sum_{q>j} 3^{\,n-q}\,2^{p_2(q-1)-1} = 3^{n-j}\rho_j + R(n) - 3^{n-j}R(j)$.
-\end{corollary}
-\begin{proof}
-$\rho = 3^{n-j}\rho_j + \sum_{q>j} 3^{n-q}2^{k_q}$, and $k_q \le p_2(q-1)-1$ by Theorem~\ref{thm:wall}.
-The terms $q \le j$ of $R(n)$ sum to $3^{n-j}R(j)$.
-\end{proof}
-
-\begin{proposition}[The lower wall]
-\label{prop:lowerwall}
-For every word with $n$ ones, $\rho \ge 3^n - 2^n$, with equality only for the words that have all
-their ones first; of Order $n$ that is the one word of $n$ ones and then $L - n$ zeros. For every
-Order $n \ge 1$, $R(n) \le n\,3^{n-1}$.
-\end{proposition}
-\begin{proof}
-The $q$-th one has $q - 1$ ones before it, so $k_q \ge q - 1$ and
-$\rho \ge \sum_{q=1}^{n} 3^{n-q}\,2^{q-1} = 3^n - 2^n$, with equality only if every $k_q = q - 1$. That
-word is admissible: $3^j > 2^j$ on the ones, and $3^n > 2^\ell$ for $\ell < L$. On the other side
-$2^{p_2(q-1)-1} \le 3^{q-1}$, so each term of $R(n)$ is at most $3^{n-1}$.
-\end{proof}
-
-\begin{lemma}[The start parts]
-\label{lem:startparts}
-\termhere{startpart}Let $1 \le w < n$. The prefixes of the words of Order $n$ that end in their $w$-th one are exactly the
-words of Order $w$ without their final $0$'s.
-\end{lemma}
-\begin{proof}
-Let $p$ be such a prefix, of length $m$. As $w < n$ it is a nonempty proper prefix, so $3^w > 2^m$,
-and so are its own nonempty prefixes. Append $0$'s up to the least length $m + k$ with
-$3^w < 2^{m+k}$: every prefix on the way keeps $3^w > 2^{m+i}$, so this is a word of Order $w$, and $p$
-is that word without its final $0$'s. Conversely let $u$ be a word of Order $w$ and $p$ the word $u$
-without its final $0$'s, of length $m$, ending in the $w$-th one. Then $p$ is a proper prefix of $u$,
-so $3^w > 2^m$. Append $n - w$ ones: each new prefix has $3^{w+i} > 2^{m+i}$. Then append $0$'s up to
-the least length with $3^n < 2^\ell$. Every nonempty proper prefix of the result is admissible, so it
-is a word of Order $n$, and $p$ is its prefix ending in its $w$-th one. Cf.~\cite[Ch.~4]{Paper3}.
-\end{proof}
+The window of the best, the tail bound below a prefix and the lower wall $\rho \ge 3^n - 2^n$ that
+build on it are in paper~3~\cite[Ch.~4]{Paper3}.
 
 \nopagebreak
 
 \begin{wordbox}
 \boxhere{wallword}wall word\index{wall word@\termlink{wallword}{wall word}|textbf} & the word of Order $n$ with each one as late as admissibility allows: its $q$-th one at letter $p_2(q-1)-1$. \\ \hline
-\boxhere{R}$R(n)$\index{R@\termlink{R}{$R(n)$}|textbf} & the constant of the wall word, the largest $\rho$ of Order $n$. \\ \hline
-\boxhere{tailbound}tail bound\index{tail bound@\termlink{tailbound}{tail bound}|textbf} & the largest $\rho$ below a prefix: the prefix followed by the rest of the wall word (Corollary~\ref{cor:tail}). \\ \hline
-\boxhere{startpart}start part\index{start part@\termlink{startpart}{start part}|textbf} & the prefix of a word up to its $w$-th one: a word of Order $w$ without its final $0$'s.
+\boxhere{R}$R(n)$\index{R@\termlink{R}{$R(n)$}|textbf} & the constant of the wall word, the largest $\rho$ of Order $n$.
 \end{wordbox}
 
 %------------------------------------------------------------------------------------------------
@@ -1527,7 +1440,7 @@ $1 - 3^n/2^L > 0$, the ratio $T^L(c)/c$ grows with $\theta$, and $T^L(c) < c$ ex
 That every class id $c > 1$ of every Order satisfies $c > x^\ast$ is the width identity of the series
 (Terras's coefficient stopping time conjecture~\cite[Conj.~2.9]{Terras1976}):
 open in general, and the best of the Order is its hardest case. Terras proved it for the words of
-length up to $2592$~\cite[p.~252]{Terras1976}, which covers the Orders of this paper
+length up to $2592$~\cite[p.~252]{Terras1976}, which covers the Orders $1$ to $378$ of the bests
 ($p_2(378) = 600$); with a range check it holds for every Order up to
 $10\,781\,273$~\cite{Paper2}. Before letter $L$ every start of the word
 rises: $T^\ell(x) = (3^{w_\ell}x + \rho_\ell)/2^\ell > x$ for $0 < \ell < L$. So each start $x > 1$ of an
@@ -1550,361 +1463,15 @@ modulo $2^m$ exceeds $x^\ast$ (for $n = 12$, $L = 20$: after $2$ digits for $265
 the other, measured); this is a restatement, not a proof.
 \end{remark}
 
-\begin{proposition}[The cycle]
-\label{prop:cyclemin}
-Let $x^\ast_\ell = (3^{w_\ell} x^\ast + \rho_\ell)/2^\ell$ be the points of the rational cycle of the
-word, $w_\ell$ and $\rho_\ell$ the ones and the constant of its first $\ell$ letters. Then
-$x^\ast_\ell > x^\ast$ for $0 < \ell < L$: the cycle point is the strict minimum of its cycle.
-\end{proposition}
-\begin{proof}
-$x^\ast_L = x^\ast$ by the choice of $x^\ast$, and $x^\ast_{\ell+1}$ is $x^\ast_\ell/2$ or
-$(3x^\ast_\ell + 1)/2$ by the letter $e_\ell$ (as in Lemma~\ref{lem:affine}): the points form a cycle of
-the two affine maps. For $0 < \ell < L$,
-$x^\ast_\ell - x^\ast = \bigl((3^{w_\ell} - 2^\ell)x^\ast + \rho_\ell\bigr)/2^\ell > 0$, since
-$3^{w_\ell} > 2^\ell$ for the nonempty proper prefixes, $x^\ast > 0$ and $\rho_\ell > 0$.
-\end{proof}
-
-\begin{lemma}[The split of the trajectory]
-\label{lem:trajsplit}
-For $0 \le \ell \le L$: $T^\ell(c) = x^\ast_\ell + (c - x^\ast)\,3^{w_\ell}/2^\ell$.
-\end{lemma}
-\begin{proof}
-$T^\ell(c) = (3^{w_\ell}c + \rho_\ell)/2^\ell$ by Lemma~\ref{lem:affine}. Both sides are affine in $c$
-with slope $3^{w_\ell}/2^\ell$ and take the value $x^\ast_\ell$ at $c = x^\ast$.
-\end{proof}
-
-\begin{proposition}[Prefix cycle points]
-\label{prop:prefixneg}
-The cycle point of the prefix of length $\ell$ as a word of its own,
-$\rho_\ell/(2^\ell - 3^{w_\ell})$, is negative for every nonempty proper prefix.
-\end{proposition}
-\begin{proof}
-$\rho_\ell > 0$ and $2^\ell < 3^{w_\ell}$.
-\end{proof}
-
-\begin{proposition}[A ceiling]
-\label{prop:ceiling}
-\termhere{ceiling}Let \keysym{ceiling}{$t_n$} be the least integer $x \ge 1$ with $(3x+1)^n < 2^L x^n$: the constant start of a word whose
-odd steps all multiply by $3 + 1/x$. Every word of Order $n \ge 1$ has $2^L \le (3 + 1/x^\ast)^n$, so
-$x^\ast < t_n$; in particular $x^\ast(\text{best}) \le x^\ast(\text{wall}) = R(n)/(2^L - 3^n) < t_n$. $t_n$ depends on $L/n$ only.
-\end{proposition}
-\begin{proof}
-An even letter halves $x^\ast_\ell$; an odd one takes it to $(3x^\ast_\ell + 1)/2 = x^\ast_\ell\,(3 + 1/x^\ast_\ell)/2$,
-at most $x^\ast_\ell\,(3 + 1/x^\ast)/2$ as $x^\ast_\ell \ge x^\ast > 0$ (Proposition~\ref{prop:cyclemin}). Around
-the cycle, $x^\ast = x^\ast_L \le x^\ast (3 + 1/x^\ast)^n/2^L$. As $(3 + 1/t_n)^n < 2^L$, $3 + 1/t_n < 3 + 1/x^\ast$.
-\end{proof}
+The cycle point is the strict minimum of its rational cycle, it lies below a ceiling that depends on
+$L/n$ only, and with the largest $\rho$ it bounds where the best can lie; these, the two exact
+searches, Dinkelbach's method and the meeting split are in paper~3~\cite[Ch.~4, 5]{Paper3}.
 
 \nopagebreak
 
 \begin{wordbox}
-\boxhere{cyclepoint}cycle point $x^\ast$\index{cycle point@\termlink{cyclepoint}{cycle point $x^\ast$}|textbf} & $\rho/(2^L - 3^n)$, the rational fixed point of the affine map of a word; the least point of its rational cycle. \\ \hline
-\boxhere{share}share $\theta$\index{share theta@\termlink{share}{share $\theta$}|textbf} & $x^\ast/c$; the best of the Order is the class id with the largest share. \\ \hline
-\boxhere{ceiling}ceiling $t_n$\index{ceiling@\termlink{ceiling}{ceiling $t_n$}|textbf} & the least $x \ge 1$ with $(3x+1)^n < 2^L x^n$; above the cycle point of every word of Order $n$.
-\end{wordbox}
-
-%------------------------------------------------------------------------------------------------
-\section{Dinkelbach and the meeting split}
-\label{sec:dinkelbach}
-
-By Theorem~\ref{thm:cycle} the best maximizes $\rho/c$ over the words of Order $n$: a fractional
-program over a finite set.
-
-\begin{lemma}[Dinkelbach~\cite{Dinkelbach1967}]
-\label{lem:dinkelbach}
-\termhere{lambdastar}Let \keysym{lambdastar}{$\lambda^\ast$} be the largest $\rho/c$ over the words of Order $n$, and
-\[
-F(\lambda) = \max\,(\rho - \lambda c),
-\]
-the maximum over the same words. Then $F$ is strictly decreasing, $F(\lambda^\ast) = 0$, and from any class id the step
-$\lambda \mapsto \rho/c$ of an argmax of $\rho - \lambda c$ reaches $\lambda^\ast$ in finitely many steps.
-\end{lemma}
-\begin{proof}
-$F$ is a maximum of finitely many strictly decreasing functions of $\lambda$ ($c > 0$), so it is strictly
-decreasing; $\rho - \lambda^\ast c \le 0$ for every word, with equality at the best, so $F(\lambda^\ast) = 0$.
-Let $\lambda = \rho_0/c_0 \le \lambda^\ast$ be the ratio of some class id. Then $F(\lambda) \ge 0$. If
-$F(\lambda) = 0$, then $\lambda = \lambda^\ast$. Otherwise an argmax has $\rho - \lambda c > 0$, so its
-$\rho/c > \lambda$: the steps strictly increase within a finite set, and stop at $\lambda^\ast$.
-\end{proof}
-
-\begin{remark}[The steps]
-\label{rem:steps}
-In Order $6$ (Remark~\ref{rem:order6}) one step suffices from either end. From the smallest start,
-$\lambda = 697/287$ gives
-\[
-F(697/287) = \frac{1024}{7} > 0,
-\]
-with the argmax $347$, and $F(989/347) = 0$; from the wall word, $\lambda = 1085/507$ gives the same
-argmax. Order $13$ ($8045$ words) takes four steps from its wall word,
-\[
-941\,051 \to 40\,699 \to 6\,427 \to 319 \to 159,
-\]
-and none from its smallest start $159$, which is the best. For Orders $2$ to $16$ the smallest start
-needs at most one step (Orders $6$, $8$, $14$), the wall word at most four (Orders $13$, $16$)
-(\texttt{boo\_count.py}, all words, an argmax tie taken at the smaller class id). This is the reason to
-seed with $s_0$ (Remark~\ref{rem:seeds}).
-\end{remark}
-
-\begin{lemma}[The walk]
-\label{lem:walk}
-\termhere{walk}Let $n \ge 2$. With $c = \sum_\ell t_\ell 2^\ell$ ($t_\ell$ the bits of $c < 2^L$) and $e_\ell$ the letters,
-\[
-\rho - \lambda c = \sum_{\ell=0}^{L-1} 2^\ell \delta_\ell,\qquad \delta_\ell = e_\ell\,3^{\,n-q_\ell} - \lambda\,t_\ell,
-\]
-$q_\ell$ the ones among the letters $0..\ell$ (so $q_\ell = w_{\ell+1}$).
-\end{lemma}
-\begin{proof}
-A one at letter $\ell = k_q$ has $q_\ell = q$, so $\rho = \sum_\ell e_\ell\,3^{n-q_\ell}2^\ell$ by
-Lemma~\ref{lem:affine}; $c < 2^L$ by Remark~\ref{rem:residue}.
-\end{proof}
-
-\begin{theorem}[The meeting split]
-\label{thm:split}
-\termhere{meetingsplit}Cut a word of Order $n$ after its $w$-th one, after $m$ letters; let $\rho_p$ be the constant of the start
-part, $\sigma$ that of the drop part (its own letters counted from $0$) and $y = T^m(c)$. Then
-\[
-\rho = 3^{n-w}\rho_p + 2^m\sigma, \qquad c = \frac{2^m y - \rho_p}{3^w},
-\]
-and
-\[
-\rho - \lambda c = \rho_p\Bigl(3^{n-w} + \frac{\lambda}{3^w}\Bigr) + 2^m\Bigl(\sigma - \frac{\lambda\,y}{3^w}\Bigr).
-\]
-Conversely, let $p$ be a start part (a word of Order $w$ without its final $0$'s,
-Lemma~\ref{lem:startparts}) and $v$ a drop part with $n - w$ ones. Then $pv$ is a word of Order $n$
-exactly when each nonempty proper prefix of $v$, with $j$ ones in $\ell$ letters, has
-\[
-3^{w+j} > 2^{m+\ell}, \qquad\text{and}\qquad 3^n < 2^{m+|v|}.
-\]
-Its members $x > 0$ are then exactly the numbers
-$(2^m y - \rho_p)/3^w$ with $y > \rho_p/2^m$ in the class of $v$ and $2^m y \equiv \rho_p \pmod{3^w}$;
-the class id is the least of them above $1$.
-\end{theorem}
-\begin{proof}
-The ones of $v$ sit at $k = m + k'$ and are the $(w+q')$-th of $pv$, so Lemma~\ref{lem:affine} gives
-\[
-\rho = 3^{n-w}\rho_p + \sum_{q'} 3^{(n-w)-q'}2^{m+k'} = 3^{n-w}\rho_p + 2^m\sigma,
-\]
-and for the start
-part $2^m y = 3^w c + \rho_p$. Substituting $c$ gives the identity. Admissibility of $pv$: the nonempty
-prefixes of $pv$ inside $p$ are admissible as $p$ is a proper prefix of a word of Order $w$ with
-$3^w > 2^m$, and the longer ones are the condition on $v$.
-
-For the members: if $x$ has the word $pv$,
-then $y = T^m(x)$ has the word $v$ and $3^w x = 2^m y - \rho_p$. Conversely, for such a $y$ the number
-\[
-x = \frac{2^m y - \rho_p}{3^w}
-\]
-is a positive integer with $3^w x \equiv -\rho_p \pmod{2^m}$, so $x$ is in the
-class of $p$ (Lemma~\ref{lem:congruence}, whose proof holds for any word), and
-$T^m(x) = (3^w x + \rho_p)/2^m = y$ has the word $v$. The congruence is the only tie between the two
-parts: $p$ alone fixes $\rho_p$, $m$, $w$; $v$ alone fixes $\sigma$ and the class of $y$.
-Checked exactly by \texttt{mitm.py}.
-\end{proof}
-
-\begin{remark}[Order $6$, cut at $w = 3$]
-\label{rem:splitex}
-The best of Order $6$, $c = 347$ with the word \bw{1101110100} (Remark~\ref{rem:order6}), cut after its
-third one: the start part is $p = \bw{1101}$, $m = 4$, and the drop part $v = \bw{110100}$. Both have
-their ones at the letters $0, 1, 3$, so $\rho_p = \sigma = 3^2 + 3\cdot 2 + 2^3 = 23$, and
-\[
-\rho = 3^3\cdot 23 + 2^4\cdot 23 = 989, \qquad y = T^4(347) = 587, \qquad c = \frac{2^4\cdot 587 - 23}{3^3} = 347.
-\]
-The start part is the word \bw{11010} of Order $3$ (class id $11$, and $347 \equiv 11 \pmod{2^4}$)
-without its final $0$; the drop part alone asks $y \equiv 11 \pmod{2^6}$, and the two meet in
-$2^4 \cdot 587 = 9392 \equiv 23 \pmod{3^3}$. What the split is for: the start sides at a cut are the
-words of one lower Order, the same for every $n > w$, and each side can be bounded without the other;
-the searches of Section~\ref{sec:search} do not use it yet.
-\end{remark}
-
-\begin{remark}[Both sides in turns]
-By Lemma~\ref{lem:startparts} the start side at cut $w$ is the set of words of Order $w$, the same
-for every $n > w$. The drop side grows backward from the last letter on residues $y \bmod 2^k$
-($y' = 2y$ or $(2y-1)/3$). A word can be the best only if each part plus the other side's maximum
-is $\ge 0$; with the true maxima, $1$ to $3$ words pass both tests at each cut for Orders $4$ to $13$
-(\texttt{mitm4.py}), and $1$ or $2$ for Orders $14$ to $26$ (all words, \texttt{both\_sides.cpp}).
-\end{remark}
-
-\nopagebreak
-
-\begin{wordbox}
-\boxhere{lambdastar}$\lambda^\ast$, $F(\lambda)$\index{lambda star@\termlink{lambdastar}{$\lambda^\ast$, $F(\lambda)$}|textbf} & the largest $\rho/c$ of Order $n$, and $F(\lambda) = \max(\rho - \lambda c)$, zero exactly at $\lambda^\ast$ (Dinkelbach). \\ \hline
-\boxhere{walk}walk $\delta_\ell$\index{walk@\termlink{walk}{walk $\delta_\ell$}|textbf} & $\rho - \lambda c$ letter by letter: $\delta_\ell = e_\ell 3^{n-q_\ell} - \lambda t_\ell$, with $q_\ell$ the ones among the letters $0..\ell$ and $t_\ell$ the bits of $c$. \\ \hline
-\boxhere{meetingsplit}meeting split\index{meeting split@\termlink{meetingsplit}{meeting split}|textbf} & a word cut after its $w$-th one into a start part and a drop part (constant $\sigma$), tied only by a congruence modulo $3^w$.
-\end{wordbox}
-
-%------------------------------------------------------------------------------------------------
-\section{The search}
-\label{sec:search}
-
-\begin{theorem}[The window]
-\label{thm:window}
-\termhere{window}Let $g/h > 3^n/2^L$ be the drop ratio of some class id of Order $n \ge 1$. A class id $c$ of Order $n$ with
-$T^L(c)/c > g/h$ satisfies $c\,(2^L g - 3^n h) < R(n)\,h$, that is, $c < W = \lceil R(n)\,h/(2^L g - 3^n h) \rceil$, the window of that class id. For a prefix with $j$ ones, constant $\rho_j$ and
-residue $r$, every class id below it with a higher ratio satisfies
-$r\,(2^L g - 3^n h) < \bigl(3^{n-j}\rho_j + \sum_{q>j} 3^{\,n-q} 2^{p_2(q-1)-1}\bigr)\,h$.
-\end{theorem}
-\begin{proof}
-$T^L(c)/c > g/h$ means $h\,2^L T^L(c) > g\,2^L c$, that is $h(3^n c + \rho) > 2^L g\,c$, that is
-$c\,(2^L g - 3^n h) < \rho\,h$. Now $\rho \le R(n)$ by Theorem~\ref{thm:wall}; below a prefix,
-$\rho$ is at most the bound of Corollary~\ref{cor:tail}, and $c \ge r$ as $c \equiv r \pmod{2^\ell}$,
-$c > 0$, $0 < r < 2^\ell$.
-\end{proof}
-
-\begin{corollary}[Where the best lies]
-\label{cor:bestrange}
-Let $s_0$ be the smallest class id above $1$ of Order $n$, with constant $\rho_0$, and $c^\ast$ the best. Then
-\[
-s_0 \;\le\; c^\ast \;\le\; \frac{R(n)}{\rho_0}\,s_0 \;\le\; \frac{R(n)}{3^n - 2^n}\,s_0 ,
-\qquad\text{and}\qquad c^\ast < \frac{n}{2}\,s_0 \quad (n \ge 3).
-\]
-For $n \ge 3$ also $\theta(s_0) \ge 2\,\theta(c^\ast)/n$.
-\end{corollary}
-\begin{proof}
-If $c^\ast \ne s_0$, its ratio is above that of $s_0$ (a tie would make $s_0$ the best), and
-Theorem~\ref{thm:window} with $g/h$ the ratio of $s_0$ has $2^L g - 3^n h = \rho_0$, so
-$c^\ast \rho_0 < R(n)\,s_0$. Then $\rho_0 \ge 3^n - 2^n$ and $R(n) \le n\,3^{n-1}$ by
-Proposition~\ref{prop:lowerwall}, and $2\cdot 3^{n-1} \le 3^n - 2^n$ for $n \ge 3$. The shares:
-$\theta(s_0)/\theta(c^\ast) = \rho_0\,c^\ast/(\rho^\ast s_0) \ge \rho_0/R(n) \ge 2/n$ by the same two bounds and $c^\ast \ge s_0$.
-\end{proof}
-
-\begin{remark}[The size of that range]
-\label{rem:bestrange}
-The factor $R(n)/(3^n - 2^n)$ is below $31$ at Order $124$ and below $92$ at Order $378$. The bests
-found stay far inside: for Orders $1$ to $378$ the largest $c^\ast/s_0$ is $1\,097\,165/347\,477$, between
-$3$ and $16/5$, at Order $107$ (\texttt{paper\_numbers.py}).
-\end{remark}
-
-\begin{corollary}[Two exact searches]
-\begin{enumerate}
-\item \termhere{bestfirst}\keyterm{bestfirst}{Best-first.} Pop the prefixes by residue, prune by Theorem~\ref{thm:window}, stop at the first
-residue beyond the window of the best found (\texttt{boo.py}).
-\item \termhere{scan}\keyterm{scan}{The scan.} Run over the starts $x$ in increasing order, keep per Order the highest
-$T^L(x)/x$; Order $n$ is final once every $x$ below the window of its best is scanned
-(\texttt{boo\_scan.cpp}).
-\end{enumerate}
-Both are exact for any seed; the seed only sets the first window.
-\end{corollary}
-\begin{proof}
-Best-first: a prefix of residue $r$ has only descendants of residue at least $r$, and its class ids are
-at least $r$, so a popped residue beyond the window of the best found bounds every node still in the
-heap; a pruned node holds no class id with a higher ratio by Theorem~\ref{thm:window}; the window only
-shrinks as the best improves. The scan computes the first step at which $x$ falls below itself, and
-the ones before it; by the remark after Theorem~\ref{thm:cycle} that is the Order of $x$'s word for
-all Orders here. (\texttt{boo\_scan.cpp} now also counts the prefixes with $3^j < 2^\ell$ at which $x$ has
-not fallen below itself; a run with a count of $0$ does not rest on that remark. The run to Order $378$
-was repeated with that count, 46~hours on 6~threads: the count is $0$, with the same best, drop value and
-window for every Order; its output is \texttt{data/boo\_scan\_378.out}. So the bests of this paper do not
-rest on the remark.) So every class id $c$ of Order $n$ is met as a start of Order $n$, and every other start of its class is larger with a lower ratio (Lemma~\ref{lem:member}); so once
-all $x$ below the window of the best found are scanned, Theorem~\ref{thm:window} leaves no class id that
-could beat it.
-\end{proof}
-
-\begin{remark}[Seeds]
-\label{rem:seeds}
-\termhere{seed}The smallest start of Order $n$, \keysym{seed}{$s_0$} $= a(n+1)$ of A122442\oeisidx{A122442}, is the best itself for $98$ of the Orders $1$
-to $124$ (and for $307$ of the Orders $1$ to $378$). A guess from the previous Order (its $\theta$, halved until a word beats it) is exact as
-well but costs about twice the nodes, and certified candidates built from the bests of earlier Orders
-beat $s_0$ only at Orders $6$, $8$ and $107$ (Appendix~\ref{app:failed}).
-\end{remark}
-
-\begin{remark}[Cost]
-For Orders $1$ to $124$ the best-first search seeded with $s_0$ visits $164\,801\,730$ nodes in all
-(Order $124$: $15\,147\,961$); the scan finishes Orders $1$ to $124$ at $x < 2^{26}$. The scan for
-Orders $1$ to $378$ covers every start below $886\,522\,563\,681\,567$, the window of Order $378$ and the
-largest of these Orders (Theorem~\ref{thm:window}), on a wheel modulo $2^{28}$ that leaves $3\,524\,586$ residues; Orders
-$379$ to $399$ would need it up to $17\,216\,187\,145\,311\,549$ (the windows of their seeds; the scan was stopped at Order $378$). Without a seed, the scan finds the smallest start of each
-Order on the way, and its first start of each Order is checked against A122442.
-\end{remark}
-
-\begin{remark}[The certificates]
-\label{rem:cert}
-The certificate of an Order is the line $n$, $c$, $T^L(c)$, $W$. Checking it shows that $c$ is a
-class id of Order $n$ with that drop value, and that every class id with a higher ratio is below
-$W$ (Theorem~\ref{thm:window}); that there is none is the search itself. This check is done in Lean
-for all $378$ lines, by the kernel (\lean{cert\_rows}, Section~\ref{sec:lean}). Orders $1$ to $124$ were
-searched twice, by the best-first search and by the scan; Orders $125$ to $229$ by the scan and by a
-depth-first search of the words inside $W$ (\texttt{boo\_ties.cpp}: none better, none equal); Orders
-$230$ to $378$ by the scan alone.
-\end{remark}
-
-\nopagebreak
-
-\begin{wordbox}
-\boxhere{window}window $W$\index{window@\termlink{window}{window $W$}|textbf} & the bound $c\,(2^L g - 3^n h) < R(n)\,h$, or $c < W$, that a class id must meet to beat the drop ratio $g/h$ of another (Theorem~\ref{thm:window}). \\ \hline
-\boxhere{bestfirst}best-first search\index{best-first search@\termlink{bestfirst}{best-first search}|textbf} & the prefixes popped by residue and pruned by the window (\texttt{boo.py}). \\ \hline
-\boxhere{scan}scan\index{scan@\termlink{scan}{scan}|textbf} & all starts in increasing order, up to the window of the best found (\texttt{boo\_scan.cpp}). \\ \hline
-\boxhere{seed}seed $s_0$\index{seed@\termlink{seed}{seed $s_0$}|textbf} & the smallest start of the Order (A122442), the first candidate of both searches.
-\end{wordbox}
-
-%------------------------------------------------------------------------------------------------
-\section{Observations}
-\label{sec:observations}
-% Data only, measured; each with its script.
-
-\begin{observation}[The smallest start]
-$\theta(s_0)/\theta(\text{best}) > 1/4$ for all Orders $1$ to $378$, smallest at Order $272$ (between
-$25/100$ and $26/100$), then Orders $361$, $363$, $256$ and $91$; equality of $s_0$ and the best at $307$ of them
-(\texttt{boo\_obs.py}).
-\end{observation}
-
-\begin{observation}[Backward ranking]
-At $\lambda = \lambda^\ast$ let $S_k = \sum_{\ell=L-k}^{L-1} 2^\ell \delta_\ell$ be the sum of the walk over the
-last $k$ letters. \termhere{backward}The best is the strict maximum of $S_k$ over all words of its Order for every
-$k \ge$ \keysym{backward}{$k_0$}, with $k_0$ in Table~\ref{tab:k0} (Orders $2$ to $21$, all words, \texttt{dinkel\_suffix.py}; $22$ to $28$, \texttt{paper\_numbers\_slow --k0=28}).
-For Orders $15$ to $28$, $L/2 < k_0 < 4L/5$; Order $14$ needs $19$ of its $23$ letters.
-\end{observation}
-
-\begin{herefloat}{table}
-\[
-\setlength{\extrarowheight}{1pt}
-\begin{array}{|r||r|r|r|r|r|r|r|r|r|}
-\hline
-n & 2&3&4&5&6&7&8&9&10\\
-\hline
-L & 4&5&7&8&10&12&13&15&16\\
-k_0 & 1&1&3&2&6&4&8&7&9\\
-\hline
-\hline
-n & 11&12&13&14&15&16&17&18&19\\
-\hline
-L & 18&20&21&23&24&26&27&29&31\\
-k_0 & 9&12&13&19&14&16&16&18&24\\
-\hline
-\hline
-n & 20&21&22&23&24&25&26&27&28\\
-\hline
-L & 32&34&35&37&39&40&42&43&45\\
-k_0 & 21&23&25&24&29&29&30&31&32\\
-\hline
-\end{array}
-\]
-\caption{Backward ranking: the least $k_0$ from which the best leads the last $k$ letters of the walk.}
-\label{tab:k0}
-\end{herefloat}
-
-\begin{observation}[Merging trajectories]
-The drop values $d = T^L(\text{best})$ of Orders $1$ to $378$ have $240$ odd parts: $61$ is the odd
-part for $10$ Orders, $12\,729\,682\,859$ for $9$, $619\,739$, $92\,485\,801$, $1\,064\,232\,949$ and
-$30\,643\,528\,277$ for $5$ each, $8$ more for $4$ each, $18$ for $3$ each, $45$ for $2$ each, and $163$
-for one Order each. Seven of the odd parts
-($31$, $167$, $325$, $61$, $23$, $5$, $1$) lie on the trajectory of $27$, for $21$ Orders (\texttt{boo\_hubs.py}). The inverse trees of such hubs do not hold the bests
-more often than other starts (Appendix~\ref{app:failed}).
-\end{observation}
-
-\subsection*{Open questions}
-\begin{enumerate}\setlength{\itemsep}{0.2ex}
-\item Does the best of an Order ever have a tie (Remark~\ref{rem:ties}; none for Orders $1$ to $378$)?
-\item Is $\theta(s_0)/\theta(\text{best}) > 1/4$ for every Order, or bounded below by a constant at all (it is at least $2/n$, Corollary~\ref{cor:bestrange})?
-\item Is the smallest start the best for infinitely many Orders ($307$ of the first $378$)?
-\item Does $L/2 < k_0 < 4L/5$ hold beyond Order $28$ (Table~\ref{tab:k0})?
-\item At the true maxima, does the drop side of the meeting split keep a bounded number of words
-  ($1$ to $3$ measured, Orders $4$ to $26$)? A search on the split would then be a third, independent one.
-\item The width identity itself (Remark~\ref{rem:width}).
-\end{enumerate}
-
-\nopagebreak
-
-\begin{wordbox}
-\boxhere{backward}backward ranking $k_0$\index{backward ranking@\termlink{backward}{backward ranking $k_0$}|textbf} & the least $k_0$ such that the best leads the walk's sum over the last $k$ letters for every $k \ge k_0$.
+\boxhere{cyclepoint}cycle point $x^\ast$\index{cycle point@\termlink{cyclepoint}{cycle point $x^\ast$}|textbf} & $\rho/(2^L - 3^n)$, the rational fixed point of the affine map of a word; a class id drops exactly when it lies above it. \\ \hline
+\boxhere{share}share $\theta$\index{share theta@\termlink{share}{share $\theta$}|textbf} & $x^\ast/c$; the best of the Order is the class id with the largest share.
 \end{wordbox}
 
 %------------------------------------------------------------------------------------------------
@@ -3393,52 +2960,13 @@ first drop at length $j$ with $o$ ones has $j = p_2(o)$ (\lean{p2\_of\_firstDrop
 are the $N(m)$ at the lengths $p_2(m)$. The isometry and the dimensions are not formalized. Remark~\ref{rem:digits} is \lean{TCyclePointDigits}: for an odd $d > 0$ the digit states of $a/d$ return to $a$ iff $-d \le a \le 0$ (\lean{periodic\_iff}), and after $L$ digits of $x^\ast$ the state is $T^L(c) - c$ (\lean{iterate\_eq\_sub}), so the tail is periodic iff $T^L(c) \le c$ (\lean{tail\_periodic\_iff}). Theorem~\ref{thm:logz} is not formalized.
 
 \subsection*{The best of the Order}
-The modules \texttt{AcceleratedCollatz/Zeta/Best/} (namespace \lean{AcceleratedCollatz.Best})
-state and prove the results below in Lean~4 with Mathlib, without \texttt{sorry}. Its words (\lean{List Bool}, a one for an
-odd step), the map $T$ (\lean{tStep}), the word of a start (\lean{tBits}), the constant $\rho$
-(\lean{rho}), the Order (\lean{order}), admissibility (\lean{Admissible}) and $R(n)$ (\lean{rhoMax}) come
-from the library of the series~\cite{Paper2}, restated in the terms of this paper in \texttt{Base.lean}. Only exact
-statements are formalized; the table of bests (Appendix~\ref{app:table}) is script data, and so are
-the two searches and the observations. Of that table Lean checks what a certificate line says
-(Remark~\ref{rem:cert}): \lean{cert\_rows} proves it for each of the $378$ lines, the kernel doing the
-arithmetic (no \texttt{native\_decide}); that no start below $W$ has a higher ratio stays with the searches. Table~\ref{tab:lean} lists the Lean names.
-
-\begin{herefloat}{table}\small
-{\setlength{\extrarowheight}{1pt}\begin{tabular}{|l|l|}
-\hline
-Statement & Lean \\
-\hline
-Lemma~\ref{lem:affine} & \lean{affine}, \lean{mem\_class\_iff} \\
-Lemma~\ref{lem:congruence} & \lean{congruence} (as $-\rho\,3^{-n}$) \\
-Lemma~\ref{lem:member} & \lean{ratio\_lt\_of\_lt} \\
-Theorem~\ref{thm:wall} & \lean{rho\_le\_wall}, \lean{rho\_eq\_wall\_iff}, \lean{wall\_eq\_sum} \\
-Corollary~\ref{cor:tail} & \lean{tail\_bound} \\
-Lemma~\ref{lem:startparts} & \lean{isKey\_of\_prefix}, \lean{exists\_of\_key} \\
-Theorem~\ref{thm:cycle} (B) & \lean{one\_sub\_ratio}, \lean{ratio\_lt\_ratio\_iff}, \lean{drops\_iff} \\
-Proposition~\ref{prop:cyclemin} & \lean{cyclePoint\_lt\_cyclePt}, \lean{cyclePt\_length} \\
-Proposition~\ref{prop:ceiling} & \lean{cyclePt\_le\_pow}, \lean{cyclePoint\_lt\_ceiling} \\
-Lemma~\ref{lem:trajsplit} & \lean{iterate\_eq\_split} \\
-Proposition~\ref{prop:prefixneg} & \lean{prefix\_cyclePoint\_neg} \\
-Lemma~\ref{lem:dinkelbach} & \lean{F\_strictAnti}, \lean{F\_lamStar}, \lean{eq\_lamStar\_of\_F\_eq\_zero}, \lean{step\_lt} \\
-Lemma~\ref{lem:walk} & \lean{rho\_eq\_sum}, \lean{walk} \\
-Theorem~\ref{thm:split} (D) & \lean{split\_identity}, \lean{mem\_split\_iff}, \lean{mem\_of\_meet}, \lean{exists\_start\_iff} \\
- & \lean{admissible\_split\_iff}, \lean{prefix\_pow\_of\_admissible} \\
-Theorem~\ref{thm:window} (C) & \lean{window}, \lean{window\_prefix} \\
-Proposition~\ref{prop:lowerwall} & \lean{rho\_eq\_lower\_iff}, \lean{rhoMax\_le\_mul} \\
-Corollary~\ref{cor:bestrange} & \lean{window\_seed}, \lean{window\_seed\_half}, \lean{share\_ratio\_ge} \\
-Remark~\ref{rem:ties} & \lean{tie\_rho}, \lean{tie\_dvd} \\
-Remark~\ref{rem:cert} & \lean{cert\_rows} \\
-\hline
-\end{tabular}}
-\caption{The statements of this paper and their Lean names in \texttt{AcceleratedCollatz/Zeta/Best/}.}
-\label{tab:lean}
-\end{herefloat}
-
-The width identity, on which the first runs of the scan rested (Remark~\ref{rem:width}; the rerun with the count does not), is
-\lean{WidthIdentity} of that library; its range to Order $10\,781\,273$ uses a range check outside
-Lean~\cite{Paper2}; the Orders of this paper lie within Terras's own range (Remark~\ref{rem:width}).
-Lemma~\ref{lem:dinkelbach} is formalized for any finite family of ratios; that the steps end follows
-from \lean{step\_lt}, as the family is finite. Böhm and Sontacchi's paper, with the cycle point of
+The modules \texttt{AcceleratedCollatz/Zeta/Best/} (namespace \lean{AcceleratedCollatz.Best}) prove
+Lemma~\ref{lem:affine} (\lean{affine}, \lean{mem\_class\_iff}), Lemma~\ref{lem:congruence}
+(\lean{congruence}), Lemma~\ref{lem:member} (\lean{ratio\_lt\_of\_lt}), Theorem~\ref{thm:wall}
+(\lean{rho\_le\_wall}, \lean{rho\_eq\_wall\_iff}, \lean{wall\_eq\_sum}) and Theorem~\ref{thm:cycle}
+(\lean{one\_sub\_ratio}, \lean{ratio\_lt\_ratio\_iff}, \lean{drops\_iff}); the rest of these modules,
+the window, the certificates of the bests, Dinkelbach and the meeting split, belongs to
+paper~3~\cite[Ch.~4, 5, App.~A]{Paper3}. Böhm and Sontacchi's paper, with the cycle point of
 Definition~\ref{def:cycle}, has a Lean formalization of its own~\cite{BohmSontacchiLean}, the first paper
 formalized in the Collatz Conjecture Challenge~\cite{CCChallenge}.
 
@@ -3446,149 +2974,104 @@ formalized in the Collatz Conjecture Challenge~\cite{CCChallenge}.
 
 The Lean files, the scripts and this text were written in conversation with Claude (Anthropic):
 ideas were tried numerically first, in exact integers, then stated and proved in Lean, compiled
-locally, and every open end was logged for the next session; the long runs (the scan, the tie
-search) ran on the author's computer. Some of it went better than planned: the ties, first
-searched word by word, turned out to need only the multiples of one number below the window
-(Remark~\ref{rem:ties}). The author checked the statements and takes responsibility for them.
+locally, and every open end was logged for the next session; the long runs ran on the author's
+computer. The author checked the statements and takes responsibility for them.
 The same workflow is open to any reader: the Lean proofs can be checked on any computer, and the
-scripts recompute the table of bests and its certificates.
+scripts recompute the numbers of this paper.
 
 \appendix
 %------------------------------------------------------------------------------------------------
-\section{Detectors that fail}
-\label{app:failed}
-One line each, with the reason (measured; scripts in \texttt{src/lean\_files/zeta/scripts/}).
-\begin{itemize}\setlength{\itemsep}{0.2ex}
-\item \emph{The scaled wall word as an ideal staircase:} every word starts and ends below it; the best's
-  $2$ to $8$ crossings (Orders $4$ to $14$) are not special, and by the area between the two it ranks
-  anywhere ($3$ to $1337$ at Orders $5$ to $13$) (\texttt{aim\_cross.py}, \texttt{aim\_area.py}).
-\item \emph{Ideal lines and curves (diagonal, ruler, $\log$-shaped):} they measure area only; the best
-  ranks anywhere (by the diagonal: $2$ to $6425$ at Orders $5$ to $13$) (\texttt{ideal\_lines.py}).
-\item \emph{Trailing $1$-bits of the start:} no relation with the best.
-\item \emph{Inverse trees:} the inverse tree of $91$ holds $21$ of the $106$ bests of Orders $1$ to $124$ in
-  $(91, 2^{22})$, $20\%$, against $28\%$ of the odd starts in that range: no excess
-  (\texttt{paper\_numbers.py}; \texttt{inv\_hub.py}, \texttt{inv\_grow.py}).
-\item \emph{The backward branch and bound:} correct, but costs more nodes than forward (Order $22$:
-  $96\,743$ primed against $1\,505$; \texttt{mitm\_search.py}, \texttt{boo.py}).
-\item \emph{A guessed $\theta$ from the previous Order:} exact with halving, about twice the nodes of the
-  seed $s_0$ (Orders $2$ to $75$: $8\,408\,907$ against $4\,317\,574$; \texttt{paper\_numbers\_slow.cpp}).
-\item \emph{Candidates from earlier Orders} (one $1$ inserted per Order step, beams of $8$): beat $s_0$ at
-  Orders $6$, $8$, $107$ only, of Orders $3$ to $124$ (\texttt{boo\_beam.py}).
-\end{itemize}
+\section{The floors}
+\label{app:floors}
+% C167 (26 Nov 2026): in place of the appendices on the best (now paper 3, Ch. 4, and OEIS A402443);
+% made by zeta/scripts/floors_appendix.py, exact integers only.
+Table~\ref{tab:floors} puts the floors $\theta_n = 3^n/2^{p_2(n)}$ of the Orders $0$ to $45$ in their
+order on the octave, lowest first, each with its number of drop words $N(n)$ (OEIS
+A100982\oeisidx{A100982}) and the end ratio up to the next floor; after the highest floor the octave
+closes at $2\theta_0 = 1$. Floors are compared exactly: $\theta_a < \theta_b$ exactly when
+$3^a\,2^{p_2(b)} < 3^b\,2^{p_2(a)}$. The end ratios take the three values of Theorem~\ref{thm:gaps}:
+$2\theta_{12} = 3^{12}/2^{19}$ (the comma of Pythagorean tuning), $1/\theta_{41} = 2^{65}/3^{41}$ and their
+product $2^{46}/3^{29}$, with $12$ and $41$ the last lower and upper record Orders up to $45$; the product
+is there for $N = 41$ to $51$ and missing at $N = 40$ and $N = 52$, as $41$ and $53$ are record Orders.
+Table~\ref{tab:records} lists the record Orders up to $20\,000$ as their record fractions: $p_2(n)/n$
+at an upper record Order and $(p_2(n) - 1)/n$ at a lower one, the one-sided semiconvergents of
+$\alpha$ from above and from below (paper~2~\cite{Paper2}, \lean{upperRecord\_iff\_semiconv},
+\lean{lowerRecord\_iff\_semiconv}). Order $1$ counts as an upper record only. All entries are computed
+exactly (\texttt{floors\_appendix.py}).
 
-%------------------------------------------------------------------------------------------------
-\section{The bests}
-\label{app:table}
-The best $c$ of Order $n$ and its drop value $T^L(c)$; $\ast$: $c$ differs from the smallest start
-$a(n+1)$ of A122442\oeisidx{A122442}. The column $c$ is OEIS A402443\oeisidx{A402443}~\cite{OEIS_A402443} (with $a(0) = 2$ for Order $0$).
-Table~\ref{tab:bests} lists Orders $1$ to $96$; for Orders $97$ to $378$ only the rows marked $\ast$ are listed (Table~\ref{tab:bests2}); all bests are in the b-file of
-A402443 and in the repository (\texttt{src/lean\_files/zeta/data/}), with a certificate file (\texttt{best\_cert\_378.txt}: $n$, $c$, $T^L(c)$
-and the window of Theorem~\ref{thm:window}).
+\begin{herefloat}{table}\footnotesize
+\centering
+{\setlength{\extrarowheight}{0pt}\begin{tabular}{|r|r|r|r|c|c|}
+\hline
+ & $n$ & $p_2(n)$ & $N(n)$ & rec. & up \\
+\hline
+1 & 0 & 1 & 1 &  & $3^{12}/2^{19}$ \\
+2 & 12 & 20 & 2\,652 & L & $3^{12}/2^{19}$ \\
+3 & 24 & 39 & 257\,978\,502 &  & $3^{12}/2^{19}$ \\
+4 & 36 & 58 & 38\,088\,111\,350\,198 &  & $2^{46}/3^{29}$ \\
+5 & 7 & 12 & 30 & L & $3^{12}/2^{19}$ \\
+6 & 19 & 31 & 1\,900\,470 &  & $3^{12}/2^{19}$ \\
+7 & 31 & 50 & 248\,369\,601\,964 &  & $3^{12}/2^{19}$ \\
+8 & 43 & 69 & 41\,156\,292\,958\,100\,112 &  & $2^{65}/3^{41}$ \\
+9 & 2 & 4 & 1 & L & $3^{12}/2^{19}$ \\
+10 & 14 & 23 & 17\,637 &  & $3^{12}/2^{19}$ \\
+11 & 26 & 42 & 1\,899\,474\,678 &  & $3^{12}/2^{19}$ \\
+12 & 38 & 61 & 290\,838\,337\,577\,435 &  & $2^{46}/3^{29}$ \\
+13 & 9 & 15 & 173 &  & $3^{12}/2^{19}$ \\
+14 & 21 & 34 & 13\,472\,296 &  & $3^{12}/2^{19}$ \\
+15 & 33 & 53 & 1\,857\,112\,329\,035 &  & $3^{12}/2^{19}$ \\
+16 & 45 & 72 & 315\,356\,241\,137\,505\,268 &  & $2^{65}/3^{41}$ \\
+17 & 4 & 7 & 3 &  & $3^{12}/2^{19}$ \\
+18 & 16 & 26 & 108\,950 &  & $3^{12}/2^{19}$ \\
+19 & 28 & 45 & 12\,809\,477\,536 &  & $3^{12}/2^{19}$ \\
+20 & 40 & 64 & 2\,029\,460\,152\,095\,008 &  & $2^{46}/3^{29}$ \\
+21 & 11 & 18 & 961 &  & $3^{12}/2^{19}$ \\
+22 & 23 & 37 & 87\,986\,917 &  & $3^{12}/2^{19}$ \\
+23 & 35 & 56 & 12\,732\,900\,345\,928 &  & $2^{46}/3^{29}$ \\
+24 & 6 & 10 & 12 &  & $3^{12}/2^{19}$ \\
+25 & 18 & 29 & 663\,535 &  & $3^{12}/2^{19}$ \\
+26 & 30 & 48 & 84\,141\,805\,077 &  & $3^{12}/2^{19}$ \\
+27 & 42 & 67 & 13\,759\,389\,839\,553\,008 &  & $2^{65}/3^{41}$ \\
+28 & 1 & 2 & 1 & U & $3^{12}/2^{19}$ \\
+29 & 13 & 21 & 8\,045 &  & $3^{12}/2^{19}$ \\
+30 & 25 & 40 & 820\,236\,724 &  & $3^{12}/2^{19}$ \\
+31 & 37 & 59 & 123\,110\,229\,387\,834 &  & $2^{46}/3^{29}$ \\
+32 & 8 & 13 & 85 &  & $3^{12}/2^{19}$ \\
+33 & 20 & 32 & 5\,936\,673 &  & $3^{12}/2^{19}$ \\
+34 & 32 & 51 & 794\,919\,136\,728 &  & $3^{12}/2^{19}$ \\
+35 & 44 & 70 & 133\,180\,667\,145\,777\,072 &  & $2^{65}/3^{41}$ \\
+36 & 3 & 5 & 2 & U & $3^{12}/2^{19}$ \\
+37 & 15 & 24 & 51\,033 &  & $3^{12}/2^{19}$ \\
+38 & 27 & 43 & 5\,723\,030\,586 &  & $3^{12}/2^{19}$ \\
+39 & 39 & 62 & 889\,949\,312\,454\,085 &  & $2^{46}/3^{29}$ \\
+40 & 10 & 16 & 476 &  & $3^{12}/2^{19}$ \\
+41 & 22 & 35 & 39\,993\,895 &  & $3^{12}/2^{19}$ \\
+42 & 34 & 54 & 5\,636\,545\,892\,795 &  & $2^{46}/3^{29}$ \\
+43 & 5 & 8 & 7 & U & $3^{12}/2^{19}$ \\
+44 & 17 & 27 & 312\,455 & U & $3^{12}/2^{19}$ \\
+45 & 29 & 46 & 38\,036\,848\,410 & U & $3^{12}/2^{19}$ \\
+46 & 41 & 65 & 6\,113\,392\,816\,333\,320 & U & $2^{65}/3^{41}$ \\
+\hline
+\end{tabular}}
+\caption{The floors of Orders $0$ to $45$, lowest first: the place on the octave, $n$, $p_2(n)$, the
+number of drop words $N(n)$, U or L at an upper or lower record Order, and the end ratio up to the
+next floor.}
+\label{tab:floors}
+\end{herefloat}
 
-{\footnotesize\setlength{\extrarowheight}{1pt}
-\begin{longtable}{|r|r|rc||r|r|rc|}
-\caption{The bests of Orders $1$ to $96$ and their drop values.}\label{tab:bests}\\
+\begin{herefloat}{table}\small
+\centering
+{\setlength{\extrarowheight}{0.5pt}\begin{tabular}{|l|p{0.80\linewidth}|}
 \hline
-$n$ & $c$ & $T^L(c)$ & & $n$ & $c$ & $T^L(c)$ & \\
+upper & $2/1$, $5/3$, $8/5$, $27/17$, $46/29$, $65/41$, $149/94$, $233/147$, $317/200$, $401/253$, $485/306$, $1539/971$, $2593/1636$, $3647/2301$, $4701/2966$, $5755/3631$, $6809/4296$, $7863/4961$, $8917/5626$, $9971/6291$, $11025/6956$, $12079/7621$, $13133/8286$, $14187/8951$, $15241/9616$, $16295/10281$, $17349/10946$, $18403/11611$, $19457/12276$, $20511/12941$, $21565/13606$, $22619/14271$, $23673/14936$, $24727/15601$ \\
 \hline
-\endfirsthead
+lower & $3/2$, $11/7$, $19/12$, $84/53$, $569/359$, $1054/665$, $25781/16266$ \\
 \hline
-$n$ & $c$ & $T^L(c)$ & & $n$ & $c$ & $T^L(c)$ & \\
-\hline
-\endhead
-1 & 5 & 4 &  & 49 & 1583 & 1256 &  \\
-2 & 3 & 2 &  & 50 & 1055 & 628 &  \\
-3 & 11 & 10 &  & 51 & 703 & 628 &  \\
-4 & 7 & 5 &  & 52 & 15039 & 10049 &  \\
-5 & 39 & 38 &  & 53 & 186239 & 93317 & $\ast$ \\
-6 & 347 & 248 & $\ast$ & 54 & 41407 & 31123 &  \\
-7 & 231 & 124 &  & 55 & 115547 & 65134 & $\ast$ \\
-8 & 207 & 167 & $\ast$ & 56 & 84975 & 71852 & $\ast$ \\
-9 & 127 & 77 &  & 57 & 147151 & 93317 & $\ast$ \\
-10 & 359 & 325 &  & 58 & 34239 & 32572 &  \\
-11 & 511 & 346 &  & 59 & 200863 & 143300 & $\ast$ \\
-12 & 239 & 122 &  & 60 & 99007 & 52975 &  \\
-13 & 159 & 122 &  & 61 & 127647 & 102449 & $\ast$ \\
-14 & 1115 & 637 & $\ast$ & 62 & 236991 & 142655 & $\ast$ \\
-15 & 283 & 244 &  & 63 & 101375 & 91535 & $\ast$ \\
-16 & 991 & 637 &  & 64 & 226767 & 153563 &  \\
-17 & 251 & 244 &  & 65 & 105639 & 53654 & $\ast$ \\
-18 & 167 & 122 &  & 66 & 10087 & 7688 &  \\
-19 & 111 & 61 &  & 67 & 284063 & 162307 & $\ast$ \\
-20 & 1695 & 1378 &  & 68 & 67583 & 57925 &  \\
-21 & 1307 & 797 &  & 69 & 90111 & 57925 &  \\
-22 & 871 & 797 &  & 70 & 45055 & 43444 &  \\
-23 & 927 & 637 &  & 71 & 126575 & 91535 &  \\
-24 & 671 & 346 &  & 72 & 299259 & 162307 &  \\
-25 & 155 & 122 &  & 73 & 112511 & 91535 & $\ast$ \\
-26 & 103 & 61 &  & 74 & 366447 & 223589 & $\ast$ \\
-27 & 1639 & 1424 &  & 75 & 64255 & 58810 &  \\
-28 & 91 & 61 &  & 76 & 84383 & 57925 &  \\
-29 & 3431 & 3349 &  & 77 & 57115 & 29405 &  \\
-30 & 3399 & 2489 &  & 78 & 56255 & 43444 &  \\
-31 & 2287 & 1256 &  & 79 & 37503 & 21722 &  \\
-32 & 71 & 61 &  & 80 & 60975 & 52975 &  \\
-33 & 6395 & 3949 &  & 81 & 45127 & 29405 &  \\
-34 & 47 & 46 &  & 82 & 393967 & 385043 &  \\
-35 & 31 & 23 &  & 83 & 827503 & 606566 & $\ast$ \\
-36 & 2047 & 1067 &  & 84 & 1759951 & 967537 &  \\
-37 & 27 & 23 &  & 85 & 35655 & 29405 &  \\
-38 & 1819 & 1067 &  & 86 & 434223 & 268556 &  \\
-39 & 25407 & 22331 & $\ast$ & 87 & 495687 & 459857 &  \\
-40 & 6887 & 4541 &  & 88 & 665215 & 462844 &  \\
-41 & 4591 & 4541 &  & 89 & 2452159 & 1279622 & $\ast$ \\
-42 & 13439 & 9968 &  & 90 & 528895 & 413995 &  \\
-43 & 6383 & 3551 &  & 91 & 1242471 & 729412 & $\ast$ \\
-44 & 4255 & 3551 &  & 92 & 437247 & 385043 &  \\
-45 & 7963 & 4984 &  & 93 & 5825855 & 3847667 & $\ast$ \\
-46 & 7527 & 7066 &  & 94 & 432923 & 428885 &  \\
-47 & 12399 & 8729 &  & 95 & 565247 & 419981 &  \\
-48 & 7279 & 3844 &  & 96 & 288615 & 160832 &  \\
-\hline
-\end{longtable}
-}
-
-\ifpaper\clearpage\fi
-{\footnotesize\setlength{\extrarowheight}{1pt}
-\begin{longtable}{|r|r|rc||r|r|rc|}
-\caption{Orders $97$ to $378$: the rows marked $\ast$.}\label{tab:bests2}\\
-\hline
-$n$ & $c$ & $T^L(c)$ & & $n$ & $c$ & $T^L(c)$ & \\
-\hline
-\endfirsthead
-\hline
-$n$ & $c$ & $T^L(c)$ & & $n$ & $c$ & $T^L(c)$ & \\
-\hline
-\endhead
-102 & 543515 & 431245 & $\ast$ & 223 & 1483334895 & 1010789105 & $\ast$ \\
-106 & 4937243 & 2478956 & $\ast$ & 234 & 7032588283 & 6476798801 & $\ast$ \\
-107 & 3291495 & 2478956 & $\ast$ & 244 & 18023934831 & 14956412627 & $\ast$ \\
-112 & 1733791 & 1239478 & $\ast$ & 247 & 26690574503 & 18687428219 & $\ast$ \\
-116 & 1345383 & 1217288 & $\ast$ & 252 & 36068070847 & 23970706696 & $\ast$ \\
-121 & 6688623 & 5744467 & $\ast$ & 256 & 109571933119 & 92164207369 & $\ast$ \\
-130 & 30997755 & 15991322 & $\ast$ & 259 & 68821108463 & 48842559905 & $\ast$ \\
-132 & 39091199 & 22687444 & $\ast$ & 261 & 45880738975 & 36631919929 & $\ast$ \\
-136 & 27401343 & 20127209 & $\ast$ & 268 & 4167011775 & 3552816982 & $\ast$ \\
-148 & 66742363 & 49693357 & $\ast$ & 272 & 180760272511 & 97527287242 & $\ast$ \\
-153 & 43254511 & 30569932 & $\ast$ & 284 & 380685108059 & 208196864200 & $\ast$ \\
-161 & 354899823 & 200885648 & $\ast$ & 320 & 871451633243 & 496371686726 & $\ast$ \\
-167 & 151639911 & 122212106 & $\ast$ & 321 & 580967755495 & 496371686726 & $\ast$ \\
-168 & 93596391 & 56574545 & $\ast$ & 332 & 1764823531367 & 1018943581204 & $\ast$ \\
-174 & 182938751 & 157443683 & $\ast$ & 333 & 1178426794975 & 1020569816743 & $\ast$ \\
-175 & 620227615 & 400342673 & $\ast$ & 338 & 1901445212927 & 1563112498897 & $\ast$ \\
-177 & 183238907 & 133061072 & $\ast$ & 349 & 11880525347559 & 6599878561517 & $\ast$ \\
-183 & 306533191 & 158466836 & $\ast$ & 352 & 33002596968063 & 30937997255275 & $\ast$ \\
-186 & 998412031 & 870992600 & $\ast$ & 361 & 31995574586139 & 18016704357124 & $\ast$ \\
-187 & 1012039419 & 662160625 & $\ast$ & 363 & 8779855801839 & 5561927762411 & $\ast$ \\
-200 & 604499583 & 601365250 & $\ast$ & 365 & 16443662260783 & 11718958906807 & $\ast$ \\
-203 & 2836010779 & 2380476962 & $\ast$ & 366 & 35022709434363 & 18719812205938 & $\ast$ \\
-208 & 1080905007 & 861211745 & $\ast$ & 368 & 63552404555879 & 38215210500644 & $\ast$ \\
-212 & 6893644607 & 3475732561 & $\ast$ & 374 & 34029080366207 & 29134800518302 & $\ast$ \\
-220 & 3119162651 & 2519100964 & $\ast$ & 378 & 45451163871559 & 24625320657779 & $\ast$ \\
-221 & 2136191463 & 1293924665 & $\ast$ &  &  &  &  \\
-\hline
-\end{longtable}
-}
+\end{tabular}}
+\caption{The record fractions of the record Orders up to $20\,000$: $p_2(n)/n$ at the $34$ upper
+ones, $(p_2(n) - 1)/n$ at the $7$ lower ones.}
+\label{tab:records}
+\end{herefloat}
 
 \ifpaper\clearpage\fi
 %------------------------------------------------------------------------------------------------
@@ -3612,13 +3095,6 @@ $n$ & $c$ & $T^L(c)$ & & $n$ & $c$ & $T^L(c)$ & \\
 Spectrum 11 (1989), 187--206.
 \bibitem{CCChallenge} \emph{The Collatz Conjecture Challenge: formalising the Collatz literature, one
   paper at a time}, \url{https://ccchallenge.org/}.
-\bibitem{ChenZhengXia2025} H.~Chen, C.~Zheng and Y.~Xia, \emph{Accelerated Dinkelbach method},
-  arXiv:2510.26257 (2025).
-\bibitem{DadushKNV2021} D.~Dadush, Z.~K. Koh, B.~Natura and L.~A. V\'egh, \emph{An accelerated
-  Newton--Dinkelbach method and its application to two variables per inequality systems},
-  arXiv:2004.08634.
-\bibitem{Dinkelbach1967} W.~Dinkelbach, \emph{On nonlinear fractional programming}, Management Sci.\
-  \textbf{13} (1967), 492--498.
 \bibitem{Eggleston1949} H.~G. Eggleston, \emph{The fractional dimension of a set defined by decimal
   properties}, Quart.\ J. Math.\ Oxford Ser.\ 20 (1949), 31--36.
 \bibitem{Everett1977} C.~J. Everett, \emph{Iteration of the number-theoretic function

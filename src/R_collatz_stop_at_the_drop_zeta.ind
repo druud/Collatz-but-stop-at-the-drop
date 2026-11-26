@@ -1,75 +1,52 @@
 \begin{theindex}
 
-  \item \termlink{admissible}{admissible word}, \textbf{7}
+  \item \termlink{admissible}{admissible word}, \textbf{6}
 
   \indexspace
 
-  \item \termlink{backward}{backward ranking $k_0$}, \textbf{22}
-  \item \termlink{best}{best of the Order}, \textbf{7}
-  \item \termlink{bestfirst}{best-first search}, \textbf{21}
+  \item \termlink{best}{best of the Order}, \textbf{6}
 
   \indexspace
 
-  \item \termlink{ceiling}{ceiling $t_n$}, \textbf{17}
-  \item \termlink{classid}{class id $c$}, \textbf{7}
-  \item \termlink{rho}{constant $\rho$}, \textbf{12}
-  \item \termlink{cyclepoint}{cycle point $x^\ast$}, \textbf{17}
+  \item \termlink{classid}{class id $c$}, \textbf{6}
+  \item \termlink{rho}{constant $\rho$}, \textbf{11}
+  \item \termlink{cyclepoint}{cycle point $x^\ast$}, \textbf{15}
 
   \indexspace
 
-  \item \termlink{drop}{drop}, \textbf{7}
-  \item \termlink{dropratio}{drop ratio}, \textbf{7}
-  \item \termlink{dropvalue}{drop value $d$}, \textbf{12}
+  \item \termlink{drop}{drop}, \textbf{6}
+  \item \termlink{dropratio}{drop ratio}, \textbf{6}
+  \item \termlink{dropvalue}{drop value $d$}, \textbf{11}
 
   \indexspace
 
-  \item \termlink{floor}{floor $\theta_n$}, \textbf{12}
-
-  \indexspace
-
-  \item \termlink{lambdastar}{$\lambda^\ast$, $F(\lambda)$}, 
-		\textbf{19}
-
-  \indexspace
-
-  \item \termlink{meetingsplit}{meeting split}, \textbf{19}
+  \item \termlink{floor}{floor $\theta_n$}, \textbf{11}
 
   \indexspace
 
   \item OEIS
-    \subitem \hyperlink {cite.OEIS_A100982}{A100982}, 2, 11, 12, 43
-    \subitem \hyperlink {cite.OEIS_A122442}{A122442}, 2, 3, 6, 7, 11, 
-		20, 41, 43
-    \subitem \hyperlink {cite.OEIS_A402443}{A402443}, 2, 7, 41, 43
-  \item \termlink{order}{Order $n$}, \textbf{7}
+    \subitem \hyperlink {cite.OEIS_A100982}{A100982}, 2, 10, 11, 33, 35
+    \subitem \hyperlink {cite.OEIS_A122442}{A122442}, 3, 6, 10, 35
+    \subitem \hyperlink {cite.OEIS_A402443}{A402443}, 2, 5, 6, 35
+  \item \termlink{order}{Order $n$}, \textbf{6}
 
   \indexspace
 
-  \item \termlink{p2}{$p_2(n)$}, \textbf{12}
+  \item \termlink{p2}{$p_2(n)$}, \textbf{11}
 
   \indexspace
 
-  \item \termlink{R}{$R(n)$}, \textbf{15}
-  \item \termlink{record}{record Order}, \textbf{12}
+  \item \termlink{R}{$R(n)$}, \textbf{14}
+  \item \termlink{record}{record Order}, \textbf{11}
 
   \indexspace
 
-  \item \termlink{scan}{scan}, \textbf{21}
-  \item \termlink{seed}{seed $s_0$}, \textbf{21}
-  \item \termlink{share}{share $\theta$}, \textbf{17}
-  \item \termlink{startpart}{start part}, \textbf{15}
+  \item \termlink{share}{share $\theta$}, \textbf{15}
 
   \indexspace
 
-  \item \termlink{tailbound}{tail bound}, \textbf{15}
-  \item \termlink{tie}{tie}, \textbf{12}
-
-  \indexspace
-
-  \item \termlink{walk}{walk $\delta_\ell$}, \textbf{19}
-  \item \termlink{wallword}{wall word}, \textbf{15}
-  \item \termlink{widthidentity}{width identity}, \textbf{7}
-  \item \termlink{window}{window $W$}, \textbf{21}
-  \item \termlink{word}{word}, \textbf{12}
+  \item \termlink{wallword}{wall word}, \textbf{14}
+  \item \termlink{widthidentity}{width identity}, \textbf{6}
+  \item \termlink{word}{word}, \textbf{11}
 
 \end{theindex}
