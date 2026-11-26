@@ -18,6 +18,9 @@ first. Version names (R_65a, R_66, ...) are the authors' own labels.
   the floors of Orders 0 to 45 in their order on the octave with N(n) and the end ratios (the
   three values 3^12/2^19, 2^65/3^41, 2^46/3^29), and the record fractions of the record Orders
   up to 20000, all exact (`zeta/scripts/floors_appendix.py`).
+- Drop zeta draft, Draft (15), section "No drop at all": the negative starts in E are -1, -5 and
+  -17, each the only point of its cycle in E (-7 and -10 drop at once); in the lower bound of the
+  dimension the proof takes the supremum over m given by countable stability.
 
 ## R_106 (26 November 2026)
 

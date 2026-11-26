@@ -2650,7 +2650,9 @@ Let $E \subset \Z_2$ be the starts whose parity word has no drop word as a prefi
 prefix has level above $1$. Its complement is the union of the classes of the drop words, open sets of
 total measure $\sum_n m_n = 1$ (Lemma~\ref{lem:mass}), so $E$ is closed and of measure $0$. Covering
 (paper~2~\cite{Paper2}) is the statement that $E$ holds no integer $x \ge 0$; it holds the negative
-cycles $-1$ (word $\bw{1}^\infty$), $-5, -7, -10$ (word $(\bw{110})^\infty$) and the cycle of $-17$.
+starts $-1$ (word $\bw{1}^\infty$), $-5$ (word $(\bw{110})^\infty$) and $-17$, each the only point of its
+cycle in $E$: $-7$ (word $\bw{10}\ldots$) and $-10$ (word $\bw{0}\ldots$) drop at once, as do the
+other ten points of the cycle of $-17$.
 The size of $E$ is set by $\kappa$, the constant of the masses.
 
 \begin{theorem}\label{thm:nodrop}
@@ -2682,10 +2684,11 @@ is at most $H(p)$.
 first $k$ letters tends to $q$; $\dim_H X_q = H(q)$ (Eggleston~\cite{Eggleston1949}; see
 Billingsley~\cite{Billingsley1965}). For $v \in X_q$ with $a_k$ ones among its first $k$ letters,
 $a_k - kp \to \infty$, so $b(v) = \inf_k (a_k - kp)$ is finite, and $X_q$ is the union over $m \ge 0$ of
-the sets $X_{q,m} = \{v : b(v) > -m(1-p)\}$. By countable stability some $X_{q,m}$ has dimension $H(q)$.
+the sets $X_{q,m} = \{v : b(v) > -m(1-p)\}$. By countable stability $\sup_m \dim_H X_{q,m} = H(q)$.
 The map $v \mapsto \bw{1}^m v$ multiplies all distances by $2^{-m}$, and it maps $X_{q,m}$ into $Q(E)$: a
 prefix of length $j \le m$ has $j > jp$ ones, one of length $m + j$ has
-$m + a_j > m + jp - m(1-p) = (m + j)p$. So $\dim_H Q(E) \ge H(q)$ for every $q > p$, hence
+$m + a_j > m + jp - m(1-p) = (m + j)p$. So $\dim_H Q(E) \ge \dim_H X_{q,m}$ for every $m$, hence
+$\dim_H Q(E) \ge H(q)$ for every $q > p$, hence
 $\ge H(p)$, and the Hausdorff dimension is at most the lower box dimension.
 
 \emph{The value.} $2^{\alpha H(p)} = p^{-1}(1-p)^{-(\alpha-1)} = 3\kappa$ by the proof of
