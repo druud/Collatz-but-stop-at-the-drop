@@ -579,7 +579,7 @@
 \title{\textbf{Collatz, but stop at the drop}\\[0.5ex]
   \Large The game on the grid of $2^i 3^j$}
 \author{\textbf{Ruud H.G. van Tol}}
-\date{\textbf{Draft: R\_101}\\[8ex]
+\date{\textbf{Draft: R\_105}\\[8ex]
   {\small\copyright\ 2026 Ruud H.G. van Tol. Licensed under \href{https://creativecommons.org/licenses/by/4.0/}{CC BY 4.0}.}}  % on the public site as a draft; no date (user, 28 Oct 2026)
 
 \begin{document}
@@ -1046,6 +1046,15 @@ a range check up to $W(b)$ gives the width identity at every Order up to $n$
 at $W(190\,537)$ instead of $\lfloor \tau(190\,537) \rfloor$; one up to
 $\lfloor \tau(10\,781\,274) \rfloor = 294\,401\,822\,513\,350$ gives it up to Order $64\,497\,106$
 (\lean{classDropsAt\_le\_64497106}).
+
+In the picture of A100982\index{OEIS!A100982}~\cite{OEIS_A100982} (the \bw{1}'s across, the
+\bw{0}'s up, under the line of slope $\log_2 3 - 1$), an admissible word of Order $n$ is a walk
+that stays under the line and crosses it with its last step, at the lattice point
+$(n, p_2(n) - n)$. That point lies closest to the line, relative to $3^n$, exactly at the upper
+record Orders, the one-sided semiconvergents of $\log_2 3$; so the records of $W$ follow the
+continued fraction of $\log_2 3$, rising along each ladder of semiconvergents to the next
+convergent. These are also the Orders where the larger of M.~Winkler's two bounds on
+A100982$(n)$ is an equality, a rational Catalan number~\cite{Winkler2026b}.
 
 \begin{table}[htbp]
 \centering

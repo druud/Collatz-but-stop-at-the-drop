@@ -10,6 +10,11 @@ first. Version names (R_65a, R_66, ...) are the authors' own labels.
   k+1 and those that drop first at their end are together 2 S(k)), `noDropCount_add_sum`
   (S(k) plus the first drops at the lengths j <= k, each times 2^(k-j), is 2^k) and
   `p2_of_firstDrop` (a first drop at length j with o ones has j = p2(o)).
+- Paper 3, Draft: R_105 (29 pages): Chapter 4, the finite reduction, gains a paragraph on the
+  picture of OEIS A100982: an admissible word as a walk under the line of slope log2 3 - 1,
+  crossing it at (n, p2(n) - n); the records of W(n) follow the continued fraction of log2 3
+  along its ladders of one-sided semiconvergents, the Orders where the larger of M. Winkler's
+  bounds on A100982(n) is an equality (a rational Catalan number).
 
 ## R_105 (25 November 2026)
 
