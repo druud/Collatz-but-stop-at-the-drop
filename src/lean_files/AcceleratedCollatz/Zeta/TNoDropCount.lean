@@ -200,7 +200,8 @@ theorem noDropCount_succ (k : ℕ) :
     exact absurd h2.2 (not_le.mpr h1.2)
 
 /-- The exact count (zeta paper, before Corollary cor:norate), in natural numbers:
-`S(k) + Σ_{j<k} firstDropCount j · 2^(k-1-j) = 2^k`; with `p2_of_firstDrop` these are the drop-word counts N(m)
+`S(k) + Σ_{j<k} firstDropCount j · 2^(k-1-j) = 2^k`; with `p2_of_firstDrop` these are the
+drop-word counts N(m)
 at the lengths p2(m), so S(k) = 2^k - Σ_{p2(m) ≤ k} N(m) 2^(k - p2(m)). -/
 theorem noDropCount_add_sum (k : ℕ) :
     noDropCount k + ∑ j ∈ range k, firstDropCount j * 2 ^ (k - 1 - j) = 2 ^ k := by
@@ -220,8 +221,8 @@ theorem noDropCount_add_sum (k : ℕ) :
 /-- Small values: S(0), ..., S(5) = 1, 1, 1, 2, 3, 4. -/
 example : (List.range 6).map noDropCount = [1, 1, 1, 2, 3, 4] := by decide
 
-/-- Small values: the first drops at the lengths 1, ..., 5 number 1, 1, 0, 1, 2 (the drop words of Orders 0, 1, 2, 3 at the
-lengths 1, 2, 4, 5). -/
+/-- Small values: the first drops at the lengths 1, ..., 5 number 1, 1, 0, 1, 2 (the drop words
+of Orders 0, 1, 2, 3 at the lengths 1, 2, 4, 5). -/
 example : (List.range 5).map firstDropCount = [1, 1, 0, 1, 2] := by decide
 
 end AcceleratedCollatz

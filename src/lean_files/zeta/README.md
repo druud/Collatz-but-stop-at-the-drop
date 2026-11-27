@@ -26,8 +26,9 @@ Copies of the scripts the paper cites (originals in the local `_keep/tree_01/`),
 |---|---|
 | `scripts/boo.py` | best-first search seeded with the smallest start (Orders 1..124) |
 | `scripts/boo_scan.cpp` | the scan over all starts below the window (6 threads, wheel mod 2^28); it counts the prefixes with 3^j < 2^l at which the start has not dropped: with a count of 0 the run does not rest on the width identity |
-| `scripts/paper_numbers.py` | recomputes the numbers of the paper and compares each with the text (OK / DIFF / SKIP); the smallest starts from `data/b122442.txt` (`--seeds=FILE` for another copy); `--appendix` reruns the scripts of Appendix A (about 3 minutes), `--beam` also `boo_beam.py 3 8` (long) |
+| `scripts/paper_numbers.py` | recomputes the numbers of the paper and compares each with the text (OK / DIFF / SKIP; the bests' tables left the zeta paper in C167, so their check is a SKIP; the numbers are now in paper 3, Ch. 4); the smallest starts from `data/b122442.txt` (`--seeds=FILE` for another copy); `--appendix` reruns the scripts of Appendix A (about 3 minutes), `--beam` also `boo_beam.py 3 8` (long) |
 | `scripts/paper_numbers_slow.cpp` | its two slow checks in C++ (GMP), about 2 minutes, 2.4 GB: Table 1 to Order 21, and the node counts of the best-first search for Orders 1..124 (`_tmp/paper_numbers_slow`, the smallest starts from `data/b122442.txt`); `--k0=N` gives k0 for Orders 22..N instead (N <= 32; checked against Table 1 up to 28; 22..25 about 5 minutes, 28 about 1.3 hours) |
+| `scripts/floors_appendix.py` | the floors appendix of the zeta paper (C167): the floors of Orders 0..45 in their order on the octave with N(n) and the end ratios, and the record Orders to 20000; exact integers, about 15 s |
 | `scripts/cert_lean.py` | writes `../AcceleratedCollatz/Zeta/Best/CertData.lean` from `data/best_cert_378.txt` |
 | `scripts/boo_tie_mult.py` | ties of the best (Remark 2.10) by divisibility: the multiples of c*/gcd(c*, rho*) below the window; `boo_tie_mult.py data/best_cert_378.txt` |
 | `scripts/boo_ties.cpp` | ties of the best by the tree (Remark 2.10, Orders to 229), and the recheck of one Order: `boo_ties n n` |

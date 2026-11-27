@@ -246,10 +246,12 @@ if TEX:
         for i in (0, 4, 8, 12):
             if g[i]: rows[int(g[i])] = (int(g[i + 1]), int(g[i + 2]), bool(g[i + 3]))
     N = len(cert)
+    if not rows:                                             # C167: the tables left the zeta paper
+        skip('Tables 3 and 4', 'no longer in the paper (C167): the bests are OEIS A402443 and data/')
     star = {n for n, c, d, W in cert if seed and seed[n] != c}
     want = {n: (c, d, n in star) for n, c, d, W in cert if n <= 96 or n in star}
-    check('Tables 3 and 4: the rows printed (Orders 1..96, then the marked ones to %d): count, all present' % N, (len(rows), sorted(rows) == sorted(want)), (len(want), True))
-    check('Tables 3 and 4: n, c, T^L(c) and the mark of every row', all(rows.get(n) == v for n, v in want.items()), True)
+    if rows: check('Tables 3 and 4: the rows printed (Orders 1..96, then the marked ones to %d): count, all present' % N, (len(rows), sorted(rows) == sorted(want)), (len(want), True))
+    if rows: check('Tables 3 and 4: n, c, T^L(c) and the mark of every row', all(rows.get(n) == v for n, v in want.items()), True)
     check('p2 of the last Order (Remark on the width identity)', p2(N), int(re.search(r'\(\$p_2\((\d+)\) = (\d+)\$\)', tex).group(2)))
 else:
     skip('Tables 3 and 4', 'the .tex is not at hand')
