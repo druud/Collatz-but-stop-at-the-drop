@@ -3,8 +3,22 @@
 The changes to this repository since its first public release, newest
 first. Version names (R_65a, R_66, ...) are the authors' own labels.
 
-## After R_106
+## R_107 (28 November 2026)
 
+- The drop zeta draft, Draft (16): its Lean section states Theorem thm:logz in its coefficient
+  form, the never-dropping words from below and the parity map as an isometry level by level.
+  Lean: `TLogZ` (`choose_eq_logz`: for 3^n < 2^L, binom(L, n) = [p2(n) = L] L N(n) + sum_m N(m)
+  binom(L - p2(m), n - m) over the m <= n with p2(m) < L and 3^(n-m) < 2^(L-p2(m)), the x d/dx
+  form of -log(1 - P) = sum binom(L, n)/L x^L y^n); `TNoDropLower` (`choose_pow_le_noDropCount`:
+  for 2^(a+b) < 3^a and 2^(t+b) < 3^t, binom(a+b, a)^m <= S(t + (a+b) m), by a run of t ones and
+  m blocks of a ones in a+b letters; `noDropCount_le_succ`), so H(p) is the growth rate of S(k)
+  both ways in integers; `TParityIsometry` (`tBits_eq_iff_modEq`, `tBits_eq_iff_two_pow_dvd`,
+  `tBits_bijOn`).
+- Lean: `TCycleZero` (`p2_mul_card_admSet_eq_choose_iff`: p2(n) N(n) = binom(p2(n), n) iff n is
+  an upper record Order, so the zeros of OEIS A400061 are the upper record Orders; the q = 3 form
+  of `p2Q_mul_card_eq_choose_iff`).
+- Paper 3, Chapter 7 (the minimal class ids): the terms a(1) to a(400) of A122442 (was a(1) to
+  a(397)), all x0 < 1104426949410816 scanned, the last a(400) = 104041167205839.
 - The best of the Order moved from the drop zeta draft to paper 3 (C167). Paper 3, Chapter 4
   (the largest rho and the finite reduction) gains the cycle point x* = rho/d_23(n), the share,
   the cycle with x* as its strict minimum, the ceiling, the window c (2^L g - 3^n h) <
