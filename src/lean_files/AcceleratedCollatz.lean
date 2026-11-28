@@ -62,6 +62,7 @@ import AcceleratedCollatz.Zeta.TCycleCount
 import AcceleratedCollatz.Zeta.TCycleCountQ
 import AcceleratedCollatz.Zeta.TCycleZeroQ
 import AcceleratedCollatz.Zeta.TCycleZero
+import AcceleratedCollatz.Zeta.TLogZ
 import AcceleratedCollatz.Zeta.TCyclePointDigits
 import AcceleratedCollatz.TDrop
 import AcceleratedCollatz.TDropPeriod
@@ -96,6 +97,8 @@ import AcceleratedCollatz.TMarkerPointHigh
 import AcceleratedCollatz.TMarkerTree
 import AcceleratedCollatz.Zeta.TMassShareQ
 import AcceleratedCollatz.Zeta.TNoDropCount
+import AcceleratedCollatz.Zeta.TNoDropLower
+import AcceleratedCollatz.Zeta.TParityIsometry
 import AcceleratedCollatz.TMersenne
 import AcceleratedCollatz.TMerge
 import AcceleratedCollatz.TMod4
