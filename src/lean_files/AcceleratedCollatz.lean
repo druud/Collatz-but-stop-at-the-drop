@@ -61,6 +61,7 @@ import AcceleratedCollatz.TCycle
 import AcceleratedCollatz.Zeta.TCycleCount
 import AcceleratedCollatz.Zeta.TCycleCountQ
 import AcceleratedCollatz.Zeta.TCycleZeroQ
+import AcceleratedCollatz.Zeta.TCycleZero
 import AcceleratedCollatz.Zeta.TCyclePointDigits
 import AcceleratedCollatz.TDrop
 import AcceleratedCollatz.TDropPeriod
