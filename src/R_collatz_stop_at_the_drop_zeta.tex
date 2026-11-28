@@ -14,6 +14,7 @@
 % (14): Theorem thm:logz, the binomials as the coefficients of log Z (C161); Remark rem:digits (C159), in Lean TCyclePointDigits (C163).
 % (15): the best material moved to paper 3, Ch. 4 and 5 (C167): the window, the searches, Dinkelbach, the meeting
 %       split, the observations, Appendices A and B; Theorem thm:cycle stays; Appendix A is now the floors.
+% (16): Theorem thm:logz in Lean, coefficient form (TLogZ: choose_eq_logz; C192).
 % (13): the exact count of S(k) in Lean (TNoDropCount: noDropCount_add_sum, p2_of_firstDrop; C135).
 \documentclass[10pt,a4paper,titlepage]{article}
 \usepackage[utf8]{inputenc}
@@ -637,7 +638,7 @@
   \Large The drop zeta function}
 \author{\textbf{Ruud H.G. van Tol}}
 \date{\begin{tikzpicture}\dropturnfig\end{tikzpicture}\\[5ex]
-  \textbf{Draft (15)}\\[8ex]
+  \textbf{Draft (16)}\\[8ex]
   {\small\copyright\ 2026 Ruud H.G. van Tol. Licensed under \href{https://creativecommons.org/licenses/by/4.0/}{CC BY 4.0}.}
 }
 
@@ -2960,7 +2961,7 @@ Corollary~\ref{cor:norate} is there too: the words of length $k+1$ that never dr
 first at their end are together $2S(k)$ (\lean{noDropCount\_succ}); summed, $S(k)$ plus these first
 drops at the lengths $j \le k$, each times $2^{k-j}$, is $2^k$ (\lean{noDropCount\_add\_sum}); and a
 first drop at length $j$ with $o$ ones has $j = p_2(o)$ (\lean{p2\_of\_firstDrop}), so their counts
-are the $N(m)$ at the lengths $p_2(m)$. The isometry and the dimensions are not formalized. Remark~\ref{rem:digits} is \lean{TCyclePointDigits}: for an odd $d > 0$ the digit states of $a/d$ return to $a$ iff $-d \le a \le 0$ (\lean{periodic\_iff}), and after $L$ digits of $x^\ast$ the state is $T^L(c) - c$ (\lean{iterate\_eq\_sub}), so the tail is periodic iff $T^L(c) \le c$ (\lean{tail\_periodic\_iff}). Theorem~\ref{thm:logz} is not formalized.
+are the $N(m)$ at the lengths $p_2(m)$. The isometry and the dimensions are not formalized. Remark~\ref{rem:digits} is \lean{TCyclePointDigits}: for an odd $d > 0$ the digit states of $a/d$ return to $a$ iff $-d \le a \le 0$ (\lean{periodic\_iff}), and after $L$ digits of $x^\ast$ the state is $T^L(c) - c$ (\lean{iterate\_eq\_sub}), so the tail is periodic iff $T^L(c) \le c$ (\lean{tail\_periodic\_iff}). Theorem~\ref{thm:logz} is \lean{TLogZ} in its coefficient form: $x\,\partial/\partial x$ turns it into $x P_x = B(1 - P)$ with $B = \sum_{3^n < 2^L} \binom{L}{n} x^L y^n$, that is, for $3^n < 2^L$, $\binom{L}{n} = [p_2(n) = L]\, L\, N(n) + \sum_m N(m) \binom{L - p_2(m)}{n - m}$ over the $m \le n$ with $p_2(m) < L$ and $3^{n-m} < 2^{L - p_2(m)}$ (\lean{choose\_eq\_logz}); the case $L = p_2(n)$ is \lean{choose\_p2\_eq\_split}.
 
 \subsection*{The best of the Order}
 The modules \texttt{AcceleratedCollatz/Zeta/Best/} (namespace \lean{AcceleratedCollatz.Best}) prove
