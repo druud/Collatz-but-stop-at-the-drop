@@ -1,6 +1,7 @@
 -- SPDX-License-Identifier: MIT
 import AcceleratedCollatz.Zeta.TNoDropCount
 import AcceleratedCollatz.TBinomial
+import AcceleratedCollatz.TAdmSet
 
 /-!
   The words that never drop, from below (C195; zeta paper, Theorem thm:nodrop).
@@ -189,5 +190,115 @@ theorem noDropCount_le_succ (k : ℕ) : noDropCount k ≤ noDropCount (k + 1) :=
   · intro v _ v' _ he
     have := congrArg Fin.init he
     simpa [Fin.init_snoc] using this
+
+/-! The first drops are the drop words (C201): S(k) = 2^k - Σ_{p2(m) ≤ k} N(m) 2^(k - p2(m)). -/
+
+theorem succ_le_p2_of (m : ℕ) : m + 1 ≤ p2_of m := by
+  unfold p2_of
+  have : m ≤ Nat.log 2 (3 ^ m) :=
+    Nat.le_log_of_pow_le (by norm_num) (Nat.pow_le_pow_left (by norm_num) m)
+  omega
+
+/-- A word drops first at its end iff it is a drop word. -/
+theorem firstDrop_iff_admissible {j : ℕ} (v : Fin (j + 1) → Bool) :
+    (NoDrop (Fin.init v) ∧ 3 ^ onesUpTo v (j + 1) ≤ 2 ^ (j + 1)) ↔
+      Admissible (List.ofFn v) := by
+  have hlen : (List.ofFn v).length = j + 1 := List.length_ofFn
+  constructor
+  · rintro ⟨h1, h2⟩
+    refine ⟨fun i hi1 hi2 => ?_, ?_⟩
+    · rw [hlen] at hi2
+      have := h1 i hi1 (by omega)
+      rw [← onesUpTo_init v (by omega), onesUpTo_eq_order] at this
+      rw [one_lt_seqProduct_iff, List.length_take, min_eq_left (by omega)]
+      exact this
+    · rw [seqProduct_lt_one_iff, hlen]
+      rw [onesUpTo_eq_order, List.take_of_length_le (by omega)] at h2
+      rcases h2.lt_or_eq with h | h
+      · exact h
+      · exfalso
+        have h3 : (3 : ℕ) ^ order (List.ofFn v) % 2 = 1 := by
+          rw [Nat.pow_mod]; simp
+        rw [h, pow_succ] at h3
+        simp at h3
+  · intro ha
+    refine ⟨fun i hi1 hi2 => ?_, ?_⟩
+    · rw [← onesUpTo_init v hi2, onesUpTo_eq_order]
+      have := ha.prefix_gt i hi1 (by omega)
+      rw [one_lt_seqProduct_iff, List.length_take, min_eq_left (by omega)] at this
+      exact this
+    · have := ha.lt_one
+      rw [seqProduct_lt_one_iff, hlen] at this
+      rw [onesUpTo_eq_order, List.take_of_length_le (by omega)]
+      exact this.le
+
+/-- The first drops at length j+1 are the drop words of the Orders m with p2(m) = j+1. -/
+theorem firstDropCount_eq (j : ℕ) :
+    firstDropCount j = ∑ m ∈ range (j + 1), if p2_of m = j + 1 then (admSet m).card else 0 := by
+  rw [← sum_filter, ← card_biUnion]
+  · unfold firstDropCount
+    apply card_bij (fun v _ => List.ofFn v)
+    · intro v hv
+      simp only [mem_filter, mem_univ, true_and] at hv
+      rw [firstDrop_iff_admissible] at hv
+      simp only [mem_biUnion, mem_filter, mem_range, mem_admSet]
+      have hl := admissible_length _ hv
+      rw [List.length_ofFn] at hl
+      refine ⟨order (List.ofFn v), ⟨?_, hl.symm⟩, hv, rfl⟩
+      have := succ_le_p2_of (order (List.ofFn v)); omega
+    · intro v _ w _ h; exact List.ofFn_injective h
+    · intro l hl
+      simp only [mem_biUnion, mem_filter, mem_range, mem_admSet] at hl
+      obtain ⟨m, ⟨_, hm⟩, ha, ho⟩ := hl
+      have hlen : l.length = j + 1 := by rw [admissible_length _ ha, ho, hm]
+      refine ⟨toWord (j + 1) l, ?_, ofFn_toWord hlen⟩
+      simp only [mem_filter, mem_univ, true_and]
+      rw [firstDrop_iff_admissible, ofFn_toWord hlen]; exact ha
+  · intro m _ m' _ hne
+    simp only [Function.onFun]
+    rw [disjoint_left]
+    intro l h1 h2
+    rw [mem_admSet] at h1 h2
+    exact hne (h1.2.symm.trans h2.2)
+
+/-- C201: S(k) + Σ_{m : p2(m) ≤ k} N(m) 2^(k - p2(m)) = 2^k, N(m) = |admSet m| (zeta paper,
+    before Corollary cor:norate). -/
+theorem noDropCount_add_sum_admSet (k : ℕ) :
+    noDropCount k + ∑ m ∈ (range (k + 1)).filter (fun m => p2_of m ≤ k),
+      (admSet m).card * 2 ^ (k - p2_of m) = 2 ^ k := by
+  rw [← noDropCount_add_sum k]
+  congr 1
+  have h1 : ∀ j ∈ range k, firstDropCount j * 2 ^ (k - 1 - j) =
+      ∑ m ∈ range (k + 1),
+        if p2_of m = j + 1 then (admSet m).card * 2 ^ (k - p2_of m) else 0 := by
+    intro j hj
+    rw [mem_range] at hj
+    rw [firstDropCount_eq, sum_mul, ← sum_range_add_sum_Ico _ (show j + 1 ≤ k + 1 by omega)]
+    have hz : ∑ m ∈ Ico (j + 1) (k + 1),
+        (if p2_of m = j + 1 then (admSet m).card * 2 ^ (k - p2_of m) else 0) = 0 := by
+      apply sum_eq_zero
+      intro m hm
+      rw [mem_Ico] at hm
+      have := succ_le_p2_of m
+      rw [ite_eq_right_iff]; intro h; omega
+    rw [hz, add_zero]
+    apply sum_congr rfl
+    intro m _
+    split_ifs with h
+    · rw [h, show k - 1 - j = k - (j + 1) by omega]
+    · simp
+  rw [sum_congr rfl h1, sum_comm, sum_filter]
+  apply sum_congr rfl
+  intro m _
+  have hp := succ_le_p2_of m
+  have e : ∀ j, (p2_of m = j + 1) ↔ (p2_of m - 1 = j) := fun j => by omega
+  simp_rw [e]
+  rw [sum_ite_eq]
+  by_cases h : p2_of m ≤ k
+  · simp only [h, ↓reduceIte, mem_range, show p2_of m - 1 < k by omega]
+  · simp only [h, ↓reduceIte, mem_range, show ¬ p2_of m - 1 < k by omega]
+
+/-- Small values of the drop-word form: S(5) = 2^5 - N(0) 2^4 - N(1) 2^3 - N(2) 2^1 - N(3) 2^0. -/
+example : noDropCount 5 = 4 := by decide
 
 end AcceleratedCollatz
