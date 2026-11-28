@@ -3,6 +3,12 @@
 The changes to this repository since its first public release, newest
 first. Version names (R_65a, R_66, ...) are the authors' own labels.
 
+## After R_107
+
+- The drop zeta draft, Draft (17): its Lean section adds the exact count of the words that never
+  drop by the drop words, S(k) + sum over p2(m) <= k of N(m) 2^(k - p2(m)) = 2^k
+  (`TNoDropLower`: `firstDropCount_eq`, `noDropCount_add_sum_admSet`).
+
 ## R_107 (28 November 2026)
 
 - The drop zeta draft, Draft (16): its Lean section states Theorem thm:logz in its coefficient
